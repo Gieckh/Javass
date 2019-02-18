@@ -84,25 +84,15 @@ public final class PackedCard {
         if((rank.equals(Card.Rank.ACE))) {
             return 11;
         }
+
+
         if(color.equals(trump)) {
-                    
-            if((rank.equals(Card.Rank.NINE))) {
-                return 14;
-            }
-            if((rank.equals(Card.Rank.JACK))) {
-                return 20;
-            }
+            return (rank.equals(Card.Rank.NINE))? 14 : 20;
         }
+
         else {
-            if((rank.equals(Card.Rank.NINE))) {
-                return 0;
-            }
-            else {
-                return 2;
-            }
+            return (rank.equals(Card.Rank.NINE)) ? 0 : 2;
         }
-        return 0;
-            
     }
 
     public static String toString(int pkCard) {
