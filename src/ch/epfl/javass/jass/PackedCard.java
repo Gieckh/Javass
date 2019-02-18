@@ -1,7 +1,7 @@
 package ch.epfl.javass.jass;
 
 public final class PackedCard {
-    public static int INVALID = 111111;
+    public final static int INVALID = 111111;
     
     
     public static boolean isValid(int pkCard) {
