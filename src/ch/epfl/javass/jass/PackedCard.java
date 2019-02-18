@@ -27,6 +27,7 @@ public final class PackedCard {
 
     
     public static Card.Color color(int pkCard) {
+        assert isValid(pkCard);
         /*
         Clearer but (slightly) slower version:
         int color = extract(pkCard, 4, 2);
@@ -37,20 +38,80 @@ public final class PackedCard {
     }
     
     public static Card.Rank rank(int pkCard) {
+        assert isValid(pkCard);
         int rank = extract(pkCard, 0, 4);
         return Card.Rank.toType(rank + 6);
     }
     
-    public static boolean isBetter (Card.Color trump, int pkCardL, int pkCardR) {
-        return false;
+    public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
+        if (!(isValid(pkCardL) || (!isValid(pkCardR)))) {
+            return false;
+        }
+        Card.Color colorOfL = color(pkCardL); 
+        Card.Rank rankOfL = rank(pkCardL);
+        Card.Color colorOfR = color(pkCardR);
+        Card.Rank  rankOfR = rank(pkCardR);
+        if ((colorOfL.equals(trump)&&(!(colorOfR.equals(trump))))){
+            return true;
+        }
+        if ((!(colorOfL.equals(trump))&&(colorOfR.equals(trump)))){
+            return false;
+        }
+        if ((colorOfL.equals(trump)&&(colorOfR.equals(trump)))){
+            return (Card.Rank.trumpOrdinal(rankOfL)>Card.Rank.trumpOrdinal(rankOfR));
+        }
+        else {
+            return rankOfL.type>rankOfR.type;
+        }
+        
     }
-    
+
     public static int points(Card.Color trump, int pkCard) {
+        Card.Color color = color(pkCard); 
+        Card.Rank rank = rank(pkCard);
+        if((rank.equals(Card.Rank.SIX)||rank.equals(Card.Rank.SEVEN)||rank.equals(Card.Rank.EIGHT))) {
+            return 0;
+        }
+        if((rank.equals(Card.Rank.TEN))) {
+            return 10;
+        }
+        if((rank.equals(Card.Rank.QUEEN))) {
+            return 3;
+        }
+        if((rank.equals(Card.Rank.KING))) {
+            return 4;
+        }
+        if((rank.equals(Card.Rank.ACE))) {
+            return 11;
+        }
+        if(color.equals(trump)) {
+                    
+            if((rank.equals(Card.Rank.NINE))) {
+                return 14;
+            }
+            if((rank.equals(Card.Rank.JACK))) {
+                return 20;
+            }
+        }
+        else {
+            if((rank.equals(Card.Rank.NINE))) {
+                return 0;
+            }
+            else {
+                return 2;
+            }
+        }
         return 0;
+            
     }
-    
+
     public static String toString(int pkCard) {
-        return "";
+        Card.Color color = color(pkCard); 
+        Card.Rank rank = rank(pkCard);        
+        return color.toString()+rank.toString();
     }
+
+    
+    
 }
 
