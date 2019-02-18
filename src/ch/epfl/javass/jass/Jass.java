@@ -2,7 +2,7 @@ package ch.epfl.javass.jass;
 
 public interface Jass {
     
- // Redudant, but clearer in our opinion
+ // Redundant, but clearer in our opinion
  public final static int HAND_SIZE = 9;
  public final static int TRICKS_PER_TURN = 9;
  public final static int WINNING_POINTS = 1000;

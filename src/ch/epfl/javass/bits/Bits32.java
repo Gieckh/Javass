@@ -4,9 +4,7 @@ package ch.epfl.javass.bits;
 public class Bits32 {
     /** ============================================== **/
     /** ==============   CONSTRUCTEURS   ============= **/
-    /**
-     * ==============================================
-     **/
+    /** ============================================== **/
     private Bits32() {
     }
 
@@ -49,6 +47,7 @@ public class Bits32 {
      */
     public static int extract(int bits, int start, int size)
             throws IllegalArgumentException {
+        // The call to mask checks the exceptions
         int mask = mask(start, size);
         return (mask & bits) >>> start;
     }
