@@ -81,8 +81,8 @@ public class Bits32 {
      * @param value
      * @param size
      * @return (boolean) true if
-     * - 1 <= size <= 31
-     * - and "value" doesn't use more bits than specified by "size"
+     *         - 1 <= size <= 31
+     *         - and "value" doesn't use more bits than specified by "size"
      *
      * @author - Marin Nguyen (288260)
      */
@@ -108,14 +108,14 @@ public class Bits32 {
      * @param s1 (int) the size of v1
      * @param v2 (int) the second (int) to concatenate
      * @param s2 (int) the size of v2
-     * @return (int) the number formed by the concatenation of v1 and v2
+     * @return (int) the number formed by the concatenation of v1 and v2 (in binary)
      * @throws IllegalArgumentException
      *
      * @author - Marin Nguyen (288260)
      */
     public static int
     pack(int v1, int s1, int v2, int s2) throws IllegalArgumentException {
-        if (!packCheck(v1, s1) || !packCheck(v2, s2)) {
+        if (!(packCheck(v1, s1) && packCheck(v2, s2))) {
             throw new IllegalArgumentException();
         }
 
@@ -127,16 +127,50 @@ public class Bits32 {
         return (s2 << v1) + s1;
     }
 
+
+    // I decided not to call "pack(int v1, int s1, int v2, int s2)" because
+    // it would do many unnecessary size checks
+
+    /**
+     * @brief concatenates the binary expressions of v1, v2 and v3
+     *        (where v3's bits are the most significant ones and v1's's the least)
+     * @see "pack(int v1, int s1, int v2, int s2)"
+     * @return the number formed by the concatenation (in binary form) of v1, v2 and v3
+     * @throws IllegalArgumentException
+     */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3) throws IllegalArgumentException {
+        boolean compatibleSizes = packCheck(v1, s1) && packCheck(v2, s2) && packCheck(v3, s3);
+        if (!compatibleSizes) {
+            throw new IllegalArgumentException();
+        }
 
-        return 0;
+        if (s1 + s2 + s3 > Integer.SIZE) {
+            throw new IllegalArgumentException();
+        }
+
+        return ((s3 << v2) + v2) << v1;
     }
 
-
+    /**
+     * @brief concatenates the binary expressions of v1, v2, ... v6 and v7
+     *        (where v7's bits are the most significant ones and v1's's the least)
+     * @see "pack(int v1, int s1, int v2, int s2)"
+     * @return the number formed by the concatenation (in binary form) of all the "v_i", (where 1 <= i <= 7)
+     * @throws IllegalArgumentException
+     */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3, int v4, int s4,
          int v5, int s5, int v6, int s6, int v7, int s7) throws IllegalArgumentException {
-        return 0;
+        boolean compatibleSizes = packCheck(v1, s1) && packCheck(v2, s2) &&
+                                  packCheck(v3, s3) && packCheck(v4, s4) &&
+                                  packCheck(v5, s5) && packCheck(v6, s6) &&
+                                  packCheck(v7, s7);
+        if (!compatibleSizes) {
+            throw new IllegalArgumentException();
+        }
+
+        // Same principle as before, but with more parenthesises.
+        return (((((((((((s7 << s6) + v6) << s5) + v5) << s4) + v4) << s3) + v3) << s2) + v2) << s1) + v1;
     }
 }
