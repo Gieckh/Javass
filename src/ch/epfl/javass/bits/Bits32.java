@@ -12,9 +12,11 @@ public class Bits32 {
     /** ============================================== **/
 
     /**
-     * @param start
-     * @param size
-     * @return
+     * @brief creates a mask of "size" 1 bits, starting at position "start"
+     *        ex : mask(1, 3) = 0...01110
+     * @param start (int) the position of the first 1
+     * @param size (int) the length of the 1-sequence
+     * @return (int) the mask
      * @throws IllegalArgumentException
      * @author - Marin Nguyen (288260)
      */
@@ -32,10 +34,11 @@ public class Bits32 {
     }
 
     /**
-     * @param bits
-     * @param start
-     * @param size
-     * @return
+     * @brief creates the int formed from the bits [start] to [start + size - 1] of "bits"
+     * @param bits (int)
+     * @param start (int)
+     * @param size (int)
+     * @return (int) the int formed from the bits [start] to [start + size - 1] of "bits"
      * @throws IllegalArgumentException
      * @author - Marin Nguyen (288260)
      */
@@ -46,11 +49,12 @@ public class Bits32 {
     }
 
     /**
-     * @param v1
-     * @param s1
-     * @param v2
-     * @param s2
-     * @return
+     * @brief concatenates the binary expressions of v1 and v2 (where v2's bits are significant than v1's ones)
+     * @param v1 (int) the first (int) to concatenate
+     * @param s1 (int) the size of v1
+     * @param v2 (int) the second (int) to concatenate
+     * @param s2 (int) the size of v2
+     * @return (int) the number formed by the concatenation of v1 and v2
      * @throws IllegalArgumentException
      * @author - Marin Nguyen (288260)
      */
@@ -69,10 +73,12 @@ public class Bits32 {
     }
 
     /**
-     * indicates whether
+     * checks whether "size" and "value" are compatible
      * @param value
      * @param size
-     * @return (boolean) true if the size is be
+     * @return (boolean) true if
+     *         - 1 <= size <= 31
+     *         - and "value" doesn't use more bits than specified by "size"
      * @author - Marin Nguyen (288260)
      */
     private static boolean packCheck(int value, int size) {
@@ -91,7 +97,7 @@ public class Bits32 {
     }
 
     /**
-     * finds the position of the MSB of the int value
+     * @brief finds the position of the MSB of the int value
      * @param value the bit whose MSB position we want to know, NOT 0.
      * @return (int) the MSB position (an int between 0 and 31)
      * @author - Marin Nguyen (288260)
