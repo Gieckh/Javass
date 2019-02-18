@@ -260,7 +260,17 @@ public final class Card {
 
     //TODO
     @Override
-    boolean equals(Object thatO) {
+    public boolean equals(Object thatO) {
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }
