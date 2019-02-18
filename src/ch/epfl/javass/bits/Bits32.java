@@ -1,7 +1,7 @@
 package ch.epfl.javass.bits;
 
 //TODO: Junit tests
-public class Bits32 {
+public final class Bits32 {
     /** ============================================== **/
     /** ==============   CONSTRUCTEURS   ============= **/
     /** ============================================== **/
