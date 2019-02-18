@@ -1,5 +1,6 @@
 package ch.epfl.javass.jass;
 
+import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre.
 import static ch.epfl.javass.bits.Bits32.extract;
 
 public final class PackedCard {
@@ -18,19 +19,26 @@ public final class PackedCard {
         return (extract(pkCard, 0, 4) <= 4 &&
                 extract(pkCard, 6, 26) == 0);
     }
-    
-    public static int pack(Card.Color c, Card.Rank r) {
-        int rank =
 
-        return 0;
+
+    public static int pack(Card.Color c, Card.Rank r) {
+        return Bits32.pack(r.type, 4, c.type, 2);
     }
+
     
     public static Card.Color color(int pkCard) {
-        return null;
+        /*
+        Clearer but (slightly) slower version:
+        int color = extract(pkCard, 4, 2);
+        return Card.Color.toType(color);
+        */
+
+        return Card.Color.toType(extract(pkCard, 4, 2));
     }
     
     public static Card.Rank rank(int pkCard) {
-        return null;
+        int rank = extract(pkCard, 0, 4);
+        return Card.Rank.toType(rank + 6);
     }
     
     public static boolean isBetter (Card.Color trump, int pkCardL, int pkCardR) {
@@ -44,6 +52,5 @@ public final class PackedCard {
     public static String toString(int pkCard) {
         return "";
     }
-    
 }
 
