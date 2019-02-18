@@ -261,7 +261,12 @@ public final class Card {
     //TODO
     @Override
     public boolean equals(Object thatO) {
-        return false;
+        if (thatO == null  ||  !(thatO instanceof Card)) { // maybe getClass, tho must be equivalent since final
+            return false;
+        }
+
+        Card thatOCard = (Card) thatO; // Or do 2 "conversions, idk"
+        return (thatOCard.color == color  &&  thatOCard.rank == rank);
     }
 
     @Override
