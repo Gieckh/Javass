@@ -4,6 +4,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+//TODO: Des "import" strange.
+import ch.epfl.javass.jass.PackedCard.*;
+
+import static ch.epfl.javass.jass.PackedCard.color;
+import static ch.epfl.javass.jass.PackedCard.isValid;
+import static ch.epfl.javass.jass.PackedCard.rank;
+
 /**
  * represents any card of the deck.
  * 
@@ -12,13 +19,25 @@ import java.util.List;
  *
  */
 public final class Card {
+    /** =============================================== **/
+    /** ===============    ATTRIBUTES    ============== **/
+    /** =============================================== **/
+    Color color;
+    Rank rank;
 
-    /**
-     * manages the colors of the cards.
-     *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-     */
+    /** ============================================== **/
+    /** ==============   CONSTRUCTORS   ============== **/
+    /** ============================================== **/
+    private Card(Color c, Rank r) {
+        color = c;
+        rank = r;
+    }
+
+    /** ============================================== **/
+    /** ===============    METHODS    ================ **/
+    /** ============================================== **/
+
+
     public enum Color {
         SPADE  (1), //pique
         HEART  (2), //coeur
@@ -207,5 +226,18 @@ public final class Card {
 
             }
         }
+    }
+
+    //TODO: not public right ?
+    static Card of(Color c, Rank r) {
+        return new Card(c, r);
+    }
+
+    static Card ofPacked(int packed) throws IllegalArgumentException {
+        if (!isValid(packed)) {
+            throw new IllegalArgumentException();
+        }
+
+        return new Card(color(packed), rank(packed));
     }
 }
