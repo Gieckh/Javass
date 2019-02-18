@@ -233,7 +233,7 @@ public final class Card {
             throw new IllegalArgumentException();
         }
 
-        return new Card(color(packed), rank(packed));
+        return new Card(PackedCard.color(packed), PackedCard.rank(packed));
     }
 
 
