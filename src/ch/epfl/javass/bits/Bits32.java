@@ -50,7 +50,7 @@ public class Bits32 {
     public static int extract(int bits, int start, int size)
             throws IllegalArgumentException {
         int mask = mask(start, size);
-        return (mask & bits) >>> size;
+        return (mask & bits) >>> start;
     }
 
 
