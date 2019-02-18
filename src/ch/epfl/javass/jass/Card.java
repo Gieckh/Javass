@@ -266,11 +266,11 @@ public final class Card {
 
     @Override
     public int hashCode() {
-        return 0;
+        return packed();
     }
 
     @Override
     public String toString() {
-        return "";
+        return PackedCard.toString(packed());
     }
 }
