@@ -4,12 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//TODO: Des "import" strange.
-import ch.epfl.javass.jass.PackedCard.*;
-
-import static ch.epfl.javass.jass.PackedCard.color;
-import static ch.epfl.javass.jass.PackedCard.isValid;
-import static ch.epfl.javass.jass.PackedCard.rank;
+import static ch.epfl.javass.jass.PackedCard.*;
 
 /**
  * represents any card of the deck.
@@ -228,7 +223,7 @@ public final class Card {
         }
     }
 
-    //TODO: not public right ?
+    //TODO: take care of public/private/none
     static Card of(Color c, Rank r) {
         return new Card(c, r);
     }
@@ -239,5 +234,33 @@ public final class Card {
         }
 
         return new Card(color(packed), rank(packed));
+    }
+
+
+    int packed() {
+        return pack(color, rank);
+    }
+
+    Color color() {
+        return color;
+    }
+
+    Rank rank() {
+        return rank;
+    }
+
+    boolean isBetter(Color trump, Card that) {
+        return PackedCard.isBetter(trump, this.packed(), that.packed());
+    }
+
+    int points(Color trump) {
+        return PackedCard.points(trump, this.packed());
+    }
+
+
+    //TODO
+    @Override
+    boolean equals(Object thatO) {
+        return false;
     }
 }
