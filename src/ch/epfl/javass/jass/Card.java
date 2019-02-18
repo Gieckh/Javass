@@ -4,48 +4,83 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * represents any card of the deck.
+ * 
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ *
+ */
 public final class Card {
     
     
     
+    /**
+     * manages the colors of the cards.
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+     *
+     */
     public enum   Color{
         SPADE   (1),
         HEART   (2),
         DIAMOND (3), 
         CLUB    (4);
         
-        final int type;
-        final static int COUNT = 4; 
-        final static List<Color> list = Arrays.asList(SPADE,HEART,DIAMOND,CLUB);
-        final static List<Color>  ALL = Collections.unmodifiableList(list);
+        public final int type;
+        public final static int COUNT = 4; 
+        public final static List<Color>  ALL = Collections.unmodifiableList(Arrays.asList(SPADE,HEART,DIAMOND,CLUB));
+        
         
         Color(int type){
             this.type = type ;
         }
         
-        static Color toType(int type) {
-            switch(type) {
+        /**
+         * return the color.
+         * @param number
+         * @return color
+         * @author Antoine Scardigli - (299905)
+         * @author Marin Nguyen - (288260)
+        */
+        public static Color toType(int number) {
+            // for all the switches which returns something for any value, it is not necessary to use break
+            switch(number) {
                 case 1:return SPADE;
                 case 2:return HEART;
                 case 3:return DIAMOND;
                 case 4:return CLUB;
+                default: throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a color");
+                
             }
-            return null;
         }
+        
+        
+        /* 
+         * returns the character corresponding to the rank of the card
+         * @throws an exception in case it doesn't correspond to a case planned
+         */
         @Override
-        public String toString() {
+        public String toString() throws IllegalArgumentException{
             switch(type) {
                 case 1:return "\u2660";
                 case 2:return "\u2661";
                 case 3:return "\u2662";
                 case 4:return "\u2663";
+                default: throw new IllegalArgumentException("this thing does not correspond to a color");
             }
-            return null;
         }
         
         
     }
     
+    /**
+     * manages the ranks of the cards.
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+     *
+     */
     public enum   Rank{
         SIX     (6),
         SEVEN   (7),
@@ -57,17 +92,23 @@ public final class Card {
         KING    (13), 
         ACE     (14);
 
-        final int type;
-        final static int COUNT = 9; 
-        final static List<Rank> list = Arrays.asList(SIX,SEVEN,EIGHT,NINE,TEN,JACK,QUEEN,KING,ACE);
-        final static List<Rank>  ALL = Collections.unmodifiableList(list);
+        public  final int type;
+        public  final static int COUNT = 9; 
+        public  final static List<Rank>  ALL = Collections.unmodifiableList(Arrays.asList(SIX,SEVEN,EIGHT,NINE,TEN,JACK,QUEEN,KING,ACE));
         
         Rank(int type){
             this.type = type ;
         }
         
-        static Rank toType(int type) {
-            switch(type) {
+        /**
+         * gives the rank corresponding to the number
+         * @param number
+         * @return Rank
+         * @author Antoine Scardigli - (299905)
+         * @author Marin Nguyen - (288260)
+        */
+        static Rank toType(int number) throws IllegalArgumentException{
+            switch(number) {
                 case 6:return SIX;
                 case 7:return SEVEN;
                 case 8:return EIGHT;
@@ -77,12 +118,20 @@ public final class Card {
                 case 12:return QUEEN;
                 case 13:return KING;
                 case 14:return ACE;
-                
+                default: throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a rank");
             }
-            return null;
         }
 
-        static int trumpOrdinal(Rank rank) {
+     
+    /**
+     * returns the importance of the order in the case it is a trump in fonction of ranks.
+     * @param rank
+     * @return the importance of the order in the case it is a trump
+     * @throws IllegalArgumentException
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    static int trumpOrdinal(Rank rank) throws IllegalArgumentException {
             switch(rank) {
                 case SIX:return 0;
                 case SEVEN:return 1;
@@ -93,14 +142,19 @@ public final class Card {
                 case QUEEN:return 4;
                 case KING:return 5;
                 case ACE:return 6;
+                default: throw new IllegalArgumentException("this input (" + rank + ") doesn't correspond to a rank");
+
                 
             }
-            return -1;
         }
 
         
+        /* 
+         * returns the character corresponding to the rank of the card
+         * @throws an exception in case it doesn't correspond to a case planned
+         */
         @Override
-        public String toString() {
+        public String toString() throws IllegalArgumentException {
             switch(type) {
                 case 6:return "6";
                 case 7:return "7";
@@ -111,8 +165,9 @@ public final class Card {
                 case 12:return "Q";
                 case 13:return "K";
                 case 14:return "A";
+                default: throw new IllegalArgumentException("this thing does not correspond to a rank");
+
             }
-            return null;
         }
         
         
