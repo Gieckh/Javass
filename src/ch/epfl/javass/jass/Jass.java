@@ -1,5 +1,9 @@
 package ch.epfl.javass.jass;
-
+/**
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ *
+ */
 public interface Jass {
     
  // Redudant, but clearer in our opinion
