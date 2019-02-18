@@ -27,6 +27,7 @@ public final class PackedCard {
 
     
     public static Card.Color color(int pkCard) {
+        assert isValid(pkCard);
         /*
         Clearer but (slightly) slower version:
         int color = extract(pkCard, 4, 2);
@@ -37,6 +38,7 @@ public final class PackedCard {
     }
     
     public static Card.Rank rank(int pkCard) {
+        assert isValid(pkCard);
         int rank = extract(pkCard, 0, 4);
         return Card.Rank.toType(rank + 6);
     }
