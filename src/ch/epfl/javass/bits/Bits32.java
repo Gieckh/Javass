@@ -26,11 +26,19 @@ public final class Bits32 {
         if (start < 0 || size < 0) {
             throw new IllegalArgumentException();
         }
-        if (start + size >= Integer.SIZE) { //The bits are numbered from 0 to Integer.SIZE - 1 (== 31)
+        if (start + size > Integer.SIZE) { //There are Integer.SIZE( == 32 bits)
             throw new IllegalArgumentException();
         }
 
-        int mask = 1 << (size) - 1; // (theoretically) also works when size == 31 || size == 0
+        if (size == 0) { //Otherwise we'd have mask = 111...111 with the following formula
+            return 0;
+        }
+
+        if (size == 32) { // Because 1 << 32 == 1, it goes back from the right hmmmm
+            return -1;
+        }
+
+        int mask = (1 << size) - 1; // (theoretically) also works when size == 31 || size == 0
 
         return mask << start;
     }
@@ -63,14 +71,17 @@ public final class Bits32 {
      * @author - Marin Nguyen (288260)
      */
     // finds the msb position of an int, assuming there is one (i.e. value != 0)
+    //TODO: can i do better ?
     private static int msbPosition(int value) {
-        int mask = 1 << 30;
+        int mask = 1 << 31; // 1 followed by thirty 0
         int msbPos = 31;
 
-        while ((mask & value) != 1) {
+        while ((mask & value)>>>msbPos != 1) {
+            mask >>>= 1;
             msbPos--;
         }
 
+        System.out.println("msb pos of " + value + " is " + msbPos); //TODO: suppr.
         return msbPos;
     }
 
