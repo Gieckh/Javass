@@ -58,7 +58,7 @@ public final class PackedCard {
             return false;
         }
         if ((colorOfL.equals(trump)&&(colorOfR.equals(trump)))){
-            return (Card.Rank.trumpOrdinal(rankOfL)>Card.Rank.trumpOrdinal(rankOfR));
+            return (rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal());
         }
         else {
             return rankOfL.type>rankOfR.type;

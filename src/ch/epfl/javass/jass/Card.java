@@ -6,6 +6,7 @@ import java.util.List;
 
 import static ch.epfl.javass.jass.PackedCard.*;
 
+//TODO: check access rights
 /**
  * represents any card of the deck.
  * 
@@ -169,7 +170,7 @@ public final class Card {
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
-        static int trumpOrdinal() throws IllegalArgumentException {
+        int trumpOrdinal() throws IllegalArgumentException {
             Rank rank = this.rank;
             switch (rank) {
             case SIX:
