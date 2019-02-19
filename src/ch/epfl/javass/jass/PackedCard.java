@@ -69,6 +69,7 @@ public final class PackedCard {
     public static int points(Card.Color trump, int pkCard) {
         Card.Color color = color(pkCard); 
         Card.Rank rank = rank(pkCard);
+        // TODO: switch ?
         if((rank.equals(Card.Rank.SIX)||rank.equals(Card.Rank.SEVEN)||rank.equals(Card.Rank.EIGHT))) {
             return 0;
         }
@@ -100,8 +101,5 @@ public final class PackedCard {
         Card.Rank rank = rank(pkCard);        
         return color.toString()+rank.toString();
     }
-
-    
-    
 }
 
