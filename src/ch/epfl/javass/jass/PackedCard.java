@@ -47,7 +47,7 @@ public final class PackedCard {
         int intRank = extract(pkCard, 0, 4);
         return Card.Rank.toTyper(intRank);
          */
-        return Card.Rank.toType(extract(pkCard, 0, 4));
+        return Card.Rank.toType(extract(pkCard + 6, 0, 4));
     }
 
 
@@ -87,6 +87,8 @@ public final class PackedCard {
 
         return false;
     }
+
+
     /** returns the value of points of the card corresponding to the int pkCard.
      * @param trump
      * @param pkCard
@@ -98,7 +100,7 @@ public final class PackedCard {
         Card.Color color = color(pkCard); 
         Card.Rank rank = rank(pkCard);
         // TODO: switch ?
-        if((rank.equals(Card.Rank.SIX)||rank.equals(Card.Rank.SEVEN)||rank.equals(Card.Rank.EIGHT))) {
+        /*if((rank.equals(Card.Rank.SIX)||rank.equals(Card.Rank.SEVEN)||rank.equals(Card.Rank.EIGHT))) {
             return 0;
         }
         if((rank.equals(Card.Rank.TEN))) {
@@ -114,13 +116,32 @@ public final class PackedCard {
             return 11;
         }
 
-
         if(color.equals(trump)) {
             return (rank.equals(Card.Rank.NINE))? 14 : 20;
         }
 
         else {
             return (rank.equals(Card.Rank.NINE)) ? 0 : 2;
+        }*/
+
+        switch(rank) {
+        case SIX:
+        case SEVEN:
+        case EIGHT:
+            return 0;
+        case NINE:
+            return color.equals(trump) ? 14 : 0;
+        case TEN:
+            return 10;
+        case JACK:
+            return color.equals(trump) ? 20 : 2;
+        case QUEEN:
+            return 3;
+        case KING:
+            return 4;
+        case ACE:
+            return 11;
+        default: throw new IllegalArgumentException();
         }
     }
     /**
