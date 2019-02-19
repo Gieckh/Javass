@@ -4,7 +4,8 @@ import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 import static ch.epfl.javass.bits.Bits32.extract;
 
 //TODO: handle access rights
-//TODO: check where we assert
+//TODO: check where we assert (tests must not be done here)
+//TODO: use class preconditions
 public final class PackedCard {
     public final static int INVALID = 111111;
     

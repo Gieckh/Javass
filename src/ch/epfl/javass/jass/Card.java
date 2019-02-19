@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static ch.epfl.javass.jass.PackedCard.*;
+import static ch.epfl.javass.Preconditions.*;
 
 //TODO: check access rights
+//TODO: use class preconditions
 /**
  * represents any card of the deck.
  * 
@@ -200,7 +202,6 @@ public final class Card {
             default:
                 //TODO : what to put there ?
                 throw new IllegalArgumentException("this input (" + type + ") doesn't correspond to a rank");
-
             }
         }
 
@@ -241,9 +242,7 @@ public final class Card {
 
 
     static Card ofPacked(int packed) throws IllegalArgumentException {
-        if (!isValid(packed)) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(isValid(packed));
 
         return new Card(PackedCard.color(packed), PackedCard.rank(packed));
     }

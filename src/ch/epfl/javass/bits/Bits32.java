@@ -28,10 +28,12 @@ public final class Bits32 {
             throw new IllegalArgumentException();
         }
         if (start + size > Integer.SIZE) { //There are Integer.SIZE( == 32 bits)
+            // avec strict > ça marche (passe les tests)
+            // TODO: bizarre...
             throw new IllegalArgumentException();
         }
 
-        if (size == 0) { //Otherwise we'd have mask = 111...111 with the following formula
+        if (size == 0) { //Otherwise we'd have mask = 111...111 with the following formula. Plus that makes us "pass" the test mask(32, 0).
             return 0;
         }
 
