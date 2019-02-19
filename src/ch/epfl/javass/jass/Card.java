@@ -50,7 +50,7 @@ public final class Card {
         }
 
         /**
-         * return the color.
+         * returns the color.
          *
          * @param number
          * @return color
@@ -239,6 +239,7 @@ public final class Card {
         return new Card(c, r);
     }
 
+
     static Card ofPacked(int packed) throws IllegalArgumentException {
         if (!isValid(packed)) {
             throw new IllegalArgumentException();
@@ -246,7 +247,6 @@ public final class Card {
 
         return new Card(PackedCard.color(packed), PackedCard.rank(packed));
     }
-
 
     int packed() {
         return pack(color, rank);

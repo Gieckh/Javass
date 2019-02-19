@@ -1,8 +1,10 @@
 package ch.epfl.javass.jass;
 
-import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre.
+import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 import static ch.epfl.javass.bits.Bits32.extract;
 
+//TODO: handle access rights
+//TODO: check where we assert
 public final class PackedCard {
     public final static int INVALID = 111111;
     
@@ -17,13 +19,13 @@ public final class PackedCard {
 
         // Since we want to be fast
         System.out.println("extracted rank" + extract(pkCard, 0, 4));
-        return (extract(pkCard, 0, 4) < 9 &&
-                extract(pkCard, 6, 26) == 0);
+        return (extract(pkCard, 0, 4) < 9 &&  //The rank is valid
+                extract(pkCard, 6, 26) == 0); //The 26 "bigger" bits are "0s"
     }
 
 
     public static int pack(Card.Color c, Card.Rank r) {
-        return Bits32.pack(r.type, 4, c.type, 2);
+        return Bits32.pack(r.type - 6, 4, c.type, 2);
     }
 
     
@@ -31,8 +33,8 @@ public final class PackedCard {
         assert isValid(pkCard);
         /*
         Clearer but (slightly) slower version:
-        int color = extract(pkCard, 4, 2);
-        return Card.Color.toType(color);
+        int intColor = extract(pkCard, 4, 2);
+        return Card.Color.toType(intColor);
         */
 
         return Card.Color.toType(extract(pkCard, 4, 2));
@@ -40,12 +42,15 @@ public final class PackedCard {
     
     public static Card.Rank rank(int pkCard) {
         assert isValid(pkCard);
-
-        int rank = extract(pkCard, 0, 4);
-
-        return Card.Rank.toType(rank);
+        /*
+        Clearer but (slightly) slower version:
+        int intRank = extract(pkCard, 0, 4);
+        return Card.Rank.toTyper(intRank);
+         */
+        return Card.Rank.toType(extract(pkCard, 0, 4));
     }
-    
+
+
      /** returns true if and only if the card represented by the first int is better than the second
      * @param trump
      * @param pkCardL
@@ -55,11 +60,14 @@ public final class PackedCard {
      * @author Marin Nguyen - (288260)
      * IMPORTANT : return false in case an int is not valid
     */
-    //TOU DOU  : check whether we have to throw or not , and how we should manage the exceptions.
+    //TODO  : check whether we have to throw or not , and how we should manage the exceptions.
     public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
-        if (!(isValid(pkCardL) || (!isValid(pkCardR)))) {
-            return false;
-        }
+        //if ( !(isValid(pkCardL) && isValid(pkCardR)) ) {
+        //    return false;
+        //}
+        assert(isValid(pkCardL) && isValid(pkCardR));
+
+
         Card.Color colorOfL = color(pkCardL); 
         Card.Rank rankOfL = rank(pkCardL);
         Card.Color colorOfR = color(pkCardR);
@@ -124,7 +132,7 @@ public final class PackedCard {
     }
     /**
      * returns the representation of the card empacked, as a string.
-     * @param int pkCard
+     * @param pkCard (int)
      * @return the string of the symbol of the color and the character of the rank
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
