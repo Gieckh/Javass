@@ -113,7 +113,8 @@ public final class Card {
         KING  (13),
         ACE   (14);
 
-        public final int type;
+        public  int type;
+        public  Rank rank;
         public final static int COUNT = 9;
         public final static List<Rank> ALL = Collections.unmodifiableList(
                 Arrays.asList(SIX, SEVEN, EIGHT, NINE, TEN,
@@ -121,6 +122,9 @@ public final class Card {
 
         Rank(int type) {
             this.type = type;
+        }
+        Rank(Rank rank ){
+            this.rank = rank;
         }
 
         /**
@@ -165,7 +169,8 @@ public final class Card {
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
-        static int trumpOrdinal(Rank rank) throws IllegalArgumentException {
+        static int trumpOrdinal() throws IllegalArgumentException {
+            Rank rank = this.rank;
             switch (rank) {
             case SIX:
                 return 0;
