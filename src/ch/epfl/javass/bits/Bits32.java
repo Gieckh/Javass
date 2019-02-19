@@ -1,6 +1,7 @@
 package ch.epfl.javass.bits;
 
 //TODO: Junit tests
+//TODO: apprendre à utiliser les énumérations
 public final class Bits32 {
     /** ============================================== **/
     /** ==============   CONSTRUCTEURS   ============= **/
@@ -81,7 +82,6 @@ public final class Bits32 {
             msbPos--;
         }
 
-        System.out.println("msb pos of " + value + " is " + msbPos); //TODO: suppr.
         return msbPos;
     }
 
@@ -134,7 +134,7 @@ public final class Bits32 {
             throw new IllegalArgumentException();
         }
 
-        return (s2 << v1) + s1;
+        return (v2 << s1) + v1;
     }
 
 
@@ -159,7 +159,7 @@ public final class Bits32 {
             throw new IllegalArgumentException();
         }
 
-        return ((s3 << v2) + v2) << v1;
+        return (((v3 << s2) + v2) << s1) + v1;
     }
 
     /**
@@ -180,7 +180,11 @@ public final class Bits32 {
             throw new IllegalArgumentException();
         }
 
+        if (s1 + s2 + s3 + s4 + s5 + s6 + s7 > Integer.SIZE) {
+            throw new IllegalArgumentException();
+        }
+
         // Same principle as before, but with more parenthesises.
-        return (((((((((((s7 << s6) + v6) << s5) + v5) << s4) + v4) << s3) + v3) << s2) + v2) << s1) + v1;
+        return (((((((((((v7 << s6) + v6) << s5) + v5) << s4) + v4) << s3) + v3) << s2) + v2) << s1) + v1;
     }
 }

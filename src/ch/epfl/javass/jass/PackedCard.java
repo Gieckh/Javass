@@ -16,7 +16,7 @@ public final class PackedCard {
         */
 
         // Since we want to be fast
-        return (extract(pkCard, 0, 4) <= 4 &&
+        return (extract(pkCard, 0, 4) < 9 &&
                 extract(pkCard, 6, 26) == 0);
     }
 

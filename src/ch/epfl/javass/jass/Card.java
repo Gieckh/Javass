@@ -171,8 +171,8 @@ public final class Card {
          * @author Marin Nguyen - (288260)
          */
         int trumpOrdinal() throws IllegalArgumentException {
-            Rank rank = this.rank;
-            switch (rank) {
+            // Rank rank = this.rank;
+            switch (this) {
             case SIX:
                 return 0;
             case SEVEN:
