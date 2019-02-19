@@ -103,6 +103,10 @@ public final class Card {
      * @author Marin Nguyen - (288260)
      */
     public enum Rank {
+        /** =============================================== **/
+        /** ===============    ATTRIBUTES    ============== **/
+        /** =============================================== **/
+
         SIX   (6),
         SEVEN (7),
         EIGHT (8),
@@ -118,9 +122,19 @@ public final class Card {
         public final static List<Rank> ALL =
           Collections.unmodifiableList(Arrays.asList(values()));
 
-        Rank(int type) {
+
+        /** ============================================== **/
+        /** ==============   CONSTRUCTORS   ============== **/
+        /** ============================================== **/
+
+        private Rank(int type) {
             this.type = type;
         }
+
+
+        /** ============================================== **/
+        /** ===============    METHODS    ================ **/
+        /** ============================================== **/
 
         /**
          * gives the rank corresponding to the number
@@ -216,7 +230,6 @@ public final class Card {
             default:
                 throw new IllegalArgumentException(
                         "this thing does not correspond to a rank");
-
             }
         }
     }
