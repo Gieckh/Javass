@@ -235,26 +235,27 @@ public final class Card {
         }
     }
 
+
     //TODO: take care of public/private/none
+    // the rank ranges from 6 to 8
     static Card of(Color c, Rank r) {
         return new Card(c, r);
     }
-
-
     static Card ofPacked(int packed) throws IllegalArgumentException {
         checkArgument(isValid(packed));
 
         return new Card(PackedCard.color(packed), PackedCard.rank(packed));
     }
 
+
     int packed() {
         return pack(color, rank);
     }
 
+
     Color color() {
         return color;
     }
-
     Rank rank() {
         return rank;
     }

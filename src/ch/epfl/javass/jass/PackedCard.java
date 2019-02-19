@@ -19,14 +19,15 @@ public final class PackedCard {
         */
 
         // Since we want to be fast
-        System.out.println("extracted rank" + extract(pkCard, 0, 4));
         return (extract(pkCard, 0, 4) < 9 &&  //The rank is valid
                 extract(pkCard, 6, 26) == 0); //The 26 "bigger" bits are "0s"
     }
 
 
     public static int pack(Card.Color c, Card.Rank r) {
-        return Bits32.pack(r.type - 6, 4, c.type, 2);
+        return Bits32.pack(r.type - 6, 4, c.type - 1, 2);
+        // "-6" because the rank ranges from 6 to 14 instead of 0 to 8
+        // "-2" because the color ranges from 1 to 4 instrad of 0 to 3
     }
 
     
@@ -38,17 +39,23 @@ public final class PackedCard {
         return Card.Color.toType(intColor);
         */
 
-        return Card.Color.toType(extract(pkCard, 4, 2));
+        return Card.Color.toType(extract(pkCard, 4, 2) + 1);
+        // "+1" since toType expects arguments from 1 to 4
+        // while our card is encoded from 0 to 3.
+        // (We could also add the +1 in the extract) //TODO
     }
     
-    public static Card.Rank rank(int pkCard) {
+    public static Card.Rank rank(int pkCard) { //TODO: erase unnecessary comments
         assert isValid(pkCard);
         /*
         Clearer but (slightly) slower version:
         int intRank = extract(pkCard, 0, 4);
-        return Card.Rank.toTyper(intRank);
+        return Card.Rank.toTyper(intRank + 6);
          */
-        return Card.Rank.toType(extract(pkCard + 6, 0, 4));
+        return Card.Rank.toType(extract(pkCard, 0, 4) + 6);
+        // "+6" since toType expects arguments from 6 to 14
+        // while our card is encoded from 0 to 8.
+        // (We could also add the +6 in the extract) //TODO
     }
 
 
@@ -63,9 +70,6 @@ public final class PackedCard {
     */
     //TODO  : check whether we have to throw or not , and how we should manage the exceptions.
     public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
-        //if ( !(isValid(pkCardL) && isValid(pkCardR)) ) {
-        //    return false;
-        //}
         assert (isValid(pkCardL)  &&  isValid(pkCardR));
 
         Card.Color colorOfL = color(pkCardL);
