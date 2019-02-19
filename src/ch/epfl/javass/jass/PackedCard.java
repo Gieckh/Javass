@@ -61,17 +61,21 @@ public final class PackedCard {
         Card.Rank rankOfL = rank(pkCardL);
         Card.Color colorOfR = color(pkCardR);
         Card.Rank  rankOfR = rank(pkCardR);
-        if ((colorOfL.equals(trump)&&(!(colorOfR.equals(trump))))){
+
+        if (colorOfL.equals(trump)  &&  !colorOfR.equals(trump)){
             return true;
         }
-        if ((!(colorOfL.equals(trump))&&(colorOfR.equals(trump)))){
+
+        if (!colorOfL.equals(trump)  &&  (colorOfR.equals(trump))){
             return false;
         }
-        if ((colorOfL.equals(trump)&&(colorOfR.equals(trump)))){
+
+        if (colorOfL.equals(trump)) {
             return (rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal());
         }
+
         else {
-            return rankOfL.type>rankOfR.type;
+            return rankOfL.type > rankOfR.type;
         }
         
     }
