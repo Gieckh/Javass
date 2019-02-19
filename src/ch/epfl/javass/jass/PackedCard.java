@@ -65,34 +65,27 @@ public final class PackedCard {
         //if ( !(isValid(pkCardL) && isValid(pkCardR)) ) {
         //    return false;
         //}
-        assert(isValid(pkCardL) && isValid(pkCardR));
+        assert (isValid(pkCardL)  &&  isValid(pkCardR));
 
-
-        Card.Color colorOfL = color(pkCardL); 
-        Card.Rank rankOfL = rank(pkCardL);
+        Card.Color colorOfL = color(pkCardL);
         Card.Color colorOfR = color(pkCardR);
-        Card.Rank  rankOfR = rank(pkCardR);
 
-        if (colorOfL.equals(trump)  &&  !colorOfR.equals(trump)){
+        Card.Rank rankOfL = rank(pkCardL);
+        Card.Rank rankOfR = rank(pkCardR);
+
+        if (colorOfL.equals(trump)) { //TODO: "==" works too i think ? and is less greedy in operation
+            if (colorOfR.equals(trump)) {
+                return rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal();
+            }
+
             return true;
         }
 
-        if (!colorOfL.equals(trump)  &&  (colorOfR.equals(trump))){
-            return false;
+        if (colorOfL.equals(colorOfR)) {
+            return rankOfL.ordinal() > rankOfR.ordinal();
         }
 
-        if (colorOfL.equals(trump)) {
-            //TODO: suppr
-            System.out.println("trumpOrdinal of first card : " + rankOfL.trumpOrdinal());
-            System.out.println("trumpOrdinal of second card : " + rankOfR.trumpOrdinal());
-
-            return (rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal());
-        }
-
-        else {
-            return rankOfL.type > rankOfR.type;
-        }
-        
+        return false;
     }
     /** returns the value of points of the card corresponding to the int pkCard.
      * @param trump
