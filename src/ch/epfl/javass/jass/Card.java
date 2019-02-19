@@ -113,18 +113,13 @@ public final class Card {
         KING  (13),
         ACE   (14);
 
-        public  int type;
-        public  Rank rank;
+        public int type;
         public final static int COUNT = 9;
-        public final static List<Rank> ALL = Collections.unmodifiableList(
-                Arrays.asList(SIX, SEVEN, EIGHT, NINE, TEN,
-                              JACK, QUEEN, KING,ACE));
+        public final static List<Rank> ALL =
+          Collections.unmodifiableList(Arrays.asList(values()));
 
         Rank(int type) {
             this.type = type;
-        }
-        Rank(Rank rank ){
-            this.rank = rank;
         }
 
         /**
@@ -135,7 +130,7 @@ public final class Card {
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
-        static Rank toType(int number) throws IllegalArgumentException {
+        static Rank toType(int number) {
             switch (number) {
             case 6:
                 return SIX;
@@ -156,21 +151,19 @@ public final class Card {
             case 14:
                 return ACE;
             default:
+                //TODO: what to put there?
                 throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a rank");
             }
         }
 
         /**
-         * returns the importance of the order in the case it is a trump in fonction of ranks.
-         *
-         * @param rank
-         * @return the importance of the order in the case it is a trump
+         * @return (int) the position of the trump card which has the rank "this"
+         *         in the list of trump cards, based on their strength //TODO: better
          * @throws IllegalArgumentException
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
         int trumpOrdinal() throws IllegalArgumentException {
-            // Rank rank = this.rank;
             switch (this) {
             case SIX:
                 return 0;
@@ -191,34 +184,34 @@ public final class Card {
             case ACE:
                 return 6;
             default:
-                throw new IllegalArgumentException("this input (" + rank + ") doesn't correspond to a rank");
+                //TODO : what to put there ?
+                throw new IllegalArgumentException("this input (" + type + ") doesn't correspond to a rank");
 
             }
         }
 
-        /*
+        /**
          * returns the character corresponding to the rank of the card
-         * @throws an exception in case it doesn't correspond to a case planned
          */
-        @Override public String toString() throws IllegalArgumentException {
-            switch (type) {
-            case 6:
+        @Override public String toString() {
+            switch (this) {
+            case SIX:
                 return "6";
-            case 7:
+            case SEVEN:
                 return "7";
-            case 8:
+            case EIGHT:
                 return "8";
-            case 9:
+            case NINE:
                 return "9";
-            case 10:
+            case TEN:
                 return "10";
-            case 11:
+            case JACK:
                 return "J";
-            case 12:
+            case QUEEN:
                 return "Q";
-            case 13:
+            case KING:
                 return "K";
-            case 14:
+            case ACE:
                 return "A";
             default:
                 throw new IllegalArgumentException(
