@@ -16,6 +16,7 @@ public final class PackedCard {
         */
 
         // Since we want to be fast
+        System.out.println("extracted rank" + extract(pkCard, 0, 4));
         return (extract(pkCard, 0, 4) < 9 &&
                 extract(pkCard, 6, 26) == 0);
     }
@@ -39,8 +40,10 @@ public final class PackedCard {
     
     public static Card.Rank rank(int pkCard) {
         assert isValid(pkCard);
+
         int rank = extract(pkCard, 0, 4);
-        return Card.Rank.toType(rank + 6);
+
+        return Card.Rank.toType(rank);
     }
     
      /** returns true if and only if the card represented by the first int is better than the second
@@ -52,7 +55,7 @@ public final class PackedCard {
      * @author Marin Nguyen - (288260)
      * IMPORTANT : return false in case an int is not valid
     */
-    //TOU DOU  : check wether we have to throw or not , and how we should manage the exceptions.
+    //TOU DOU  : check whether we have to throw or not , and how we should manage the exceptions.
     public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
         if (!(isValid(pkCardL) || (!isValid(pkCardR)))) {
             return false;
@@ -71,6 +74,10 @@ public final class PackedCard {
         }
 
         if (colorOfL.equals(trump)) {
+            //TODO: suppr
+            System.out.println("trumpOrdinal of first card : " + rankOfL.trumpOrdinal());
+            System.out.println("trumpOrdinal of second card : " + rankOfR.trumpOrdinal());
+
             return (rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal());
         }
 

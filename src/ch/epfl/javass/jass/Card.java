@@ -42,8 +42,8 @@ public final class Card {
 
         public final int type;
         public final static int COUNT = 4;
-        public final static List<Color> ALL = Collections
-                .unmodifiableList(Arrays.asList(SPADE, HEART, DIAMOND, CLUB));
+        public final static List<Color> ALL =
+          Collections.unmodifiableList(Arrays.asList(values()));
 
         Color(int type) {
             this.type = type;
@@ -70,7 +70,6 @@ public final class Card {
                 return CLUB;
             default:
                 throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a color");
-
             }
         }
 
@@ -80,14 +79,14 @@ public final class Card {
          * @throws IllegalArgumentException
          */
         @Override public String toString() throws IllegalArgumentException {
-            switch (type) {
-            case 1:
+            switch (this) {
+            case SPADE:
                 return "\u2660";
-            case 2:
-                return "\u2661";
-            case 3:
-                return "\u2662";
-            case 4:
+            case HEART:
+                return "\u2665";
+            case DIAMOND:
+                return "\u2666";
+            case CLUB:
                 return "\u2663";
             default:
                 throw new IllegalArgumentException(
