@@ -43,6 +43,16 @@ public final class PackedCard {
         return Card.Rank.toType(rank + 6);
     }
     
+     /** returns true if and only if the card represented by the first int is better than the second
+     * @param trump
+     * @param pkCardL
+     * @param pkCardR
+     * @return boolean , true in case the card represented by pkCardL is better than the one represented by pkcardR
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+     * IMPORTANT : return false in case an int is not valid
+    */
+    //TOU DOU  : check wether we have to throw or not , and how we should manage the exceptions.
     public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
         if (!(isValid(pkCardL) || (!isValid(pkCardR)))) {
             return false;
@@ -65,7 +75,13 @@ public final class PackedCard {
         }
         
     }
-
+    /** returns the value of points of the card corresponding to the int pkCard.
+     * @param trump
+     * @param pkCard
+     * @return the number of points a card worth
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static int points(Card.Color trump, int pkCard) {
         Card.Color color = color(pkCard); 
         Card.Rank rank = rank(pkCard);
@@ -95,7 +111,13 @@ public final class PackedCard {
             return (rank.equals(Card.Rank.NINE)) ? 0 : 2;
         }
     }
-
+    /**
+     * returns the representation of the card empacked, as a string.
+     * @param int pkCard
+     * @return the string of the symbol of the color and the character of the rank
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static String toString(int pkCard) {
         Card.Color color = color(pkCard); 
         Card.Rank rank = rank(pkCard);        
