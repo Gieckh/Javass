@@ -26,7 +26,18 @@ public final class Card {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
+    /**
+     * @brief PRIVATE constructor of the class card. Invoked by method
+     *        "of(Color c, Rank r)" and "ofPacked(int packed)".
+     *        used to create the card of (Color) c and (Rank) r.
+     *
+     * @param c (Color) the color of the card to create
+     * @param r (Rank) the rank of the card to create
+     *
+     * @return a new card of (Color) c and (Rank) r
+     */
     private Card(Color c, Rank r) {
+        //TODO: copies ?
         color = c;
         rank = r;
     }
@@ -236,7 +247,7 @@ public final class Card {
     }
 
 
-    //TODO: take care of public/private/none
+    //TODO: take care of access rights : public/private/none
     // the rank ranges from 6 to 8
     static Card of(Color c, Rank r) {
         return new Card(c, r);
