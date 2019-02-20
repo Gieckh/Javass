@@ -13,11 +13,21 @@ public class Bits64 {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-    /** ============================================== **/
-    /** ==================   MAIN   ================== **/
-    /** ============================================== **/
+    long mask(int start, int size) {
+        //TODO: ...
+        return 0;
+    }
 
-    public static void main(String args[]) {
 
+    long extract(long bits, int start, int size) {
+        //TODO: ...
+        return 0;
+    }
+
+
+
+    long pack(long v1, int s1, long v2, int s2) {
+        //TODO: ...
+        return 0;
     }
 }
