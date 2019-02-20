@@ -1,4 +1,7 @@
 package ch.epfl.javass.bits;
+import ch.epfl.javass.Preconditions.*;
+
+import static ch.epfl.javass.Preconditions.checkArgument;
 
 //TODO: Junit tests
 //TODO: apprendre à utiliser les énumérations
@@ -24,9 +27,7 @@ public final class Bits32 {
      * @author - Marin Nguyen (288260)
      */
     public static int mask(int start, int size) throws IllegalArgumentException {
-        if (start < 0 || size < 0) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(start >= 0  &&  size >=0);
         if (start + size > Integer.SIZE) { //There are Integer.SIZE( == 32 bits)
             // avec strict > ça marche (passe les tests)
             // TODO: bizarre...
@@ -67,7 +68,7 @@ public final class Bits32 {
 
     /**
      * @brief finds the position of the MSB of the int value
-     * @see packCheck
+     * @see checkPack(int, int)
      * @param value the bit whose MSB position we want to know, NOT 0.
      * @return (int) the MSB position (an int between 0 and 31)
      *
@@ -89,7 +90,7 @@ public final class Bits32 {
 
     /**
      * @brief checks whether "size" and "value" are compatible
-     * @see pack
+     * @see pack(int, int, int, int)
      * @param value
      * @param size
      * @return (boolean) true if
@@ -98,7 +99,7 @@ public final class Bits32 {
      *
      * @author - Marin Nguyen (288260)
      */
-    private static boolean packCheck(int value, int size) {
+    private static boolean checkPack(int value, int size) {
         if (size < 1 || size >= Integer.SIZE) {
             return false;
         }
@@ -127,7 +128,7 @@ public final class Bits32 {
      */
     public static int
     pack(int v1, int s1, int v2, int s2) throws IllegalArgumentException {
-        if (!(packCheck(v1, s1) && packCheck(v2, s2))) {
+        if (!(checkPack(v1, s1) && checkPack(v2, s2))) {
             throw new IllegalArgumentException();
         }
 
@@ -152,7 +153,7 @@ public final class Bits32 {
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3) throws IllegalArgumentException {
-        boolean compatibleSizes = packCheck(v1, s1) && packCheck(v2, s2) && packCheck(v3, s3);
+        boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) && checkPack(v3, s3);
         if (!compatibleSizes) {
             throw new IllegalArgumentException();
         }
@@ -174,10 +175,10 @@ public final class Bits32 {
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3, int v4, int s4,
          int v5, int s5, int v6, int s6, int v7, int s7) throws IllegalArgumentException {
-        boolean compatibleSizes = packCheck(v1, s1) && packCheck(v2, s2) &&
-                                  packCheck(v3, s3) && packCheck(v4, s4) &&
-                                  packCheck(v5, s5) && packCheck(v6, s6) &&
-                                  packCheck(v7, s7);
+        boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) &&
+                                  checkPack(v3, s3) && checkPack(v4, s4) &&
+                                  checkPack(v5, s5) && checkPack(v6, s6) &&
+                                  checkPack(v7, s7);
         if (!compatibleSizes) {
             throw new IllegalArgumentException();
         }
