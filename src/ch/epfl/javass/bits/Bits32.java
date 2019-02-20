@@ -1,6 +1,8 @@
 package ch.epfl.javass.bits;
 import ch.epfl.javass.Preconditions.*;
 
+import java.lang.annotation.Inherited;
+
 import static ch.epfl.javass.Preconditions.checkArgument;
 
 //TODO: Junit tests
@@ -28,11 +30,8 @@ public final class Bits32 {
      */
     public static int mask(int start, int size) throws IllegalArgumentException {
         checkArgument(start >= 0  &&  size >=0);
-        if (start + size > Integer.SIZE) { //There are Integer.SIZE( == 32 bits)
-            // avec strict > ça marche (passe les tests)
-            // TODO: bizarre...
-            throw new IllegalArgumentException();
-        }
+        checkArgument(start + size <= Integer.SIZE);
+        // https://piazza.com/class/jrhvyjm5czn4f?cid=14
 
         if (size == 0) { //Otherwise we'd have mask = 111...111 with the following formula. Plus that makes us "pass" the test mask(32, 0).
             return 0;
@@ -57,8 +56,8 @@ public final class Bits32 {
      *
      * @author - Marin Nguyen (288260)
      */
-    public static int extract(int bits, int start, int size)
-            throws IllegalArgumentException {
+    public static int
+    extract(int bits, int start, int size) throws IllegalArgumentException {
         // The call to mask checks the exceptions
         int mask = mask(start, size);
         return (mask & bits) >>> start;
@@ -128,15 +127,10 @@ public final class Bits32 {
      */
     public static int
     pack(int v1, int s1, int v2, int s2) throws IllegalArgumentException {
-        if (!(checkPack(v1, s1) && checkPack(v2, s2))) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(checkPack(v1, s1) && checkPack(v2, s2));
 
         // Seems better (to us) to have a new if statement for that condition
-        if (s1 + s2 > Integer.SIZE) {
-            throw new IllegalArgumentException();
-        }
-
+        checkArgument(s1 + s2 <= Integer.SIZE);
         return (v2 << s1) + v1;
     }
 
@@ -154,13 +148,8 @@ public final class Bits32 {
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3) throws IllegalArgumentException {
         boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) && checkPack(v3, s3);
-        if (!compatibleSizes) {
-            throw new IllegalArgumentException();
-        }
-
-        if (s1 + s2 + s3 > Integer.SIZE) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(compatibleSizes);
+        checkArgument(s1 + s2 +s3 <= Integer.SIZE);
 
         return (((v3 << s2) + v2) << s1) + v1;
     }
@@ -179,13 +168,9 @@ public final class Bits32 {
                                   checkPack(v3, s3) && checkPack(v4, s4) &&
                                   checkPack(v5, s5) && checkPack(v6, s6) &&
                                   checkPack(v7, s7);
-        if (!compatibleSizes) {
-            throw new IllegalArgumentException();
-        }
 
-        if (s1 + s2 + s3 + s4 + s5 + s6 + s7 > Integer.SIZE) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(compatibleSizes);
+        checkArgument(s1 + s2 + s3 + s4 + s5 + s6 + s7 <= Integer.SIZE);
 
         // Same principle as before, but with more parenthesises.
         return (((((((((((v7 << s6) + v6) << s5) + v5) << s4) + v4) << s3) + v3) << s2) + v2) << s1) + v1;

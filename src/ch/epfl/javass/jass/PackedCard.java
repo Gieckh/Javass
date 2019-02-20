@@ -23,7 +23,12 @@ public final class PackedCard {
                 extract(pkCard, 6, 26) == 0); //The 26 "bigger" bits are "0s"
     }
 
-
+    /**
+     * @brief packs a card, given its color and rank
+     * @param c (Color), the color of the card
+     * @param r (Rank), the rank of the card
+     * @return (int) the corresponding packed card.
+     */
     public static int pack(Card.Color c, Card.Rank r) {
         return Bits32.pack(r.type - 6, 4, c.type - 1, 2);
         // "-6" because the rank ranges from 6 to 14 instead of 0 to 8
@@ -44,7 +49,12 @@ public final class PackedCard {
         // while our card is encoded from 0 to 3.
         // (We could also add the +1 in the extract) //TODO
     }
-    
+
+    /**
+     * @brief Gives the rank of a packed card
+     * @param pkCard (int), a card coded by an int (i.e. a packed card)
+     * @return (Rank) the rank of this card
+     */
     public static Card.Rank rank(int pkCard) { //TODO: erase unnecessary comments
         assert isValid(pkCard);
         /*
