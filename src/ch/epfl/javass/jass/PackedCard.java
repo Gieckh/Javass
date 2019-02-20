@@ -19,7 +19,7 @@ public final class PackedCard {
         */
 
         // Since we want to be fast
-        return (extract(pkCard, 0, 4) < 9 &&  //The rank is valid
+        return (extract(pkCard, 0, 4) < 9 &&  //The rank is valid (we don't check color since it can only be valid)
                 extract(pkCard, 6, 26) == 0); //The 26 "bigger" bits are "0s"
     }
 
@@ -32,7 +32,7 @@ public final class PackedCard {
     public static int pack(Card.Color c, Card.Rank r) {
         return Bits32.pack(r.type - 6, 4, c.type - 1, 2);
         // "-6" because the rank ranges from 6 to 14 instead of 0 to 8
-        // "-2" because the color ranges from 1 to 4 instrad of 0 to 3
+        // "-1" because the color ranges from 1 to 4 instrad of 0 to 3
     }
 
     
