@@ -17,7 +17,7 @@ public final class Preconditions {
         if (!b) {
             throw new IllegalArgumentException();
         }
-        // ne fait rien sinon
+        // Overwise, does nothing
     }
 
     /**
@@ -35,7 +35,7 @@ public final class Preconditions {
             throw new IndexOutOfBoundsException();
         }
 
-        // S'il n'y a pas d'erreur
+        // if there is no error
         return index;
     }
 }
