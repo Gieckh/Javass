@@ -5,7 +5,6 @@ package ch.epfl.javass.jass;
  *
  */
 public interface Jass {
-    
     // Redundant, but clearer in our opinion
 
     public final static int HAND_SIZE = 9;
