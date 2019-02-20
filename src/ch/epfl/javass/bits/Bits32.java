@@ -114,7 +114,7 @@ public final class Bits32 {
 
 
     /**
-     * @brief concatenates the binary expressions of v1 and v2 (where v2's bits are significant than v1's ones)
+     * @brief concatenates the binary expressions of v1 and v2 (where v2's bits are more significant than v1's ones)
      *
      * @param v1 (int) the first (int) to concatenate
      * @param s1 (int) the size of v1
