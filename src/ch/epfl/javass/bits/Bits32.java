@@ -1,12 +1,7 @@
 package ch.epfl.javass.bits;
-import ch.epfl.javass.Preconditions.*;
-
-import java.lang.annotation.Inherited;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
-//TODO: Junit tests
-//TODO: apprendre à utiliser les énumérations
 public final class Bits32 {
     /** ============================================== **/
     /** ==============   CONSTRUCTEURS   ============= **/
@@ -20,6 +15,7 @@ public final class Bits32 {
 
     /**
      * @brief creates a mask of "size" 1 bits, starting at position "start"
+     *
      * ex : mask(1, 3) = 0...01110
      * @param start (int) the position of the first 1
      * @param size  (int) the length of the 1-sequence
@@ -48,6 +44,7 @@ public final class Bits32 {
 
     /**
      * @brief creates the int formed from the bits [start] to [start + size - 1] of "bits"
+     *
      * @param bits  (int)
      * @param start (int)
      * @param size  (int)
@@ -67,6 +64,7 @@ public final class Bits32 {
 
     /**
      * @brief finds the position of the MSB of the int value
+     *
      * @see checkPack(int, int)
      * @param value the bit whose MSB position we want to know, NOT 0.
      * @return (int) the MSB position (an int between 0 and 31)
@@ -89,6 +87,7 @@ public final class Bits32 {
 
     /**
      * @brief checks whether "size" and "value" are compatible
+     *
      * @see pack(int, int, int, int)
      * @param value
      * @param size
@@ -116,6 +115,7 @@ public final class Bits32 {
 
     /**
      * @brief concatenates the binary expressions of v1 and v2 (where v2's bits are significant than v1's ones)
+     *
      * @param v1 (int) the first (int) to concatenate
      * @param s1 (int) the size of v1
      * @param v2 (int) the second (int) to concatenate
@@ -141,9 +141,12 @@ public final class Bits32 {
     /**
      * @brief concatenates the binary expressions of v1, v2 and v3
      *        (where v3's bits are the most significant ones and v1's's the least)
+     *
      * @see "pack(int v1, int s1, int v2, int s2)"
      * @return the number formed by the concatenation (in binary form) of v1, v2 and v3
      * @throws IllegalArgumentException
+     *
+     * @author - Marin Nguyen (288260)
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3) throws IllegalArgumentException {
@@ -157,9 +160,12 @@ public final class Bits32 {
     /**
      * @brief concatenates the binary expressions of v1, v2, ... v6 and v7
      *        (where v7's bits are the most significant ones and v1's's the least)
+     *
      * @see "pack(int v1, int s1, int v2, int s2)"
      * @return the number formed by the concatenation (in binary form) of all the "v_i", (where 1 <= i <= 7)
      * @throws IllegalArgumentException
+     *
+     * @author - Marin Nguyen (288260)
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3, int v4, int s4,

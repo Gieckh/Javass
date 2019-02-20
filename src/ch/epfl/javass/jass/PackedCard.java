@@ -68,17 +68,18 @@ public final class PackedCard {
         // (We could also add the +6 in the extract) //TODO
     }
 
-
-     /** returns true if and only if the card represented by the first int is better than the second
-     * @param trump
-     * @param pkCardL
-     * @param pkCardR
-     * @return boolean , true in case the card represented by pkCardL is better than the one represented by pkcardR
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-     * IMPORTANT : return false in case an int is not valid
-    */
-    //TODO  : check whether we have to throw or not , and how we should manage the exceptions.
+    /**
+     * @brief returns true if the packed card "pkCardL" is stronger than the
+     *        packed card "pkCardR", false otherwise (weaker or not comparable).
+     *
+     * @param trump (Color) the color of the trump. Needed to evaluate the strength of a card
+     * @param pkCardL (int) the int encoding the first card
+     * @param pkCardR (int) the int encoding the second card
+     * @return (boolean) true when pkCardL is better than pkCardR.
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
         assert (isValid(pkCardL)  &&  isValid(pkCardR));
 
@@ -103,73 +104,56 @@ public final class PackedCard {
         return false;
     }
 
-
-    /** returns the value of points of the card corresponding to the int pkCard.
-     * @param trump
-     * @param pkCard
-     * @return the number of points a card worth
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+    /**
+     * @brief return the value (nb of points a card is worth) of the (encoded)
+     *        card "pkCard", given the trump "trump".
+     *
+     * @param trump (Color) the color of the trump
+     * @param pkCard (int) the int representing a card
+     *
+     * @return the value of the (encoded) card "pkCard"
+     *
+     * @author - Antoine Scardigli (299905)
+     * @author - Marin Nguyen (288260)
+     */
     public static int points(Card.Color trump, int pkCard) {
         Card.Color color = color(pkCard); 
         Card.Rank rank = rank(pkCard);
-        // TODO: switch ?
-        /*if((rank.equals(Card.Rank.SIX)||rank.equals(Card.Rank.SEVEN)||rank.equals(Card.Rank.EIGHT))) {
-            return 0;
-        }
-        if((rank.equals(Card.Rank.TEN))) {
-            return 10;
-        }
-        if((rank.equals(Card.Rank.QUEEN))) {
-            return 3;
-        }
-        if((rank.equals(Card.Rank.KING))) {
-            return 4;
-        }
-        if((rank.equals(Card.Rank.ACE))) {
-            return 11;
-        }
-
-        if(color.equals(trump)) {
-            return (rank.equals(Card.Rank.NINE))? 14 : 20;
-        }
-
-        else {
-            return (rank.equals(Card.Rank.NINE)) ? 0 : 2;
-        }*/
 
         switch(rank) {
-        case SIX:
-        case SEVEN:
-        case EIGHT:
-            return 0;
-        case NINE:
-            return color.equals(trump) ? 14 : 0;
-        case TEN:
-            return 10;
-        case JACK:
-            return color.equals(trump) ? 20 : 2;
-        case QUEEN:
-            return 3;
-        case KING:
-            return 4;
-        case ACE:
-            return 11;
-        default: throw new IllegalArgumentException();
+            case SIX:
+            case SEVEN:
+            case EIGHT:
+                return 0;
+            case NINE:
+                return color.equals(trump) ? 14 : 0;
+            case TEN:
+                return 10;
+            case JACK:
+                return color.equals(trump) ? 20 : 2;
+            case QUEEN:
+                return 3;
+            case KING:
+                return 4;
+            case ACE:
+                return 11;
+            default: throw new IllegalArgumentException();
         }
     }
+
+
     /**
-     * returns the representation of the card empacked, as a string.
-     * @param pkCard (int)
-     * @return the string of the symbol of the color and the character of the rank
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     * @brief the (String) representation of the card :
+     *        "[its suit]" then "[its rank]", without spaces in between.
+     *
+     * @param pkCard (int) the int encoding a card
+     * @return the (String) representation of the card.
+     *
+     * @author - Antoine Scardigli (299905)
+     * @author - Marin Nguyen (288260)
+     */
     public static String toString(int pkCard) {
-        Card.Color color = color(pkCard); 
-        Card.Rank rank = rank(pkCard);        
-        return color.toString()+rank.toString();
+        return color(pkCard).toString() + rank(pkCard).toString();
     }
 }
 
