@@ -25,8 +25,8 @@ public final class PackedScored {
     
    
     public static boolean isValid(long pkScore) {
-       return(extract(pkScore,24,7) == 0 &&
-              extract(pkScore,56,7) == 0 &&
+       return(extract(pkScore,24,8) == 0 &&
+              extract(pkScore,56,8) == 0 &&
               extract(pkScore,0,4) < 10 &&
               extract(pkScore,4,9) < 258 &&
               extract(pkScore,13,11) < 2001 &&
