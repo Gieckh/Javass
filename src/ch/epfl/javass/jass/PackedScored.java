@@ -1,6 +1,8 @@
 package ch.epfl.javass.jass;
 
 import ch.epfl.javass.bits.Bits64;
+import ch.epfl.javass.jass.Jass.TeamId;
+
 import static ch.epfl.javass.bits.Bits64.extract;
 
 /** manipulates scores of a jass game
@@ -51,6 +53,114 @@ public final class PackedScored {
         long msb= Bits64.pack(turnTricks2, 4, turnPoints2, 9, gamePoints2, 11);
         return Bits64.pack(lsb, 32, msb, 32);       
         }
+    
+    
+    /** returns the number of tricks won in function of the team.
+     * @param pkScore
+     * @param t, the TeamId
+     * @return int : the number of tricks won 
+     * @throws IllegalArgumentException
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    public static int turnTricks(long pkScore, TeamId t) throws IllegalArgumentException{
+        assert isValid(pkScore);
+        if(t.ordinal() == 1) {
+            return (int) extract( pkScore , 0 , 4 );
+        }
+        if(t.ordinal() == 2) {
+            return (int) extract( pkScore , 32 , 4 );
+        }
+        else {
+            throw new IllegalArgumentException("Bad Team Inmput");
+        }
+    }
+    
+    
+    /** returns the number of points won in the current turn in function of the team.
+     * @param pkScore
+     * @param t, the TeamId
+     * @return int : the number of points won in the current turn 
+     * @throws IllegalArgumentException
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    public static int turnPoints(long pkScore, TeamId t) throws IllegalArgumentException{
+        assert isValid(pkScore);
+        if(t.ordinal() == 1) {
+            return (int) extract( pkScore , 4 , 9 );
+        }
+        if(t.ordinal() == 2) {
+            return (int) extract( pkScore , 36 ,9 );
+        }
+        else {
+            throw new IllegalArgumentException("Bad Team Inmput");
+        }
+    }
+    
+    /** returns the number of points won in the whole game except the current turn. 
+     * @param pkScore
+     * @param t, the TeamId
+     * @return int : the total number of points won depending on the team 
+     * @throws IllegalArgumentException
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    public static int gamePoints(long pkScore, TeamId t) throws IllegalArgumentException{
+        assert isValid(pkScore);
+        if(t.ordinal() == 1) {
+            return (int) extract( pkScore , 13 , 11 );
+        }
+        if(t.ordinal() == 2) {
+            return (int) extract( pkScore , 45 , 11 );
+        }
+        else {
+            throw new IllegalArgumentException("Bad Team Inmput");
+        }
+    }
+    
+    /** returns the total number of points won in the whole game except the current turn. 
+     * @param pkScore
+     * @param t, the TeamId
+     * @return int : the total number of points won depending on the team 
+     * @throws IllegalArgumentException
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    public static int totalPoints(long pkScore, TeamId t) throws IllegalArgumentException{
+        assert isValid(pkScore);
+        if(t.ordinal() == 1) {
+            return (int) (extract( pkScore , 13 , 11 ) + extract( pkScore, 4 , 9 ));
+        }
+        if(t.ordinal() == 2) {
+            return (int) (extract( pkScore , 45 , 11 ) + extract( pkScore, 4 , 9 ));
+        }
+        else {
+            throw new IllegalArgumentException("Bad Team Inmput");
+        }
+    }
+    
+    
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 }
