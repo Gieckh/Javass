@@ -46,10 +46,25 @@ public class Bits64 {
     }
 
 
-    long extract(long bits, int start, int size) {
-        //TODO: ...
-        return (long) 0;
+    /**
+     * @brief creates the int formed from the bits [start] to [start + size - 1] of "bits"
+     *
+     * @param bits  (int)
+     * @param start (int)
+     * @param size  (int)
+     * @return (int) the int formed from the bits [start] to [start + size - 1] of "bits"
+     * @throws IllegalArgumentException
+     *
+     * @author - Marin Nguyen (288260)
+     */
+    public static long
+    extract(long bits, int start, int size) throws IllegalArgumentException {
+        // The call to mask checks the exceptions
+        long mask = mask(start, size);
+        return (mask & bits) >>> start;
     }
+
+
 
 
 
