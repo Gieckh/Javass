@@ -139,9 +139,22 @@ public final class PackedScored {
             throw new IllegalArgumentException("Bad Team Inmput");
         }
     }
+        
+        //TODO : de with aditional a next turn + lire les "conseils"
+       
     
     
     
+    public static String toString(long pkScore) {
+        assert isValid(pkScore);    
+        String Tricksof1 = "Tricks of Team 1 : " + extract(pkScore,0,4);
+        String Tricksof2 = "Tricks of Team 2 : " + extract(pkScore,32,4);
+        String CurrentPointsOf1 = "Current points of Team 1 : " + extract(pkScore,4,9);
+        String CurrentPointsOf2 = "Current points of Team 2 : " + extract(pkScore,36,9);
+        String GlobalPointsOf1 = "Global points of Team 1 : " + extract(pkScore,13,11);
+        String GlobalPointsOf2 = "Global points of Team 1 : " + extract(pkScore,45,11);
+        return Tricksof1 + "\n" + CurrentPointsOf1 + "\n"+ GlobalPointsOf1 + "\n"+ Tricksof2 + "\n"+ CurrentPointsOf2 + "\n"+ GlobalPointsOf2;
+    }
    
     
     
