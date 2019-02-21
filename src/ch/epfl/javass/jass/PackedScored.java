@@ -1,5 +1,6 @@
 package ch.epfl.javass.jass;
 
+import ch.epfl.javass.bits.Bits64;
 import static ch.epfl.javass.bits.Bits64.extract;
 
 /** manipulates scores of a jass game
@@ -21,6 +22,8 @@ public final class PackedScored {
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
+    
+   
     public static boolean isValid(long pkScore) {
        return(extract(pkScore,24,7) == 0 &&
               extract(pkScore,56,7) == 0 &&
