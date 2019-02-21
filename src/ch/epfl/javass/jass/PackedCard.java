@@ -32,7 +32,7 @@ public final class PackedCard {
     public static int pack(Card.Color c, Card.Rank r) {
         return Bits32.pack(r.type - 6, 4, c.type - 1, 2);
         // "-6" because the rank ranges from 6 to 14 instead of 0 to 8
-        // "-1" because the color ranges from 1 to 4 instrad of 0 to 3
+        // "-1" because the color ranges from 1 to 4 instead of 0 to 3
     }
 
     
