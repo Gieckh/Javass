@@ -25,7 +25,7 @@ public interface Jass {
 
         public final int type;
         public final static int COUNT = 2;
-        public final static List<Card.Color> ALL =
+        public final static List<TeamId> ALL =
           Collections.unmodifiableList(Arrays.asList(values()));
      // TODO : inutile pour le moment ( et pas demandé)
         TeamId(int type) {
@@ -38,7 +38,7 @@ public interface Jass {
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
-        public static TeamId other() throws IllegalArgumentException{
+        public  TeamId other() throws IllegalArgumentException{
                switch (this) {
                 case TEAM_1:
                     return TEAM_2;
@@ -53,13 +53,13 @@ public interface Jass {
     
     public enum PlayerId {
         PLAYER_1  (1), 
-        PLAYER_2  (2); 
-        PLAYER_3  (3);
+        PLAYER_2  (2),
+        PLAYER_3  (3),
         PLAYER_4  (4);
  
         public final int type;
         public final static int COUNT = 4;
-        public final static List<Color> ALL =
+        public final static List<PlayerId> ALL =
           Collections.unmodifiableList(Arrays.asList(values()));
 
         // TODO : inutile pour le moment ( et pas demandé)
@@ -73,14 +73,14 @@ public interface Jass {
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
-        public static TeamId team() throws IllegalArgumentException{
+        public  TeamId team() throws IllegalArgumentException{
                switch (this) {
                    case PLAYER_1:
                    case PLAYER_3:
-                       return TEAM_1;
+                       return TeamId.TEAM_1;
                    case PLAYER_2:
                    case PLAYER_4:
-                       return TEAM_2;
+                       return TeamId.TEAM_2;
                    default:
                        throw new IllegalArgumentException();
                 }
