@@ -34,7 +34,7 @@ public final class Bits32 {
             return 0;
         }
 
-        if (size == 32) { // Because 1 << 32 == 1, it goes back from the right hmmmm
+        if (size == Integer.SIZE) { // Because 1 << 32 == 1, it goes back from the right hmmmm
             return -1;
         }
 

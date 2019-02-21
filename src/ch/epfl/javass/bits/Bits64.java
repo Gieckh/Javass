@@ -28,11 +28,21 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    long mask(int start, int size) {
+    long mask(int start, int size) { //TODO: tester
         checkArgument(start >= 0  &&  size >= 0);
         checkArgument(start + size <= Long.SIZE);
-        //TODO: ...
-        return (long) 0;
+
+        if (size == 0) {
+            return 0L;
+        }
+
+        if (size == Long.SIZE) {
+            return -1L;  // = 111...111 with Long.SIZE = 64 ones.
+        }
+
+        long mask = (1L << size) - 1L;
+
+        return mask << start;
     }
 
 
