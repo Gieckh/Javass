@@ -190,7 +190,7 @@ public final class Card {
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
-        int trumpOrdinal() throws IllegalArgumentException {
+        public int trumpOrdinal() throws IllegalArgumentException {
             switch (this) {
             case SIX:
                 return 0;
@@ -249,33 +249,33 @@ public final class Card {
 
     //TODO: take care of access rights : public/private/none
     // the rank ranges from 6 to 8
-    static Card of(Color c, Rank r) {
+    public static Card of(Color c, Rank r) {
         return new Card(c, r);
     }
-    static Card ofPacked(int packed) throws IllegalArgumentException {
+    public static Card ofPacked(int packed) throws IllegalArgumentException {
         checkArgument(isValid(packed));
 
         return new Card(PackedCard.color(packed), PackedCard.rank(packed));
     }
 
 
-    int packed() {
+    public int packed() {
         return pack(color, rank);
     }
 
 
-    Color color() {
+    public Color color() {
         return color;
     }
-    Rank rank() {
+    public Rank rank() {
         return rank;
     }
 
-    boolean isBetter(Color trump, Card that) {
+    public boolean isBetter(Color trump, Card that) {
         return PackedCard.isBetter(trump, this.packed(), that.packed());
     }
 
-    int points(Color trump) {
+    public int points(Color trump) {
         return PackedCard.points(trump, this.packed());
     }
 
