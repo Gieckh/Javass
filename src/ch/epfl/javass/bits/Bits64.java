@@ -80,7 +80,7 @@ public class Bits64 {
     //TODO: can i do better ?
     private static int msbPosition(long value) {
         int msbPos = Long.SIZE - 1; // = 63
-        int mask = 1 << msbPos; // 1 followed by sixty-three 0
+        long mask = 1L << msbPos; // 1 followed by sixty-three 0
 
         while ((mask & value) >>> msbPos != 1) {
             mask >>>= 1;
@@ -108,10 +108,11 @@ public class Bits64 {
         }
 
         // first check whether there is a MSB
-        if (value == 0) {
+        if (value == 0L) {
             return true;
         }
 
+        // If there is one, we find it.
         int msbPosition = msbPosition(value);
 
         return (msbPosition < size); // the MSB of 2**size is the bit at the position (size + 1)
