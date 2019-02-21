@@ -18,6 +18,13 @@ public interface Jass {
     public final static int MATCH_ADDITIONAL_POINTS = 100;
     public final static int LAST_TRICK_ADDITIONAL_POINTS = 5;
 
+    
+    /**
+     * manages the teams.
+     *
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+     */
     public enum TeamId {
         TEAM_1  (1), 
         TEAM_2  (2); 
@@ -50,7 +57,12 @@ public interface Jass {
             }
         }
     
-    
+    /**
+     * manages the players.
+     *
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+     */
     public enum PlayerId {
         PLAYER_1  (1), 
         PLAYER_2  (2),
