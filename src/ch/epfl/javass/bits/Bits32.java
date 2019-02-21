@@ -64,27 +64,27 @@ public final class Bits32 {
 
 
     /**
-     * @brief finds the position of the MSB of the int value
-     *
-     * @see checkPack(int, int)
-     * @param value the bit whose MSB position we want to know, NOT 0.
-     * @return (int) the MSB position (an int between 0 and 31)
-     *
-     * @author - Marin Nguyen (288260)
-     */
-    // finds the msb position of an int, assuming there is one (i.e. value != 0)
-    //TODO: can i do better ?
-    private static int msbPosition(int value) {
-        int msbPos = Integer.SIZE - 1; // = 31
-        int mask = 1 << msbPos; // 1 followed by thirty-one 0
+ * @brief finds the position of the MSB of the int value
+ *
+ * @see checkPack(int, int)
+ * @param value the bit whose MSB position we want to know, NOT 0.
+ * @return (int) the MSB position (an int between 0 and 31)
+ *
+ * @author - Marin Nguyen (288260)
+ */
+// finds the msb position of an int, assuming there is one (i.e. value != 0)
+//TODO: can i do better ?
+private static int msbPosition(int value) {
+    int msbPos = Integer.SIZE - 1; // = 31
+    int mask = 1 << msbPos; // 1 followed by thirty-one 0
 
-        while ((mask & value)>>>msbPos != 1) {
-            mask >>>= 1;
-            msbPos--;
-        }
-
-        return msbPos;
+    while ((mask & value)>>>msbPos != 1) {
+        mask >>>= 1;
+        msbPos--;
     }
+
+    return msbPos;
+}
 
     /**
      * @brief checks whether "size" and "value" are compatible
@@ -99,7 +99,7 @@ public final class Bits32 {
      * @author - Marin Nguyen (288260)
      */
     private static boolean checkPack(int value, int size) {
-        if (size < 1 || size >= Integer.SIZE) {
+        if (size < 1 || size >= Integer.SIZE) { //Firstly, the size must be legal
             return false;
         }
 
@@ -110,7 +110,7 @@ public final class Bits32 {
 
         int msbPosition = msbPosition(value);
 
-        return (msbPosition < size); // the MSB of 2**size is the bit at the position (size + 1)
+        return (msbPosition < size); // Secondly, there mustn't be more bits than indicated by the "size"
     }
 
 
@@ -170,11 +170,11 @@ public final class Bits32 {
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3, int v4, int s4,
-         int v5, int s5, int v6, int s6, int v7, int s7) throws IllegalArgumentException {
+            int v5, int s5, int v6, int s6, int v7, int s7) throws IllegalArgumentException {
         boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) &&
-                                  checkPack(v3, s3) && checkPack(v4, s4) &&
-                                  checkPack(v5, s5) && checkPack(v6, s6) &&
-                                  checkPack(v7, s7);
+                checkPack(v3, s3) && checkPack(v4, s4) &&
+                checkPack(v5, s5) && checkPack(v6, s6) &&
+                checkPack(v7, s7);
 
         checkArgument(compatibleSizes);
         checkArgument(s1 + s2 + s3 + s4 + s5 + s6 + s7 <= Integer.SIZE);

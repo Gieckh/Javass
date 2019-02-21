@@ -77,7 +77,7 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    //TODO: can i do better ?
+    //TODO: can i do better ? -> log search, but more comparisons ?
     private static int msbPosition(long value) {
         int msbPos = Long.SIZE - 1; // = 63
         long mask = 1L << msbPos; // 1 followed by sixty-three 0
@@ -103,7 +103,7 @@ public class Bits64 {
      * @author - Marin Nguyen (288260)
      */
     private static boolean checkPack(long value, int size) {
-        if (size < 1 || size >= Long.SIZE) {
+        if (size < 1 || size >= Long.SIZE) { //Firstly, the size must be legal
             return false;
         }
 
@@ -115,7 +115,7 @@ public class Bits64 {
         // If there is one, we find it.
         int msbPosition = msbPosition(value);
 
-        return (msbPosition < size); // the MSB of 2**size is the bit at the position (size + 1)
+        return (msbPosition < size); // Secondly, there mustn't be more bits than indicated by the "size"
     }
 
 
