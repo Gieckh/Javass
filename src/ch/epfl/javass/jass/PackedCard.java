@@ -10,17 +10,24 @@ public final class PackedCard {
     public final static int INVALID = 111111;
     
     
+    /** returns true if the pkCard is correctly packed.
+     * @param pkCard
+     * @return true if the pkCard is correctly packed
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static boolean isValid(int pkCard) {
+ 
+        // Since we want to be fast
+        return (extract(pkCard, 0, 4) < 9 &&  //The rank is valid (we don't check color since it can only be valid)
+                extract(pkCard, 6, 26) == 0); //The 26 "bigger" bits are "0s"
         /*
         Clearer but slower version:
         int rank = extract(pkCard, 0, 4);
         int restOfTheCard = extract(pkCard, 6, 26); //26 = 31 - 6 + 1
         return (rank < 9 && restOfTheCard == 0);
         */
-
-        // Since we want to be fast
-        return (extract(pkCard, 0, 4) < 9 &&  //The rank is valid (we don't check color since it can only be valid)
-                extract(pkCard, 6, 26) == 0); //The 26 "bigger" bits are "0s"
+    
     }
 
     /**
@@ -36,6 +43,12 @@ public final class PackedCard {
     }
 
     
+    /** returns the color of the card packed, we assert the int is valid
+     * @param pkCard
+     * @return the color of this card
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static Card.Color color(int pkCard) {
         assert isValid(pkCard);
         /*
