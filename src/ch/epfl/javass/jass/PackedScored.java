@@ -1,5 +1,7 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.bits.Bits64.extract;
+
 /** manipulates scores of a jass game
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
