@@ -28,7 +28,7 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    long mask(int start, int size) { //TODO: tester
+    public static long mask(int start, int size) { //TODO: tester
         checkArgument(start >= 0  &&  size >= 0);
         checkArgument(start + size <= Long.SIZE);
 
