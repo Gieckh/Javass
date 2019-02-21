@@ -1,4 +1,9 @@
 package ch.epfl.javass.jass;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -20,7 +25,7 @@ public interface Jass {
 
         public final int type;
         public final static int COUNT = 2;
-        public final static List<Color> ALL =
+        public final static List<Card.Color> ALL =
           Collections.unmodifiableList(Arrays.asList(values()));
      // TODO : inutile pour le moment ( et pas demandé)
         TeamId(int type) {
