@@ -20,8 +20,7 @@ public interface Jass {
 
     public enum TeamId {
         TEAM_1  (1), 
-        TEAM_2  (2); 
- 
+        TEAM_2  (2);
 
         public final int type;
         public final static int COUNT = 2;
@@ -53,13 +52,13 @@ public interface Jass {
     
     public enum PlayerId {
         PLAYER_1  (1), 
-        PLAYER_2  (2); 
-        PLAYER_3  (3);
+        PLAYER_2  (2),
+        PLAYER_3  (3),
         PLAYER_4  (4);
  
         public final int type;
         public final static int COUNT = 4;
-        public final static List<Color> ALL =
+        public final static List<Card.Color> ALL =
           Collections.unmodifiableList(Arrays.asList(values()));
 
         // TODO : inutile pour le moment ( et pas demandé)
