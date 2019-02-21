@@ -78,7 +78,7 @@ public class Bits64 {
      * @author - Marin Nguyen (288260)
      */
     //TODO: can i do better ?
-    private static int msbPosition(Long value) {
+    private static int msbPosition(long value) {
         int msbPos = Long.SIZE - 1; // = 63
         int mask = 1 << msbPos; // 1 followed by sixty-three 0
 
@@ -102,7 +102,7 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    private static boolean checkPack(Long value, int size) {
+    private static boolean checkPack(long value, int size) {
         if (size < 1 || size >= Long.SIZE) {
             return false;
         }
@@ -130,8 +130,8 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    public static Long
-    pack(Long v1, int s1, Long v2, int s2) throws IllegalArgumentException {
+    public static long
+    pack(long v1, int s1, long v2, int s2) throws IllegalArgumentException {
         checkArgument(checkPack(v1, s1) && checkPack(v2, s2));
 
         // Seems better (to us) to have a new if statement for that condition
@@ -153,8 +153,8 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    public static Long
-    pack(Long v1, int s1, Long v2, int s2, Long v3, int s3) throws IllegalArgumentException {
+    public static long
+    pack(long v1, int s1, long v2, int s2, long v3, int s3) throws IllegalArgumentException {
         boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) && checkPack(v3, s3);
         checkArgument(compatibleSizes);
         checkArgument(s1 + s2 +s3 <= Long.SIZE);
@@ -172,9 +172,9 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    public static Long
-    pack(Long v1, int s1, Long v2, int s2, Long v3, int s3, Long v4, int s4,
-            Long v5, int s5, Long v6, int s6, Long v7, int s7) throws IllegalArgumentException {
+    public static long
+    pack(long v1, int s1, long v2, int s2, long v3, int s3, long v4, int s4,
+            long v5, int s5, long v6, int s6, long v7, int s7) throws IllegalArgumentException {
         boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) &&
                 checkPack(v3, s3) && checkPack(v4, s4) &&
                 checkPack(v5, s5) && checkPack(v6, s6) &&
