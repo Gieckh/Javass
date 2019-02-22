@@ -19,7 +19,7 @@ public final class PackedScored {
     private PackedScored() {};
     
     /** returns true if pkScore is packed correctly.
-     * @param pkScore
+     * @param  pkScore (long) the long encoding the points and tricks of the game
      * @return true if pkScore is packed correctly
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
@@ -56,7 +56,7 @@ public final class PackedScored {
     
     
     /** returns the number of tricks won in function of the team.
-     * @param pkScore
+     * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
      * @return int : the number of tricks won 
      * @throws IllegalArgumentException
@@ -78,7 +78,7 @@ public final class PackedScored {
     
     
     /** returns the number of points won in the current turn in function of the team.
-     * @param pkScore
+     * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
      * @return int : the number of points won in the current turn 
      * @throws IllegalArgumentException
@@ -99,7 +99,7 @@ public final class PackedScored {
     }
     
     /** returns the number of points won in the whole game except the current turn. 
-     * @param pkScore
+     * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
      * @return int : the total number of points won depending on the team 
      * @throws IllegalArgumentException
@@ -120,7 +120,7 @@ public final class PackedScored {
     }
     
     /** returns the total number of points won in the whole game except the current turn. 
-     * @param pkScore
+     * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
      * @return int : the total number of points won depending on the team 
      * @throws IllegalArgumentException
@@ -139,11 +139,19 @@ public final class PackedScored {
             throw new IllegalArgumentException("Bad Team Inmput");
         }
     }
+    
+    /** returns a new long with one new trick won for the winningTeam, and the corresponding points
+     * @param pkScore (long) the long encoding the points and tricks of the game
+     * @param winningTeam
+     * @param trickPoints
+     * @return the updated pkScore, taking in consideration a team just won a trick thus some points
+     * @throws IllegalArgumentException
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    public static long withAdditionalTrick(long pkScore, TeamId winningTeam,int trickPoints)throws IllegalArgumentException {
         
-       
-    public static long withAdditionalTrick(long pkScore, TeamId winningTeam,int trickPoints) {
-        
-        // better than an if I think (either a shift of 0 -Team 1, or of 32 -Team 2)
+        // better than an if() I think (either a shift of 0:Team 1, or of 32:Team 2)
         int shift = winningTeam.ordinal()*32; 
         int elseShift = (1-winningTeam.ordinal())*32;
         long unmodifiedPkScoreForLoosingTeam = extract(pkScore, elseShift, 32);
@@ -170,7 +178,7 @@ public final class PackedScored {
     
     
     /** returns a long with global points updated with adding the currents points, and  0 as number of Tricks won and 0 current points for both teams.
-     * @param pkScore
+     * @param  pkScore (long) the long encoding the points and tricks of the game
      * @return a new long with the datas updated as it becomes next turn
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
@@ -187,6 +195,12 @@ public final class PackedScored {
     
     
     
+    /** returns a paragraph with all informations packed in pkScore
+     * @param pkScore (long) the long encoding the points and tricks of the game
+     * @return the String with all informations about points and tricks of both teams 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static String toString(long pkScore) {
         assert isValid(pkScore);    
         String Tricksof1 = "Tricks of Team 1 : " + extract(pkScore,0,4);
