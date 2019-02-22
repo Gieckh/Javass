@@ -54,8 +54,24 @@ public final class Score {
         return ofPacked(PackedScore.nextTurn(packedScore));
     }
 
+    
+    @Override
+    public boolean equals(Object thatO) {
+        if (thatO == null  ||  thatO.getClass() != getClass()) { // getClass same as instance of since final ?
+            return false;
+        }
+
+        Score thatOScore= (Score) thatO; // Or do 2 "conversions, idk"
+            return (thatOScore.packedScore == this.packedScore);
+    }
+    
     @Override
     public int hashCode() {
         return Long.hashCode(packedScore);
+    }
+    
+    @Override
+    public String toString() {
+        return PackedScored.toString(packedScore);
     }
 }
