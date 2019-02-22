@@ -127,7 +127,7 @@ public final class PackedScore {
     /**
      * @brief the number of points the team won in the whole game, <em>except</em> the current turn.
      *
-     * @param pkScore (long) the long encoding the points and tricks of the game
+     * @param pkScore (long) the long encoding the scores
      * @param t, the TeamId
      * @return int : the total number of points won depending on the team
      *
@@ -144,7 +144,7 @@ public final class PackedScore {
     /**
      * returns the total number of points won in the whole game.
      *
-     * @param pkScore (long) the long encoding the points and tricks of the game
+     * @param pkScore (long) the long encoding the scores
      * @param t, the TeamId
      * @return (int): the total number of points won depending on the team
      *
@@ -162,12 +162,14 @@ public final class PackedScore {
     }
 
     /**
-     * returns a new long with one new trick won for the winningTeam, and the corresponding points
+     * @brief updates the "pkScore", knowing that the team "winningTeam" just won
+     *        a trick of value "trickPoints". takes into consideration the <em>additional trick</em>,
+     *        but <em>not</em> the <em>last trick</em> bonus.
      *
-     * @param pkScore (long) the long encoding the points and tricks of the game
-     * @param winningTeam
-     * @param trickPoints
-     * @return the updated pkScore, taking in consideration a team just won a trick thus some points
+     * @param pkScore (long) the long encoding the scores
+     * @param winningTeam (TeamId) the team winning the points
+     * @param trickPoints (int) the value of the won trick
+     * @return (long) the updated pkScore.
      *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
@@ -189,10 +191,10 @@ public final class PackedScore {
 
 
     /**
-     * returns a long with global points updated with adding the currents points,
+     * @brief a long with global points updated with adding the currents points,
      * and 0 as number of Tricks won and 0 current points for both teams.
      *
-     * @param  pkScore (long) the long encoding the points and tricks of the game
+     * @param  pkScore (long) the long encoding the scores
      * @return a new long with the datas updated as it becomes next turn
      *
      * @author Antoine Scardigli - (299905)
@@ -214,7 +216,7 @@ public final class PackedScore {
     /**
      * returns a paragraph with all informations packed in pkScore
      *
-     * @param pkScore (long) the long encoding the points and tricks of the game
+     * @param pkScore (long) the long encoding the scores
      * @return the String with all informations about points and tricks of both teams
      *
      * @author Antoine Scardigli - (299905)
