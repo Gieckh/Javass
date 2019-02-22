@@ -1,4 +1,4 @@
-/*package ch.epfl.javass.jass;
+package ch.epfl.javass.jass;
 import static ch.epfl.javass.jass.PackedScored.*;
 
 import ch.epfl.javass.jass.Jass.TeamId;
@@ -8,7 +8,7 @@ import static ch.epfl.javass.Preconditions.*;
 public final class Score {
     
     public final static Score INITIAL = new Score(0);
-    private final long packedScore;
+    private long packedScore;
     
     private Score(long packed) {
      packedScore = packed;   
@@ -48,6 +48,12 @@ public final class Score {
         }
         
     }
+    
+    public Score nextTurn() {
+        return ofPacked(PackedScored.nextTurn(packedScore));
+    }
 
+    public long hashCode() {
+        return packedScore;
+    }
 }
-*/
