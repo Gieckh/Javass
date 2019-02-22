@@ -53,7 +53,8 @@ public final class Score {
         return ofPacked(PackedScored.nextTurn(packedScore));
     }
 
-    public long hashCode() {
-        return packedScore;
+    @Override
+    public int hashCode() {
+        return Long.hashCode(packedScore);
     }
 }
