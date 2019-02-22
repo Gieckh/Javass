@@ -195,7 +195,7 @@ public final class PackedScore {
      * and 0 as number of Tricks won and 0 current points for both teams.
      *
      * @param  pkScore (long) the long encoding the scores
-     * @return a new long with the datas updated as it becomes next turn
+     * @return a new long with the data updated as it becomes next turn
      *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
@@ -217,7 +217,7 @@ public final class PackedScore {
      * returns a paragraph with all informations packed in pkScore
      *
      * @param pkScore (long) the long encoding the scores
-     * @return the String with all informations about points and tricks of both teams
+     * @return the String with all information about points and tricks of both teams
      *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
