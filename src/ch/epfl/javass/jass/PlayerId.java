@@ -8,7 +8,6 @@ import java.util.List;
  * manages the players.
  *
  * @author Antoine Scardigli - (299905)
- * @author Marin Nguyen - (288260)
  */
 public enum PlayerId {
     PLAYER_1  (1),
@@ -21,27 +20,29 @@ public enum PlayerId {
     public final static List<PlayerId> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
 
-    // TODO : inutile pour le moment ( et pas demandé)
+
+    // TODO : inutile pour le moment ( et pas demandé) (?? @Marin)
     PlayerId(int type) {
         this.type = type;
     }
 
-    /** returns team 1 for players 1 and 3, and team 2 for players 2 and 4.
-     * @return the team in function of the player
-     * @throws IllegalArgumentException
+    /**
+     * returns team 1 for players 1 and 3, and team 2 for players 2 and 4.
+     *
+     * @return A player's team
+     *
      * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
      */
     public  TeamId team() throws IllegalArgumentException{
         switch (this) {
-        case PLAYER_1:
-        case PLAYER_3:
-            return TeamId.TEAM_1;
-        case PLAYER_2:
-        case PLAYER_4:
-            return TeamId.TEAM_2;
-        default:
-            throw new IllegalArgumentException();
+            case PLAYER_1:
+            case PLAYER_3:
+                return TeamId.TEAM_1;
+            case PLAYER_2:
+            case PLAYER_4:
+                return TeamId.TEAM_2;
+            default: // unreachable statement
+                throw new IllegalArgumentException();
         }
     }
 }
