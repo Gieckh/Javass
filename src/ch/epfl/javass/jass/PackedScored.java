@@ -72,7 +72,7 @@ public final class PackedScored {
             return (int) extract( pkScore , 32 , 4 );
         }
         else {
-            throw new IllegalArgumentException("Bad Team Inmput");
+            throw new IllegalArgumentException("Bad Team Input");
         }
     }
     
