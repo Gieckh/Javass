@@ -1,4 +1,4 @@
-package ch.epfl.javass.jass;
+/*package ch.epfl.javass.jass;
 import static ch.epfl.javass.jass.PackedScored.*;
 import static ch.epfl.javass.Preconditions.*;
 
@@ -14,3 +14,4 @@ public final static class Score {
     
 
 }
+*/

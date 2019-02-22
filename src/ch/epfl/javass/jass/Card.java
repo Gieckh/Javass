@@ -118,17 +118,18 @@ public final class Card {
         /** ===============    ATTRIBUTES    ============== **/
         /** =============================================== **/
 
-        SIX   (6),
-        SEVEN (7),
-        EIGHT (8),
-        NINE  (9),
-        TEN   (10),
-        JACK  (11),
-        QUEEN (12),
-        KING  (13),
-        ACE   (14);
+        SIX   (6, 0),
+        SEVEN (7, 1),
+        EIGHT (8, 2),
+        NINE  (9, 7),
+        TEN   (10, 3),
+        JACK  (11, 8),
+        QUEEN (12, 4),
+        KING  (13, 5),
+        ACE   (14, 6);
 
-        public int type;
+        public final int type;
+        public final int trumpOrdinal;
         public final static int COUNT = 9;
         public final static List<Rank> ALL =
           Collections.unmodifiableList(Arrays.asList(values()));
@@ -138,8 +139,9 @@ public final class Card {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
-        private Rank(int type) {
+        private Rank(int type, int trumpOrdinal) {
             this.type = type;
+            this.trumpOrdinal = trumpOrdinal;
         }
 
 
@@ -189,29 +191,7 @@ public final class Card {
          * @author Marin Nguyen - (288260)
          */
         public int trumpOrdinal() throws IllegalArgumentException {
-            switch (this) {
-            case SIX:
-                return 0;
-            case SEVEN:
-                return 1;
-            case EIGHT:
-                return 2;
-            case NINE:
-                return 7;
-            case TEN:
-                return 3;
-            case JACK:
-                return 8;
-            case QUEEN:
-                return 4;
-            case KING:
-                return 5;
-            case ACE:
-                return 6;
-            default:
-                //TODO : what to put there ?
-                throw new IllegalArgumentException("this input (" + type + ") doesn't correspond to a rank");
-            }
+            return trumpOrdinal;
         }
 
         /**
