@@ -33,7 +33,7 @@ public enum PlayerId {
      *
      * @author Antoine Scardigli - (299905)
      */
-    public  TeamId team() throws IllegalArgumentException{
+    public TeamId team() {
         switch (this) {
             case PLAYER_1:
             case PLAYER_3:

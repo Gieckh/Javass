@@ -69,7 +69,7 @@ public final class PackedScore {
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    public static long pack //TODO: pas comme antoine a fait.
+    public static long pack //TODO: pas comme Antoine a fait.
     (int turnTricks1, int turnPoints1, int gamePoints1, int turnTricks2, int turnPoints2, int gamePoints2) {
         long lsb= Bits64.pack(turnTricks1, TRICKS_SIZE, turnPoints1, POINTS_PER_TURN_SIZE, gamePoints1, POINTS_PER_GAME_SIZE);
         long msb= Bits64.pack(turnTricks2, TRICKS_SIZE, turnPoints2, POINTS_PER_TURN_SIZE, gamePoints2, POINTS_PER_GAME_SIZE);
