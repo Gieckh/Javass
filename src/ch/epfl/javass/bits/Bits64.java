@@ -28,7 +28,7 @@ public class Bits64 {
      *
      * @author - Marin Nguyen (288260)
      */
-    public static long mask(int start, int size) { //TODO: tester
+    public static long mask(int start, int size) {
         checkArgument(start >= 0  &&  size >= 0);
         checkArgument(start + size <= Long.SIZE);
 
@@ -141,6 +141,7 @@ public class Bits64 {
     }
 
 
+    //TODO : suppr the following.
     // I decided not to call "pack(int v1, int s1, int v2, int s2)" because
     // it would do many unnecessary size checks
 

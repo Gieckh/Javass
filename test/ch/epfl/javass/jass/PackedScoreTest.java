@@ -7,10 +7,5 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PackedScoreTest {
     //TODO: à faire
-    @Test
-    void checkArgumentFailsForFalse() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            Preconditions.checkArgument(false);
-        });
-    }
+
 }

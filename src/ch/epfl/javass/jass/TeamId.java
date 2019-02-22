@@ -18,25 +18,28 @@ public enum TeamId {
     public final static int COUNT = 2;
     public final static List<TeamId> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
-    // TODO : inutile pour le moment ( et pas demandé)
+
+    // TODO : inutile pour le moment ( et pas demandé) (?? @Marin)
     TeamId(int type) {
         this.type = type;
     }
 
-    /** returns the other team than the one we apply the function on.
+    /**
+     * returns the other team than the one we apply the function on.
+     *
      * @return the other team than the one we apply the function on
-     * @throws IllegalArgumentException
+     *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
      */
-    public  TeamId other() throws IllegalArgumentException{
+    public  TeamId other() {
         switch (this) {
-        case TEAM_1:
-            return TEAM_2;
-        case TEAM_2:
-            return TEAM_1;
-        default:
-            throw new IllegalArgumentException();
+            case TEAM_1:
+                return TEAM_2;
+            case TEAM_2:
+                return TEAM_1;
+            default: // unreachable statement
+                throw new IllegalArgumentException();
         }
     }
 }
