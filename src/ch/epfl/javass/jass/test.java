@@ -4,7 +4,7 @@ package ch.epfl.javass.jass;
 import ch.epfl.javass.jass.TeamId;
 
 public abstract class test {
-
+//
     public static void main(String[] args) {
         long pkScore = PackedScore.pack(2, 16, 32, 1, 64, 256);
         System.out.println(Long.SIZE);
