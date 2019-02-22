@@ -65,10 +65,10 @@ public final class PackedScored {
     */
     public static int turnTricks(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 1) {
+        if(t.ordinal() == 0) {
             return (int) extract( pkScore , 0 , 4 );
         }
-        if(t.ordinal() == 2) {
+        if(t.ordinal() == 1) {
             return (int) extract( pkScore , 32 , 4 );
         }
         else {
@@ -87,10 +87,10 @@ public final class PackedScored {
     */
     public static int turnPoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 1) {
+        if(t.ordinal() == 0) {
             return (int) extract( pkScore , 4 , 9 );
         }
-        if(t.ordinal() == 2) {
+        if(t.ordinal() == 1) {
             return (int) extract( pkScore , 36 ,9 );
         }
         else {
@@ -108,10 +108,10 @@ public final class PackedScored {
     */
     public static int gamePoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 1) {
+        if(t.ordinal() == 0) {
             return (int) extract( pkScore , 13 , 11 );
         }
-        if(t.ordinal() == 2) {
+        if(t.ordinal() == 1) {
             return (int) extract( pkScore , 45 , 11 );
         }
         else {
@@ -129,10 +129,10 @@ public final class PackedScored {
     */
     public static int totalPoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 1) {
+        if(t.ordinal() == 0) {
             return (int) (extract( pkScore , 13 , 11 ) + extract( pkScore, 4 , 9 ));
         }
-        if(t.ordinal() == 2) {
+        if(t.ordinal() == 1) {
             return (int) (extract( pkScore , 45 , 11 ) + extract( pkScore, 4 , 9 ));
         }
         else {
@@ -140,8 +140,50 @@ public final class PackedScored {
         }
     }
         
-        //TODO : de with aditional a next turn + lire les "conseils"
        
+    public static long withAdditionalTrick(long pkScore, TeamId winningTeam,int trickPoints) {
+        
+        // better than an if I think (either a shift of 0 -Team 1, or of 32 -Team 2)
+        int shift = winningTeam.ordinal()*32; 
+        int elseShift = (1-winningTeam.ordinal())*32;
+        long unmodifiedPkScoreForLoosingTeam = extract(pkScore, elseShift, 32);
+        int currentPointsOfWinningTeam = (int) extract(pkScore, 4+shift, 9);
+        int numberOfTricksOfWinningTeam = (int) extract(pkScore, 0 + shift,4);
+        int GlobalPointsOfWinnigTeam =  (int) extract(pkScore,45,11);
+        if (numberOfTricksOfWinningTeam ==8) {
+            currentPointsOfWinningTeam += Jass.MATCH_ADDITIONAL_POINTS; // 100 
+        }
+        long modifiedpkScoreForWinningTeam = Bits64.pack(numberOfTricksOfWinningTeam+1, 4, currentPointsOfWinningTeam+trickPoints, 9,GlobalPointsOfWinnigTeam,11);
+        if(shift==32) {
+            return Bits64.pack(unmodifiedPkScoreForLoosingTeam, 32, modifiedpkScoreForWinningTeam, 32);
+        }
+        if(shift ==0) {
+            return Bits64.pack(modifiedpkScoreForWinningTeam, 32, unmodifiedPkScoreForLoosingTeam, 32);
+        }
+        else {
+            throw new IllegalArgumentException("There is a mistake somewhere"); 
+        }
+        
+        
+    }
+    
+    
+    
+    /** returns a long with global points updated with adding the currents points, and  0 as number of Tricks won and 0 current points for both teams.
+     * @param pkScore
+     * @return a new long with the datas updated as it becomes next turn
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    public static long nextTurn(long pkScore) {
+        assert isValid(pkScore);
+        int currentPointsOfTeam1 = (int) extract(pkScore, 4, 9);
+        int currentPointsOfTeam2 = (int) extract(pkScore, 36, 9);
+        int GlobalPointsOf1 =  (int) extract(pkScore,13,11);
+        int GlobalPointsOf2 =  (int) extract(pkScore,45,11);
+        return pack(0, 0, currentPointsOfTeam1+GlobalPointsOf1, 0, 0, currentPointsOfTeam2+GlobalPointsOf2);
+        
+    }
     
     
     
@@ -152,7 +194,7 @@ public final class PackedScored {
         String CurrentPointsOf1 = "Current points of Team 1 : " + extract(pkScore,4,9);
         String CurrentPointsOf2 = "Current points of Team 2 : " + extract(pkScore,36,9);
         String GlobalPointsOf1 = "Global points of Team 1 : " + extract(pkScore,13,11);
-        String GlobalPointsOf2 = "Global points of Team 1 : " + extract(pkScore,45,11);
+        String GlobalPointsOf2 = "Global points of Team 2 : " + extract(pkScore,45,11);
         return Tricksof1 + "\n" + CurrentPointsOf1 + "\n"+ GlobalPointsOf1 + "\n"+ Tricksof2 + "\n"+ CurrentPointsOf2 + "\n"+ GlobalPointsOf2;
     }
    
