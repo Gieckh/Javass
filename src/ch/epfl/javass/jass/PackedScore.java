@@ -102,7 +102,7 @@ public final class PackedScore {
         assert isValid(pkScore);
 
         int shift = (t == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
-        return (int) extract(pkScore, shift, TRICKS_SIZE );
+        return (int) extract(pkScore, shift + TRICKS_START, TRICKS_SIZE );
     }
 
 
@@ -111,7 +111,7 @@ public final class PackedScore {
      *
      * @param pkScore (long) the long encoding the scores
      * @param t (TeamId) the team we're interested in.
-     * @return int : the number of points won in the current turn
+     * @return (int) the number of points won in the current turn
      *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
@@ -121,11 +121,11 @@ public final class PackedScore {
 
         int shift = (t == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
 
-        return (int) extract(pkScore, shift + TRICKS_SIZE, POINTS_PER_TURN_SIZE);
+        return (int) extract(pkScore, shift + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE);
     }
 
     /**
-     * returns the number of points the team won in the whole game, except the current turn.
+     * @brief the number of points the team won in the whole game, <em>except</em> the current turn.
      *
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
@@ -142,7 +142,7 @@ public final class PackedScore {
     }
 
     /**
-     * returns the total number of points won in the whole game except the current turn.
+     * returns the total number of points won in the whole game.
      *
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
@@ -156,7 +156,7 @@ public final class PackedScore {
 
         int shift = (t == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
         return (int) (
-                extract(pkScore, shift + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE ) +
+                extract(pkScore, shift + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE ) + // == gamePoints(pkScore, t), but we don't want to recalculate "shift"
                 extract(pkScore, shift + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE )
         );
     }

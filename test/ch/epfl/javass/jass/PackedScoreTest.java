@@ -11,7 +11,11 @@ class PackedScoreTest {
 
     }
     @Test
-    void isValidReturnsFalseWithInvalidPacked() {
+    void isValidReturnsFalseWithTooBigValues() {
+
+    }
+    @Test
+    void isValidReturnsFalseWithNegativeValues() {
 
     }
 
