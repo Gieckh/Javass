@@ -1,8 +1,6 @@
 package ch.epfl.javass.jass;
 import static ch.epfl.javass.jass.PackedScore.*;
 
-import ch.epfl.javass.jass.Jass.TeamId;
-
 import static ch.epfl.javass.Preconditions.*;
 
 public final class Score {
@@ -72,6 +70,6 @@ public final class Score {
     
     @Override
     public String toString() {
-        return PackedScored.toString(packedScore);
+        return PackedScore.toString(packedScore);
     }
 }
