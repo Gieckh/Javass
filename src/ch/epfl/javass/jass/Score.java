@@ -1,5 +1,5 @@
 package ch.epfl.javass.jass;
-import static ch.epfl.javass.jass.PackedScored.*;
+import static ch.epfl.javass.jass.PackedScore.*;
 
 import ch.epfl.javass.jass.Jass.TeamId;
 
@@ -24,19 +24,19 @@ public final class Score {
     }
     
     public int turnTricks(TeamId t) {
-        return PackedScored.turnTricks(packedScore, t);
+        return PackedScore.turnTricks(packedScore, t);
     }
     
     public int turnPoints(TeamId t) {
-        return PackedScored.turnPoints(packedScore, t);
+        return PackedScore.turnPoints(packedScore, t);
     }
     
     public int gamePoints(TeamId t) {
-        return PackedScored.turnPoints(packedScore, t);
+        return PackedScore.turnPoints(packedScore, t);
     }
     
     public int totalPoints(TeamId t) {
-        return PackedScored.totalPoints(packedScore, t);    
+        return PackedScore.totalPoints(packedScore, t);
     }
     
     public Score withAdditionalTrick(TeamId winningTeam, int trickPoints) {
@@ -44,13 +44,14 @@ public final class Score {
             throw new IllegalArgumentException("your int input is negative");
         }
         else {
-            return ofPacked(PackedScored.withAdditionalTrick(packedScore, winningTeam, trickPoints));
+            return ofPacked(PackedScore
+                    .withAdditionalTrick(packedScore, winningTeam, trickPoints));
         }
         
     }
     
     public Score nextTurn() {
-        return ofPacked(PackedScored.nextTurn(packedScore));
+        return ofPacked(PackedScore.nextTurn(packedScore));
     }
 
     @Override
