@@ -11,22 +11,30 @@ import static ch.epfl.javass.bits.Bits64.extract;
  *
  */
 public final class PackedScored {
-    
+
     public final static long INITIAL = 0;
+
+    private final static int TRICKS_START = 0;
     private final static int TRICKS_SIZE = 4;
+
+    private final static int POINTS_PER_TURN_START = 4;
     private final static int POINTS_PER_TURN_SIZE = 9;
+
     private final static int POINTS_PER_GAME_SIZE = 11;
+    private final static int POINTS_PER_GAME_START = TRICKS_SIZE + POINTS_PER_TURN_SIZE;
+
     private final static int EMPTY_BIT_SIZE = 8;
-    private final static int ONE_TEAM_INFO_SIZE = 32;
+    private final static int ONE_TEAM_SIZE = 32;
+    private final static int TEAM_TWO_START = ONE_TEAM_SIZE;
     private final static int MAX_TRICKS_PER_TURN = 9;
     private final static int MAX_POINTS_PER_TURN = 257;
     private final static int MAX_POINTS_PER_GAME = 2000;
 
-    
-    //so the class is not instanciable
+
+    //so the class is not instantiable
     //TODO do same for some other classes
     private PackedScored() {};
-    
+
     /** returns true if pkScore is packed correctly.
      * @param  pkScore (long) the long encoding the points and tricks of the game
      * @return true if pkScore is packed correctly
@@ -34,18 +42,18 @@ public final class PackedScored {
      * @author Marin Nguyen - (288260)
     */
     public static boolean isValid(long pkScore) {
-        
-       return( 
-              extract(pkScore,0,TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // the number of tricks is valid (<10)
-              extract(pkScore,TRICKS_SIZE,POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // the number of points per turn is valid (<258)
-              extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE,POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME && // the number of points of the game is valid (<2000)
+
+       return(
+              extract(pkScore, TRICKS_START, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // the number of tricks is valid (<10)
+              extract(pkScore, POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // the number of points per turn is valid (<258)
+              extract(pkScore, POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME && // the number of points of the game is valid (<2000)
               //We want only 0 from the 24th to the 31th bit thus the "+ EMPTY_BIT_SIZE"
-              extract(pkScore,ONE_TEAM_INFO_SIZE,TRICKS_SIZE) < MAX_TRICKS_PER_TURN && // the number of tricks is valid (<10)
-              extract(pkScore,ONE_TEAM_INFO_SIZE + TRICKS_SIZE,POINTS_PER_TURN_SIZE) < MAX_POINTS_PER_TURN && // the number of points per turn is valid (<258)
-              extract(pkScore,ONE_TEAM_INFO_SIZE + TRICKS_SIZE + POINTS_PER_TURN_SIZE ,POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME ); // the number of points of the game is valid (<2000)
+              extract(pkScore, ONE_TEAM_SIZE, TRICKS_SIZE) < MAX_TRICKS_PER_TURN && // the number of tricks is valid (<10)
+              extract(pkScore, TEAM_TWO_START + TRICKS_SIZE, POINTS_PER_TURN_SIZE) < MAX_POINTS_PER_TURN && // the number of points per turn is valid (<258)
+              extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME ); // the number of points of the game is valid (<2000)
               //We want only 0 from the 56th to the 63th bit thus the "+ EMPTY_BIT_SIZE"
     }
-    
+
     /** returns the packed long with all of these informations packed on 64bits.
      * @param turnTricks1 (team1)
      * @param turnPoints1 (team1)
@@ -61,132 +69,106 @@ public final class PackedScored {
             int turnTricks2, int turnPoints2, int gamePoints2) {
         long lsb= Bits64.pack(turnTricks1, TRICKS_SIZE, turnPoints1, POINTS_PER_TURN_SIZE, gamePoints1, POINTS_PER_GAME_SIZE);
         long msb= Bits64.pack(turnTricks2, TRICKS_SIZE, turnPoints2, POINTS_PER_TURN_SIZE, gamePoints2, POINTS_PER_GAME_SIZE);
-        return Bits64.pack(lsb, ONE_TEAM_INFO_SIZE, msb, ONE_TEAM_INFO_SIZE);       
+        return Bits64.pack(lsb, ONE_TEAM_SIZE, msb, ONE_TEAM_SIZE);
         }
-    
-    
+
+
     /** returns the number of tricks won in function of the team.
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
-     * @return int : the number of tricks won 
+     * @return int : the number of tricks won
      * @throws IllegalArgumentException
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
     public static int turnTricks(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 0) {
-            return (int) extract( pkScore , 0 , TRICKS_SIZE );
-        }
-        if(t.ordinal() == 1) {
-            return (int) extract( pkScore , ONE_TEAM_INFO_SIZE , TRICKS_SIZE );
-        }
-        else {
-            throw new IllegalArgumentException("Bad Team Input");
-        }
+
+        int shift = (t == TeamId.TEAM_1) ? 0 : TEAM_TWO_START;
+        return (int) extract(pkScore, shift, TRICKS_SIZE );
     }
-    
-    
+
+
     /** returns the number of points won in the current turn in function of the team.
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
-     * @return int : the number of points won in the current turn 
+     * @return int : the number of points won in the current turn
      * @throws IllegalArgumentException
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
     public static int turnPoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 0) {
-            return (int) extract( pkScore , TRICKS_SIZE , POINTS_PER_TURN_SIZE );
-        }
-        if(t.ordinal() == 1) {
-            return (int) extract( pkScore , TRICKS_SIZE + ONE_TEAM_INFO_SIZE ,POINTS_PER_TURN_SIZE );
-        }
-        else {
-            throw new IllegalArgumentException("Bad Team Inmput");
-        }
+
+        int shift = (t == TeamId.TEAM_1) ? 0 : TEAM_TWO_START;
+        return (int) extract(pkScore, shift + TRICKS_SIZE, POINTS_PER_TURN_SIZE);
     }
-    
-    /** returns the number of points won in the whole game except the current turn. 
+
+    /**
+     * returns the number of points won in the whole game except the current turn.
+     *
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
-     * @return int : the total number of points won depending on the team 
-     * @throws IllegalArgumentException
+     * @return int : the total number of points won depending on the team
+     *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
     public static int gamePoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 0) {
-            return (int) extract( pkScore , TRICKS_SIZE + POINTS_PER_TURN_SIZE , POINTS_PER_GAME_SIZE);
-        }
-        if(t.ordinal() == 1) {
-            return (int) extract( pkScore , TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_INFO_SIZE , POINTS_PER_GAME_SIZE );
-        }
-        else {
-            throw new IllegalArgumentException("Bad Team Inmput");
-        }
+
+        int shift = (t == TeamId.TEAM_1) ? 0 : TEAM_TWO_START;
+        return (int) extract(pkScore, shift + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE);
     }
-    
-    /** returns the total number of points won in the whole game except the current turn. 
+
+    /**
+     * returns the total number of points won in the whole game except the current turn.
+     *
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
-     * @return int : the total number of points won depending on the team 
-     * @throws IllegalArgumentException
+     * @return (int): the total number of points won depending on the team
+     *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
     public static int totalPoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
-        if(t.ordinal() == 0) {
-            return (int) (extract( pkScore , TRICKS_SIZE + POINTS_PER_TURN_SIZE  , POINTS_PER_GAME_SIZE ) + extract( pkScore, TRICKS_SIZE , POINTS_PER_TURN_SIZE ));
-        }
-        if(t.ordinal() == 1) {
-            return (int) (extract( pkScore , TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_INFO_SIZE , POINTS_PER_GAME_SIZE ) + extract( pkScore, TRICKS_SIZE + ONE_TEAM_INFO_SIZE, POINTS_PER_TURN_SIZE ));
-        }
-        else {
-            throw new IllegalArgumentException("Bad Team Inmput");
-        }
+
+        int shift = (t == TeamId.TEAM_1) ? 0 : TEAM_TWO_START;
+        return (int) (
+                extract( pkScore, shift + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE ) +
+                extract( pkScore, shift + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE )
+        );
     }
-    
-    /** returns a new long with one new trick won for the winningTeam, and the corresponding points
+
+    /**
+     * returns a new long with one new trick won for the winningTeam, and the corresponding points
+     *
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param winningTeam
      * @param trickPoints
      * @return the updated pkScore, taking in consideration a team just won a trick thus some points
-     * @throws IllegalArgumentException
+     *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    public static long withAdditionalTrick(long pkScore, TeamId winningTeam,int trickPoints)throws IllegalArgumentException {
-        
-        // better than an if() I think (either a shift of 0:Team 1, or of 32:Team 2)
-        int shift = winningTeam.ordinal()*ONE_TEAM_INFO_SIZE; 
-        int elseShift = (1-winningTeam.ordinal())*ONE_TEAM_INFO_SIZE;
-        long unmodifiedPkScoreForLoosingTeam = extract(pkScore, elseShift, ONE_TEAM_INFO_SIZE);
-        int currentPointsOfWinningTeam = (int) extract(pkScore, TRICKS_SIZE + shift, POINTS_PER_TURN_SIZE);
-        int numberOfTricksOfWinningTeam = (int) extract(pkScore, 0 + shift,TRICKS_SIZE);
-        int GlobalPointsOfWinnigTeam =  (int) extract(pkScore,TRICKS_SIZE + shift + POINTS_PER_TURN_SIZE ,POINTS_PER_GAME_SIZE);
-        if (numberOfTricksOfWinningTeam ==8) { //conuting the actual one, it is doing 9
-            currentPointsOfWinningTeam += Jass.MATCH_ADDITIONAL_POINTS; // 100 
+    public static long
+    withAdditionalTrick(long pkScore, TeamId winningTeam, int trickPoints)throws IllegalArgumentException {
+        int shift = (winningTeam == TeamId.TEAM_1) ? 0 : TEAM_TWO_START;
+        int numberOfTricksOfWinningTeam = (int) extract(pkScore, shift, TRICKS_SIZE);
+        if (numberOfTricksOfWinningTeam == MAX_TRICKS_PER_TURN - 1) {
+            trickPoints += Jass.MATCH_ADDITIONAL_POINTS;
         }
-        long modifiedpkScoreForWinningTeam = Bits64.pack(numberOfTricksOfWinningTeam+1, TRICKS_SIZE, currentPointsOfWinningTeam+trickPoints, POINTS_PER_TURN_SIZE,GlobalPointsOfWinnigTeam,POINTS_PER_GAME_SIZE);
-        if(shift==32) {
-            return Bits64.pack(unmodifiedPkScoreForLoosingTeam, ONE_TEAM_INFO_SIZE, modifiedpkScoreForWinningTeam, ONE_TEAM_INFO_SIZE);
-        }
-        if(shift ==0) {
-            return Bits64.pack(modifiedpkScoreForWinningTeam, ONE_TEAM_INFO_SIZE, unmodifiedPkScoreForLoosingTeam, ONE_TEAM_INFO_SIZE);
-        }
-        else {
-            throw new IllegalArgumentException("There is a mistake somewhere"); 
-        }
-        
-        
+
+        long trickPointsL = trickPoints;
+        trickPointsL <<= (shift + POINTS_PER_TURN_START);
+        long wonTrick = 1L << (shift + TRICKS_START);
+
+        return (pkScore + trickPointsL + wonTrick);
     }
-    
-    
-    
+
+
+
     /** returns a long with global points updated with adding the currents points, and  0 as number of Tricks won and 0 current points for both teams.
      * @param  pkScore (long) the long encoding the points and tricks of the game
      * @return a new long with the datas updated as it becomes next turn
@@ -196,29 +178,30 @@ public final class PackedScored {
     public static long nextTurn(long pkScore) {
         assert isValid(pkScore);
         int currentPointsOfTeam1 = (int) extract(pkScore, TRICKS_SIZE,POINTS_PER_TURN_SIZE);
-        int currentPointsOfTeam2 = (int) extract(pkScore, TRICKS_SIZE + ONE_TEAM_INFO_SIZE, POINTS_PER_TURN_SIZE);
+        int currentPointsOfTeam2 = (int) extract(pkScore, TRICKS_SIZE + ONE_TEAM_SIZE, POINTS_PER_TURN_SIZE);
         int GlobalPointsOf1 =  (int) extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE ,POINTS_PER_GAME_SIZE);
-        int GlobalPointsOf2 =  (int) extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_INFO_SIZE,POINTS_PER_GAME_SIZE);
+        int GlobalPointsOf2 =  (int) extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_SIZE,POINTS_PER_GAME_SIZE);
         return pack(0, 0, currentPointsOfTeam1+GlobalPointsOf1, 0, 0, currentPointsOfTeam2+GlobalPointsOf2);
-        
+
     }
-    
-    
-    
+
+
+
     /** returns a paragraph with all informations packed in pkScore
      * @param pkScore (long) the long encoding the points and tricks of the game
-     * @return the String with all informations about points and tricks of both teams 
+     * @return the String with all informations about points and tricks of both teams
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
     public static String toString(long pkScore) {
-        assert isValid(pkScore);    
+        assert isValid(pkScore);
         String Tricksof1 = "Tricks of Team 1 : " + extract(pkScore,0,TRICKS_SIZE);
-        String Tricksof2 = "Tricks of Team 2 : " + extract(pkScore,ONE_TEAM_INFO_SIZE,TRICKS_SIZE);
+        String Tricksof2 = "Tricks of Team 2 : " + extract(pkScore,
+                ONE_TEAM_SIZE,TRICKS_SIZE);
         String CurrentPointsOf1 = "Current points of Team 1 : " + extract(pkScore,TRICKS_SIZE,POINTS_PER_TURN_SIZE);
-        String CurrentPointsOf2 = "Current points of Team 2 : " + extract(pkScore,TRICKS_SIZE + ONE_TEAM_INFO_SIZE ,POINTS_PER_TURN_SIZE);
+        String CurrentPointsOf2 = "Current points of Team 2 : " + extract(pkScore,TRICKS_SIZE + ONE_TEAM_SIZE,POINTS_PER_TURN_SIZE);
         String GlobalPointsOf1 = "Global points of Team 1 : " + extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE ,POINTS_PER_GAME_SIZE);
-        String GlobalPointsOf2 = "Global points of Team 2 : " + extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_INFO_SIZE ,POINTS_PER_GAME_SIZE);
+        String GlobalPointsOf2 = "Global points of Team 2 : " + extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_SIZE,POINTS_PER_GAME_SIZE);
         return Tricksof1 + "\n" + CurrentPointsOf1 + "\n"+ GlobalPointsOf1 + "\n"+ Tricksof2 + "\n"+ CurrentPointsOf2 + "\n"+ GlobalPointsOf2;
-    }   
+    }
 }

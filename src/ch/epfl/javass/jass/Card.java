@@ -26,14 +26,13 @@ public final class Card {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     /**
-     * @brief PRIVATE constructor of the class card. Invoked by method
+     * @brief PRIVATE constructor of the class card. Invoked by method //TODO: "invoked" ?
      *        "of(Color c, Rank r)" and "ofPacked(int packed)".
-     *        used to create the card of (Color) c and (Rank) r.
      *
-     * @param c (Color) the color of the card to create
-     * @param r (Rank) the rank of the card to create
+     * @param packed (int) an encoded card
      *
-     * @return a new card of (Color) c and (Rank) r
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
      */
     private Card(int packed) {
         packedCard = packed; //int so no need to copy ? //TODO: suppr
