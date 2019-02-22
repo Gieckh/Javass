@@ -65,12 +65,12 @@ public final class PackedScored {
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    public static long pack(int turnTricks1, int turnPoints1, int gamePoints1,
-            int turnTricks2, int turnPoints2, int gamePoints2) {
+    public static long pack //TODO: pas comme antoine a fait.
+    (int turnTricks1, int turnPoints1, int gamePoints1, int turnTricks2, int turnPoints2, int gamePoints2) {
         long lsb= Bits64.pack(turnTricks1, TRICKS_SIZE, turnPoints1, POINTS_PER_TURN_SIZE, gamePoints1, POINTS_PER_GAME_SIZE);
         long msb= Bits64.pack(turnTricks2, TRICKS_SIZE, turnPoints2, POINTS_PER_TURN_SIZE, gamePoints2, POINTS_PER_GAME_SIZE);
         return Bits64.pack(lsb, ONE_TEAM_SIZE, msb, ONE_TEAM_SIZE);
-        }
+    }
 
 
     /** returns the number of tricks won in function of the team.
@@ -177,10 +177,11 @@ public final class PackedScored {
     */
     public static long nextTurn(long pkScore) {
         assert isValid(pkScore);
+
         int currentPointsOfTeam1 = (int) extract(pkScore, TRICKS_SIZE,POINTS_PER_TURN_SIZE);
-        int currentPointsOfTeam2 = (int) extract(pkScore, TRICKS_SIZE + ONE_TEAM_SIZE, POINTS_PER_TURN_SIZE);
-        int GlobalPointsOf1 =  (int) extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE ,POINTS_PER_GAME_SIZE);
-        int GlobalPointsOf2 =  (int) extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_SIZE,POINTS_PER_GAME_SIZE);
+        int currentPointsOfTeam2 = (int) extract(pkScore, POINTS_PER_TURN_START + ONE_TEAM_SIZE, POINTS_PER_TURN_SIZE);
+        int GlobalPointsOf1 =  (int) extract(pkScore, POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE);
+        int GlobalPointsOf2 =  (int) extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE);
         return pack(0, 0, currentPointsOfTeam1+GlobalPointsOf1, 0, 0, currentPointsOfTeam2+GlobalPointsOf2);
 
     }
@@ -195,13 +196,13 @@ public final class PackedScored {
     */
     public static String toString(long pkScore) {
         assert isValid(pkScore);
-        String Tricksof1 = "Tricks of Team 1 : " + extract(pkScore,0,TRICKS_SIZE);
-        String Tricksof2 = "Tricks of Team 2 : " + extract(pkScore,
+        String tricksOf1 = "Tricks of Team 1 : " + extract(pkScore,0,TRICKS_SIZE);
+        String tricksOf2 = "Tricks of Team 2 : " + extract(pkScore,
                 ONE_TEAM_SIZE,TRICKS_SIZE);
         String CurrentPointsOf1 = "Current points of Team 1 : " + extract(pkScore,TRICKS_SIZE,POINTS_PER_TURN_SIZE);
         String CurrentPointsOf2 = "Current points of Team 2 : " + extract(pkScore,TRICKS_SIZE + ONE_TEAM_SIZE,POINTS_PER_TURN_SIZE);
         String GlobalPointsOf1 = "Global points of Team 1 : " + extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE ,POINTS_PER_GAME_SIZE);
         String GlobalPointsOf2 = "Global points of Team 2 : " + extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE + ONE_TEAM_SIZE,POINTS_PER_GAME_SIZE);
-        return Tricksof1 + "\n" + CurrentPointsOf1 + "\n"+ GlobalPointsOf1 + "\n"+ Tricksof2 + "\n"+ CurrentPointsOf2 + "\n"+ GlobalPointsOf2;
+        return tricksOf1 + "\n" + CurrentPointsOf1 + "\n"+ GlobalPointsOf1 + "\n"+ tricksOf2 + "\n"+ CurrentPointsOf2 + "\n"+ GlobalPointsOf2;
     }
 }
