@@ -2,6 +2,11 @@ package ch.epfl.javass.jass;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.SplittableRandom;
+
+import static ch.epfl.test.TestRandomizer.RANDOM_ITERATIONS;
+import static ch.epfl.test.TestRandomizer.newRandom;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 //TODO: Fill the methods
@@ -10,12 +15,25 @@ class PackedScoreTest {
     void isValidReturnsTrueWithValidPacked() {
 
     }
+
     @Test
-    void isValidReturnsFalseWithTooBigValues() {
+    void isValidReturnsFalseWithTooBigValuesForTeam1() {
 
     }
     @Test
-    void isValidReturnsFalseWithNegativeValues() {
+    void isValidReturnsFalseWithTooBigValuesForTeam2() {
+
+    }
+
+    @Test
+    void isValidReturnsFalseWithNegativeValuesForTeam1() {
+        SplittableRandom rng = newRandom();
+        for (int i = 0 ; i < RANDOM_ITERATIONS ; ++i) {
+
+        }
+    }
+    @Test
+    void isValidReturnsFalseWithNegativeValuesForTeam2() {
 
     }
 

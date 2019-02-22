@@ -187,7 +187,7 @@ public class Bits64Test {
 //    void pack3Works() {
 //        SplittableRandom rng = newRandom();
 //        for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
-//            System.out.println("itération : " + i);
+//            System.out.println("iteration : " + i);
 //            int[] s = getSizes(rng, 3);
 //            long[] v = getValues(rng, s);
 //            //Ca a l'air de marcher...
