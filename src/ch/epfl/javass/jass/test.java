@@ -6,7 +6,7 @@ import ch.epfl.javass.jass.Jass.TeamId;
 public abstract class test {
 
     public static void main(String[] args) {
-        long pkScore = PackedScored.pack(0, 0, 0, 0, 0, 0);
+        long pkScore = PackedScored.pack(2, 16, 32, 1, 64, 256);
         System.out.println(Long.SIZE);
         System.out.println(PackedScored.turnTricks(pkScore, TeamId.TEAM_1));
         System.out.println(PackedScored.turnPoints(pkScore, TeamId.TEAM_1));

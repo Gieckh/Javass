@@ -13,6 +13,14 @@ import static ch.epfl.javass.bits.Bits64.extract;
 public final class PackedScored {
     
     public final static long INITIAL = 0;
+    public final static int CODED_TRICKS_SIZE = 4;
+    public final static int CODED_POINTS_PER_TURN_SIZE = 9;
+    public final static int CODED_POINTS_PER_GAME_SIZE = 11;
+    public final static int CODED_EMPTY_BIT_SIZE = 8;
+    public final static int CODED_ONE_TEAM_INFO_SIZE = 32;
+    public final static int MAX_TRICKS_PER_TURN = 9;
+    public final static int MAX_POINTS_PER_TURN = 257;
+    public final static int MAX_POINTS_PER_GAME = 2000;
     
     //so the class is not instanciable
     //TODO do same for some other classes
