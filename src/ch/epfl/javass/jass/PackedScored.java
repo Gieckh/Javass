@@ -13,14 +13,15 @@ import static ch.epfl.javass.bits.Bits64.extract;
 public final class PackedScored {
     
     public final static long INITIAL = 0;
-    public final static int CODED_TRICKS_SIZE = 4;
-    public final static int CODED_POINTS_PER_TURN_SIZE = 9;
-    public final static int CODED_POINTS_PER_GAME_SIZE = 11;
-    public final static int CODED_EMPTY_BIT_SIZE = 8;
-    public final static int CODED_ONE_TEAM_INFO_SIZE = 32;
-    public final static int MAX_TRICKS_PER_TURN = 9;
-    public final static int MAX_POINTS_PER_TURN = 257;
-    public final static int MAX_POINTS_PER_GAME = 2000;
+    private final static int TRICKS_SIZE = 4;
+    private final static int POINTS_PER_TURN_SIZE = 9;
+    private final static int POINTS_PER_GAME_SIZE = 11;
+    private final static int EMPTY_BIT_SIZE = 8;
+    private final static int ONE_TEAM_INFO_SIZE = 32;
+    private final static int MAX_TRICKS_PER_TURN = 9;
+    private final static int MAX_POINTS_PER_TURN = 257;
+    private final static int MAX_POINTS_PER_GAME = 2000;
+
     
     //so the class is not instanciable
     //TODO do same for some other classes
@@ -33,15 +34,16 @@ public final class PackedScored {
      * @author Marin Nguyen - (288260)
     */
     public static boolean isValid(long pkScore) {
-       return(extract(pkScore,24,8) == 0 && //We want only 0 from the 24th to the 31th bit
-              extract(pkScore,56,8) == 0 && //We want only 0 from the 56th to the 63th bit
-              extract(pkScore,0,4) < 10 && // the number of tricks is valid (<10)
-              extract(pkScore,4,9) < 258 && // the number of points per turn is valid (<258)
-              extract(pkScore,13,11) < 2001 && // the number of points of the game is valid (<2000)
-              extract(pkScore,32,4) < 10 && // the number of tricks is valid (<10)
-              extract(pkScore,36,9) < 258 && // the number of points per turn is valid (<258)
-              extract(pkScore,45,11) < 2001 ); // the number of points of the game is valid (<2000)
-              
+        
+       return( 
+              extract(pkScore,0,TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // the number of tricks is valid (<10)
+              extract(pkScore,TRICKS_SIZE,POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // the number of points per turn is valid (<258)
+              extract(pkScore,TRICKS_SIZE + POINTS_PER_TURN_SIZE,POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME && // the number of points of the game is valid (<2000)
+              //We want only 0 from the 24th to the 31th bit thus the "+ EMPTY_BIT_SIZE"
+              extract(pkScore,ONE_TEAM_INFO_SIZE,TRICKS_SIZE) < MAX_TRICKS_PER_TURN && // the number of tricks is valid (<10)
+              extract(pkScore,ONE_TEAM_INFO_SIZE + TRICKS_SIZE,POINTS_PER_TURN_SIZE) < MAX_POINTS_PER_TURN && // the number of points per turn is valid (<258)
+              extract(pkScore,ONE_TEAM_INFO_SIZE + TRICKS_SIZE + POINTS_PER_TURN_SIZE ,POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME ); // the number of points of the game is valid (<2000)
+              //We want only 0 from the 56th to the 63th bit thus the "+ EMPTY_BIT_SIZE"
     }
     
     /** returns the packed long with all of these informations packed on 64bits.
@@ -57,9 +59,9 @@ public final class PackedScored {
     */
     public static long pack(int turnTricks1, int turnPoints1, int gamePoints1,
             int turnTricks2, int turnPoints2, int gamePoints2) {
-        long lsb= Bits64.pack(turnTricks1, 4, turnPoints1, 9, gamePoints1, 11);
-        long msb= Bits64.pack(turnTricks2, 4, turnPoints2, 9, gamePoints2, 11);
-        return Bits64.pack(lsb, 32, msb, 32);       
+        long lsb= Bits64.pack(turnTricks1, TRICKS_SIZE, turnPoints1, POINTS_PER_TURN_SIZE, gamePoints1, POINTS_PER_GAME_SIZE);
+        long msb= Bits64.pack(turnTricks2, TRICKS_SIZE, turnPoints2, POINTS_PER_TURN_SIZE, gamePoints2, POINTS_PER_GAME_SIZE);
+        return Bits64.pack(lsb, ONE_TEAM_INFO_SIZE, msb, ONE_TEAM_INFO_SIZE);       
         }
     
     
@@ -74,10 +76,10 @@ public final class PackedScored {
     public static int turnTricks(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
         if(t.ordinal() == 0) {
-            return (int) extract( pkScore , 0 , 4 );
+            return (int) extract( pkScore , 0 , TRICKS_SIZE );
         }
         if(t.ordinal() == 1) {
-            return (int) extract( pkScore , 32 , 4 );
+            return (int) extract( pkScore , ONE_TEAM_INFO_SIZE , TRICKS_SIZE );
         }
         else {
             throw new IllegalArgumentException("Bad Team Input");
@@ -96,10 +98,10 @@ public final class PackedScored {
     public static int turnPoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
         if(t.ordinal() == 0) {
-            return (int) extract( pkScore , 4 , 9 );
+            return (int) extract( pkScore , TRICKS_SIZE , POINTS_PER_TURN_SIZE );
         }
         if(t.ordinal() == 1) {
-            return (int) extract( pkScore , 36 ,9 );
+            return (int) extract( pkScore , TRICKS_SIZE + ONE_TEAM_INFO_SIZE ,POINTS_PER_TURN_SIZE );
         }
         else {
             throw new IllegalArgumentException("Bad Team Inmput");
@@ -117,7 +119,7 @@ public final class PackedScored {
     public static int gamePoints(long pkScore, TeamId t) throws IllegalArgumentException{
         assert isValid(pkScore);
         if(t.ordinal() == 0) {
-            return (int) extract( pkScore , 13 , 11 );
+            return (int) extract( pkScore , TRICKS_SIZE + POINTS_PER_TURN_SIZE , POINTS_PER_GAME_SIZE);
         }
         if(t.ordinal() == 1) {
             return (int) extract( pkScore , 45 , 11 );
