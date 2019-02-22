@@ -88,11 +88,13 @@ public final class PackedScore {
     }
 
 
-    /** returns the number of tricks won in function of the team.
+    /**
+     * @brief The number of tricks the team "t" won during the current turn.
+     *
      * @param pkScore (long) the long encoding the points and tricks of the game
-     * @param t, the TeamId
-     * @return int : the number of tricks won
-     * @throws IllegalArgumentException
+     * @param t (TeamId) The team we're interested in.
+     * @return (int) How many tricks this team won during this turn
+     *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
@@ -105,10 +107,10 @@ public final class PackedScore {
 
 
     /**
-     * returns the number of points won in the current turn in function of the team.
+     * @brief the number of points won in the current turn in function of the team.
      *
-     * @param pkScore (long) the long encoding the points and tricks of the game
-     * @param t, the TeamId
+     * @param pkScore (long) the long encoding the scores
+     * @param t (TeamId) the team we're interested in.
      * @return int : the number of points won in the current turn
      *
      * @author Antoine Scardigli - (299905)
@@ -123,7 +125,7 @@ public final class PackedScore {
     }
 
     /**
-     * returns the number of points won in the whole game except the current turn.
+     * returns the number of points the team won in the whole game, except the current turn.
      *
      * @param pkScore (long) the long encoding the points and tricks of the game
      * @param t, the TeamId
@@ -154,8 +156,8 @@ public final class PackedScore {
 
         int shift = (t == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
         return (int) (
-                extract( pkScore, shift + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE ) +
-                extract( pkScore, shift + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE )
+                extract(pkScore, shift + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE ) +
+                extract(pkScore, shift + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE )
         );
     }
 
