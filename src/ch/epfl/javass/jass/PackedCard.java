@@ -6,10 +6,21 @@ import static ch.epfl.javass.bits.Bits32.extract;
 //TODO: handle access rights
 //TODO: check where we assert (tests must not be done here)
 //TODO: use class preconditions
+//TODO: mettre des variables plutôt que
 public final class PackedCard {
     public final static int INVALID = 111111;
-    
-    
+    //TODO: public or private.
+    private final static int MAX_RANK = 8;
+    private final static int CODED_RANK_START = 0;
+    private final static int CODED_RANK_SIZE = 4;
+    private final static int RANK_SHIFT = 6;
+
+    private final static int CODED_COLOR_SIZE = 2;
+    private final static int CODED_COLOR_START = 4;
+    private final static int COLOR_SHIFT = 1;
+
+    private final static int EMPTY_BITS_START = 6;
+    private final static int EMPTY_BITS_SIZE = 26;
     /** returns true if the pkCard is correctly packed.
      * @param pkCard
      * @return true if the pkCard is correctly packed
@@ -19,15 +30,14 @@ public final class PackedCard {
     public static boolean isValid(int pkCard) {
  
         // Since we want to be fast
-        return (extract(pkCard, 0, 4) < 9 &&  //The rank is valid (we don't check color since it can only be valid)
-                extract(pkCard, 6, 26) == 0); //The 26 "bigger" bits are "0s"
+        return (extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) <= MAX_RANK &&  //The rank is valid (we don't check color since it can only be valid)
+                extract(pkCard, EMPTY_BITS_START, EMPTY_BITS_SIZE) == 0); //The 26 "bigger" bits are "0s"
         /*
         Clearer but slower version:
         int rank = extract(pkCard, 0, 4);
         int restOfTheCard = extract(pkCard, 6, 26); //26 = 31 - 6 + 1
         return (rank < 9 && restOfTheCard == 0);
         */
-    
     }
 
     /**
@@ -37,7 +47,7 @@ public final class PackedCard {
      * @return (int) the corresponding packed card.
      */
     public static int pack(Card.Color c, Card.Rank r) {
-        return Bits32.pack(r.type - 6, 4, c.type - 1, 2);
+        return Bits32.pack(r.type - RANK_SHIFT, CODED_RANK_SIZE, c.type - COLOR_SHIFT, CODED_COLOR_SIZE);
         // "-6" because the rank ranges from 6 to 14 instead of 0 to 8
         // "-1" because the color ranges from 1 to 4 instead of 0 to 3
     }

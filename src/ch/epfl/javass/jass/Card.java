@@ -20,8 +20,7 @@ public final class Card {
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
-    Color color;
-    Rank rank;
+    private final int packedCard;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -36,10 +35,8 @@ public final class Card {
      *
      * @return a new card of (Color) c and (Rank) r
      */
-    private Card(Color c, Rank r) {
-        //TODO: copies ?
-        color = c;
-        rank = r;
+    private Card(int packed) {
+        packedCard = packed; //int so no need to copy ? //TODO: suppr
     }
 
     /** ============================================== **/
@@ -109,6 +106,7 @@ public final class Card {
 
     }
 
+    //TODO: test add another attribute rather than have a switch on trumpOrdinal.
     /**
      * manages the ranks of the cards.
      *
@@ -250,33 +248,33 @@ public final class Card {
     //TODO: take care of access rights : public/private/none
     // the rank ranges from 6 to 8
     public static Card of(Color c, Rank r) {
-        return new Card(c, r);
+        return new Card(pack(c, r));
     }
+
     public static Card ofPacked(int packed) throws IllegalArgumentException {
         checkArgument(isValid(packed));
-
-        return new Card(PackedCard.color(packed), PackedCard.rank(packed));
+        return new Card(packed);
     }
 
 
     public int packed() {
-        return pack(color, rank);
+        return packedCard;
     }
 
 
     public Color color() {
-        return color;
+        return PackedCard.color(packedCard);
     }
     public Rank rank() {
-        return rank;
+        return PackedCard.rank(packedCard);
     }
 
     public boolean isBetter(Color trump, Card that) {
-        return PackedCard.isBetter(trump, this.packed(), that.packed());
+        return PackedCard.isBetter(trump, packedCard, that.packed());
     }
 
     public int points(Color trump) {
-        return PackedCard.points(trump, this.packed());
+        return PackedCard.points(trump, packedCard);
     }
 
 
@@ -288,16 +286,16 @@ public final class Card {
         }
 
         Card thatOCard = (Card) thatO; // Or do 2 "conversions, idk"
-        return (thatOCard.color == color  &&  thatOCard.rank == rank);
+        return (thatOCard.color() == this.color()  &&  thatOCard.rank() == this.rank());
     }
 
     @Override
     public int hashCode() {
-        return packed();
+        return packedCard;
     }
 
     @Override
     public String toString() {
-        return PackedCard.toString(packed());
+        return PackedCard.toString(packedCard);
     }
 }

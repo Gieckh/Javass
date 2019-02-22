@@ -74,6 +74,7 @@ public final class Bits32 {
  */
 // finds the msb position of an int, assuming there is one (i.e. value != 0)
 //TODO: can i do better ?
+//TODO: binary search rather than linear search.
 private static int msbPosition(int value) {
     int msbPos = Integer.SIZE - 1; // = 31
     int mask = 1 << msbPos; // 1 followed by thirty-one 0
