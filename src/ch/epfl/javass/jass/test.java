@@ -45,9 +45,6 @@ public abstract class test {
         System.out.println(PackedScored.gamePoints(pkScore, TeamId.TEAM_2));
         System.out.println(PackedScored.totalPoints(pkScore, TeamId.TEAM_2));
         System.out.println(PackedScored.toString(pkScore));
-        
-        
-
     }
 
 }
