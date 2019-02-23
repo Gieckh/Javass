@@ -200,7 +200,7 @@ public final class PackedScore {
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    public static long nextTurn(long pkScore) { //TODO: moins empaqueter.
+    public static long nextTurn(long pkScore) { //TODO: moins empaqueter -> mask
         assert isValid(pkScore);
 
         int turnPointsOf1 = (int) extract(pkScore, POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE);
@@ -214,7 +214,7 @@ public final class PackedScore {
 
 
     /**
-     * returns a paragraph with all informations packed in pkScore
+     * returns a paragraph with all information packed in pkScore
      *
      * @param pkScore (long) the long encoding the scores
      * @return the String with all information about points and tricks of both teams
