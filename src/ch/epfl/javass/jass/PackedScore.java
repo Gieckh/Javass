@@ -198,7 +198,6 @@ public final class PackedScore {
      * @return a new long with the data updated as it becomes next turn
      *
      * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static long nextTurn(long pkScore) { //TODO: moins empaqueter -> mask
         assert isValid(pkScore);
@@ -214,10 +213,10 @@ public final class PackedScore {
 
 
     /**
-     * returns a paragraph with all information packed in pkScore
+     * @brief a paragraph with all information packed in pkScore
      *
      * @param pkScore (long) the long encoding the scores
-     * @return the String with all information about points and tricks of both teams
+     * @return (String) the String with all information about points and tricks of both teams
      *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
