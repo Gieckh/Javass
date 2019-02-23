@@ -79,7 +79,7 @@ private static int msbPosition(int value) {
     int msbPos = Integer.SIZE - 1; // = 31
     int mask = 1 << msbPos; // 1 followed by thirty-one 0
 
-    while ((mask & value)>>>msbPos != 1) {
+    while ((mask & value) == 0) {
         mask >>>= 1;
         msbPos--;
     }

@@ -82,7 +82,7 @@ public class Bits64 {
         int msbPos = Long.SIZE - 1; // = 63
         long mask = 1L << msbPos; // 1 followed by sixty-three 0
 
-        while ((mask & value) >>> msbPos != 1) {
+        while ((mask & value) == 0) {
             mask >>>= 1;
             msbPos--;
         }
