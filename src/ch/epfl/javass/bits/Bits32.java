@@ -75,7 +75,7 @@ public final class Bits32 {
 // finds the msb position of an int, assuming there is one (i.e. value != 0)
 //TODO: can i do better ?
 //TODO: binary search rather than linear search.
-private static int msbPosition(int value) {
+private static int msbPosition(int value) { //Or use method highestOneBit / numberOfLeadingZeros //TODO
     int msbPos = Integer.SIZE - 1; // = 31
     int mask = 1 << msbPos; // 1 followed by thirty-one 0
 
@@ -133,7 +133,7 @@ private static int msbPosition(int value) {
 
         // Seems better (to us) to have a new if statement for that condition
         checkArgument(s1 + s2 <= Integer.SIZE);
-        return (v2 << s1) + v1;
+        return (v2 << s1) | v1;
     }
 
 
@@ -156,7 +156,7 @@ private static int msbPosition(int value) {
         checkArgument(compatibleSizes);
         checkArgument(s1 + s2 +s3 <= Integer.SIZE);
 
-        return (((v3 << s2) + v2) << s1) + v1;
+        return (((v3 << s2) | v2) << s1) | v1;
     }
 
     /**
@@ -181,6 +181,6 @@ private static int msbPosition(int value) {
         checkArgument(s1 + s2 + s3 + s4 + s5 + s6 + s7 <= Integer.SIZE);
 
         // Same principle as before, but with more parenthesises.
-        return (((((((((((v7 << s6) + v6) << s5) + v5) << s4) + v4) << s3) + v3) << s2) + v2) << s1) + v1;
+        return (((((((((((v7 << s6) | v6) << s5) | v5) << s4) | v4) << s3) | v3) << s2) | v2) << s1) | v1;
     }
 }

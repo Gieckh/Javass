@@ -78,7 +78,7 @@ public class Bits64 {
      * @author - Marin Nguyen (288260)
      */
     //TODO: can i do better ? -> log search, but more comparisons ?
-    private static int msbPosition(long value) {
+    private static int msbPosition(long value) { //Or use method bitCount //TODO
         int msbPos = Long.SIZE - 1; // = 63
         long mask = 1L << msbPos; // 1 followed by sixty-three 0
 
@@ -137,7 +137,7 @@ public class Bits64 {
 
         // Seems better (to us) to have a new if statement for that condition
         checkArgument(s1 + s2 <= Long.SIZE);
-        return (v2 << s1) + v1;
+        return (v2 << s1) | v1;
     }
 
 
@@ -161,7 +161,7 @@ public class Bits64 {
         checkArgument(compatibleSizes);
         checkArgument(s1 + s2 +s3 <= Long.SIZE);
 
-        return (((v3 << s2) + v2) << s1) + v1;
+        return (((v3 << s2) | v2) << s1) | v1;
     }
 
     /**
@@ -186,6 +186,6 @@ public class Bits64 {
         checkArgument(s1 + s2 + s3 + s4 + s5 + s6 + s7 <= Long.SIZE);
 
         // Same principle as before, but with more parenthesises.
-        return (((((((((((v7 << s6) + v6) << s5) + v5) << s4) + v4) << s3) + v3) << s2) + v2) << s1) + v1;
+        return (((((((((((v7 << s6) | v6) << s5) | v5) << s4) | v4) << s3) | v3) << s2) | v2) << s1) | v1;
     }
 }
