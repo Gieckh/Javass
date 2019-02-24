@@ -105,7 +105,6 @@ public final class Card {
 
     }
 
-    //TODO: test add another attribute rather than have a switch on trumpOrdinal.
     /**
      * manages the ranks of the cards.
      *
@@ -138,6 +137,15 @@ public final class Card {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
+        /**
+         * Creates a new variable of type Rank
+         *
+         * @param type (int) associates the card rank to an int
+         * @param trumpOrdinal (int) associates to the card rank its strength, assuming
+         *                     it is a trump. for example, the nine of trump color
+         *                     beats the ten. Therefore, it has a bigger trumpOrdinal
+         *                     (7 > 3).
+         */
         private Rank(int type, int trumpOrdinal) {
             this.type = type;
             this.trumpOrdinal = trumpOrdinal;
