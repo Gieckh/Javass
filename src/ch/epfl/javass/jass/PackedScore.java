@@ -229,11 +229,11 @@ public final class PackedScore {
         int turnPointsOf1 = turnPoints(pkScore, TeamId.TEAM_1);
         int turnPointsOf2 = turnPoints(pkScore, TeamId.TEAM_2);
 
-        int totalPointsOf1 = totalPoints(pkScore, TeamId.TEAM_1);
-        int totalPointsOf2 = totalPoints(pkScore, TeamId.TEAM_2);
+        int gamePointsOf1 = gamePoints(pkScore, TeamId.TEAM_1);
+        int gamePointsOf2 = gamePoints(pkScore, TeamId.TEAM_2);
 
-        String string1 = "(" + tricksOf1 + ", " + turnPointsOf1 + ", " + totalPointsOf1 + ")";
-        String string2 = "(" + tricksOf2 + ", " + turnPointsOf2 + ", " + totalPointsOf2 + ")";
+        String string1 = "(" + tricksOf1 + "," + turnPointsOf1 + "," + gamePointsOf1 +")";
+        String string2 = "(" + tricksOf2 + "," + turnPointsOf2 + "," + gamePointsOf2 +")";
 
         return string1 + "/" + string2;
     }
