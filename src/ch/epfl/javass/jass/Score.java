@@ -30,7 +30,7 @@ public final class Score {
     }
     
     public int gamePoints(TeamId t) {
-        return PackedScore.turnPoints(packedScore, t);
+        return PackedScore.gamePoints(packedScore, t);
     }
     
     public int totalPoints(TeamId t) {

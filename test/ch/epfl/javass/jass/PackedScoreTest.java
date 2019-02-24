@@ -125,7 +125,7 @@ class PackedScoreTest {
 
             int gamePoints1 = rng.nextInt(MAX_POINTS_PER_GAME);
             int gamePoints2 = rng.nextInt(MAX_POINTS_PER_GAME);
-            System.out.println(tooBigTricks);
+            // lance l'exception sur le 1er assert quand tooBigTricks = 16 > 2^4 -1 , mais est ce que ca doit lancer false ou exception ?
             assertFalse(isValid(pack(tooBigTricks, turnPoints1, gamePoints1,
                     tricks2, turnPoints2, gamePoints2)));
             assertFalse(isValid(pack(tricks1, tooBigTurnPoints, gamePoints1,

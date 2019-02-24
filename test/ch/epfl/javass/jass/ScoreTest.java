@@ -86,7 +86,7 @@ class ScoreTest {
         for (int r = 0; r <=9; ++r) {
             for (int c = 0; c <= 257; ++c) {
                 for(int j = 0; j<=2000; ++j) {
-                    System.out.println(j +"+"+ c +"+"+ j);
+                   
                     assertEquals(j, 
                             Score.ofPacked(PackedScore.pack(r, c, j, r, c, j)).gamePoints(TeamId.TEAM_1));
                     assertEquals(j,
