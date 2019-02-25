@@ -1,5 +1,4 @@
 package ch.epfl.javass.jass;
-qdjfqhq
 import static ch.epfl.javass.bits.Bits64.extract;
 
 import ch.epfl.javass.jass.Card.Color;
