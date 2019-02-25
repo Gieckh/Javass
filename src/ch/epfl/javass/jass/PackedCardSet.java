@@ -1,5 +1,5 @@
 package ch.epfl.javass.jass;
-
+qdjfqhq
 import static ch.epfl.javass.bits.Bits64.extract;
 
 import ch.epfl.javass.jass.Card.Color;
@@ -52,7 +52,7 @@ public final class PackedCardSet {
         assert isValid(pkCard);
         Color color = PackedCard.color(pkCard);
         Rank rank = PackedCard.rank(pkCard);
-        return ;
+        return 0L;
     }
     
     public static long singleton ( int pkCard) {
