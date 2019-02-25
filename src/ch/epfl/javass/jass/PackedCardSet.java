@@ -23,6 +23,7 @@ public static final class PackedCardSet {
     private final static int CLUB_COLOR_START = 48;
     private final static int UNUSED_BITS_START = 9;
     private final static int UNUSED_BITS_SIZE = 7;
+    private final static int COLOR_SIZE= 16;
     //so the class is not instantiable
     private PackedCardSet() {};
 
@@ -58,9 +59,8 @@ public static final class PackedCardSet {
         assert isValid(pkCard);
         Color color = PackedCard.color(pkCard);
         Rank rank = PackedCard.rank(pkCard);
-        int shift = 16*color.ordinal()
-        long singleton = 1<<
-        return ;
+        int shift = 16*color.ordinal() + rank.ordinal();
+        return 1<<shift;
     }
     
     public static boolean isEmpty (long pkCardSet) {
@@ -72,6 +72,7 @@ public static final class PackedCardSet {
     }
     
     public static int get(long pkCardSet, int index) {
+        
         return ;
     }
     
@@ -88,21 +89,23 @@ public static final class PackedCardSet {
     }
     
     public static long complement(long pkCardSet) {
+        return ~pkCardSet;
         
     }
     
     public static long union(long pkCardSet1, long pkCardSet2) {
-        
+        return (pkCardSet1 | pkCardSet2);
     }
     
     public static long intersection(long pkCardSet1, long pkCardSet2) {
-        
+        return (pkCardSet1 & pkCardSet2);
     }
     
     public static long difference(long pkCardSet1, long pkCardSet2) {
-        
+        return (pkCardSet1 - (pkCardSet1&pkCardSet2));
     }
     public static long subsetOfColor(long pkCardSet, Card.Color color) {
+        extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
         
     }
     
