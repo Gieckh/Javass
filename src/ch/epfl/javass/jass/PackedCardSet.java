@@ -12,7 +12,7 @@ import ch.epfl.javass.jass.Card.Rank;
  * @author Marin Nguyen - (288260)
  *
  */
-public static final class PackedCardSet {
+public final class PackedCardSet {
    
     static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
