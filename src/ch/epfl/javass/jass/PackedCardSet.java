@@ -81,16 +81,16 @@ public final class PackedCardSet {
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    
-    //TODO : l'ennoncé ne demande pas à ce que ca soit static ... etrange
-    public static boolean isValid(long pkCardSet) {
 
+    // WORKS
+    public static boolean isValid(long pkCardSet) {
        return(
-               //We want only 0 from the 9th + 16*N to 15 ++16*N (N goes from 0 to 3)
+              //We want only 0 from the 9th + 16*N to 15 ++ 16*N (N goes from 0 to 3)
               extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
               extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
               extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0);
+              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0
+       );
     }
     
     public static long trumpAbove (int pkCard) {
@@ -104,7 +104,8 @@ public final class PackedCardSet {
         int shift = index (pkCard);
         return 1L<<shift;
     }
-    
+
+    //WORKS
     public static boolean isEmpty (long pkCardSet) {
         return pkCardSet == 0;
     }
@@ -132,7 +133,7 @@ public final class PackedCardSet {
     private static int findPkCard(long pkCardSet, int index) {
         int rank = index % 4 ;
         int color = index % 16;
-       return Bits32.pack(color, 2, rank, 4);
+        return Bits32.pack(color, 2, rank, 4); //TODO: demander au prof quel pack utiliser.
     }
     
     public static long add(long pkCardSet, int pkCard) {
@@ -148,14 +149,14 @@ public final class PackedCardSet {
         int mask = 1<<index(pkCard);
         return (mask&pkCardSet)==mask;
     }
-    
+
+    //WORKS
     private static int index(int pkCard) {
         return pkCardToIndex.get(pkCard);
     }
     
     public static long complement(long pkCardSet) {
         return ~pkCardSet;
-        
     }
     
     public static long union(long pkCardSet1, long pkCardSet2) {

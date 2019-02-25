@@ -111,18 +111,21 @@ class PackedCardSetTest {
         }
     }
 
-    //First test
+
     @Test
-    void addDoesAddWithValidCards() {
+    void addDoesAddWithValidCards() { //First test
         Card.Color[] colors = getAllColors();
         Card.Rank[]   ranks = getAllRanks();
         long packedCardSet = PackedCardSet.EMPTY;
-        for (int j = 0 ; j < colors.length ; ++j)
-            for(int i = 0 ; i < ranks.length ; ++i) {
+        for (int j = 0 ; j < colors.length ; ++j) {
+            for (int i = 0; i < ranks.length; ++i) {
                 int pkCard = PackedCard.pack(colors[j], ranks[i]);
-                PackedCardSet.add(packedCardSet, pkCard);
+                packedCardSet = PackedCardSet.add(packedCardSet, pkCard);
+
                 long mask = 1L << (i + (16 * j));
-                assertTrue((packedCardSet & mask) == 1);
+
+                assertEquals(mask, packedCardSet & mask);
             }
+        }
     }
 }
