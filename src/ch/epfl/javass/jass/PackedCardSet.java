@@ -2,6 +2,9 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.bits.Bits64.extract;
 
+import ch.epfl.javass.jass.Card.Color;
+import ch.epfl.javass.jass.Card.Rank;
+
 /**
  * manipulates sets of cards of a jass game.
  * 
@@ -45,10 +48,17 @@ public final class PackedCardSet {
     }
     
     public long trumpAbove (int pkCard) {
+        assert isValid(pkCard);
+        Color color = PackedCard.color(pkCard);
+        Rank rank = PackedCard.rank(pkCard);
         return ;
     }
     
     public long singleton ( int pkCard) {
+        assert isValid(pkCard);
+        Color color = PackedCard.color(pkCard);
+        Rank rank = PackedCard.rank(pkCard);
+        long singleton = 1
         return ;
     }
     
