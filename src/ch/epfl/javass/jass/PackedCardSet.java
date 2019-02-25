@@ -73,19 +73,19 @@ public final class PackedCardSet {
     
     public static int get(long pkCardSet, int index) {
         
-        return ;
+        return 0;
     }
     
     public static long add(long pkCardSet, int pkCard) {
-        
+        return 0L;
     }
     
     public static long remove(long pkCardSet, int pkCard) {
-        
+        return 0L;
     }
     
     public static boolean contains(long pkCardSet, int pkCard) {
-        
+        return false;
     }
     
     public static long complement(long pkCardSet) {
@@ -105,20 +105,13 @@ public final class PackedCardSet {
         return (pkCardSet1 - (pkCardSet1&pkCardSet2));
     }
     public static long subsetOfColor(long pkCardSet, Card.Color color) {
-        extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
+       return extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
         
     }
     
     public static String toString(long pkCardSet) {
-        
+        return "";
     }
-    
-    
-    
-
-
-
-
 }
 
 
