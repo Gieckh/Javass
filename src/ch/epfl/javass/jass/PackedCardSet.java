@@ -34,7 +34,7 @@ public final class PackedCardSet {
     */
     
     //TODO : l'ennoncé ne demande pas à ce que ca soit static ... etrange
-    public boolean isValid(long pkCardSet) {
+    public static boolean isValid(long pkCardSet) {
 
        return(
                //We want only 0 from the 9th + 16*N to 15 ++16*N (N goes from 0 to 3)
@@ -64,7 +64,7 @@ public final class PackedCardSet {
         return ;
     }
     
-    public long add(long pkCardSet, int pkCard) {
+    public static long add(long pkCardSet, int pkCard) {
         
     }
     
