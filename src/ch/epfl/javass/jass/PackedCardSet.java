@@ -41,7 +41,7 @@ public final class PackedCardSet {
         };
     }
 
-    private final static Hashtable pkCardToIndex = pkCardToIndex();
+    private static Hashtable<Integer, Integer> pkCardToIndex = pkCardToIndex();
 
     public static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
@@ -138,9 +138,7 @@ public final class PackedCardSet {
     }
     
     private static int index(int pkCard) {
-        Color color = PackedCard.color(pkCard);
-        Rank rank = PackedCard.rank(pkCard);
-        return 16 * color.ordinal() + rank.ordinal();
+        return pkCardToIndex.get(pkCard);
     }
     
     public static long complement(long pkCardSet) {
@@ -174,7 +172,7 @@ public final class PackedCardSet {
         return j.toString();
     }
 
-    private final static void pkIntToIndex() {
+    private static Hashtable<Integer, Integer> pkCardToIndex() {
         Hashtable hash = new Hashtable();
         Card.Color[] colors = getAllColors();
         Card.Rank[] ranks = getAllRanks();
@@ -184,8 +182,8 @@ public final class PackedCardSet {
                 hash.put(pkCard, 16 * j + i);
             }
         }
+        return hash;
     }
-
 }
 
 
