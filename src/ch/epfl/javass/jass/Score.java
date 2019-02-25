@@ -6,12 +6,23 @@ import static ch.epfl.javass.Preconditions.*;
 public final class Score {
     
     public final static Score INITIAL = new Score(0);
+    /** =============================================== **/
+    /** ===============    ATTRIBUTES    ============== **/
+    /** =============================================== **/
     private long packedScore;
-    
+
+    /** ============================================== **/
+    /** ==============   CONSTRUCTORS   ============== **/
+    /** ============================================== **/
+
     private Score(long packed) {
      packedScore = packed;   
     }
-    
+
+
+    /** ============================================== **/
+    /** ===============    METHODS    ================ **/
+    /** ============================================== **/
     public static Score ofPacked(long packed) throws IllegalArgumentException{
         checkArgument(isValid(packed));
         return new Score(packed);

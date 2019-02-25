@@ -38,9 +38,6 @@ public final class Card {
         packedCard = packed; //int so no need to copy ? //TODO: suppr
     }
 
-    /** ============================================== **/
-    /** ===============    METHODS    ================ **/
-    /** ============================================== **/
 
 
     public enum Color {
@@ -232,6 +229,9 @@ public final class Card {
     }
 
 
+    /** ============================================== **/
+    /** ===============    METHODS    ================ **/
+    /** ============================================== **/
     //TODO: take care of access rights : public/private/none
     // the rank ranges from 6 to 8
     public static Card of(Color c, Rank r) {
