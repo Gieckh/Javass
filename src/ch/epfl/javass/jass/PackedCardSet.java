@@ -40,9 +40,24 @@ public final class PackedCardSet {
                 Card.Rank.ACE,
         };
     }
+    
+    private static Card.Rank[] getAllRanksInTrumpCase() {
+        return new Card.Rank[] {
+                Card.Rank.SIX,
+                Card.Rank.SEVEN,
+                Card.Rank.EIGHT,
+                Card.Rank.TEN,
+                Card.Rank.QUEEN,
+                Card.Rank.KING,
+                Card.Rank.ACE,
+                Card.Rank.NINE,
+                Card.Rank.JACK,
+
+        };
+    }
 
     private static Hashtable<Integer, Integer> pkCardToIndex = pkCardToIndex();
-    private static Hashtable<Integer, Integer> pkCardsForTrump = pkCardsForTrump();
+    private static Hashtable<Integer, Long> pkCardsForTrump = pkCardsForTrump();
 
     public static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
@@ -80,13 +95,9 @@ public final class PackedCardSet {
     
     public static long trumpAbove (int pkCard) {
         assert isValid(pkCard);
-        Color color = PackedCard.color(pkCard);
-        Rank rank = PackedCard.rank(pkCard);
-        return 0L;
+        return pkCardsForTrump.get(pkCard);
     }
-    
-    private static int cellOfTrump;
-    
+        
     
     public static long singleton ( int pkCard) {
         assert isValid(pkCard);
@@ -179,6 +190,7 @@ public final class PackedCardSet {
         Card.Rank[] ranks = getAllRanks();
         for (int j = 0 ; j < colors.length ; ++j) {
             for (int i = 0 ; i < ranks.length ; ++i) {
+                
                 int pkCard = PackedCard.pack(colors[j], ranks[i]);
                 hash.put(pkCard, 16 * j + i);
             }
@@ -186,17 +198,23 @@ public final class PackedCardSet {
         return hash;
     }
     
-    private static Hashtable<Integer, Integer> pkCardsForTrump() {
-        Hashtable<Integer, Integer> hash = new Hashtable<Integer, Integer>();
+    private static Hashtable<Integer, Long> pkCardsForTrump() {
+        Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
         Card.Color[] colors = getAllColors();
         Card.Rank[] ranks = getAllRanks();
+        Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
+        long pkSet = 0L;
         for (int j = 0 ; j < colors.length ; ++j) {
-            for (int i = 0 ; i < ranks.length ; ++i) {
-                int pkCard = PackedCard.pack(colors[j], ranks[i]);
-                hash.put(pkCard, 16 * j + i);
+            for (int k = 0 ; k < trumpRanks.length ; ++k) {
+                pkSet = 0L;
+                for (int i = k+1 ; i < trumpRanks.length ; ++i) {
+                    pkSet = add(pkSet,k);
+                }
+            int pkCardSet = PackedCard.pack(colors[j], ranks[k]);
+            hash.put(pkCardSet, pkSet);
             }
         }
-        return hash;
+    return hash;
     }
 }
 
