@@ -1,8 +1,12 @@
 package ch.epfl.javass.jass;
 import static ch.epfl.javass.bits.Bits64.extract;
 
+import java.util.StringJoiner;
+
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
+
+//TODO faire le signcheck
 
 /**
  * manipulates sets of cards of a jass game.
@@ -51,14 +55,12 @@ public final class PackedCardSet {
         assert isValid(pkCard);
         Color color = PackedCard.color(pkCard);
         Rank rank = PackedCard.rank(pkCard);
-        return 0L;
+        return ;
     }
     
     public static long singleton ( int pkCard) {
         assert isValid(pkCard);
-        Color color = PackedCard.color(pkCard);
-        Rank rank = PackedCard.rank(pkCard);
-        int shift = 16*color.ordinal() + rank.ordinal();
+        int shift = index (pkCard);
         return 1<<shift;
     }
     
@@ -71,20 +73,39 @@ public final class PackedCardSet {
     }
     
     public static int get(long pkCardSet, int index) {
-        
+        int lowestBit = (int) Long.lowestOneBit(pkCardSet);
+        for(int i = lowestBit ; i < index ; ++i ) {
+            long mask = 1<<i;
+            if((mask&pkCardSet) == mask) {
+                return 
+            }
+            
+        }
         return 0;
     }
     
     public static long add(long pkCardSet, int pkCard) {
-        return 0L;
+        return pkCardSet|(1<<index(pkCard));
     }
     
     public static long remove(long pkCardSet, int pkCard) {
-        return 0L;
+      if(contains(pkCardSet, pkCard)){
+        return pkCardSet - 1<<index(pkCard);
+      }
+      else {
+          return pkCardSet;
+      }
     }
     
     public static boolean contains(long pkCardSet, int pkCard) {
-        return false;
+        int mask = 1<<index(pkCard);
+        return (mask&pkCardSet)==mask;
+    }
+    
+    private static int index(int pkCard) {
+        Color color = PackedCard.color(pkCard);
+        Rank rank = PackedCard.rank(pkCard);
+        return 16*color.ordinal() + rank.ordinal();
     }
     
     public static long complement(long pkCardSet) {
@@ -99,7 +120,7 @@ public final class PackedCardSet {
     public static long intersection(long pkCardSet1, long pkCardSet2) {
         return (pkCardSet1 & pkCardSet2);
     }
-    
+    //moins ou exlusif je suis vraiement pas sur
     public static long difference(long pkCardSet1, long pkCardSet2) {
         return (pkCardSet1 - (pkCardSet1&pkCardSet2));
     }
@@ -109,8 +130,15 @@ public final class PackedCardSet {
     }
     
     public static String toString(long pkCardSet) {
-        return "";
+        StringJoiner j = new StringJoiner(",", "{", "}");
+        for (int i=0; i<64; ++i) {
+            if(1 == extract(pkCardSet, i, 1)) {
+                j.add(PackedCard.toString(get(pkCardSet,i)));
+            }
+        }
+        return j.toString();
     }
+
 }
 
 
