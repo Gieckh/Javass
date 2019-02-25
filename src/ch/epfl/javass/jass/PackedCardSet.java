@@ -3,6 +3,7 @@ import static ch.epfl.javass.bits.Bits64.extract;
 
 import java.util.StringJoiner;
 
+import java.util.Hashtable;
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
@@ -17,8 +18,32 @@ import ch.epfl.javass.jass.Card.Rank;
  *
  */
 public final class PackedCardSet {
-   
-    static final long EMPTY = 0;
+    private static Card.Color[] getAllColors() {
+        return new Card.Color[] {
+                Card.Color.SPADE,
+                Card.Color.HEART,
+                Card.Color.DIAMOND,
+                Card.Color.CLUB
+        };
+    }
+
+    private static Card.Rank[] getAllRanks() {
+        return new Card.Rank[] {
+                Card.Rank.SIX,
+                Card.Rank.SEVEN,
+                Card.Rank.EIGHT,
+                Card.Rank.NINE,
+                Card.Rank.TEN,
+                Card.Rank.JACK,
+                Card.Rank.QUEEN,
+                Card.Rank.KING,
+                Card.Rank.ACE,
+        };
+    }
+
+    private final static Hashtable pkCardToIndex = pkCardToIndex();
+
+    public static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
     // TODO trouver a quelle couleur correspond 1St, 2nd , etc
     private final static int SPADE_COLOR_START = 0;
@@ -99,7 +124,7 @@ public final class PackedCardSet {
     }
     
     public static long add(long pkCardSet, int pkCard) {
-        return pkCardSet|(1<<index(pkCard));
+        return pkCardSet |(1 << index(pkCard));
     }
     
     public static long remove(long pkCardSet, int pkCard) {
@@ -115,7 +140,7 @@ public final class PackedCardSet {
     private static int index(int pkCard) {
         Color color = PackedCard.color(pkCard);
         Rank rank = PackedCard.rank(pkCard);
-        return 16*color.ordinal() + rank.ordinal();
+        return 16 * color.ordinal() + rank.ordinal();
     }
     
     public static long complement(long pkCardSet) {
@@ -130,9 +155,9 @@ public final class PackedCardSet {
     public static long intersection(long pkCardSet1, long pkCardSet2) {
         return (pkCardSet1 & pkCardSet2);
     }
-    //moins ou exlusif je suis vraiement pas sur
+
     public static long difference(long pkCardSet1, long pkCardSet2) {
-        return (pkCardSet1 - (pkCardSet1&pkCardSet2));
+        return pkCardSet1 & (~pkCardSet1&pkCardSet2);
     }
     public static long subsetOfColor(long pkCardSet, Card.Color color) {
        return extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
@@ -147,6 +172,18 @@ public final class PackedCardSet {
             }
         }
         return j.toString();
+    }
+
+    private final static void pkIntToIndex() {
+        Hashtable hash = new Hashtable();
+        Card.Color[] colors = getAllColors();
+        Card.Rank[] ranks = getAllRanks();
+        for (int j = 0 ; j < colors.length ; ++j) {
+            for (int i = 0 ; i < ranks.length ; ++i) {
+                int pkCard = PackedCard.pack(colors[j], ranks[i]);
+                hash.put(pkCard, 16 * j + i);
+            }
+        }
     }
 
 }

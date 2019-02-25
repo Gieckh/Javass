@@ -47,7 +47,6 @@ class PackedCardSetTest {
     }
 
 
-
     @Test
     void isValidReturnsTrueWithSomeValidCombinations() {
         long pkCardSet = PackedCardSet.EMPTY;
@@ -110,5 +109,20 @@ class PackedCardSetTest {
             long packedCardSet = rng.nextLong(1, maxRngLong);
             assertFalse(PackedCardSet.isEmpty(packedCardSet | minLong));
         }
+    }
+
+    //First test
+    @Test
+    void addDoesAddWithValidCards() {
+        Card.Color[] colors = getAllColors();
+        Card.Rank[]   ranks = getAllRanks();
+        long packedCardSet = PackedCardSet.EMPTY;
+        for (int j = 0 ; j < colors.length ; ++j)
+            for(int i = 0 ; i < ranks.length ; ++i) {
+                int pkCard = PackedCard.pack(colors[j], ranks[i]);
+                PackedCardSet.add(packedCardSet, pkCard);
+                long mask = 1L << (i + (16 * j));
+                assertTrue((packedCardSet & mask) == 1);
+            }
     }
 }
