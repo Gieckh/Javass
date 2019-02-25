@@ -5,12 +5,13 @@ import static ch.epfl.javass.Preconditions.*;
 
 public final class Score {
     
-    public final static Score INITIAL = new Score(0);
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
     private long packedScore;
+    public final static Score INITIAL = new Score(PackedScore.INITIAL);
 
+    
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
