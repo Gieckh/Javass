@@ -1,7 +1,8 @@
 package ch.epfl.javass.jass;
 
-import ch.epfl.javass.bits.Bits64;
-import ch.epfl.javass.jass.PackedCardSet;
+import static ch.epfl.test.TestRandomizer.RANDOM_ITERATIONS;
+import static ch.epfl.test.TestRandomizer.newRandom;
+import java.util.SplittableRandom;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,6 +47,7 @@ class PackedCardSetTest {
     }
 
 
+
     @Test
     void isValidReturnsTrueWithSomeValidCombinations() {
         long pkCardSet = PackedCardSet.EMPTY;
@@ -88,6 +90,16 @@ class PackedCardSetTest {
                 assertFalse(PackedCardSet.isValid(pkCardSet | mask));
                 mask <<= 1;
             }
+        }
+    }
+
+
+    @Test
+    void isEmptyWorksInSomeCases() {
+        long pkCardSet = PackedCardSet.EMPTY;
+
+        for (int i = 0 ; i < RANDOM_ITERATIONS ; ++i) {
+            (...)
         }
     }
 }
