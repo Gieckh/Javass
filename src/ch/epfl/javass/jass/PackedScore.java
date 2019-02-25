@@ -211,7 +211,7 @@ public final class PackedScore {
         int previousGlobalPointsOf1 = (int) extract(pkScore, POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE);
         int previousGlobalPointsOf2 = (int) extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE);
 
-        return pack(0, 0, turnPointsOf1 + previousGlobalPointsOf1, 0, 0, turnPointsOf2+previousGlobalPointsOf2);
+        return pack(0, 0, turnPointsOf1 + previousGlobalPointsOf1, 0, 0, turnPointsOf2 + previousGlobalPointsOf2);
     }
 
 

@@ -5,8 +5,10 @@ import ch.epfl.javass.jass.TeamId;
 
 public abstract class test {
     public static void main(String[] args) {
-        System.out.println(1L << 62);
-        System.out.println((1L << 63) - 1);
-        System.out.println(1L << 63);
+        long packed = PackedScore.pack(5, 77, 1023,
+                                       4, 80, 12);
+        System.out.println(PackedScore.toString(packed));
+        packed = PackedScore.nextTurn(packed);
+        System.out.println(PackedScore.toString(packed));
     }
 }
