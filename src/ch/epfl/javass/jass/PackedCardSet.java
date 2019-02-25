@@ -14,10 +14,10 @@ public final class PackedCardSet {
     static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
     // TODO trouver a quelle couleur correspond 1St, 2nd , etc
-    private final static int FIRST_COLOR_START = 0;
-    private final static int SECOND_COLOR_START = 16;
-    private final static int THIRD_COLOR_START = 32;
-    private final static int THOURTH_COLOR_START = 48;
+    private final static int SPADE_COLOR_START = 0;
+    private final static int HEART_COLOR_START = 16;
+    private final static int DIAMOND_COLOR_START = 32;
+    private final static int CLUB_COLOR_START = 48;
     private final static int UNUSED_BITS_START = 9;
     private final static int UNUSED_BITS_SIZE = 7;
     //so the class is not instantiable
