@@ -50,7 +50,15 @@ public class CardSet {
         
     }
     
-    public String toString(long ) {
+    public boolean equals(Object thatO) {
+        
+    }
+    
+    public int hashCode() {
+        
+    }
+    
+    public String toString() {
         
     }
     
