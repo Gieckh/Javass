@@ -18,46 +18,14 @@ import ch.epfl.javass.jass.Card.Rank;
  *
  */
 public final class PackedCardSet {
-    private static Card.Color[] getAllColors() {
-        return new Card.Color[] {
-                Card.Color.SPADE,
-                Card.Color.HEART,
-                Card.Color.DIAMOND,
-                Card.Color.CLUB
-        };
-    }
 
-    private static Card.Rank[] getAllRanks() {
-        return new Card.Rank[] {
-                Card.Rank.SIX,
-                Card.Rank.SEVEN,
-                Card.Rank.EIGHT,
-                Card.Rank.NINE,
-                Card.Rank.TEN,
-                Card.Rank.JACK,
-                Card.Rank.QUEEN,
-                Card.Rank.KING,
-                Card.Rank.ACE,
-        };
-    }
-    
-    private static Card.Rank[] getAllRanksInTrumpCase() {
-        return new Card.Rank[] {
-                Card.Rank.SIX,
-                Card.Rank.SEVEN,
-                Card.Rank.EIGHT,
-                Card.Rank.TEN,
-                Card.Rank.QUEEN,
-                Card.Rank.KING,
-                Card.Rank.ACE,
-                Card.Rank.NINE,
-                Card.Rank.JACK,
+    private final static Card.Color[] colors = getAllColors();
+    private final static Card.Rank[] ranks = getAllRanks();
 
-        };
-    }
+    private final static Hashtable<Integer, Integer> pkCardToIndex = pkCardToIndex();
+    private final static Hashtable<Integer, Long> pkCardsForTrump = pkCardsForTrump();
 
-    private static Hashtable<Integer, Integer> pkCardToIndex = pkCardToIndex();
-    private static Hashtable<Integer, Long> pkCardsForTrump = pkCardsForTrump();
+    private final static int[] indexToPkCard = indexToPkCard();
 
     public static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
@@ -66,9 +34,11 @@ public final class PackedCardSet {
     private final static int HEART_COLOR_START = 16;
     private final static int DIAMOND_COLOR_START = 32;
     private final static int CLUB_COLOR_START = 48;
+
     private final static int UNUSED_BITS_START = 9;
     private final static int UNUSED_BITS_SIZE = 7;
-    private final static int COLOR_SIZE= 16;
+
+    private final static int COLOR_SIZE = 16;
     //so the class is not instantiable
     private PackedCardSet() {};
 
@@ -102,7 +72,7 @@ public final class PackedCardSet {
     public static long singleton ( int pkCard) {
         assert isValid(pkCard);
         int shift = index (pkCard);
-        return 1L<<shift;
+        return 1L << shift;
     }
 
     //WORKS
@@ -114,11 +84,11 @@ public final class PackedCardSet {
         return Long.bitCount(pkCardSet);
     }
     
-    public static int get(long pkCardSet, int index) {
+    public static int get2(long pkCardSet, int index) {
         int i = (int) Long.lowestOneBit(pkCardSet);
-        while (i< 64) {
-            for (int j = i; j<64; ++j) {
-                long mask = 1<<j;
+        while (true) {
+            for (int j = i; j < 64; ++j) {
+                long mask = 1 << j;
                 if((mask&pkCardSet) == mask) {
                     i+=1;
                 }
@@ -127,8 +97,23 @@ public final class PackedCardSet {
                 }
             }
         }
-        return 0;
     }
+
+    public static int get(long pkCardSet, int index) {
+        long mask = 1L << ((int)Long.lowestOneBit(pkCardSet));
+
+        int nbOfValuesPassed = 0;
+        while (nbOfValuesPassed != index) {
+            mask <<= 1;
+            if ((mask & pkCardSet) == mask) {
+                nbOfValuesPassed++;
+            }
+        }
+
+        return
+    }
+
+
     
     private static int findPkCard(long pkCardSet, int index) {
         int rank = index % 4 ;
@@ -185,10 +170,59 @@ public final class PackedCardSet {
         return j.toString();
     }
 
+
+
+    private static Card.Color[] getAllColors() {
+        return new Card.Color[] {
+                Card.Color.SPADE,
+                Card.Color.HEART,
+                Card.Color.DIAMOND,
+                Card.Color.CLUB
+        };
+    }
+    private static Card.Rank[] getAllRanks() {
+        return new Card.Rank[] {
+                Card.Rank.SIX,
+                Card.Rank.SEVEN,
+                Card.Rank.EIGHT,
+                Card.Rank.NINE,
+                Card.Rank.TEN,
+                Card.Rank.JACK,
+                Card.Rank.QUEEN,
+                Card.Rank.KING,
+                Card.Rank.ACE,
+        };
+    }
+    private static Card.Rank[] getAllRanksInTrumpCase() {
+        return new Card.Rank[] {
+                Card.Rank.SIX,
+                Card.Rank.SEVEN,
+                Card.Rank.EIGHT,
+                Card.Rank.TEN,
+                Card.Rank.QUEEN,
+                Card.Rank.KING,
+                Card.Rank.ACE,
+                Card.Rank.NINE,
+                Card.Rank.JACK,
+
+        };
+    }
+
+    private static int[] indexToPkCard() {
+        int[] tmp = new int[ranks.length * colors.length];
+
+        for (int j = 0 ; j < colors.length ; ++j) {
+            for (int i = 0 ; i < ranks.length ; ++i) {
+                int pkCard = PackedCard.pack(colors[j], ranks[i]);
+                tmp[9 * j + i] = pkCard;
+            }
+        }
+
+        return tmp;
+    }
+
     private static Hashtable<Integer, Integer> pkCardToIndex() {
         Hashtable<Integer, Integer> hash = new Hashtable<Integer, Integer>();
-        Card.Color[] colors = getAllColors();
-        Card.Rank[] ranks = getAllRanks();
         for (int j = 0 ; j < colors.length ; ++j) {
             for (int i = 0 ; i < ranks.length ; ++i) {
                 
@@ -201,8 +235,6 @@ public final class PackedCardSet {
     
     private static Hashtable<Integer, Long> pkCardsForTrump() {
         Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
-        Card.Color[] colors = getAllColors();
-        Card.Rank[] ranks = getAllRanks();
         Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
         long pkSet = 0L;
         for (int j = 0 ; j < colors.length ; ++j) {

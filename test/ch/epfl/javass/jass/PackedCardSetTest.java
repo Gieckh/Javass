@@ -121,10 +121,33 @@ class PackedCardSetTest {
             for (int i = 0; i < ranks.length; ++i) {
                 int pkCard = PackedCard.pack(colors[j], ranks[i]);
                 packedCardSet = PackedCardSet.add(packedCardSet, pkCard);
-
                 long mask = 1L << (i + (16 * j));
-
                 assertEquals(mask, packedCardSet & mask);
+            }
+        }
+    }
+
+
+    @Test
+    void getWorksWithSomeCorrectInputs() {
+        Card.Color[] colors = getAllColors();
+        Card.Rank[] ranks = getAllRanks();
+        int[] allCardsFromTheBeginning = new int[4 * 9];
+        int cardsPerRank = 9;
+        long packedCardSet = PackedCardSet.EMPTY;
+        for (int j = 0 ; j < colors.length ; ++j) {
+            System.out.println("j = " + j);
+            for (int i = 0 ; i < ranks.length ; i += 3) {
+                System.out.println("i = " + i);
+                int pkCard = PackedCard.pack(colors[j], ranks[i]);
+                allCardsFromTheBeginning[9 * j + i] = pkCard;
+
+                packedCardSet = PackedCardSet.add(packedCardSet, pkCard);
+
+                for (int k = 0 ; k <= 9 * j + i ; k += 3) {
+                    System.out.println("k = " + k);
+                    assertEquals(allCardsFromTheBeginning[k], PackedCardSet.get(packedCardSet, k / 3));
+                }
             }
         }
     }
