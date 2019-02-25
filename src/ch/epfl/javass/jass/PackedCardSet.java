@@ -3,6 +3,7 @@ import static ch.epfl.javass.bits.Bits64.extract;
 
 import java.util.StringJoiner;
 
+import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
 
@@ -58,6 +59,9 @@ public final class PackedCardSet {
         return 0L;
     }
     
+    private static int cellOfTrump;
+    
+    
     public static long singleton ( int pkCard) {
         assert isValid(pkCard);
         int shift = index (pkCard);
@@ -73,15 +77,25 @@ public final class PackedCardSet {
     }
     
     public static int get(long pkCardSet, int index) {
-        int lowestBit = (int) Long.lowestOneBit(pkCardSet);
-        for(int i = lowestBit ; i < index ; ++i ) {
-            long mask = 1<<i;
-            if((mask&pkCardSet) == mask) {
-                return 0;
+        int i = (int) Long.lowestOneBit(pkCardSet);
+        while (i< 64) {
+            for (int j = i; j<64; ++j) {
+                long mask = 1<<j;
+                if((mask&pkCardSet) == mask) {
+                    i+=1;
+                }
+                if(((mask&pkCardSet) == mask) && (i==index)){
+                    return findPkCard(pkCardSet,j);
+                }
             }
-            
         }
         return 0;
+    }
+    
+    private static int findPkCard(long pkCardSet, int index) {
+        int rank = index % 4 ;
+        int color = index % 16;
+       return Bits32.pack(color, 2, rank, 4);
     }
     
     public static long add(long pkCardSet, int pkCard) {
@@ -89,12 +103,8 @@ public final class PackedCardSet {
     }
     
     public static long remove(long pkCardSet, int pkCard) {
-      if(contains(pkCardSet, pkCard)){
-        return pkCardSet - 1<<index(pkCard);
-      }
-      else {
-          return pkCardSet;
-      }
+        return pkCardSet & ~(1<<index(pkCard));
+   
     }
     
     public static boolean contains(long pkCardSet, int pkCard) {
