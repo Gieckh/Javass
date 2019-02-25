@@ -96,10 +96,19 @@ class PackedCardSetTest {
 
     @Test
     void isEmptyWorksInSomeCases() {
-        long pkCardSet = PackedCardSet.EMPTY;
+        assertTrue(PackedCardSet.isEmpty(PackedCardSet.EMPTY));
+        long maxRngLong = (1L << 63) - 1L;
 
+        SplittableRandom rng = new SplittableRandom();
         for (int i = 0 ; i < RANDOM_ITERATIONS ; ++i) {
-            (...)
+            long packedCardSet = rng.nextLong(1, maxRngLong);
+            assertFalse(PackedCardSet.isEmpty(packedCardSet));
+        }
+
+        long minLong = 1L << 63;
+        for (int i = 0 ; i < RANDOM_ITERATIONS ; ++i) {
+            long packedCardSet = rng.nextLong(1, maxRngLong);
+            assertFalse(PackedCardSet.isEmpty(packedCardSet | minLong));
         }
     }
 }

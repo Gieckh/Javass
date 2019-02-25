@@ -55,7 +55,7 @@ public final class PackedCardSet {
         assert isValid(pkCard);
         Color color = PackedCard.color(pkCard);
         Rank rank = PackedCard.rank(pkCard);
-        return ;
+        return 0L;
     }
     
     public static long singleton ( int pkCard) {
@@ -77,7 +77,7 @@ public final class PackedCardSet {
         for(int i = lowestBit ; i < index ; ++i ) {
             long mask = 1<<i;
             if((mask&pkCardSet) == mask) {
-                return 
+                return 0;
             }
             
         }
