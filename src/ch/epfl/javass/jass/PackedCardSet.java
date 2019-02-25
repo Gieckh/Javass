@@ -38,10 +38,10 @@ public final class PackedCardSet {
 
        return(
                //We want only 0 from the 9th + 16*N to 15 ++16*N (N goes from 0 to 3)
-              extract(pkCardSet, FIRST_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, SECOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, THIRD_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, THOURTH_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0);
+              extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+              extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+              extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0);
     }
     
     public long trumpAbove (int pkCard) {
