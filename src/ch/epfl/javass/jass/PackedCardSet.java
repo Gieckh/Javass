@@ -2,6 +2,9 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.bits.Bits64.extract;
 
+import ch.epfl.javass.jass.Card.Color;
+import ch.epfl.javass.jass.Card.Rank;
+
 /**
  * manipulates sets of cards of a jass game.
  * 
@@ -9,7 +12,7 @@ import static ch.epfl.javass.bits.Bits64.extract;
  * @author Marin Nguyen - (288260)
  *
  */
-public final class PackedCardSet {
+public static final class PackedCardSet {
    
     static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
@@ -20,6 +23,7 @@ public final class PackedCardSet {
     private final static int CLUB_COLOR_START = 48;
     private final static int UNUSED_BITS_START = 9;
     private final static int UNUSED_BITS_SIZE = 7;
+    private final static int COLOR_SIZE= 16;
     //so the class is not instantiable
     private PackedCardSet() {};
 
@@ -44,23 +48,31 @@ public final class PackedCardSet {
               extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0);
     }
     
-    public long trumpAbove (int pkCard) {
+    public static long trumpAbove (int pkCard) {
+        assert isValid(pkCard);
+        Color color = PackedCard.color(pkCard);
+        Rank rank = PackedCard.rank(pkCard);
         return ;
     }
     
-    public long singleton ( int pkCard) {
-        return ;
+    public static long singleton ( int pkCard) {
+        assert isValid(pkCard);
+        Color color = PackedCard.color(pkCard);
+        Rank rank = PackedCard.rank(pkCard);
+        int shift = 16*color.ordinal() + rank.ordinal();
+        return 1<<shift;
     }
     
-    public boolean isEmpty (long pkCardSet) {
+    public static boolean isEmpty (long pkCardSet) {
         return pkCardSet == 0;
     }
     
-    public int size(long pkCardSet) {
+    public static int size(long pkCardSet) {
         return Long.bitCount(pkCardSet);
     }
     
-    public int get(long pkCardSet, int index) {
+    public static int get(long pkCardSet, int index) {
+        
         return ;
     }
     
@@ -68,34 +80,36 @@ public final class PackedCardSet {
         
     }
     
-    public long remove(long pkCardSet, int pkCard) {
+    public static long remove(long pkCardSet, int pkCard) {
         
     }
     
-    public boolean contains(long pkCardSet, int pkCard) {
+    public static boolean contains(long pkCardSet, int pkCard) {
         
     }
     
-    public long complement(long pkCardSet) {
+    public static long complement(long pkCardSet) {
+        return ~pkCardSet;
         
     }
     
-    public long union(long pkCardSet1, long pkCardSet2) {
+    public static long union(long pkCardSet1, long pkCardSet2) {
+        return (pkCardSet1 | pkCardSet2);
+    }
+    
+    public static long intersection(long pkCardSet1, long pkCardSet2) {
+        return (pkCardSet1 & pkCardSet2);
+    }
+    
+    public static long difference(long pkCardSet1, long pkCardSet2) {
+        return (pkCardSet1 - (pkCardSet1&pkCardSet2));
+    }
+    public static long subsetOfColor(long pkCardSet, Card.Color color) {
+        extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
         
     }
     
-    public long intersection(long pkCardSet1, long pkCardSet2) {
-        
-    }
-    
-    public long difference(long pkCardSet1, long pkCardSet2) {
-        
-    }
-    public long subsetOfColor(long pkCardSet, Card.Color color) {
-        
-    }
-    
-    public String toString(long pkCardSet) {
+    public static String toString(long pkCardSet) {
         
     }
     

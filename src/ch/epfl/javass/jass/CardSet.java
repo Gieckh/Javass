@@ -2,6 +2,7 @@ package ch.epfl.javass.jass;
 
 public class CardSet {
 
+    private CardSet() {};
     
     public long packed() {
         

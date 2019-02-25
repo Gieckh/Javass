@@ -81,9 +81,11 @@ public final class PackedScore {
     pack (int turnTricks1, int turnPoints1, int gamePoints1,
           int turnTricks2, int turnPoints2, int gamePoints2)
     {
+
         long team1 = Bits64.pack(turnTricks1, TRICKS_SIZE, turnPoints1, POINTS_PER_TURN_SIZE, gamePoints1, POINTS_PER_GAME_SIZE);
         long team2 = Bits64.pack(turnTricks2, TRICKS_SIZE, turnPoints2, POINTS_PER_TURN_SIZE, gamePoints2, POINTS_PER_GAME_SIZE);
 
+        assert(isValid(Bits64.pack(team1, TEAM_INFO_SIZE, team2, TEAM_INFO_SIZE)));
         return Bits64.pack(team1, TEAM_INFO_SIZE, team2, TEAM_INFO_SIZE);
     }
 
@@ -176,6 +178,7 @@ public final class PackedScore {
     */
     public static long
     withAdditionalTrick(long pkScore, TeamId winningTeam, int trickPoints) {
+        assert(isValid(pkScore));
         int shift = (winningTeam == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
         int numberOfTricksOfWinningTeam = (int) extract(pkScore, shift, TRICKS_SIZE);
         if (numberOfTricksOfWinningTeam == MAX_TRICKS_PER_TURN - 1) {
