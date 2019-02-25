@@ -12,7 +12,7 @@ import ch.epfl.javass.jass.Card.Rank;
  * @author Marin Nguyen - (288260)
  *
  */
-public final class PackedCardSet {
+public static final class PackedCardSet {
    
     static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
@@ -37,7 +37,7 @@ public final class PackedCardSet {
     */
     
     //TODO : l'ennoncé ne demande pas à ce que ca soit static ... etrange
-    public boolean isValid(long pkCardSet) {
+    public static boolean isValid(long pkCardSet) {
 
        return(
                //We want only 0 from the 9th + 16*N to 15 ++16*N (N goes from 0 to 3)
@@ -47,65 +47,66 @@ public final class PackedCardSet {
               extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0);
     }
     
-    public long trumpAbove (int pkCard) {
+    public static long trumpAbove (int pkCard) {
         assert isValid(pkCard);
         Color color = PackedCard.color(pkCard);
         Rank rank = PackedCard.rank(pkCard);
         return ;
     }
     
-    public long singleton ( int pkCard) {
+    public static long singleton ( int pkCard) {
         assert isValid(pkCard);
         Color color = PackedCard.color(pkCard);
         Rank rank = PackedCard.rank(pkCard);
-        long singleton = 1
+        int shift = 16*color.ordinal()
+        long singleton = 1<<
         return ;
     }
     
-    public boolean isEmpty (long pkCardSet) {
+    public static boolean isEmpty (long pkCardSet) {
         return pkCardSet == 0;
     }
     
-    public int size(long pkCardSet) {
+    public static int size(long pkCardSet) {
         return Long.bitCount(pkCardSet);
     }
     
-    public int get(long pkCardSet, int index) {
+    public static int get(long pkCardSet, int index) {
         return ;
     }
     
-    public long add(long pkCardSet, int pkCard) {
+    public static long add(long pkCardSet, int pkCard) {
         
     }
     
-    public long remove(long pkCardSet, int pkCard) {
+    public static long remove(long pkCardSet, int pkCard) {
         
     }
     
-    public boolean contains(long pkCardSet, int pkCard) {
+    public static boolean contains(long pkCardSet, int pkCard) {
         
     }
     
-    public long complement(long pkCardSet) {
+    public static long complement(long pkCardSet) {
         
     }
     
-    public long union(long pkCardSet1, long pkCardSet2) {
+    public static long union(long pkCardSet1, long pkCardSet2) {
         
     }
     
-    public long intersection(long pkCardSet1, long pkCardSet2) {
+    public static long intersection(long pkCardSet1, long pkCardSet2) {
         
     }
     
-    public long difference(long pkCardSet1, long pkCardSet2) {
+    public static long difference(long pkCardSet1, long pkCardSet2) {
         
     }
-    public long subsetOfColor(long pkCardSet, Card.Color color) {
+    public static long subsetOfColor(long pkCardSet, Card.Color color) {
         
     }
     
-    public String toString(long pkCardSet) {
+    public static String toString(long pkCardSet) {
         
     }
     
