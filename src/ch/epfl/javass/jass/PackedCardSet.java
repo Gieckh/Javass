@@ -45,19 +45,17 @@ public final class PackedCardSet {
     private PackedCardSet() {};
 
     /**
-     * returns true if pkCardSet is packed correctly.
+     * @brief Indicates whether the given set of packed cards is packed correctly
+     *        It is iff the bits b_i of "pkCardSet" such that
+     *        <em>9 <= b_i % 16 <= 15</em> are zeros [0].
      *
-     * @param  pkCardSet (long) the long encoding a set of cards
-     * @return true if pkCardSet is packed correctly
+     * @param pkCardSet (long) the set of packed cards we are interested in.
+     * @return (boolean) true if "pkCardSet" encodes a valid set of packedCards.
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
-
-    // WORKS
+     * @author - Antoine Scardigli (299905)
+     */
     public static boolean isValid(long pkCardSet) {
        return(
-              //We want only 0 from the 9th + 16*N to 15 ++ 16*N (N goes from 0 to 3)
               extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
               extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
               extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
