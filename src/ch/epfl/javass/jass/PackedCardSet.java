@@ -173,13 +173,47 @@ public final class PackedCardSet {
     public static long complement(long pkCardSet) {
         return ~pkCardSet;
     }
+
+    /**
+     * @brief the union of the two given sets of packed cards.
+     *
+     * @param pkCardSet1 (long) the first set of packed cards
+     * @param pkCardSet2 (long) the second set of packed cards.
+     * @return the union of the two given sets of packed cards.
+     *
+     * @author - Antoine Scardigli (299905)
+     */
     public static long union(long pkCardSet1, long pkCardSet2) {
         return (pkCardSet1 | pkCardSet2);
     }
+
+    /**
+     * @brief the intersection of the two given sets of packed cards.
+     *
+     * @param pkCardSet1 (long) the first set of packed cards
+     * @param pkCardSet2 (long) the second set of packed cards.
+     * @return the intersection of the two given sets of packed cards.
+     *
+     * @author - Antoine Scardigli (299905)
+     */
     public static long intersection(long pkCardSet1, long pkCardSet2) {
         return (pkCardSet1 & pkCardSet2);
     }
 
+    /**
+     * @brief If we interpret a set of packed cards "pkCS" the following way :
+     *        pkCS = <em>{</em>b_63 * (2**63), ..., b_0 * (2 ** 0)<em>]</em>, where b_i represents
+     *        the i-th bit of pkCS.
+     *        Then this method simply return <em>pkCardSet1 \ pkCardSet2</em>
+     *
+     * @param pkCardSet1 (long) the first set of packed cards
+     * @param pkCardSet2 (long) the second set of packed cards.
+     * @return (long) the set of packed cards formed by all the cards in the first
+     *         set, but not in the second.
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static long difference(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 & (~pkCardSet1&pkCardSet2);
     }
