@@ -88,7 +88,7 @@ public final class PackedCardSet {
     //TODO check which one is the best. Probably not the "2"
     //WORKS
     public static int get2(long pkCardSet, int index) {
-        assert (Long.bitCount(pkCardSet) >= index  &&  index >= 0);
+        assert (size(pkCardSet) >= index  &&  index >= 0);
 
         int i = (int) Long.numberOfTrailingZeros(pkCardSet);
         long mask = 1L << i;

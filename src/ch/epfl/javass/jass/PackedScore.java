@@ -219,7 +219,7 @@ public final class PackedScore {
 
 
     /**
-     * @brief a paragraph with all information packed in pkScore. Takes the form:
+     * @brief a paragraph with all the information packed in pkScore. Takes the form:
      *        (trickThisTurn1, pointsThisTurn1, pointsThisGame1)/(trickThisTurn2, pointsThisTurn2, pointsThisGame2)
      *        where the first set of parenthesis corresponds to "Team1", and
      *        the second to "Team2".
