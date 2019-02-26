@@ -1,15 +1,12 @@
 package ch.epfl.javass.jass;
 import static ch.epfl.javass.bits.Bits64.extract;
 
-import java.beans.Transient;
 import java.util.StringJoiner;
 
 import java.util.Hashtable;
-import ch.epfl.javass.bits.Bits32;
-import ch.epfl.javass.jass.Card.Color;
-import ch.epfl.javass.jass.Card.Rank;
 
 //TODO signatureCheck
+//TODO: access rights
 
 /**
  *  //TODO : this com. sucks
@@ -25,12 +22,16 @@ public final class PackedCardSet {
     private final static Card.Rank[] ranks = getAllRanks();
 
     private final static Hashtable<Integer, Integer> pkCardToIndex = pkCardToIndex();
-    private final static Hashtable<Integer, Long> pkCardsForTrump = pkCardsForTrump();
+    private final static Hashtable<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove();
 
     private final static int[] indexToPkCard = indexToPkCard();
 
     public static final long EMPTY = 0;
-    static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
+    public static final long ALL_CARDS = 0b00000001_11111111_00000001_11111111_00000001_11111111_00000001_11111111L;
+    private static final long SPADE_CARDS   = 0b00000000_00000000_00000000_00000000_00000000_00000000_00000001_11111111L;
+    private static final long HEART_CARDS   = 0b00000000_00000000_00000000_00000000_00000001_11111111_00000000_00000000L;
+    private static final long DIAMOND_CARDS = 0b00000000_00000000_00000001_11111111_00000000_00000000_00000000_00000000L;
+    private static final long CLUB_CARDS    = 0b00000001_11111111_00000000_00000000_00000000_00000000_00000000_00000000L;
 
     private final static int SPADE_COLOR_START = 0;
     private final static int HEART_COLOR_START = 16;
@@ -71,7 +72,7 @@ public final class PackedCardSet {
      *
      * @author - Antoine Scardigli (299905)
      */
-    public static long trumpAbove (int pkCard) {
+    public static long trumpAbove (int pkCard) { //TODO: test
         assert isValid(pkCard);
         return pkCardsForTrump.get(pkCard);
     }
@@ -117,7 +118,7 @@ public final class PackedCardSet {
     }
 
     //TODO: check which one is the best. Probably not the "2"
-    //TODO: suppr
+    //TODO: find the way to program "get" in  lines.
     public static int get2(long pkCardSet, int index) {
         assert (size(pkCardSet) >= index  &&  index >= 0);
 
@@ -289,8 +290,23 @@ public final class PackedCardSet {
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
      */
-    public static long subsetOfColor(long pkCardSet, Card.Color color) { //TODO: +rapide ?
-       return extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
+    public static long subsetOfColor(long pkCardSet, Card.Color color) {
+        switch (color) {
+        case SPADE:
+            return pkCardSet & SPADE_CARDS;
+        case HEART:
+            return pkCardSet & HEART_CARDS;
+        case DIAMOND:
+            return pkCardSet & DIAMOND_CARDS;
+        case CLUB:
+            return pkCardSet & CLUB_CARDS;
+        default: //unreachable statement
+            return 0L; //TODO ne pas mettre d'exceptions aux defaults, si ça fait ralentier le code ?
+        }
+    }
+
+    public static long subsetOfColorNul(long pkCardSet, Card.Color color) { //TODO: suppr
+       return extract(pkCardSet, COLOR_SIZE * color.ordinal(), COLOR_SIZE);
     }
 
     //TODO: comment ?
@@ -398,7 +414,7 @@ public final class PackedCardSet {
      *
      * @author - Antoine Scardigli (299905)
      */
-    private static Hashtable<Integer, Long> pkCardsForTrump() {
+    private static Hashtable<Integer, Long> pkCardsToTrumpAbove() {
         Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
         Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
         long pkSet = 0L;
@@ -406,7 +422,7 @@ public final class PackedCardSet {
             for (int k = 0 ; k < trumpRanks.length ; ++k) {
                 pkSet = 0L;
                 for (int i = k+1 ; i < trumpRanks.length ; ++i) {
-                    pkSet = add(pkSet,k);
+                    pkSet = add(pkSet, k);
                 }
             int pkCardSet = PackedCard.pack(colors[j], ranks[k]);
             hash.put(pkCardSet, pkSet);
