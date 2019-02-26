@@ -29,7 +29,9 @@ public final class CardSet {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-   
+   // coucou les musulmans
+    // quelle est le compble pour un noir insomniaque
+    
     
     public static CardSet of(List<Card> cards) {
         CardSet flashMacQueen = new CardSet(0L);
@@ -39,6 +41,7 @@ public final class CardSet {
         return flashMacQueen;
     }
     
+    //passer une nuit blanche
     public static CardSet ofPacked(long packed) {
         checkArgument(isValid(packed));
         return new CardSet(packed);
