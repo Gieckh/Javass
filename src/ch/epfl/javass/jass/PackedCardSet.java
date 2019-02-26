@@ -8,9 +8,10 @@ import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
 
-//TODO faire le signcheck
+//TODO signatureCheck
 
 /**
+ *  //TODO : this com. sucks
  * manipulates sets of cards of a jass game.
  * 
  * @author Antoine Scardigli - (299905)
@@ -29,7 +30,7 @@ public final class PackedCardSet {
 
     public static final long EMPTY = 0;
     static final long ALL_CARDS =  0b0000000111111111000000011111111100000001111111110000000111111111L;
-    // TODO trouver a quelle couleur correspond 1St, 2nd , etc
+
     private final static int SPADE_COLOR_START = 0;
     private final static int HEART_COLOR_START = 16;
     private final static int DIAMOND_COLOR_START = 32;
@@ -84,7 +85,9 @@ public final class PackedCardSet {
         return Long.bitCount(pkCardSet);
     }
 
-    public static int get(long pkCardSet, int index) {
+    //TODO check which one is the best. Probably not the "2"
+    //WORKS
+    public static int get2(long pkCardSet, int index) {
         int i = (int)Long.numberOfTrailingZeros(pkCardSet);
         System.out.println("LowestOneBitPos = " + i);
         long mask = 1L << i;
@@ -101,6 +104,21 @@ public final class PackedCardSet {
 
         return indexToPkCard[i];
     }
+    // NOT WORK (YET)
+    public static int get(long pkCardSet, int index) {
+        assert (Long.bitCount(pkCardSet) >= index  &&  index >= 0);
+        //int i = Long.numberOfTrailingZeros(pkCardSet);
+        int i = 0;
+        for (int ind = 0 ; ind <= index ; ++ind) {
+            int nbOfTrailingZerosBis = Long.numberOfTrailingZeros(pkCardSet) + 1;
+            i += nbOfTrailingZerosBis;
+            pkCardSet <<= (nbOfTrailingZerosBis);
+        }
+
+        System.out.println("indexFound = " + (i - 1));
+        return indexToPkCard[i - 1];
+    }
+
     
     public static long add(long pkCardSet, int pkCard) {
         return pkCardSet |(1L << index(pkCard));

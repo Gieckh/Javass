@@ -31,11 +31,11 @@ public final class CardSet {
     /** ============================================== **/
     
     public static CardSet of(List<Card> cards) {
-        CardSet flashMacQueen = new CardSet(0L);
+        CardSet ofCardSet = new CardSet(0L);
         for (Card card: cards ) {
-            flashMacQueen.add(card);
+            ofCardSet.add(card);
         }
-        return flashMacQueen;
+        return ofCardSet;
     }
 
 
