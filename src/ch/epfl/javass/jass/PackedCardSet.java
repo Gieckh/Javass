@@ -159,13 +159,39 @@ public final class PackedCardSet {
         return indexToPkCard[i - 1];
     }
 
-    
+    /**
+     * @brief If the packed card "pkCard" is not already in the set "pkCardSet",
+     *        this method puts it in [the corresponding bit is shifted from 0 to 1]. //TODO: "shifted" ?
+     *        Otherwise, does nothing.
+     *
+     * @param pkCardSet (long) the set we want to put the packed card in
+     * @param pkCard (int) the packed card we want to put in the set
+     * @return (long) The previous set, where the bit corresponding to the packed card
+     *         'pkCard" is at 1.
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static long add(long pkCardSet, int pkCard) {
-        return pkCardSet |(1L << index(pkCard));
+        return pkCardSet | (1L << index(pkCard));
     }
-    
+
+    /**
+     * @brief If the packed card "pkCard" is already in the set "pkCardSet",
+     *        this method remove it[the corresponding bit is shifted from 1 to 0]. //TODO: "shifted" ?
+     *        Otherwise, does nothing.
+     *
+     * @param pkCardSet (long) the set we want to remove the packed card from
+     * @param pkCard (int) the packed card we want to put in the set
+     * @return (long) The previous set, where the bit corresponding to the packed card
+     *         'pkCard" is at 0. [i.e. where we have "removed" "pkCard"]
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static long remove(long pkCardSet, int pkCard) {
         return pkCardSet & ~(1L << index(pkCard));
+        //We could use the method "difference", but let's not call it unnecessarily
     }
 
     /**
@@ -175,6 +201,9 @@ public final class PackedCardSet {
      * @param pkCardSet (long)
      * @param pkCard (int)
      * @return (boolean) true if "pkCardSet" contains "pkCard".
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
      */
     public static boolean contains(long pkCardSet, int pkCard) {
         long mask = 1L << index(pkCard);
@@ -183,6 +212,7 @@ public final class PackedCardSet {
 
     //WORKS
 
+    //TODO : return change so that newIndex = 1L << oldIndex.
     /**
      * @brief Given a packed card, return its index in the (long) encoding any
      *        set of cards
@@ -259,10 +289,11 @@ public final class PackedCardSet {
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
      */
-    public static long subsetOfColor(long pkCardSet, Card.Color color) { //TODO: rapide bolosse
+    public static long subsetOfColor(long pkCardSet, Card.Color color) { //TODO: +rapide ?
        return extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
     }
-    
+
+    //TODO: comment ?
     public static String toString(long pkCardSet) { //TODO: technique tout ça
         StringJoiner j = new StringJoiner(",", "{", "}");
         for (int i=0; i<64; ++i) {
