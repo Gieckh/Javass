@@ -1,6 +1,7 @@
 package ch.epfl.javass.jass;
 import static ch.epfl.javass.bits.Bits64.extract;
 
+import java.beans.Transient;
 import java.util.StringJoiner;
 
 import java.util.Hashtable;
@@ -86,7 +87,6 @@ public final class PackedCardSet {
     }
 
     //TODO check which one is the best. Probably not the "2"
-    //WORKS
     public static int get2(long pkCardSet, int index) {
         assert (size(pkCardSet) >= index  &&  index >= 0);
 
@@ -103,6 +103,18 @@ public final class PackedCardSet {
         return indexToPkCard[i];
     }
 
+    /**
+     * @brief returns the index-th packed card from the given set of packed cards.
+     *        if [index == 0], then the card given by the least significant 1-bit
+     *        of the set of cards is returned
+     *
+     * @param pkCardSet (long) a packed set of card
+     * @param index (int) //TODO
+     * @return (int) the index-th <em>packed card</em> from the given set of packed cards.
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static int get(long pkCardSet, int index) { //TODO: more tests
         assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
         //int i = Long.numberOfTrailingZeros(pkCardSet);
@@ -124,17 +136,40 @@ public final class PackedCardSet {
     public static long remove(long pkCardSet, int pkCard) {
         return pkCardSet & ~(1L << index(pkCard));
     }
-    
+
+    /**
+     * @brief Indicates whether the given set of card [pkCardSet] contains the
+     *        given card [pkCard].
+     *
+     * @param pkCardSet (long)
+     * @param pkCard (int)
+     * @return (boolean) true if "pkCardSet" contains "pkCard".
+     */
     public static boolean contains(long pkCardSet, int pkCard) {
         long mask = 1L << index(pkCard);
         return (mask & pkCardSet) == mask;
     }
 
     //WORKS
+
+    /**
+     * @brief Given a packed card, return its index in the (long) encoding any
+     *        set of cards
+     *
+     * @param pkCard (int) the packed card whose index we're looking for
+     * @return (int) the index of this packed card in the (long) encoding any
+     *         set of cards.
+     */
     private static int index(int pkCard) {
         return pkCardToIndex.get(pkCard);
     }
-    
+
+    /**
+     * @brief The complement of the given set of packed cards.
+     *
+     * @param pkCardSet (long) a set of packed cards.
+     * @return (long) the complement of "pkCardSet".
+     */
     public static long complement(long pkCardSet) {
         return ~pkCardSet;
     }
