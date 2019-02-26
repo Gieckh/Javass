@@ -64,29 +64,62 @@ public final class PackedCardSet {
               extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0
        );
     }
-    
+
+    /**
+     * @brief
+     *
+     * @param pkCard (int)
+     * @return (long)
+     *
+     * @author - Antoine Scardigli (299905)
+     */
     public static long trumpAbove (int pkCard) {
         assert isValid(pkCard);
         return pkCardsForTrump.get(pkCard);
     }
-        
-    
+
+    /**
+     * @brief
+     *
+     * @param pkCard (int)
+     * @return (long)
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static long singleton (int pkCard) {
         assert isValid(pkCard);
 
         return 1L << index(pkCard);
     }
 
-    //WORKS
+    /**
+     * @brief
+     *
+     * @param pkCardSet (long)
+     * @return (boolean) true if the set of packed cards is empty [i.e. pkCardSet == 00...000]
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static boolean isEmpty (long pkCardSet) {
-        return pkCardSet == 0;
+        return pkCardSet == EMPTY;
     }
-    
+
+    /**
+     * @brief Indicates how many cards are in the set "pkCardSet"
+     *
+     * @param pkCardSet (long) the pkCardSet whose size we want to determine
+     * @return (int) the number of cards in the set
+     *
+     * @author - Antoine Scardigli (299905)
+     */
     public static int size(long pkCardSet) {
         return Long.bitCount(pkCardSet);
     }
 
-    //TODO check which one is the best. Probably not the "2"
+    //TODO: check which one is the best. Probably not the "2"
+    //TODO: suppr
     public static int get2(long pkCardSet, int index) {
         assert (size(pkCardSet) >= index  &&  index >= 0);
 
@@ -217,12 +250,22 @@ public final class PackedCardSet {
     public static long difference(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 & (~pkCardSet1&pkCardSet2);
     }
-    public static long subsetOfColor(long pkCardSet, Card.Color color) {
+
+    /**
+     * @brief
+     *
+     * @param pkCardSet (long)
+     * @param color (Color)
+     * @return (long)
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
+    public static long subsetOfColor(long pkCardSet, Card.Color color) { //TODO: rapide bolosse
        return extract(pkCardSet, COLOR_SIZE*color.ordinal(),COLOR_SIZE);
-        
     }
     
-    public static String toString(long pkCardSet) {
+    public static String toString(long pkCardSet) { //TODO: technique tout ça
         StringJoiner j = new StringJoiner(",", "{", "}");
         for (int i=0; i<64; ++i) {
             if(1 == extract(pkCardSet, i, 1)) {
@@ -234,7 +277,16 @@ public final class PackedCardSet {
 
 
 
-    // Methods to initialize variables, used to reduce the number of operations.
+    // -------------------------------------------------------------------------
+    // Methods to initialize variables,
+    // themselves used to reduce the number of some other methods.
+
+    /**
+     *
+     * @return
+     *
+     * @author Michel Schinz
+     */
     private static Card.Color[] getAllColors() {
         return new Card.Color[] {
                 Card.Color.SPADE,
@@ -271,6 +323,13 @@ public final class PackedCardSet {
         };
     }
 
+    /**
+     * @brief
+     *
+     * @return
+     *
+     * @author - Marin Nguyen (288260)
+     */
     private static int[] indexToPkCard() {
         int[] tmp = new int[ranks.length * COLOR_SIZE];
 
@@ -284,6 +343,13 @@ public final class PackedCardSet {
         return tmp;
     }
 
+    /**
+     * @brief
+     *
+     * @return
+     *
+     * @author - Marin Nguyen (288260)
+     */
     private static Hashtable<Integer, Integer> pkCardToIndex() {
         Hashtable<Integer, Integer> hash = new Hashtable<Integer, Integer>();
         for (int j = 0 ; j < colors.length ; ++j) {
@@ -295,7 +361,14 @@ public final class PackedCardSet {
         }
         return hash;
     }
-    
+
+    /**
+     * @brief
+     *
+     * @return
+     *
+     * @author - Antoine Scardigli (299905)
+     */
     private static Hashtable<Integer, Long> pkCardsForTrump() {
         Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
         Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
