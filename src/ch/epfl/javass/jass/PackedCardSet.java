@@ -100,12 +100,11 @@ public final class PackedCardSet {
                 ++nbOfValuesPassed;
             }
         }
-        System.out.println("index found: " + i);
         return indexToPkCard[i];
     }
 
     public static int get(long pkCardSet, int index) { //TODO: more tests
-        assert (Long.bitCount(pkCardSet) >= index  &&  index >= 0);
+        assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
         //int i = Long.numberOfTrailingZeros(pkCardSet);
         int i = 0;
         for (int ind = 0 ; ind <= index ; ++ind) {
@@ -114,7 +113,6 @@ public final class PackedCardSet {
             pkCardSet >>= nbOfTrailingZerosBis;
         }
 
-        System.out.println("indexFound = " + (i - 1));
         return indexToPkCard[i - 1];
     }
 
@@ -125,12 +123,11 @@ public final class PackedCardSet {
     
     public static long remove(long pkCardSet, int pkCard) {
         return pkCardSet & ~(1L << index(pkCard));
-   
     }
     
     public static boolean contains(long pkCardSet, int pkCard) {
-        int mask = 1<<index(pkCard);
-        return (mask&pkCardSet)==mask;
+        long mask = 1L << index(pkCard);
+        return (mask & pkCardSet) == mask;
     }
 
     //WORKS

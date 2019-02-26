@@ -62,7 +62,8 @@ public final class PackedScore {
               //We want only 0 from the 24th to the 31th bit thus the "+ EMPTY_BIT_SIZE"
               extract(pkScore, TEAM_INFO_SIZE, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // number of tricks is valid (<=9)
               extract(pkScore, TEAM_TWO_START + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // number of points per turn is valid (<258)
-              extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME ); // number of points of the game is valid (<=000)
+              extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME // number of points of the game is valid (<=000)
+       );
               //We want only 0 from the 56th to the 63th bit thus the "+ EMPTY_BIT_SIZE"
     }
 

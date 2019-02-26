@@ -127,29 +127,129 @@ class PackedCardSetTest {
         }
     }
 
+    @Test
+    void removeWorksWithSomeCorrectInputs() {
+        long pkCardSet = PackedCardSet.ALL_CARDS;
+        for (Card.Color c : getAllColors()) {
+            for (Card.Rank r : getAllRanks()) {
+                int pkCard = PackedCard.pack(c, r);
+
+                assertTrue(PackedCardSet.contains(pkCardSet, pkCard));
+                pkCardSet = PackedCardSet.remove(pkCardSet, pkCard);
+
+                System.out.println();
+
+                assertFalse(PackedCardSet.contains(pkCardSet, pkCard));
+            }
+        }
+    }
 
     @Test
     void getWorksWithSomeCorrectInputs() {
         Card.Color[] colors = getAllColors();
         Card.Rank[] ranks = getAllRanks();
         int[] allCardsFromTheBeginning = new int[4 * 9];
-        int cardsPerRank = 9;
         long packedCardSet = PackedCardSet.EMPTY;
+        int size = 0;
         for (int j = 0 ; j < colors.length ; ++j) {
             System.out.println("j = " + j);
             for (int i = 0 ; i < ranks.length ; ++i) {
-                System.out.println("i = " + i);
-                int pkCard = PackedCard.pack(colors[j], ranks[i]);
-                System.out.println(PackedCard.toString(pkCard));
-                allCardsFromTheBeginning[(cardsPerRank * j) + i] = pkCard;
+                int packedCard = PackedCard.pack(colors[j], ranks[i]);
+                packedCardSet = PackedCardSet.add(packedCardSet, packedCard);
 
-                packedCardSet = PackedCardSet.add(packedCardSet, pkCard);
+                allCardsFromTheBeginning[i + 9*j] = packedCard;
+                ++size;
 
-                for (int k = 0 ; k <= cardsPerRank * i + j ; ++k) {
-                    System.out.println("k");
-                    System.out.println(PackedCard.toString(PackedCardSet.get(packedCardSet, k)));
+                for (int k = 0 ; k < size ; ++k) {
+                    assertEquals(allCardsFromTheBeginning[k],
+                                 PackedCardSet.get(packedCardSet, k));
                 }
-                System.out.println();
+            }
+        }
+    }
+
+    @Test
+    void getWorksWithSomeOtherCorrectInputs() {
+        Card.Color[] colors = getAllColors();
+        Card.Rank[] ranks = getAllRanks();
+        int[] allCardsFromTheBeginning = new int[4 * 9];
+        long packedCardSet = PackedCardSet.EMPTY;
+        int size = 0;
+        for (int j = 0 ; j < colors.length ; ++j) {
+            System.out.println("j = " + j);
+            for (int i = 0 ; i < ranks.length ; i += 3) {
+                int packedCard = PackedCard.pack(colors[j], ranks[i]);
+                packedCardSet = PackedCardSet.add(packedCardSet, packedCard);
+
+                allCardsFromTheBeginning[i + 9*j] = packedCard;
+                ++size;
+
+                for (int k = 0 ; k < 3 * size ; k += 3) {
+                    assertEquals(allCardsFromTheBeginning[k],
+                            PackedCardSet.get(packedCardSet, k / 3));
+                }
+            }
+        }
+    }
+
+    @Test
+    void getFailsWithNegativeIndex() {
+        Card.Color[] colors = getAllColors();
+        Card.Rank[] ranks = getAllRanks();
+        SplittableRandom rng = new SplittableRandom();
+        int[] allCardsFromTheBeginning = new int[4 * 9];
+        long packedCardSet = PackedCardSet.EMPTY;
+        int size = 0;
+        for (int j = 0 ; j < colors.length ; ++j) {
+            System.out.println("j = " + j);
+            for (int i = 0 ; i < ranks.length ; ++i) {
+                int packedCard = PackedCard.pack(colors[j], ranks[i]);
+                packedCardSet = PackedCardSet.add(packedCardSet, packedCard);
+
+                allCardsFromTheBeginning[i + 9*j] = packedCard;
+                ++size;
+
+                long copy = packedCardSet; //"should be final or effectively final" blah blah blah
+                assertThrows(AssertionError.class, () -> {
+                    PackedCardSet.get(copy, -rng.nextInt(1, Integer.MAX_VALUE));
+                });
+
+                assertThrows(AssertionError.class, () -> {
+                    PackedCardSet.get(copy, -1);
+                });
+            }
+        }
+    }
+
+    @Test
+    void getFailsWithTooBigIndex() {
+        Card.Color[] colors = getAllColors();
+        Card.Rank[] ranks = getAllRanks();
+
+        SplittableRandom rng = new SplittableRandom();
+
+        int[] allCardsFromTheBeginning = new int[4 * 9];
+        long packedCardSet = PackedCardSet.EMPTY;
+
+        int size = 0;
+        for (int j = 0 ; j < colors.length ; ++j) {
+            System.out.println("j = " + j);
+            for (int i = 0 ; i < ranks.length ; ++i) {
+                int packedCard = PackedCard.pack(colors[j], ranks[i]);
+                packedCardSet = PackedCardSet.add(packedCardSet, packedCard);
+
+                allCardsFromTheBeginning[i + 9*j] = packedCard;
+                ++size;
+
+                long copyOfSet = packedCardSet; //"should be final or effectively final" blah blah blah
+                int copyOfSize = size;          //"should be final or effectively final" blah blah blah
+                assertThrows(AssertionError.class, () -> {
+                    PackedCardSet.get(copyOfSet, -rng.nextInt(copyOfSize, Integer.MAX_VALUE));
+                });
+
+                assertThrows(AssertionError.class, () -> {
+                    PackedCardSet.get(copyOfSet, copyOfSize);
+                });
             }
         }
     }
