@@ -88,12 +88,11 @@ public final class PackedCardSet {
     //TODO check which one is the best. Probably not the "2"
     //WORKS
     public static int get2(long pkCardSet, int index) {
-        int i = (int)Long.numberOfTrailingZeros(pkCardSet);
-        System.out.println("LowestOneBitPos = " + i);
+        assert (Long.bitCount(pkCardSet) >= index  &&  index >= 0);
+
+        int i = (int) Long.numberOfTrailingZeros(pkCardSet);
         long mask = 1L << i;
-
         int nbOfValuesPassed = 0;
-
         while (nbOfValuesPassed != index) {
             mask <<= 1;
             ++i;
@@ -101,18 +100,18 @@ public final class PackedCardSet {
                 ++nbOfValuesPassed;
             }
         }
-
+        System.out.println("index found: " + i);
         return indexToPkCard[i];
     }
-    // NOT WORK (YET)
-    public static int get(long pkCardSet, int index) {
+
+    public static int get(long pkCardSet, int index) { //TODO: more tests
         assert (Long.bitCount(pkCardSet) >= index  &&  index >= 0);
         //int i = Long.numberOfTrailingZeros(pkCardSet);
         int i = 0;
         for (int ind = 0 ; ind <= index ; ++ind) {
             int nbOfTrailingZerosBis = Long.numberOfTrailingZeros(pkCardSet) + 1;
             i += nbOfTrailingZerosBis;
-            pkCardSet <<= (nbOfTrailingZerosBis);
+            pkCardSet >>= nbOfTrailingZerosBis;
         }
 
         System.out.println("indexFound = " + (i - 1));
