@@ -137,17 +137,19 @@ class PackedCardSetTest {
         long packedCardSet = PackedCardSet.EMPTY;
         for (int j = 0 ; j < colors.length ; ++j) {
             System.out.println("j = " + j);
-            for (int i = 0 ; i < ranks.length ; i += 3) {
+            for (int i = 0 ; i < ranks.length ; ++i) {
                 System.out.println("i = " + i);
                 int pkCard = PackedCard.pack(colors[j], ranks[i]);
-                allCardsFromTheBeginning[9 * j + i] = pkCard;
+                System.out.println(PackedCard.toString(pkCard));
+                allCardsFromTheBeginning[(cardsPerRank * j) + i] = pkCard;
 
                 packedCardSet = PackedCardSet.add(packedCardSet, pkCard);
 
-                for (int k = 0 ; k <= 9 * j + i ; k += 3) {
-                    System.out.println("k = " + k);
-                    assertEquals(allCardsFromTheBeginning[k], PackedCardSet.get(packedCardSet, k / 3));
+                for (int k = 0 ; k <= cardsPerRank * i + j ; ++k) {
+                    System.out.println("k");
+                    System.out.println(PackedCard.toString(PackedCardSet.get(packedCardSet, k)));
                 }
+                System.out.println();
             }
         }
     }

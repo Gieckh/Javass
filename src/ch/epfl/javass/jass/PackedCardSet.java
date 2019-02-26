@@ -93,29 +93,33 @@ public final class PackedCardSet {
                     i+=1;
                 }
                 if(((mask&pkCardSet) == mask) && (i==index)){
-                    return findPkCard(pkCardSet,j);
+                    return findPkCard(j);
                 }
             }
         }
     }
 
     public static int get(long pkCardSet, int index) {
-        long mask = 1L << ((int)Long.lowestOneBit(pkCardSet));
+        int i = (int)Long.numberOfTrailingZeros(pkCardSet);
+        System.out.println("LowestOneBitPos = " + i);
+        long mask = 1L << i;
 
         int nbOfValuesPassed = 0;
+
         while (nbOfValuesPassed != index) {
             mask <<= 1;
+            ++i;
             if ((mask & pkCardSet) == mask) {
-                nbOfValuesPassed++;
+                ++nbOfValuesPassed;
             }
         }
 
-        return
+        return indexToPkCard[i];
     }
 
 
     
-    private static int findPkCard(long pkCardSet, int index) {
+    private static int findPkCard(int index) {
         int rank = index % 4 ;
         int color = index % 16;
         return Bits32.pack(color, 2, rank, 4); //TODO: demander au prof quel pack utiliser.
@@ -126,7 +130,7 @@ public final class PackedCardSet {
     }
     
     public static long remove(long pkCardSet, int pkCard) {
-        return pkCardSet & ~(1L<<index(pkCard));
+        return pkCardSet & ~(1L << index(pkCard));
    
     }
     
@@ -143,11 +147,9 @@ public final class PackedCardSet {
     public static long complement(long pkCardSet) {
         return ~pkCardSet;
     }
-    
     public static long union(long pkCardSet1, long pkCardSet2) {
         return (pkCardSet1 | pkCardSet2);
     }
-    
     public static long intersection(long pkCardSet1, long pkCardSet2) {
         return (pkCardSet1 & pkCardSet2);
     }
@@ -209,12 +211,12 @@ public final class PackedCardSet {
     }
 
     private static int[] indexToPkCard() {
-        int[] tmp = new int[ranks.length * colors.length];
+        int[] tmp = new int[ranks.length * COLOR_SIZE];
 
         for (int j = 0 ; j < colors.length ; ++j) {
             for (int i = 0 ; i < ranks.length ; ++i) {
                 int pkCard = PackedCard.pack(colors[j], ranks[i]);
-                tmp[9 * j + i] = pkCard;
+                tmp[COLOR_SIZE * j + i] = pkCard;
             }
         }
 

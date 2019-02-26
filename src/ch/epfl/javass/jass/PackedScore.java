@@ -1,5 +1,6 @@
 package ch.epfl.javass.jass;
 
+import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.bits.Bits64;
 
 import static ch.epfl.javass.bits.Bits64.extract;
@@ -64,26 +65,26 @@ public final class PackedScore {
     }
 
     /**
-     * returns the packed long with all of these information packed on 64bits.
+     * @brief Creates the packed score encoding the following information.
      *
-     * @param turnTricks1 (team1)
-     * @param turnPoints1 (team1)
-     * @param gamePoints1 (team1)
-     * @param turnTricks2 (team2)
-     * @param turnPoints2 (team2)
-     * @param gamePoints2 (team2)
-     * @return the packed long with all of these information packed on 64bits
+     * @param turnTricks1 (int) the tricks team1 earned during this turn
+     * @param turnPoints1 (int) the points team1 earned during this turn
+     * @param gamePoints1 (int) the total number of points team1 earned during the previous turns.
+     *
+     * @param turnTricks2 (int) the tricks team2 earned during this turn
+     * @param turnPoints2 (int) the points team2 earned during this turn
+     * @param gamePoints2 (int) the total number of points team2 earned during the previous turns.
+     * @return (long) the packed information
      *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    public static long //TODO: pas comme Antoine a fait - Sami Abuzakuk
+    public static long //TODO: tester
     pack (int turnTricks1, int turnPoints1, int gamePoints1,
           int turnTricks2, int turnPoints2, int gamePoints2)
     {
-
-        long team1 = Bits64.pack(turnTricks1, TRICKS_SIZE, turnPoints1, POINTS_PER_TURN_SIZE, gamePoints1, POINTS_PER_GAME_SIZE);
-        long team2 = Bits64.pack(turnTricks2, TRICKS_SIZE, turnPoints2, POINTS_PER_TURN_SIZE, gamePoints2, POINTS_PER_GAME_SIZE);
+        int team1 = Bits32.pack(turnTricks1, TRICKS_SIZE, turnPoints1, POINTS_PER_TURN_SIZE, gamePoints1, POINTS_PER_GAME_SIZE);
+        int team2 = Bits32.pack(turnTricks2, TRICKS_SIZE, turnPoints2, POINTS_PER_TURN_SIZE, gamePoints2, POINTS_PER_GAME_SIZE);
 
         assert(isValid(Bits64.pack(team1, TEAM_INFO_SIZE, team2, TEAM_INFO_SIZE)));
         return Bits64.pack(team1, TEAM_INFO_SIZE, team2, TEAM_INFO_SIZE);
@@ -216,7 +217,10 @@ public final class PackedScore {
 
 
     /**
-     * @brief a paragraph with all information packed in pkScore
+     * @brief a paragraph with all information packed in pkScore. Takes the form:
+     *        (trickThisTurn1, pointsThisTurn1, pointsThisGame1)/(trickThisTurn2, pointsThisTurn2, pointsThisGame2)
+     *        where the first set of parenthesis corresponds to "Team1", and
+     *        the second to "Team2".
      *
      * @param pkScore (long) the long encoding the scores
      * @return (String) the String with all information about points and tricks of both teams

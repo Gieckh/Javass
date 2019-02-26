@@ -141,51 +141,52 @@ public class Bits64 {
     }
 
 
-    //TODO : suppr the following.
-    // I decided not to call "pack(int v1, int s1, int v2, int s2)" because
-    // it would do many unnecessary size checks
+//    //TODO : suppr the following.
 
-    /**
-     * @brief concatenates the binary expressions of v1, v2 and v3
-     *        (where v3's bits are the most significant ones and v1's's the least)
-     *
-     * @see "pack(int v1, int s1, int v2, int s2)"
-     * @return the number formed by the concatenation (in binary form) of v1, v2 and v3
-     * @throws IllegalArgumentException
-     *
-     * @author - Marin Nguyen (288260)
-     */
-    public static long
-    pack(long v1, int s1, long v2, int s2, long v3, int s3) throws IllegalArgumentException {
-        boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) && checkPack(v3, s3);
-        checkArgument(compatibleSizes);
-        checkArgument(s1 + s2 +s3 <= Long.SIZE);
-
-        return (((v3 << s2) | v2) << s1) | v1;
-    }
-
-    /**
-     * @brief concatenates the binary expressions of v1, v2, ... v6 and v7
-     *        (where v7's bits are the most significant ones and v1's's the least)
-     *
-     * @see "pack(int v1, int s1, int v2, int s2)"
-     * @return the number formed by the concatenation (in binary form) of all the "v_i", (where 1 <= i <= 7)
-     * @throws IllegalArgumentException
-     *
-     * @author - Marin Nguyen (288260)
-     */
-    public static long
-    pack(long v1, int s1, long v2, int s2, long v3, int s3, long v4, int s4,
-            long v5, int s5, long v6, int s6, long v7, int s7) throws IllegalArgumentException {
-        boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) &&
-                checkPack(v3, s3) && checkPack(v4, s4) &&
-                checkPack(v5, s5) && checkPack(v6, s6) &&
-                checkPack(v7, s7);
-
-        checkArgument(compatibleSizes);
-        checkArgument(s1 + s2 + s3 + s4 + s5 + s6 + s7 <= Long.SIZE);
-
-        // Same principle as before, but with more parenthesises.
-        return (((((((((((v7 << s6) | v6) << s5) | v5) << s4) | v4) << s3) | v3) << s2) | v2) << s1) | v1;
-    }
+//    // I decided not to call "pack(int v1, int s1, int v2, int s2)" because
+//    // it would do many unnecessary size checks
+//
+//    /**
+//     * @brief concatenates the binary expressions of v1, v2 and v3
+//     *        (where v3's bits are the most significant ones and v1's's the least)
+//     *
+//     * @see "pack(int v1, int s1, int v2, int s2)"
+//     * @return the number formed by the concatenation (in binary form) of v1, v2 and v3
+//     * @throws IllegalArgumentException
+//     *
+//     * @author - Marin Nguyen (288260)
+//     */
+//    public static long
+//    pack(long v1, int s1, long v2, int s2, long v3, int s3) throws IllegalArgumentException {
+//        boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) && checkPack(v3, s3);
+//        checkArgument(compatibleSizes);
+//        checkArgument(s1 + s2 +s3 <= Long.SIZE);
+//
+//        return (((v3 << s2) | v2) << s1) | v1;
+//    }
+//
+//    /**
+//     * @brief concatenates the binary expressions of v1, v2, ... v6 and v7
+//     *        (where v7's bits are the most significant ones and v1's's the least)
+//     *
+//     * @see "pack(int v1, int s1, int v2, int s2)"
+//     * @return the number formed by the concatenation (in binary form) of all the "v_i", (where 1 <= i <= 7)
+//     * @throws IllegalArgumentException
+//     *
+//     * @author - Marin Nguyen (288260)
+//     */
+//    public static long
+//    pack(long v1, int s1, long v2, int s2, long v3, int s3, long v4, int s4,
+//            long v5, int s5, long v6, int s6, long v7, int s7) throws IllegalArgumentException {
+//        boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) &&
+//                checkPack(v3, s3) && checkPack(v4, s4) &&
+//                checkPack(v5, s5) && checkPack(v6, s6) &&
+//                checkPack(v7, s7);
+//
+//        checkArgument(compatibleSizes);
+//        checkArgument(s1 + s2 + s3 + s4 + s5 + s6 + s7 <= Long.SIZE);
+//
+//        // Same principle as before, but with more parenthesises.
+//        return (((((((((((v7 << s6) | v6) << s5) | v5) << s4) | v4) << s3) | v3) << s2) | v2) << s1) | v1;
+//    }
 }
