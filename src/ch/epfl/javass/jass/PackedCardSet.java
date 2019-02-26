@@ -69,10 +69,10 @@ public final class PackedCardSet {
     }
         
     
-    public static long singleton ( int pkCard) {
+    public static long singleton (int pkCard) {
         assert isValid(pkCard);
-        int shift = index (pkCard);
-        return 1L << shift;
+
+        return 1L << index(pkCard);
     }
 
     //WORKS
@@ -82,21 +82,6 @@ public final class PackedCardSet {
     
     public static int size(long pkCardSet) {
         return Long.bitCount(pkCardSet);
-    }
-    
-    public static int get2(long pkCardSet, int index) {
-        int i = (int) Long.lowestOneBit(pkCardSet);
-        while (true) {
-            for (int j = i; j < 64; ++j) {
-                long mask = 1 << j;
-                if((mask&pkCardSet) == mask) {
-                    i+=1;
-                }
-                if(((mask&pkCardSet) == mask) && (i==index)){
-                    return findPkCard(j);
-                }
-            }
-        }
     }
 
     public static int get(long pkCardSet, int index) {
@@ -115,14 +100,6 @@ public final class PackedCardSet {
         }
 
         return indexToPkCard[i];
-    }
-
-
-    
-    private static int findPkCard(int index) {
-        int rank = index % 4 ;
-        int color = index % 16;
-        return Bits32.pack(color, 2, rank, 4); //TODO: demander au prof quel pack utiliser.
     }
     
     public static long add(long pkCardSet, int pkCard) {
@@ -174,6 +151,7 @@ public final class PackedCardSet {
 
 
 
+    // Methods to initialize variables, used to reduce the number of operations.
     private static Card.Color[] getAllColors() {
         return new Card.Color[] {
                 Card.Color.SPADE,

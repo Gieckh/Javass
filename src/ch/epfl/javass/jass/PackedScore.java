@@ -42,10 +42,12 @@ public final class PackedScore {
     private PackedScore() {};
 
     /**
-     * returns true if pkScore is packed correctly.
+     * @brief Indicates whether the (long) "pkScore" corresponds to a valid score.
+     *        [though we don't check everything. For example, we don't check whether
+     *         the first team's trick + the second's is below 9]
      *
      * @param  pkScore (long) the long encoding the points and tricks of the game
-     * @return true if pkScore is packed correctly
+     * @return (boolean) true if "pkScore" corresponds to a valid score
      *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
@@ -203,7 +205,7 @@ public final class PackedScore {
      *
      * @author Antoine Scardigli - (299905)
     */
-    public static long nextTurn(long pkScore) { //TODO: moins empaqueter -> mask
+    public static long nextTurn(long pkScore) { //TODO: masking instead of packing?
         assert isValid(pkScore);
 
         int turnPointsOf1 = (int) extract(pkScore, POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE);
