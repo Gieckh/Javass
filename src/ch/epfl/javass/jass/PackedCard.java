@@ -7,6 +7,13 @@ import static ch.epfl.javass.bits.Bits32.extract;
 //TODO: check where we assert (tests must not be done here)
 //TODO: use class preconditions
 //TODO: mettre des variables plutôt que
+
+/**
+ * Contains the methods used to manipulate the cards
+ *
+ * @author - Marin Nguyen (288260)
+ * @author - Antoine Scardigli (299905)
+ */
 public final class PackedCard {
     public final static int INVALID = 111111;
     //TODO: public or private.
@@ -16,7 +23,7 @@ public final class PackedCard {
     private final static int RANK_SHIFT = 6;
 
     private final static int CODED_COLOR_SIZE = 2;
-    private final static int CODED_COLOR_START = 4;
+    private final static int CODED_COLOR_START = CODED_RANK_SIZE;
     private final static int COLOR_SHIFT = 1;
 
     private final static int EMPTY_BITS_START = 6;
@@ -60,17 +67,7 @@ public final class PackedCard {
      * @author Marin Nguyen - (288260)
     */
     public static Card.Color color(int pkCard) {
-        assert isValid(pkCard);
-        /*
-        Clearer but (slightly) slower version:
-        int intColor = extract(pkCard, 4, 2);
-        return Card.Color.toType(intColor);
-        */
-
-        return Card.Color.toType(extract(pkCard, 4, 2) + 1);
-        // "+1" since toType expects arguments from 1 to 4
-        // while our card is encoded from 0 to 3.
-        // (We could also add the +1 in the extract) //TODO
+        return Card.Color.toType(extract(pkCard, CODED_COLOR_START, CODED_COLOR_SIZE) + COLOR_SHIFT);
     }
 
     /**
@@ -85,7 +82,7 @@ public final class PackedCard {
         int intRank = extract(pkCard, 0, 4);
         return Card.Rank.toTyper(intRank + 6);
          */
-        return Card.Rank.toType(extract(pkCard, 0, 4) + 6);
+        return Card.Rank.toType(extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) + RANK_SHIFT);
         // "+6" since toType expects arguments from 6 to 14
         // while our card is encoded from 0 to 8.
         // (We could also add the +6 in the extract) //TODO
