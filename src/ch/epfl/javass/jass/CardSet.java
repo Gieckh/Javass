@@ -12,7 +12,7 @@ public final class CardSet {
     /** =============================================== **/
     private long pkCardSet;
     public final static CardSet EMPTY = new CardSet(PackedCardSet.EMPTY);
-    public final static CardSet All_CARDS = new CardSet(PackedCardSet.ALL_CARDS);
+    public final static CardSet ALL_CARDS = new CardSet(PackedCardSet.ALL_CARDS);
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -97,7 +97,7 @@ public final class CardSet {
         CardSet thatOSet= (CardSet) thatO; // Or do 2 "conversions, idk"
             return (thatOSet.pkCardSet == this.pkCardSet);
     }
-    
+    //hashcode n'est pas verifié par signcheck
     @Override
     public int hashCode() {
         return Long.hashCode(pkCardSet);
