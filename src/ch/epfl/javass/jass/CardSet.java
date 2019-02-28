@@ -1,27 +1,16 @@
 package ch.epfl.javass.jass;
-import java.util.ArrayList;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 import static ch.epfl.javass.jass.PackedScore.isValid;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-/**
- *  //TODO : this com. sucks
- * manipulates sets of cards of a jass game.
- * 
- * @author Antoine Scardigli - (299905)
- * @author Marin Nguyen - (288260)
- *
- */
+
 public final class CardSet {
 
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
-    private long packedSet;
+    private long pkCardSet;
     public final static CardSet EMPTY = new CardSet(PackedCardSet.EMPTY);
     public final static CardSet ALL_CARDS = new CardSet(PackedCardSet.ALL_CARDS);
     
@@ -30,7 +19,7 @@ public final class CardSet {
     /** ============================================== **/
             
     private CardSet(long packed) {
-        packedSet = packed;
+        pkCardSet = packed;
     }
 
     /** ============================================== **/
@@ -80,7 +69,7 @@ public final class CardSet {
      * @author Marin Nguyen - (288260)
     */
     public long packed() {
-        return packedSet;
+        return pkCardSet;
     }
     
     /**
@@ -92,7 +81,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public boolean isEmpty () {
-        return PackedCardSet.isEmpty(packedSet);
+        return PackedCardSet.isEmpty(pkCardSet);
     }
     
     /**
@@ -103,7 +92,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public int size() {
-        return PackedCardSet.size(packedSet);
+        return PackedCardSet.size(pkCardSet);
     }
     
     /**
@@ -162,7 +151,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public boolean contains(Card card) {
-        return PackedCardSet.contains(packedSet, card.packed());
+        return PackedCardSet.contains(pkCardSet, card.packed());
     }
     /**
      * @brief The complement of this set of packed cards.
@@ -235,12 +224,12 @@ public final class CardSet {
         }
 
         CardSet thatOSet= (CardSet) thatO; // Or do 2 "conversions, idk"
-            return (thatOSet.packedSet == this.packedSet);
+            return (thatOSet.pkCardSet == this.pkCardSet);
     }
     //hashcode n'est pas verifié par signcheck
     @Override
     public int hashCode() {
-        return Long.hashCode(packedSet);
+        return Long.hashCode(pkCardSet);
     }
     /**
      * @brief returns the string with the cards included in the set .
@@ -252,6 +241,6 @@ public final class CardSet {
      */
     @Override
     public String toString() {
-        return PackedScore.toString(packedSet);
+        return PackedScore.toString(pkCardSet);
     }
 }

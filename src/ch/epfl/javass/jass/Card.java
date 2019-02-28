@@ -10,7 +10,7 @@ import static ch.epfl.javass.Preconditions.*;
 //TODO: check access rights
 //TODO: use class preconditions
 /**
- * represents any card of the deck.
+ * The class used to represent a card.
  * 
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
