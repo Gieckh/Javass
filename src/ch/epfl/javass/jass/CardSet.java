@@ -1,20 +1,16 @@
 package ch.epfl.javass.jass;
-import java.util.ArrayList;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 import static ch.epfl.javass.jass.PackedScore.isValid;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public final class CardSet {
 
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
-    private long packedSet;
+    private long pkCardSet;
     public final static CardSet EMPTY = new CardSet(PackedCardSet.EMPTY);
     public final static CardSet All_CARDS = new CardSet(PackedCardSet.ALL_CARDS);
     
@@ -23,7 +19,7 @@ public final class CardSet {
     /** ============================================== **/
             
     private CardSet(long packed) {
-        packedSet = packed;
+        pkCardSet = packed;
     }
 
     /** ============================================== **/
@@ -46,50 +42,50 @@ public final class CardSet {
            
 
     public long packed() {
-        return packedSet;
+        return pkCardSet;
     }
     
     public boolean isEmpty () {
-        return PackedCardSet.isEmpty(packedSet);
+        return PackedCardSet.isEmpty(pkCardSet);
     }
     
     public int size() {
-        return PackedCardSet.size(packedSet);
+        return PackedCardSet.size(pkCardSet);
     }
     
     public int get( int index) {
-        return PackedCardSet.get(packedSet, index);
+        return PackedCardSet.get(pkCardSet, index);
     }
     
     public long add(Card card) {
-        return PackedCardSet.add(packedSet, card.packed());
+        return PackedCardSet.add(pkCardSet, card.packed());
     }
     
     public long remove(Card card) {
-        return PackedCardSet.remove(packedSet, card.packed());
+        return PackedCardSet.remove(pkCardSet, card.packed());
     }
     
     public boolean contains(Card card) {
-        return PackedCardSet.contains(packedSet, card.packed());
+        return PackedCardSet.contains(pkCardSet, card.packed());
     }
     
     public long complement() {
-        return PackedCardSet.complement(packedSet);
+        return PackedCardSet.complement(pkCardSet);
     }
     
     public long union(CardSet that) {
-        return PackedCardSet.union(packedSet, that.packedSet);
+        return PackedCardSet.union(pkCardSet, that.pkCardSet);
     }
     
     public long intersection(CardSet that) {
-        return PackedCardSet.intersection(packedSet, that.packedSet);
+        return PackedCardSet.intersection(pkCardSet, that.pkCardSet);
     }
     
     public long difference(CardSet that) {
-        return PackedCardSet.difference(packedSet, that.packedSet);
+        return PackedCardSet.difference(pkCardSet, that.pkCardSet);
     }
     public long subsetOfColor(Card.Color color) {
-        return PackedCardSet.subsetOfColor(packedSet, color);
+        return PackedCardSet.subsetOfColor(pkCardSet, color);
     }
     
     @Override
@@ -99,16 +95,16 @@ public final class CardSet {
         }
 
         CardSet thatOSet= (CardSet) thatO; // Or do 2 "conversions, idk"
-            return (thatOSet.packedSet == this.packedSet);
+            return (thatOSet.pkCardSet == this.pkCardSet);
     }
     
     @Override
     public int hashCode() {
-        return Long.hashCode(packedSet);
+        return Long.hashCode(pkCardSet);
     }
     
     @Override
     public String toString() {
-        return PackedScore.toString(packedSet);
+        return PackedScore.toString(pkCardSet);
     }
 }

@@ -233,7 +233,7 @@ public final class PackedCardSet {
      * @return (long) the complement of "pkCardSet".
      */
     public static long complement(long pkCardSet) {
-        return ~pkCardSet;
+        return (~pkCardSet) & ALL_CARDS;
     }
 
     /**

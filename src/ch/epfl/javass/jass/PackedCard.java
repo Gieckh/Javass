@@ -67,6 +67,8 @@ public final class PackedCard {
      * @author Marin Nguyen - (288260)
     */
     public static Card.Color color(int pkCard) {
+        assert (isValid(pkCard));
+
         return Card.Color.toType(extract(pkCard, CODED_COLOR_START, CODED_COLOR_SIZE) + COLOR_SHIFT);
     }
 
@@ -77,15 +79,8 @@ public final class PackedCard {
      */
     public static Card.Rank rank(int pkCard) { //TODO: erase unnecessary comments
         assert isValid(pkCard);
-        /*
-        Clearer but (slightly) slower version:
-        int intRank = extract(pkCard, 0, 4);
-        return Card.Rank.toTyper(intRank + 6);
-         */
+
         return Card.Rank.toType(extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) + RANK_SHIFT);
-        // "+6" since toType expects arguments from 6 to 14
-        // while our card is encoded from 0 to 8.
-        // (We could also add the +6 in the extract) //TODO
     }
 
     /**
