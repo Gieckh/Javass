@@ -8,7 +8,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
+/**
+ *  //TODO : this com. sucks
+ * manipulates sets of cards of a jass game.
+ * 
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ *
+ */
 public final class CardSet {
 
     /** =============================================== **/
@@ -16,7 +23,7 @@ public final class CardSet {
     /** =============================================== **/
     private long packedSet;
     public final static CardSet EMPTY = new CardSet(PackedCardSet.EMPTY);
-    public final static CardSet All_CARDS = new CardSet(PackedCardSet.ALL_CARDS);
+    public final static CardSet ALL_CARDS = new CardSet(PackedCardSet.ALL_CARDS);
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -57,39 +64,39 @@ public final class CardSet {
         return PackedCardSet.size(packedSet);
     }
     
-    public int get( int index) {
-        return PackedCardSet.get(packedSet, index);
+    public Card get( int index) {
+        return Card.ofPacked(PackedCardSet.get(packedSet, index));
     }
     
-    public long add(Card card) {
-        return PackedCardSet.add(packedSet, card.packed());
+    public CardSet add(Card card) {
+        return CardSet.ofPacked(PackedCardSet.add(packedSet, card.packed()));
     }
     
-    public long remove(Card card) {
-        return PackedCardSet.remove(packedSet, card.packed());
+    public CardSet remove(Card card) {
+        return CardSet.ofPacked(PackedCardSet.remove(packedSet, card.packed()));
     }
     
     public boolean contains(Card card) {
         return PackedCardSet.contains(packedSet, card.packed());
     }
     
-    public long complement() {
-        return PackedCardSet.complement(packedSet);
+    public CardSet complement() {
+        return CardSet.ofPacked(PackedCardSet.complement(packedSet));
     }
     
-    public long union(CardSet that) {
-        return PackedCardSet.union(packedSet, that.packedSet);
+    public CardSet union(CardSet that) {
+        return CardSet.ofPacked(PackedCardSet.union(packedSet, that.packedSet));
     }
     
-    public long intersection(CardSet that) {
-        return PackedCardSet.intersection(packedSet, that.packedSet);
+    public CardSet intersection(CardSet that) {
+        return CardSet.ofPacked(PackedCardSet.intersection(packedSet, that.packedSet));
     }
     
-    public long difference(CardSet that) {
-        return PackedCardSet.difference(packedSet, that.packedSet);
+    public CardSet difference(CardSet that) {
+        return CardSet.ofPacked(PackedCardSet.difference(packedSet, that.packedSet));
     }
-    public long subsetOfColor(Card.Color color) {
-        return PackedCardSet.subsetOfColor(packedSet, color);
+    public CardSet subsetOfColor(Card.Color color) {
+        return CardSet.ofPacked(PackedCardSet.subsetOfColor(packedSet, color));
     }
     
     @Override
@@ -101,7 +108,7 @@ public final class CardSet {
         CardSet thatOSet= (CardSet) thatO; // Or do 2 "conversions, idk"
             return (thatOSet.packedSet == this.packedSet);
     }
-    
+    //hashcode n'est pas verifié par signcheck
     @Override
     public int hashCode() {
         return Long.hashCode(packedSet);
