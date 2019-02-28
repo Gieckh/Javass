@@ -107,7 +107,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public Card get( int index) {
-        return Card.ofPacked(PackedCardSet.get(packedSet, index));
+        return Card.ofPacked(PackedCardSet.get(pkCardSet, index));
     }
     /**
      * @brief If the packed card "pkCard" is not already in the set "pkCardSet",
@@ -123,7 +123,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet add(Card card) {
-        return CardSet.ofPacked(PackedCardSet.add(packedSet, card.packed()));
+        return CardSet.ofPacked(PackedCardSet.add(pkCardSet, card.packed()));
     }
     /**
      * @brief If the card "card" is already in this set,
@@ -138,7 +138,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet remove(Card card) {
-        return CardSet.ofPacked(PackedCardSet.remove(packedSet, card.packed()));
+        return CardSet.ofPacked(PackedCardSet.remove(pkCardSet, card.packed()));
     }
     /**
      * @brief Indicates whether this set of card contains the
@@ -161,7 +161,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet complement() {
-        return CardSet.ofPacked(PackedCardSet.complement(packedSet));
+        return CardSet.ofPacked(PackedCardSet.complement(pkCardSet));
     }
     /**
     * @brief the union of this set with one in the parameters.
@@ -172,7 +172,7 @@ public final class CardSet {
     * @author - Antoine Scardigli (299905)
     */
     public CardSet union(CardSet that) {
-        return CardSet.ofPacked(PackedCardSet.union(packedSet, that.packedSet));
+        return CardSet.ofPacked(PackedCardSet.union(pkCardSet, that.pkCardSet));
     }
     /**
      * @brief the intersection of this set of cards with one in the parameters.
@@ -183,7 +183,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet intersection(CardSet that) {
-        return CardSet.ofPacked(PackedCardSet.intersection(packedSet, that.packedSet));
+        return CardSet.ofPacked(PackedCardSet.intersection(pkCardSet, that.pkCardSet));
     }
     
     /**
@@ -200,7 +200,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet difference(CardSet that) {
-        return CardSet.ofPacked(PackedCardSet.difference(packedSet, that.packedSet));
+        return CardSet.ofPacked(PackedCardSet.difference(pkCardSet, that.pkCardSet));
     }
     
     /**
@@ -214,7 +214,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet subsetOfColor(Card.Color color) {
-        return CardSet.ofPacked(PackedCardSet.subsetOfColor(packedSet, color));
+        return CardSet.ofPacked(PackedCardSet.subsetOfColor(pkCardSet, color));
     }
     
     @Override
