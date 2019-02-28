@@ -195,7 +195,7 @@ public final class PackedCardSet {
      *        Otherwise, does nothing.
      *
      * @param pkCardSet (long) the set we want to remove the packed card from
-     * @param pkCard (int) the packed card we want to put in the set
+     * @param pkCard (int) the packed card we want to remove from the set
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 0. [i.e. where we have "removed" "pkCard"]
      *

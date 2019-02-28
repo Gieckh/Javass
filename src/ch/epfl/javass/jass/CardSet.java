@@ -38,6 +38,15 @@ public final class CardSet {
     /** ============================================== **/
     
     
+    /**
+     * @brief constructs a cardSet from a list of cards.
+     * 
+     * @param cards ( a list)
+     * @return a CardSet which contains all cards of the list
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static CardSet of(List<Card> cards) {
         CardSet ofCardSet = new CardSet(0L);
         for (Card card: cards ) {
@@ -47,24 +56,67 @@ public final class CardSet {
     }
 
 
+    /**
+     * @brief constructs a cardset from a packCardSet.
+     * 
+     * @param packed ( long ) a packedCardSet
+     * @return a CardSet from the packedCardSet "packed"
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static CardSet ofPacked(long packed) {
         checkArgument(isValid(packed));
         return new CardSet(packed);
     }
            
 
+    /**
+     * @brief returns the packedCardSet corresponding to this cardSet .
+     * 
+     * @return (long) the packedCardSet of this cardSet
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public long packed() {
         return packedSet;
     }
     
+    /**
+     * @brief returns true if and only if this set is empty
+     *
+     * @return (boolean) true if the set of packed cards is empty [i.e. pkCardSet == 00...000]
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public boolean isEmpty () {
         return PackedCardSet.isEmpty(packedSet);
     }
     
+    /**
+     * @brief Indicates how many cards are in this set.
+     *
+     * @return (int) the number of cards in the set
+     *
+     * @author - Antoine Scardigli (299905)
+     */
     public int size() {
         return PackedCardSet.size(packedSet);
     }
     
+    /**
+     * @brief returns the index-th packed card from this set of packed cards.
+     *        if [index == 0], then the card given by the least significant 1-bit
+     *        of the set of cards is returned
+     *
+     * @param index (int) //TODO
+     * @return (int) the index-th <em> card</em> from this set of cards.
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public Card get( int index) {
         return Card.ofPacked(PackedCardSet.get(packedSet, index));
     }
