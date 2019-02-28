@@ -5,7 +5,6 @@ import java.util.StringJoiner;
 
 import java.util.Hashtable;
 
-//TODO signatureCheck
 //TODO: access rights
 
 /**
@@ -18,6 +17,9 @@ import java.util.Hashtable;
  */
 public final class PackedCardSet {
 
+    /** =============================================== **/
+    /** ===============    ATTRIBUTES    ============== **/
+    /** =============================================== **/
     private final static Card.Color[] colors = getAllColors();
     private final static Card.Rank[] ranks = getAllRanks();
 
@@ -42,9 +44,19 @@ public final class PackedCardSet {
     private final static int UNUSED_BITS_SIZE = 7;
 
     private final static int COLOR_SIZE = 16;
+    
+    /** ============================================== **/
+    /** ==============   CONSTRUCTORS   ============== **/
+    /** ============================================== **/
+    
     //so the class is not instantiable
     private PackedCardSet() {};
 
+    
+    /** ============================================== **/
+    /** ===============    METHODS    ================ **/
+    /** ============================================== **/
+    
     /**
      * @brief Indicates whether the given set of packed cards is packed correctly
      *        It is iff the bits b_i of "pkCardSet" such that
@@ -65,10 +77,10 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief
+     * @brief returns the set of cards better than the trump card represented by pkCard. 
      *
      * @param pkCard (int)
-     * @return (long)
+     * @return (long) the set of cards better than the trump card in the parameters
      *
      * @author - Antoine Scardigli (299905)
      */
@@ -78,10 +90,10 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief
+     * @brief returns the set with the only card represented by pkCard.
      *
      * @param pkCard (int)
-     * @return (long)
+     * @return (long) returns the set with the only card in the parameters
      *
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
@@ -93,7 +105,7 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief
+     * @brief returns true if and only if the set pkCardSet is empty
      *
      * @param pkCardSet (long)
      * @return (boolean) true if the set of packed cards is empty [i.e. pkCardSet == 00...000]
@@ -281,11 +293,11 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief
+     * @brief returns the set with only the remaining cards of the chosen color from a certain set pkCardSet.
      *
      * @param pkCardSet (long)
      * @param color (Color)
-     * @return (long)
+     * @return (long) the set with only the cards from a chosen color and that were already in pkCardSet
      *
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
@@ -309,7 +321,15 @@ public final class PackedCardSet {
        return extract(pkCardSet, COLOR_SIZE * color.ordinal(), COLOR_SIZE);
     }
 
-    //TODO: comment ?
+    /**
+     * @brief returns the string with the cards included in the set pkCardSet.
+     * 
+     * @param pkCardSet (long)
+     * @return a string with the cards in pkCardSet
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public static String toString(long pkCardSet) { //TODO: technique tout ça
         StringJoiner j = new StringJoiner(",", "{", "}");
         for (int i=0; i<64; ++i) {
