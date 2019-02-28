@@ -243,9 +243,12 @@ public final class PackedCardSet {
      *
      * @param pkCardSet (long) a set of packed cards.
      * @return (long) the complement of "pkCardSet".
+     * 
+     * @author - Antoine Scardigli (299905)
      */
+    
     public static long complement(long pkCardSet) {
-        return ~pkCardSet;
+        return (~pkCardSet)&ALL_CARDS;
     }
 
     /**
