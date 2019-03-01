@@ -51,7 +51,6 @@ public final class Score {
     
     public Score withAdditionalTrick(TeamId winningTeam, int trickPoints) {
         checkArgument(trickPoints >= 0);
-
         return ofPacked(PackedScore.withAdditionalTrick(packedScore, winningTeam, trickPoints));
     }
     
@@ -66,7 +65,7 @@ public final class Score {
             return false;
         }
 
-        Score thatOScore= (Score) thatO; // Or do 2 "conversions, idk"
+        Score thatOScore = (Score) thatO; // Or do 2 "conversions, idk"
             return (thatOScore.packedScore == this.packedScore);
     }
     

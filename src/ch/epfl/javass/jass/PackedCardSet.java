@@ -459,16 +459,19 @@ public final class PackedCardSet {
         Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
         Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
         long pkSet = 0L;
+
         for (int j = 0 ; j < colors.length ; ++j) {
             for (int k = 0 ; k < trumpRanks.length ; ++k) {
                 pkSet = 0L;
-                for (int i = k+1 ; i < trumpRanks.length ; ++i) {
+                for (int i = k + 1 ; i < trumpRanks.length ; ++i) {
                     pkSet = add(pkSet, k);
                 }
-            int pkCardSet = PackedCard.pack(colors[j], ranks[k]);
-            hash.put(pkCardSet, pkSet);
+
+            int pkCard = PackedCard.pack(colors[j], ranks[k]);
+            hash.put(pkCard, pkSet);
             }
         }
+
     return Collections.unmodifiableMap(hash);
     }
 }

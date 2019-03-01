@@ -268,11 +268,13 @@ class PackedCardSetTest {
 
     @Test //TODO
     void trumpAboveWorks() {
+        Card.Color[] colors = getAllColors();
+        Card.Rank[] ranks = getAllRanks();
         for (int c = 0; c < 4; ++c) {
             for (int r = 0; r < 9; ++r) {
                 long cards = PackedCardSet.trumpAbove(c << 4 | r);
                 for (int i = 0; i < PackedCardSet.size(cards); ++i) {
-                    assertTrue(PackedCard.isBetter(Card.Color.values()[c], PackedCardSet.get(cards, i), c << 4 | r));
+                    assertTrue(PackedCard.isBetter(colors[c], PackedCardSet.get(cards, i), c << 4 | r));
                 }
             }
         }
