@@ -1,4 +1,6 @@
 package ch.epfl.javass.jass;
+import ch.epfl.javass.bits.Bits64;
+
 import static ch.epfl.javass.bits.Bits64.extract;
 
 import java.util.Collections;
@@ -63,7 +65,7 @@ public final class PackedCardSet {
     /**
      * @brief Indicates whether the given set of packed cards is packed correctly
      *        It is iff the bits b_i of "pkCardSet" such that
-     *        <em>9 <= b_i % 16 <= 15</em> are zeros [0].
+     *        <em>9 <= b_i % 16 <= 15</em>cc are zeros [0].
      *
      * @param pkCardSet (long) the set of packed cards we are interested in.
      * @return (boolean) true if "pkCardSet" encodes a valid set of packedCards.
@@ -71,12 +73,19 @@ public final class PackedCardSet {
      * @author - Antoine Scardigli (299905)
      */
     public static boolean isValid(long pkCardSet) {
-       return(
-              extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0
-       );
+        long mask = Bits64.mask(SPADE_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
+                    Bits64.mask(HEART_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
+                    Bits64.mask(DIAMOND_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
+                    Bits64.mask(CLUB_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE);
+
+        return (mask & pkCardSet) == 0L;
+
+//       return( todo suppr
+//              extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+//              extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+//              extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+//              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0
+//       );
     }
 
     /**
@@ -272,7 +281,7 @@ public final class PackedCardSet {
      * @author - Antoine Scardigli (299905)
      */
     public static long union(long pkCardSet1, long pkCardSet2) {
-        return (pkCardSet1 | pkCardSet2);
+        return pkCardSet1 | pkCardSet2;
     }
 
     /**
@@ -285,7 +294,7 @@ public final class PackedCardSet {
      * @author - Antoine Scardigli (299905)
      */
     public static long intersection(long pkCardSet1, long pkCardSet2) {
-        return (pkCardSet1 & pkCardSet2);
+        return pkCardSet1 & pkCardSet2;
     }
 
     /**
@@ -331,10 +340,6 @@ public final class PackedCardSet {
         }
     }
 
-    public static long subsetOfColorNul(long pkCardSet, Card.Color color) { //TODO: suppr
-       return extract(pkCardSet, COLOR_SIZE * color.ordinal(), COLOR_SIZE);
-    }
-
     /**
      * @brief returns the string with the cards included in the set pkCardSet.
      * 
@@ -353,10 +358,6 @@ public final class PackedCardSet {
             }
         }
         return j.toString();
-    }
-
-    public static String toString2(long pkCardSet) {
-        return "";
     }
 
 

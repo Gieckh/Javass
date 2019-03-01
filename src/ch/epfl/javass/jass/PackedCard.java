@@ -6,7 +6,6 @@ import static ch.epfl.javass.bits.Bits32.extract;
 //TODO: handle access rights
 //TODO: check where we assert (tests must not be done here)
 //TODO: use class preconditions
-//TODO: mettre des variables plutôt que
 
 /**
  * @brief Contains the methods used to manipulate the cards
@@ -64,8 +63,6 @@ public final class PackedCard {
      */
     public static int pack(Card.Color c, Card.Rank r) {
         return Bits32.pack(r.type - RANK_SHIFT, CODED_RANK_SIZE, c.type - COLOR_SHIFT, CODED_COLOR_SIZE);
-        // "-6" because the rank ranges from 6 to 14 instead of 0 to 8
-        // "-1" because the color ranges from 1 to 4 instead of 0 to 3
     }
 
     
@@ -113,15 +110,15 @@ public final class PackedCard {
         Card.Rank rankOfL = rank(pkCardL);
         Card.Rank rankOfR = rank(pkCardR);
 
-        if (colorOfL.equals(trump)) { //TODO: "==" works too i think ? and is less greedy in operation
-            if (colorOfR.equals(trump)) {
+        if (colorOfL == trump) { //TODO: "==" works too i think ? and is safer / less greedy
+            if (colorOfR == trump) {
                 return rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal();
             }
 
             return true;
         }
 
-        if (colorOfL.equals(colorOfR)) {
+        if (colorOfL == colorOfR) {
             return rankOfL.ordinal() > rankOfR.ordinal();
         }
 
