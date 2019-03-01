@@ -40,6 +40,7 @@ public final class Card {
 
 
 
+    //TODO : J-DOC
     public enum Color {
         SPADE  (1), //pique
         HEART  (2), //coeur
@@ -134,8 +135,8 @@ public final class Card {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
-        /**
-         * Creates a new variable of type Rank
+        /** todo
+         * @brief Creates a new variable of type Rank
          *
          * @param type (int) associates the card rank to an int
          * @param trumpOrdinal (int) associates to the card rank its strength, assuming
@@ -153,8 +154,8 @@ public final class Card {
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
 
-        /**
-         * gives the rank corresponding to the number
+        /** todo
+         * @brief gives the rank corresponding to the number
          *
          * @param number
          * @return Rank
@@ -190,11 +191,11 @@ public final class Card {
         /**
          * @return (int) the position of the trump card which has the rank "this"
          *         in the list of trump cards, based on their strength //TODO: better
-         * @throws IllegalArgumentException
+         *
          * @author Antoine Scardigli - (299905)
          * @author Marin Nguyen - (288260)
          */
-        public int trumpOrdinal() throws IllegalArgumentException {
+        public int trumpOrdinal() {
             return trumpOrdinal;
         }
 
@@ -232,10 +233,6 @@ public final class Card {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    //TODO: take care of access rights : public/private/none
-    // the rank ranges from 6 to 8
-    
-    
     /**
      * @brief constructs a new card with the chosen color and rank
      * 
