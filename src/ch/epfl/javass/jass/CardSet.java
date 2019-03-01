@@ -219,13 +219,14 @@ public final class CardSet {
     
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  thatO.getClass() != getClass()) { // getClass same as instance of since final ?
+        if (thatO == null  ||  !(thatO instanceof CardSet)) {//todo: test
             return false;
         }
 
         CardSet thatOSet= (CardSet) thatO; // Or do 2 "conversions, idk"
             return (thatOSet.pkCardSet == this.pkCardSet);
     }
+
     //hashcode n'est pas verifié par signcheck
     @Override
     public int hashCode() {

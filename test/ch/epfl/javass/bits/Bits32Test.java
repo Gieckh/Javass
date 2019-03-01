@@ -132,9 +132,7 @@ public final class Bits32Test {
     private int[] getValues(SplittableRandom rng, int[] sizes) {
         int[] values = new int[sizes.length];
         for (int i = 0; i < sizes.length; ++i) {
-            System.out.println("sizes[i] = " + sizes[i]); //TODO : suppr
             values[i] = (int) rng.nextLong(1L << sizes[i]);
-            System.out.println("values[i] = " + values[i]);
         }
         return values;
     }

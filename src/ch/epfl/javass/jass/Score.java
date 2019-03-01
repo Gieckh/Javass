@@ -63,7 +63,7 @@ public final class Score {
     
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  thatO.getClass() != getClass()) { // getClass same as instance of since final ?
+        if (thatO == null  ||  !(thatO instanceof Score)) { //todo: test
             return false;
         }
 

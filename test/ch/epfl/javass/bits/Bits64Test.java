@@ -147,12 +147,9 @@ public class Bits64Test {
     @Test
     void pack2Works() {
         SplittableRandom rng = newRandom();
-        for (int i = 0; i < RANDOM_ITERATIONS; ++i) { //TODO: fail à la 173e itération de la boucle
-            //            System.out.println("itération : " + i);
+        for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
             int[] s = getSizes(rng, 2);
             long[] v = getValues(rng, s);
-            //            System.out.println("v0 = " + v[0] + ", s0 = " + s[0]); //TODO: suppr
-            //            System.out.println("v1 = " + v[1] + ", s1 = " + s[1]);
             System.out.println();
             long packed = Bits64.pack(v[0], s[0], v[1], s[1]);
             for (int j = 0; j < s.length; ++j) {

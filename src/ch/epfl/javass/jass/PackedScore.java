@@ -217,7 +217,7 @@ public final class PackedScore {
      *
      * @author Antoine Scardigli - (299905)
     */
-    public static long nextTurn(long pkScore) { //TODO: masking instead of packing?
+    public static long nextTurn(long pkScore) { //TODO: (lata) masking instead of packing?
         assert isValid(pkScore);
 
         int turnPointsOf1 = (int) extract(pkScore, POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE);
