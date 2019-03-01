@@ -219,7 +219,7 @@ public final class CardSet {
     
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  thatO.getClass() != getClass()) { // getClass same as instance of since final ?
+        if (thatO == null  ||  !(thatO instanceof CardSet)) {//todo: test
             return false;
         }
 

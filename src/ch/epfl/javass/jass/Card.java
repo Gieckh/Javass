@@ -328,7 +328,7 @@ public final class Card {
     //TODO
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  thatO.getClass() != getClass()) { // getClass same as instance of since final ?
+        if (thatO == null  ||  !(thatO instanceof Card)) { //todo: test
             return false;
         }
 
