@@ -111,15 +111,15 @@ public final class PackedCard {
         Card.Rank rankOfL = rank(pkCardL);
         Card.Rank rankOfR = rank(pkCardR);
 
-        if (colorOfL.equals(trump)) { //TODO: "==" works too i think ? and is less greedy in operation
-            if (colorOfR.equals(trump)) {
+        if (colorOfL == trump) { //TODO: "==" works too i think ? and is safer / less greedy
+            if (colorOfR == trump) {
                 return rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal();
             }
 
             return true;
         }
 
-        if (colorOfL.equals(colorOfR)) {
+        if (colorOfL == colorOfR) {
             return rankOfL.ordinal() > rankOfR.ordinal();
         }
 

@@ -3,8 +3,6 @@ package ch.epfl.javass;
 public final class Preconditions {
     private Preconditions() {}
 
-
-
     /**
      * @brief checks whether "b" (boolean) is true. If not, throws an exception.
      *

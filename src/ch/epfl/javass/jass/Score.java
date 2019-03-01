@@ -14,7 +14,6 @@ public final class Score {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-
     private Score(long packed) {
      packedScore = packed;   
     }

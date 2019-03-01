@@ -63,7 +63,7 @@ public final class PackedCardSet {
     /**
      * @brief Indicates whether the given set of packed cards is packed correctly
      *        It is iff the bits b_i of "pkCardSet" such that
-     *        <em>9 <= b_i % 16 <= 15</em> are zeros [0].
+     *        <em>9 <= b_i % 16 <= 15</em>cc are zeros [0].
      *
      * @param pkCardSet (long) the set of packed cards we are interested in.
      * @return (boolean) true if "pkCardSet" encodes a valid set of packedCards.
@@ -329,10 +329,6 @@ public final class PackedCardSet {
         default: //unreachable statement
             throw new IllegalArgumentException();
         }
-    }
-
-    public static long subsetOfColorNul(long pkCardSet, Card.Color color) { //TODO: suppr
-       return extract(pkCardSet, COLOR_SIZE * color.ordinal(), COLOR_SIZE);
     }
 
     /**
