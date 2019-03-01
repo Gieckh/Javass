@@ -169,4 +169,5 @@ public final class PackedCardTest {
             assertEquals(152, s);
         }
     }
+    
 }
