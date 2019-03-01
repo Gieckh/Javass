@@ -52,16 +52,8 @@ public final class PackedCard {
      * @author Marin Nguyen - (288260)
     */
     public static boolean isValid(int pkCard) {
- 
-        // Since we want to be fast
         return (extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) <= MAX_RANK &&  //The rank is valid (we don't check color since it can only be valid)
-                extract(pkCard, EMPTY_BITS_START, EMPTY_BITS_SIZE) == 0); //The 26 "bigger" bits are "0s"
-        /*
-        Clearer but slower version:
-        int rank = extract(pkCard, 0, 4);
-        int restOfTheCard = extract(pkCard, 6, 26); //26 = 31 - 6 + 1
-        return (rank < 9 && restOfTheCard == 0);
-        */
+                extract(pkCard, EMPTY_BITS_START, EMPTY_BITS_SIZE) == 0);
     }
 
     /**

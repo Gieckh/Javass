@@ -314,15 +314,13 @@ class PackedCardSetTest {
 
 
     @Test
-    void contains() {
+    void containsWorks() {
     }
-    // itere un peu beaucoup ( genre vraiment beaucoup beaucoup), mais le test corrobore notre code
-   /* @Test
+
+   @Test
    void subsetOfColorWorks() {
         for (int c = 0; c < 4; ++c) {
             for (int i = 1; i < 512; ++i) {
-                
-                //TODO : delete
                 System.out.println(i + c*512+  " / 2048");
 
                 for (int j = 1; j < 512; ++j) {
@@ -335,8 +333,7 @@ class PackedCardSetTest {
                 }
             }
         }
-      }
-    */
+    }
 
 //    @Test
 //    void toStringWorks() { //TODO ???
