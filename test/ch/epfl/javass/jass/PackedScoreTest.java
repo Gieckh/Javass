@@ -399,7 +399,7 @@ class PackedScoreTest {
     void packWorksForSomeInvalidScores() {
         SplittableRandom rng = newRandom();
         for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
-            assertThrows(Exception.class, () -> {
+            assertThrows(AssertionError.class, () -> {
                 int gamePoints1, gamePoints2, turnPoints1, turnPoints2, turnTricks1, turnTricks2;
                 do {
                     gamePoints1 = rng.nextInt(1<<11);
