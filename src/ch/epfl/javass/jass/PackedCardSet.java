@@ -26,7 +26,7 @@ public final class PackedCardSet {
     private final static Card.Rank[] ranks = getAllRanks();
 
     private final static Map<Integer, Integer> pkCardToIndex = pkCardToIndex();
-    public final static Map<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove(); //todo: private
+    private final static Map<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove();
 
     //TODO: modify. indexToPkCard
     private final static int[] indexToPkCard = indexToPkCard();

@@ -234,32 +234,95 @@ public final class Card {
     /** ============================================== **/
     //TODO: take care of access rights : public/private/none
     // the rank ranges from 6 to 8
+    
+    
+    /**
+     * @brief constructs a new card with the chosen color and rank
+     * 
+     * @param "c" a color
+     * @param "r" a rank
+     * 
+     * @return a new Card with the chosen color and rank 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static Card of(Color c, Rank r) {
         return new Card(pack(c, r));
     }
 
+    /**
+     * @brief constructs a new card from the chosen int "packed".
+     * 
+     * @param packed
+     * @return a new Card with the chosen int "packed"
+     * @throws IllegalArgumentException
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public static Card ofPacked(int packed) throws IllegalArgumentException {
         checkArgument(isValid(packed));
         return new Card(packed);
     }
 
 
+    /**
+     * @brief returns the packedCard corresponding to this card.
+     * 
+     * @return (int) the packedCard of this card
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public int packed() {
         return packedCard;
     }
 
-
+    /** returns the color of the card .
+     * 
+     * @return the color of this card
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public Color color() {
         return PackedCard.color(packedCard);
     }
+    
+    /**
+     * @brief Gives the rank of a card
+     * @return (Rank) the rank of this card
+     */
     public Rank rank() {
         return PackedCard.rank(packedCard);
     }
-
+    
+    /**
+     * @brief returns true if the this card is stronger than the
+     *        packed card "that", false otherwise (weaker or not comparable).
+     *
+     * @param trump (Color) the color of the trump. Needed to evaluate the strength of a card
+     * @param that (Card) the Card we use to compare
+     * @return (boolean) true when this card is better than "that".
+     *
+     * @author - Marin Nguyen (288260)
+     * @author - Antoine Scardigli (299905)
+     */
     public boolean isBetter(Color trump, Card that) {
         return PackedCard.isBetter(trump, packedCard, that.packed());
     }
-
+    /**
+     * @brief return the value (nb of points a card is worth) of the (encoded)
+     *        card "pkCard", given the trump "trump".
+     *
+     * @param trump (Color) the color of the trump
+     * @param pkCard (int) the int representing a card
+     *
+     * @return the value of the (encoded) card "pkCard"
+     *
+     * @author - Antoine Scardigli (299905)
+     * @author - Marin Nguyen (288260)
+     */
     public int points(Color trump) {
         return PackedCard.points(trump, packedCard);
     }
