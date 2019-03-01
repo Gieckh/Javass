@@ -15,6 +15,9 @@ import static ch.epfl.javass.bits.Bits32.extract;
  * @author - Antoine Scardigli (299905)
  */
 public final class PackedCard {
+    /** =============================================== **/
+    /** ===============    ATTRIBUTES    ============== **/
+    /** =============================================== **/
     public final static int INVALID = 111111;
     //TODO: public or private.
     private final static int MAX_RANK = 8;
@@ -29,7 +32,20 @@ public final class PackedCard {
     private final static int EMPTY_BITS_START = 6;
     private final static int EMPTY_BITS_SIZE = 26;
 
-    /** returns true if the pkCard is correctly packed.
+    /** ============================================== **/
+    /** ==============   CONSTRUCTORS   ============== **/
+    /** ============================================== **/
+    private PackedCard() {
+        // cuz' we don't want this class instantiated.
+    }
+
+    /** ============================================== **/
+    /** ===============    METHODS    ================ **/
+    /** ============================================== **/
+
+    /**
+     * @brief returns true if the pkCard is correctly packed.
+     *
      * @param pkCard
      * @return true if the pkCard is correctly packed
      * @author Antoine Scardigli - (299905)

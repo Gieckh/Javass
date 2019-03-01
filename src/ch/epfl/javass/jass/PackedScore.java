@@ -13,6 +13,9 @@ import static ch.epfl.javass.bits.Bits64.extract;
  *
  */
 public final class PackedScore {
+    /** =============================================== **/
+    /** ===============    ATTRIBUTES    ============== **/
+    /** =============================================== **/
     public final static long INITIAL = 0;
 
     private final static int TEAM_INFO_SIZE = 32;
@@ -30,15 +33,24 @@ public final class PackedScore {
 
     private final static int EMPTY_BIT_SIZE = 8;
 
-
     private final static int MAX_TRICKS_PER_TURN = 9;
     private final static int MAX_POINTS_PER_TURN = 257;
     private final static int MAX_POINTS_PER_GAME = 2000;
 
 
-    //so the class is not instantiable
+    /** ============================================== **/
+    /** ==============   CONSTRUCTORS   ============== **/
+    /** ============================================== **/
+
     //TODO do same for some other classes
-    private PackedScore() {};
+    private PackedScore() {
+        // cuz' we don't want this class instantiated.
+    }
+
+
+    /** ============================================== **/
+    /** ===============    METHODS    ================ **/
+    /** ============================================== **/
 
     /**
      * @brief Indicates whether the (long) "pkScore" corresponds to a valid score.

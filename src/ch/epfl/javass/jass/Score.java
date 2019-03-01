@@ -4,7 +4,6 @@ import static ch.epfl.javass.jass.PackedScore.*;
 import static ch.epfl.javass.Preconditions.*;
 
 public final class Score {
-    
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
