@@ -349,7 +349,8 @@ public final class PackedCardSet {
         for (int i = 0; i < 64; ++i) {
             long mask = 1L << i;
             if((mask & pkCardSet) == mask) {
-                System.out.println(i);
+                //TODO delete
+               // System.out.println(i);
                 j.add(PackedCard.toString(pkCardToIndex.get(i)));
             }
         }
