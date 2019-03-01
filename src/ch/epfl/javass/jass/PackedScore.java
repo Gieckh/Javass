@@ -103,11 +103,11 @@ public final class PackedScore {
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    public static int turnTricks(long pkScore, TeamId t) throws IllegalArgumentException{
+    public static int turnTricks(long pkScore, TeamId t) {
         assert isValid(pkScore);
 
         int shift = (t == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
-        return (int) extract(pkScore, shift + TRICKS_START, TRICKS_SIZE );
+        return (int) extract(pkScore, shift + TRICKS_START, TRICKS_SIZE);
     }
 
 

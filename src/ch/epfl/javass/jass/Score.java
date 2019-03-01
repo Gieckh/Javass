@@ -24,7 +24,7 @@ public final class Score {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    public static Score ofPacked(long packed) throws IllegalArgumentException{
+    public static Score ofPacked(long packed) {
         checkArgument(isValid(packed));
         return new Score(packed);
     }
@@ -50,14 +50,9 @@ public final class Score {
     }
     
     public Score withAdditionalTrick(TeamId winningTeam, int trickPoints) {
-        if (trickPoints<0) {
-            throw new IllegalArgumentException("your int input is negative");
-        }
-        else {
-            return ofPacked(PackedScore
-                    .withAdditionalTrick(packedScore, winningTeam, trickPoints));
-        }
-        
+        checkArgument(trickPoints >= 0);
+
+        return ofPacked(PackedScore.withAdditionalTrick(packedScore, winningTeam, trickPoints));
     }
     
     public Score nextTurn() {
