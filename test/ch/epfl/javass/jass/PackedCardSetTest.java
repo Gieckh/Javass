@@ -152,7 +152,6 @@ class PackedCardSetTest {
         long packedCardSet = PackedCardSet.EMPTY;
         int size = 0;
         for (int j = 0 ; j < colors.length ; ++j) {
-            System.out.println("j = " + j);
             for (int i = 0 ; i < ranks.length ; ++i) {
                 int packedCard = PackedCard.pack(colors[j], ranks[i]);
                 packedCardSet = PackedCardSet.add(packedCardSet, packedCard);

@@ -160,12 +160,27 @@ public final class PackedCardSet {
     //TODO : benchmark which one is the best.
     public static int get2(long pkCardSet, int index) {
         for(int i = 0 ; i < index ; ++i) {
-            pkCardSet -= Long.lowestOneBit(pkCardSet);
+            pkCardSet ^= Long.lowestOneBit(pkCardSet);
         }
 
         return Long.numberOfTrailingZeros(pkCardSet);
     }
 
+    public static int get3(long pkCardSet, int index) {
+        assert (size(pkCardSet) >= index  &&  index >= 0);
+
+        int i = (int) Long.numberOfTrailingZeros(pkCardSet);
+        long mask = 1L << i;
+        int nbOfValuesPassed = 0;
+        while (nbOfValuesPassed != index) {
+            mask <<= 1;
+            ++i;
+            if ((mask & pkCardSet) == mask) {
+                ++nbOfValuesPassed;
+            }
+        }
+        return indexToPkCard[i];
+    }
 
     /**
      * @brief If the packed card "pkCard" is not already in the set "pkCardSet",
@@ -331,16 +346,18 @@ public final class PackedCardSet {
      */
     public static String toString(long pkCardSet) { //TODO: technique tout ça
         StringJoiner j = new StringJoiner(",", "{", "}");
-        for (int i=0; i<64; ++i) {
-            if(1 == extract(pkCardSet, i, 1)) {
-                j.add(PackedCard.toString(get(pkCardSet,i)));
+        for (int i = 0; i < 64; ++i) {
+            long mask = 1L << i;
+            if((mask & pkCardSet) == mask) {
+                System.out.println(i);
+                j.add(PackedCard.toString(pkCardToIndex.get(i)));
             }
         }
         return j.toString();
     }
 
     public static String toString2(long pkCardSet) {
-
+        return "";
     }
 
 
