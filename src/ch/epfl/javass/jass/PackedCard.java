@@ -64,8 +64,6 @@ public final class PackedCard {
      */
     public static int pack(Card.Color c, Card.Rank r) {
         return Bits32.pack(r.type - RANK_SHIFT, CODED_RANK_SIZE, c.type - COLOR_SHIFT, CODED_COLOR_SIZE);
-        // "-6" because the rank ranges from 6 to 14 instead of 0 to 8
-        // "-1" because the color ranges from 1 to 4 instead of 0 to 3
     }
 
     
