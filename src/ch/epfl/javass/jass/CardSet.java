@@ -226,6 +226,7 @@ public final class CardSet {
         CardSet thatOSet= (CardSet) thatO; // Or do 2 "conversions, idk"
             return (thatOSet.pkCardSet == this.pkCardSet);
     }
+
     //hashcode n'est pas verifié par signcheck
     @Override
     public int hashCode() {
