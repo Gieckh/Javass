@@ -351,10 +351,6 @@ public final class PackedCardSet {
         return j.toString();
     }
 
-    public static String toString2(long pkCardSet) {
-        return "";
-    }
-
 
 
     // -------------------------------------------------------------------------
