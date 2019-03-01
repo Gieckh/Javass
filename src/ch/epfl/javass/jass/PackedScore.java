@@ -151,7 +151,7 @@ public final class PackedScore {
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
-    public static int gamePoints(long pkScore, TeamId t) throws IllegalArgumentException{
+    public static int gamePoints(long pkScore, TeamId t) {
         assert isValid(pkScore);
 
         int shift = (t == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
