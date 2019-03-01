@@ -6,7 +6,6 @@ import static ch.epfl.javass.bits.Bits32.extract;
 //TODO: handle access rights
 //TODO: check where we assert (tests must not be done here)
 //TODO: use class preconditions
-//TODO: mettre des variables plutôt que
 
 /**
  * @brief Contains the methods used to manipulate the cards

@@ -1,4 +1,6 @@
 package ch.epfl.javass.jass;
+import ch.epfl.javass.bits.Bits64;
+
 import static ch.epfl.javass.bits.Bits64.extract;
 
 import java.util.Collections;
@@ -71,12 +73,19 @@ public final class PackedCardSet {
      * @author - Antoine Scardigli (299905)
      */
     public static boolean isValid(long pkCardSet) {
-       return(
-              extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0
-       );
+        long mask = Bits64.mask(SPADE_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
+                    Bits64.mask(HEART_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
+                    Bits64.mask(DIAMOND_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
+                    Bits64.mask(CLUB_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE);
+
+        return (mask & pkCardSet) == 0L;
+
+//       return( todo suppr
+//              extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+//              extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+//              extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
+//              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0
+//       );
     }
 
     /**
@@ -272,7 +281,7 @@ public final class PackedCardSet {
      * @author - Antoine Scardigli (299905)
      */
     public static long union(long pkCardSet1, long pkCardSet2) {
-        return (pkCardSet1 | pkCardSet2);
+        return pkCardSet1 | pkCardSet2;
     }
 
     /**
@@ -285,7 +294,7 @@ public final class PackedCardSet {
      * @author - Antoine Scardigli (299905)
      */
     public static long intersection(long pkCardSet1, long pkCardSet2) {
-        return (pkCardSet1 & pkCardSet2);
+        return pkCardSet1 & pkCardSet2;
     }
 
     /**
