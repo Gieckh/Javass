@@ -122,34 +122,11 @@ class PackedScoreTest {
         }
     }
 
+    @Test
+    void isValidReturnsFalseWithTooBigValuesForTeam1() {
 
-    // TODO: modify
-  //  @Test
-   /* void isValidReturnsFalseWithTooBigValuesForTeam1() {
-        SplittableRandom rng = newRandom();
-        for (int i = 0 ; i < RANDOM_ITERATIONS ; ++i) {
-            int tooBigTricks = MAX_TRICKS_PER_TURN + i + 1;
-            int tooBigTurnPoints = MAX_POINTS_PER_TURN + i + 1;
-            int tooBigGamePoints = MAX_POINTS_PER_GAME + i + 1;
-
-            int tricks1 = rng.nextInt(MAX_TRICKS_PER_TURN);
-            int tricks2 = rng.nextInt(MAX_TRICKS_PER_TURN);
-
-            int turnPoints1 = rng.nextInt(MAX_POINTS_PER_TURN);
-            int turnPoints2 = rng.nextInt(MAX_POINTS_PER_TURN);
-
-            int gamePoints1 = rng.nextInt(MAX_POINTS_PER_GAME);
-            int gamePoints2 = rng.nextInt(MAX_POINTS_PER_GAME);
-            // lance l'exception sur le 1er assert quand tooBigTricks = 16 > 2^4 -1 , mais est ce que ca doit lancer false ou exception ?
-            assertFalse(isValid(pack(tooBigTricks, turnPoints1, gamePoints1,
-                    tricks2, turnPoints2, gamePoints2)));
-            assertFalse(isValid(pack(tricks1, tooBigTurnPoints, gamePoints1,
-                    tricks2, turnPoints2, gamePoints2)));
-            assertFalse(isValid(pack(tricks1, turnPoints1, tooBigGamePoints,
-                    tricks2, turnPoints2, gamePoints2)));
-        }
     }
-    */
+
     @Test
     void isValidReturnsFalseWithTooBigValuesForTeam2() {
 
@@ -191,7 +168,6 @@ class PackedScoreTest {
     void totalPointsReturnsCorrectNumberOfPoints() {
 
     }
-
 
     @Test
     void withAdditionalTrickCalculatesTheRightScore() {
