@@ -58,7 +58,7 @@ public class Bits64 {
      * @author - Marin Nguyen (288260)
      */
     public static long
-    extract(long bits, int start, int size) throws IllegalArgumentException {
+    extract(long bits, int start, int size) {
         // The call to mask checks the exceptions
         long mask = mask(start, size);
         return (mask & bits) >>> start;
@@ -132,7 +132,7 @@ public class Bits64 {
      * @author - Marin Nguyen (288260)
      */
     public static long
-    pack(long v1, int s1, long v2, int s2) throws IllegalArgumentException {
+    pack(long v1, int s1, long v2, int s2) {
         checkArgument(checkPack(v1, s1) && checkPack(v2, s2));
 
         // Seems better (to us) to have a new if statement for that condition
@@ -174,7 +174,7 @@ public class Bits64 {
 //     * @throws IllegalArgumentException
 //     *
 //     * @author - Marin Nguyen (288260)
-//     */
+//     */ 
 //    public static long
 //    pack(long v1, int s1, long v2, int s2, long v3, int s3, long v4, int s4,
 //            long v5, int s5, long v6, int s6, long v7, int s7) throws IllegalArgumentException {

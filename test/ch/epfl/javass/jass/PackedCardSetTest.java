@@ -314,9 +314,9 @@ class PackedCardSetTest {
     @Test
     void contains() {
     }
-    // itere un peu beaucoup ( genre vraiment beaucoup beaucoup)
-    @Test
-    void subsetOfColorWorks() {
+    // itere un peu beaucoup ( genre vraiment beaucoup beaucoup), mais le test corrobore notre code
+   /* @Test
+   void subsetOfColorWorks() {
         for (int c = 0; c < 4; ++c) {
             for (int i = 1; i < 512; ++i) {
                 
@@ -333,7 +333,8 @@ class PackedCardSetTest {
                 }
             }
         }
-    }
+      }
+    */
 
 //    @Test
 //    void toStringWorks() { //TODO ???

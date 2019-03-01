@@ -25,7 +25,7 @@ public final class Bits32 {
      *
      * @author - Marin Nguyen (288260)
      */
-    public static int mask(int start, int size) throws IllegalArgumentException {
+    public static int mask(int start, int size)  {
         checkArgument(start >= 0  &&  size >=0);
         checkArgument(start + size <= Integer.SIZE);
         // https://piazza.com/class/jrhvyjm5czn4f?cid=14
@@ -55,7 +55,7 @@ public final class Bits32 {
      * @author - Marin Nguyen (288260)
      */
     public static int
-    extract(int bits, int start, int size) throws IllegalArgumentException {
+    extract(int bits, int start, int size) {
         // The call to mask checks the exceptions
         int mask = mask(start, size);
         return (mask & bits) >>> start;
@@ -128,7 +128,7 @@ private static int msbPosition(int value) { //Or use method highestOneBit / numb
      * @author - Marin Nguyen (288260)
      */
     public static int
-    pack(int v1, int s1, int v2, int s2) throws IllegalArgumentException {
+    pack(int v1, int s1, int v2, int s2) {
         checkArgument(checkPack(v1, s1) && checkPack(v2, s2));
 
         // Seems better (to us) to have a new if statement for that condition
@@ -151,7 +151,7 @@ private static int msbPosition(int value) { //Or use method highestOneBit / numb
      * @author - Marin Nguyen (288260)
      */
     public static int
-    pack(int v1, int s1, int v2, int s2, int v3, int s3) throws IllegalArgumentException {
+    pack(int v1, int s1, int v2, int s2, int v3, int s3) {
         boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) && checkPack(v3, s3);
         checkArgument(compatibleSizes);
         checkArgument(s1 + s2 +s3 <= Integer.SIZE);
@@ -171,7 +171,7 @@ private static int msbPosition(int value) { //Or use method highestOneBit / numb
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3, int v4, int s4,
-            int v5, int s5, int v6, int s6, int v7, int s7) throws IllegalArgumentException {
+            int v5, int s5, int v6, int s6, int v7, int s7){
         boolean compatibleSizes = checkPack(v1, s1) && checkPack(v2, s2) &&
                 checkPack(v3, s3) && checkPack(v4, s4) &&
                 checkPack(v5, s5) && checkPack(v6, s6) &&
