@@ -9,7 +9,7 @@ import static ch.epfl.javass.bits.Bits32.extract;
 //TODO: mettre des variables plutôt que
 
 /**
- * Contains the methods used to manipulate the cards
+ * @brief Contains the methods used to manipulate the cards
  *
  * @author - Marin Nguyen (288260)
  * @author - Antoine Scardigli (299905)
@@ -28,6 +28,7 @@ public final class PackedCard {
 
     private final static int EMPTY_BITS_START = 6;
     private final static int EMPTY_BITS_SIZE = 26;
+
     /** returns true if the pkCard is correctly packed.
      * @param pkCard
      * @return true if the pkCard is correctly packed

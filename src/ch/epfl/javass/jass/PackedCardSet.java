@@ -1,6 +1,8 @@
 package ch.epfl.javass.jass;
 import static ch.epfl.javass.bits.Bits64.extract;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import java.util.Hashtable;
@@ -23,9 +25,10 @@ public final class PackedCardSet {
     private final static Card.Color[] colors = getAllColors();
     private final static Card.Rank[] ranks = getAllRanks();
 
-    private final static Hashtable<Integer, Integer> pkCardToIndex = pkCardToIndex();
-    private final static Hashtable<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove();
+    private final static Map<Integer, Integer> pkCardToIndex = pkCardToIndex();
+    private final static Map<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove();
 
+    //TODO: modify. indexToPkCard
     private final static int[] indexToPkCard = indexToPkCard();
 
     public static final long EMPTY = 0;
@@ -129,24 +132,6 @@ public final class PackedCardSet {
         return Long.bitCount(pkCardSet);
     }
 
-    //TODO: check which one is the best. Probably not the "2"
-    //TODO: find the way to program "get" in  lines.
-    public static int get2(long pkCardSet, int index) {
-        assert (size(pkCardSet) >= index  &&  index >= 0);
-
-        int i = (int) Long.numberOfTrailingZeros(pkCardSet);
-        long mask = 1L << i;
-        int nbOfValuesPassed = 0;
-        while (nbOfValuesPassed != index) {
-            mask <<= 1;
-            ++i;
-            if ((mask & pkCardSet) == mask) {
-                ++nbOfValuesPassed;
-            }
-        }
-        return indexToPkCard[i];
-    }
-
     /**
      * @brief returns the index-th packed card from the given set of packed cards.
      *        if [index == 0], then the card given by the least significant 1-bit
@@ -171,6 +156,16 @@ public final class PackedCardSet {
 
         return indexToPkCard[i - 1];
     }
+
+    //TODO : benchmark which one is the best.
+    public static int get2(long pkCardSet, int index) {
+        for(int i = 0 ; i < index ; ++i) {
+            pkCardSet -= Long.lowestOneBit(pkCardSet);
+        }
+
+        return Long.numberOfTrailingZeros(pkCardSet);
+    }
+
 
     /**
      * @brief If the packed card "pkCard" is not already in the set "pkCardSet",
@@ -248,7 +243,8 @@ public final class PackedCardSet {
      */
     
     public static long complement(long pkCardSet) {
-        return (~pkCardSet)&ALL_CARDS;
+        return (~pkCardSet) & ALL_CARDS;
+        // return pkCardSet ^ ALL_CARDS;
     }
 
     /**
@@ -292,7 +288,7 @@ public final class PackedCardSet {
      * @author - Antoine Scardigli (299905)
      */
     public static long difference(long pkCardSet1, long pkCardSet2) {
-        return pkCardSet1 & (~pkCardSet1&pkCardSet2);
+        return pkCardSet1 & ~pkCardSet2;
     }
 
     /**
@@ -316,7 +312,7 @@ public final class PackedCardSet {
         case CLUB:
             return pkCardSet & CLUB_CARDS;
         default: //unreachable statement
-            return 0L; //TODO ne pas mettre d'exceptions aux defaults, si ça fait ralentier le code ?
+            throw new IllegalArgumentException();
         }
     }
 
@@ -341,6 +337,10 @@ public final class PackedCardSet {
             }
         }
         return j.toString();
+    }
+
+    public static String toString2(long pkCardSet) {
+
     }
 
 
@@ -391,7 +391,7 @@ public final class PackedCardSet {
         };
     }
 
-    /**
+    /** TODO
      * @brief
      *
      * @return
@@ -411,14 +411,14 @@ public final class PackedCardSet {
         return tmp;
     }
 
-    /**
+    /** TODO
      * @brief
      *
      * @return
      *
      * @author - Marin Nguyen (288260)
      */
-    private static Hashtable<Integer, Integer> pkCardToIndex() {
+    private static Map<Integer, Integer> pkCardToIndex() {
         Hashtable<Integer, Integer> hash = new Hashtable<Integer, Integer>();
         for (int j = 0 ; j < colors.length ; ++j) {
             for (int i = 0 ; i < ranks.length ; ++i) {
@@ -427,17 +427,18 @@ public final class PackedCardSet {
                 hash.put(pkCard, 16 * j + i);
             }
         }
-        return hash;
+        return Collections.unmodifiableMap(hash);
     }
 
-    /**
+
+    /** TODO
      * @brief
      *
      * @return
      *
      * @author - Antoine Scardigli (299905)
      */
-    private static Hashtable<Integer, Long> pkCardsToTrumpAbove() {
+    private static Map<Integer, Long> pkCardsToTrumpAbove() {
         Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
         Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
         long pkSet = 0L;
@@ -451,7 +452,7 @@ public final class PackedCardSet {
             hash.put(pkCardSet, pkSet);
             }
         }
-    return hash;
+    return Collections.unmodifiableMap(hash);
     }
 }
 

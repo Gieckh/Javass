@@ -13,7 +13,6 @@ import static ch.epfl.javass.bits.Bits64.extract;
  *
  */
 public final class PackedScore {
-
     public final static long INITIAL = 0;
 
     private final static int TEAM_INFO_SIZE = 32;
@@ -23,11 +22,11 @@ public final class PackedScore {
     private final static int TRICKS_START = 0;
     private final static int TRICKS_SIZE = 4;
 
-    private final static int POINTS_PER_TURN_START = 4;
+    private final static int POINTS_PER_TURN_START = TRICKS_SIZE;
     private final static int POINTS_PER_TURN_SIZE = 9;
 
     private final static int POINTS_PER_GAME_SIZE = 11;
-    private final static int POINTS_PER_GAME_START = TRICKS_SIZE + POINTS_PER_TURN_SIZE;
+    private final static int POINTS_PER_GAME_START = POINTS_PER_TURN_START + POINTS_PER_TURN_SIZE;
 
     private final static int EMPTY_BIT_SIZE = 8;
 
