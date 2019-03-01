@@ -31,9 +31,7 @@ class ScoreTest {
             }
         }
     }
-    /*
-     * packed
-     */
+    
     @Test
     void packedWorks() {
         for (int r = 0; r <=9; ++r) {
