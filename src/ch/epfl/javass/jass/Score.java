@@ -14,7 +14,10 @@ public final class Score {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-
+    // TODO ain't delete
+    // cuz' we don't want this class instantiated.
+    // kerker michmich <3
+    //@author antoine Scardigli ( put me 6)
     private Score(long packed) {
      packedScore = packed;   
     }

@@ -321,8 +321,7 @@ class PackedCardSetTest {
    void subsetOfColorWorks() {
         for (int c = 0; c < 4; ++c) {
             for (int i = 1; i < 512; ++i) {
-                System.out.println(i + c*512+  " / 2048");
-
+                
                 for (int j = 1; j < 512; ++j) {
                     for (int k = 1; k < 512; ++k) {
                         for (int l = 1; l < 512; ++l) {

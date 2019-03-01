@@ -312,13 +312,12 @@ public final class Card {
         return PackedCard.isBetter(trump, packedCard, that.packed());
     }
     /**
-     * @brief return the value (nb of points a card is worth) of the (encoded)
-     *        card "pkCard", given the trump "trump".
+     * @brief return the value (nb of points a card is worth) of this
+     *        card , given the trump Color  "trump".
      *
      * @param trump (Color) the color of the trump
-     * @param pkCard (int) the int representing a card
      *
-     * @return the value of the (encoded) card "pkCard"
+     * @return the value of this card 
      *
      * @author - Antoine Scardigli (299905)
      * @author - Marin Nguyen (288260)
@@ -343,7 +342,16 @@ public final class Card {
     public int hashCode() {
         return packedCard;
     }
-
+    
+    /**
+     * @brief the (String) representation of this card :
+     *        "[its suit]" then "[its rank]", without spaces in between.
+     *
+     * @return the (String) representation of the card.
+     *
+     * @author - Antoine Scardigli (299905)
+     * @author - Marin Nguyen (288260)
+     */
     @Override
     public String toString() {
         return PackedCard.toString(packedCard);

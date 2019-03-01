@@ -545,10 +545,10 @@ class PackedScoreTest {
                     {
                         long l = PackedScore.pack(0, 0, gamePoints1 + turnPoints1, 0, 0, gamePoints2 + turnPoints2);
                         long l2= PackedScore.nextTurn(validCard);
-                        assertEquals(l,l2
-                                );
+                        assertEquals(l,l2 );
                     }
-                });
+                }
+                );
     }
 
     @Test
