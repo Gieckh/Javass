@@ -26,7 +26,7 @@ public final class PackedCardSet {
     private final static Card.Rank[] ranks = getAllRanks();
 
     private final static Map<Integer, Integer> pkCardToIndex = pkCardToIndex();
-    private final static Map<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove();
+    public final static Map<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove(); //todo: private
 
     //TODO: modify. indexToPkCard
     private final static int[] indexToPkCard = indexToPkCard();
@@ -349,7 +349,6 @@ public final class PackedCardSet {
         for (int i = 0; i < 64; ++i) {
             long mask = 1L << i;
             if((mask & pkCardSet) == mask) {
-                System.out.println(i);
                 j.add(PackedCard.toString(pkCardToIndex.get(i)));
             }
         }
@@ -458,17 +457,16 @@ public final class PackedCardSet {
     private static Map<Integer, Long> pkCardsToTrumpAbove() {
         Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
         Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
-        long pkSet = 0L;
 
-        for (int j = 0 ; j < colors.length ; ++j) {
-            for (int k = 0 ; k < trumpRanks.length ; ++k) {
-                pkSet = 0L;
-                for (int i = k + 1 ; i < trumpRanks.length ; ++i) {
-                    pkSet = add(pkSet, k);
+        for (Card.Color c : colors) {
+            for (Card.Rank r : ranks) {
+                int pkCard = PackedCard.pack(c, r);
+                long pkCardSet = 0L;
+                for (int k = r.trumpOrdinal + 1 ; k < trumpRanks.length ; ++k) {
+                    pkCardSet = add(pkCardSet, PackedCard.pack(c, trumpRanks[k]));
                 }
 
-            int pkCard = PackedCard.pack(colors[j], ranks[k]);
-            hash.put(pkCard, pkSet);
+                hash.put(pkCard, pkCardSet);
             }
         }
 
