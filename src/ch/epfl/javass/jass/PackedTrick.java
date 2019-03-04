@@ -59,7 +59,7 @@ public final class PackedTrick {
             return false;
         }
 
-        //We suppose the color is always right
+        //We don't check whether we have the same card 2 times.
         boolean isRank1Valid = ((pkTrick & RANK_MASK_1) >>> CARD_1_START) <= MAX_RANK;
         boolean isRank2Valid = ((pkTrick & RANK_MASK_2) >>> CARD_2_START) <= MAX_RANK;
         boolean isRank3Valid = ((pkTrick & RANK_MASK_3) >>> CARD_3_START) <= MAX_RANK;
@@ -161,6 +161,8 @@ public final class PackedTrick {
 
     //assuming the card is indeed there.
     public static int card (int pkTrick, int index) {
+        assert (0 <= index  &&  index <= 3);
+
         switch(index) {
             case 0:
                 return pkTrick & CARD_MASK_1;
@@ -177,6 +179,8 @@ public final class PackedTrick {
 
     //assuming not full.
     public static int withAddedCard(int pkTrick, int pkCard) {
+        assert (isValid(pkTrick));
+
         if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) {
             return (pkTrick & (~CARD_MASK_1)) | pkCard;
         }
@@ -193,6 +197,8 @@ public final class PackedTrick {
     }
 
     public static Card.Color baseColor(int pkTrick) {
+        assert (isValid(pkTrick));
+
         return null;
     }
 
