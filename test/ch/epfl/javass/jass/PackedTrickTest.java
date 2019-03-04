@@ -107,12 +107,14 @@ public class PackedTrickTest {
     void isFullWorks(){
         for (int i = 0 ; i != -1; ++i ) {
             if (PackedTrick.isValid(i)) {
-                if((Bits32.extract(i, 0 ,6) < 9) && (Bits32.extract(i, 6 ,6) < 9) &&
-                   (Bits32.extract(i, 12,6) < 9) && (Bits32.extract(i, 18,6) < 9)) {
+                //TODO tu avais oublié la couleur : size 6 -> 4 (@author : Marin)
+                if((Bits32.extract(i, 0 ,4) < 9) && (Bits32.extract(i, 6 ,4) < 9) &&
+                   (Bits32.extract(i, 12,4) < 9) && (Bits32.extract(i, 18,4) < 9)) {
                     assertTrue(PackedTrick.isFull(i));
                 }
 
                 else {
+                    System.out.println("i : " + Integer.toBinaryString(i));
                     assertFalse(PackedTrick.isFull(i));
                 }
             }
