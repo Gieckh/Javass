@@ -19,9 +19,7 @@ public class test {
 //        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_3)));
 //        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_4)));
 
-        for(int i = 0 ; i != -1 ; ++i) {
-
-        }
-        System.out.println("over");
+        System.out.println(0b1001000000 >>> 6);
+        System.out.println(PackedTrick.isValid(0b1001000000));
     }
 }

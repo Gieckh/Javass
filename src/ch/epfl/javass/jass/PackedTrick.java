@@ -262,7 +262,7 @@ public final class PackedTrick {
         assert (isValid(pkTrick));
 
         //cuz i dont want to re-extract.
-        int firstCardColor = (pkTrick & 0b110000)>>CARD_COLOR_START;
+        int firstCardColor = (pkTrick & 0b110000) >>> CARD_COLOR_START;
         return pkColorToColor(firstCardColor);
     }
 
@@ -280,9 +280,9 @@ public final class PackedTrick {
         int total = (isLast(pkTrick)) ? 5 : 0;
         Card.Color trump = trump(pkTrick);
         total += PackedCard.points(trump, pkTrick & CARD_MASK_1);
-        total += PackedCard.points(trump, (pkTrick & CARD_MASK_2)>>CARD_2_START);
-        total += PackedCard.points(trump, (pkTrick & CARD_MASK_3)>>CARD_3_START);
-        total += PackedCard.points(trump, (pkTrick & CARD_MASK_4)>>CARD_4_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_2) >>>CARD_2_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_3) >>>CARD_3_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_4) >>>CARD_4_START);
 
         return total;
     }
