@@ -56,36 +56,58 @@ public final class PackedTrick {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
+    //Here we are ready to face all kinds of invalid cards
     public static boolean isValid(int pkTrick) {
         if (Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE) > MAX_INDEX) {
             return false;
         }
 
+        int masked1 = pkTrick & CARD_MASK_1;
+        int masked2 = pkTrick & CARD_MASK_2;
+        int masked3 = pkTrick & CARD_MASK_3;
+        int masked4 = pkTrick & CARD_MASK_4;
+
+        //TODO: simplify
         //We don't check whether we have the same card 2 times.
-        boolean isRank1Valid = ((pkTrick & RANK_MASK_1) >>> CARD_1_START) <= MAX_RANK;
-        boolean isRank2Valid = ((pkTrick & RANK_MASK_2) >>> CARD_2_START) <= MAX_RANK;
-        boolean isRank3Valid = ((pkTrick & RANK_MASK_3) >>> CARD_3_START) <= MAX_RANK;
-        boolean isRank4Valid = ((pkTrick & RANK_MASK_4) >>> CARD_4_START) <= MAX_RANK;
+        boolean isRank1Valid = (masked1 & RANK_MASK_1 >>> CARD_1_START) <= MAX_RANK;
+        boolean isRank2Valid = (masked2 & RANK_MASK_2 >>> CARD_2_START) <= MAX_RANK;
+        boolean isRank3Valid = (masked3 & RANK_MASK_3 >>> CARD_3_START) <= MAX_RANK;
+        boolean isRank4Valid = (masked4 & RANK_MASK_4 >>> CARD_4_START) <= MAX_RANK;
 
         if (!isRank1Valid) {
-            return !isRank2Valid && !isRank3Valid && !isRank4Valid;
+            return  (masked1 == CARD_MASK_1) && (masked2 == CARD_MASK_2) &&
+                    (masked3 == CARD_MASK_3) && (masked4 == CARD_MASK_4);
         }
 
         if (!isRank2Valid) {
-            return !isRank3Valid && !isRank4Valid;
+            return (masked2 == CARD_MASK_2) && (masked3 == CARD_MASK_3) &&
+                   (masked4 == CARD_MASK_4);
         }
 
         if (!isRank3Valid) {
-            return !isRank4Valid;
+            return (masked3 == CARD_MASK_3) && (masked4 == CARD_MASK_4);
         }
-        //TODO WHAT IF ONLY RANK 4 IS NOT VALID ? 
-        // this is said valid : 001001_000000_000000_000000
-        // althougth it is not : 1001 -> assert error
 
-        // return true; //Si on suppose que les invalides sont de la "bonne forme". END
+        return (isRank4Valid || masked4 == CARD_MASK_4);
+    }
 
-        // Si on suppose que les invalides peuvent être de n'importe quelle forme //TODO
-        return (isRank4Valid | (pkTrick & RANK_MASK_4) == RANK_MASK_4);
+    //Here we suppose that an invalid card always is 111111
+    public static boolean isValid2(int pkTrick) {
+        boolean isRank1Invalid = (pkTrick & RANK_MASK_1) == RANK_MASK_1;
+        boolean isRank2Invalid = (pkTrick & RANK_MASK_2) == RANK_MASK_2;
+        boolean isRank3Invalid = (pkTrick & RANK_MASK_3) == RANK_MASK_3;
+        boolean isRank4Invalid = (pkTrick & RANK_MASK_4) == RANK_MASK_4;
+
+        if (isRank1Invalid)
+            return isRank2Invalid && isRank3Invalid && isRank4Invalid;
+
+        if (isRank2Invalid)
+            return isRank3Invalid && isRank4Invalid;
+
+        if (isRank3Invalid)
+            return isRank4Invalid;
+
+        return true;
     }
 
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {

@@ -107,7 +107,7 @@ public class PackedTrickTest {
     void isFullWorks(){
         for (int i = 0 ; i != -1; ++i ) {
             if (PackedTrick.isValid(i)) {
-                //TODO tu avais oublié la couleur : size 6 -> 4 (@author : Marin)
+                //TODO [highlight]: tu avais oublié la couleur : size 6 -> 4 (@author : Marin)
                 if((Bits32.extract(i, 0 ,4) < 9) && (Bits32.extract(i, 6 ,4) < 9) &&
                    (Bits32.extract(i, 12,4) < 9) && (Bits32.extract(i, 18,4) < 9)) {
                     assertTrue(PackedTrick.isFull(i));
