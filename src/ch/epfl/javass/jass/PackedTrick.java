@@ -155,20 +155,23 @@ public final class PackedTrick {
         return pkColorToColor(pkColor);
     }
 
+    private static PlayerId playerFromIndex(int playerIndex) {
+        switch (playerIndex) {
+            case 0:
+                return PlayerId.PLAYER_1;
+            case 1:
+                return PlayerId.PLAYER_2;
+            case 2:
+                return PlayerId.PLAYER_3;
+            case 3:
+                return PlayerId.PLAYER_4;
+            default: //unreachable statement (2 bits will always be between 0 and 4).
+                throw new IllegalArgumentException();
+        }
+    }
     public static PlayerId player (int pkTrick) {
         int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
-        switch (playerIndex) {
-        case 0:
-            return PlayerId.PLAYER_1;
-        case 1:
-            return PlayerId.PLAYER_2;
-        case 2:
-            return PlayerId.PLAYER_3;
-        case 3:
-            return PlayerId.PLAYER_4;
-        default: //unreachable statement (2 bits will always be between 0 and 4).
-            throw new IllegalArgumentException();
-        }
+        return playerFromIndex(playerIndex);
     }
 
     public static int index (int pkTrick) {
@@ -241,6 +244,12 @@ public final class PackedTrick {
         total += PackedCard.points(trump, pkTrick & CARD_MASK_4);
 
         return total;
+    }
+
+    private static int winningCardIndex(int pkTrick) {
+
+
+        return 0;
     }
 
     public static PlayerId winningPlayer(int pkTrick) {
