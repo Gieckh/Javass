@@ -88,11 +88,18 @@ public final class PackedTrick {
         return EMPTY | player | color;
     }
 
+    //TODO
     public static int nextEmpty(int pkTrick) {
+        if (isLast(pkTrick)) {
+            return INVALID;
+        }
+
         int winner;
+        //incrementing the index
+        pkTrick += 1 << INDEX_START;
 
 
-        return 0;
+        return pkTrick;
     }
 
     public static boolean isLast(int pkTrick) {
@@ -234,6 +241,7 @@ public final class PackedTrick {
         return 0L;
     }
 
+
     public static int points(int pkTrick) {
         int total = (isLast(pkTrick)) ? 5 : 0;
         Card.Color trump = trump(pkTrick);
@@ -246,13 +254,29 @@ public final class PackedTrick {
         return total;
     }
 
-    private static int winningCardIndex(int pkTrick) {
 
+    private static int winningCardIndex(int pkTrick, Card.Color trump) {
+        int winningCard = pkTrick & CARD_MASK_1;
+        for (int i = 2 ; i <= 4 ; ++i) {
+            if (containsValidCard(pkTrick, i)) { //TODO: on trouve plusieurs fois la carte là
+                int pkCard = card(pkTrick, i-1);
+                if (PackedCard.isBetter(trump, winningCard, pkCard));
+            }
+            else {
+                return winningCard;
+            }
+        }
 
-        return 0;
+        return winningCard;
     }
 
     public static PlayerId winningPlayer(int pkTrick) {
-        return null;
+        Card.Color trump = trump(pkTrick);
+        int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
+
+        int winningPlayer = firstPlayer + winningCardIndex(pkTrick, trump);
+        winningPlayer %= 4;
+
+        return playerFromIndex(winningPlayer);
     }
 }
