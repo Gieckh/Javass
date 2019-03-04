@@ -162,15 +162,13 @@ public final class PackedCardSet {
             i += nbOfTrailingZerosBis;
             pkCardSet >>= nbOfTrailingZerosBis;
         }
-
         return indexToPkCard[i - 1];
     }
 
     //TODO : benchmark which one is the best.
     public static int get2(long pkCardSet, int index) {
-        for(int i = 0 ; i < index ; ++i) {
+        for(int i = 0 ; i < index ; ++i)
             pkCardSet ^= Long.lowestOneBit(pkCardSet);
-        }
 
         return Long.numberOfTrailingZeros(pkCardSet);
     }

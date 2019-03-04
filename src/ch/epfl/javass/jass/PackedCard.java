@@ -35,7 +35,7 @@ public final class PackedCard {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     private PackedCard() {
-        // cuz' we don't want this class instantiated.
+        // cuz' we don't want this class to be instantiated.
     }
 
     /** ============================================== **/
