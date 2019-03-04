@@ -33,17 +33,10 @@ public class PackedTrickTest {
                     int shouldBe0= Bits32.extract(trick, 24, 4);
                     int shouldBePlayer = Bits32.extract(trick, 28, 2);
                     int shouldBeColor = Bits32.extract(trick, 30, 2);
-                    //System.out.println(i);
-                    //System.out.println(shouldBePlayer);
-                   // System.out.println(Integer.toBinaryString(trick) );
                     assertTrue( (shouldBeColor == (j)));
-                    //System.out.println("color");
                     assertTrue((shouldBePlayer == (i)));
-                    //System.out.println("player");
                     assertTrue(shouldBe0 ==0);
-                    //System.out.println("0");
                     assertTrue(shouldBe1 == 0b111111111111111111111111);
-                  //  System.out.println("1");
                 }
         }
     }
@@ -57,7 +50,6 @@ public class PackedTrickTest {
                 for (int k = 0; k< (1 <<29) ; ++k) {               
                        int newTrick = trick|k;
                        if(Bits32.extract(trick, 24, 4) == 8) {
-                           System.out.println("on passe bien par ici ?");
                            assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(newTrick));
                        
                        }
@@ -153,7 +145,6 @@ public class PackedTrickTest {
     void indexWorks(){
         for ( int i = 0 ; i != -1 ; ++i){
             if (PackedTrick.isValid(i)) {
-                System.out.println(Integer.toBinaryString(i));
                 //s'arrete a 111110100001000000011001 : bizarre TODO
                 int index = Bits32.extract(i, 24, 4);
                     assertEquals(index , PackedTrick.index(i));
@@ -175,7 +166,6 @@ public class PackedTrickTest {
         int Card0,Card1,Card2,Card3, trump,points0,points1,points2,points3,pointBonus;
         for ( int i = 0 ; i != -1 ; ++i){
             if (PackedTrick.isValid(i)) {
-                System.out.println(Integer.toBinaryString(i));
                  Card0 = Bits32.extract(i, 0, 6);
                  Card1 = Bits32.extract(i, 6, 6);
                  Card2 = Bits32.extract(i, 12, 6);
