@@ -104,9 +104,11 @@ public class PackedTrickTest {
     void isFullWorks(){
         for (int i = 0 ; i != -1; ++i ) {
             if (PackedTrick.isValid(i)) {
-                if((Bits32.extract(i, 0,6)<9)&&(Bits32.extract(i, 6,6)<9)&&(Bits32.extract(i, 12,6)<9)&&(Bits32.extract(i, 18,6)<9)) {
+                if((Bits32.extract(i, 0 ,6) < 9) && (Bits32.extract(i, 6 ,6) < 9) &&
+                   (Bits32.extract(i, 12,6) < 9) && (Bits32.extract(i, 18,6) < 9)) {
                     assertTrue( PackedTrick.isFull(i));
                 }
+
                 else {
                     assertFalse(PackedTrick.isFull(i));
                 }
