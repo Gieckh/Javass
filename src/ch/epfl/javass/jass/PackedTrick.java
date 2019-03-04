@@ -54,10 +54,10 @@ public final class PackedTrick {
             return false;
         }
 
-        boolean isRank1Valid = ((pkTrick & RANK_MASK_1) >> CARD_1_START) <= MAX_RANK;
-        boolean isRank2Valid = ((pkTrick & RANK_MASK_2) >> CARD_2_START) <= MAX_RANK;
-        boolean isRank3Valid = ((pkTrick & RANK_MASK_3) >> CARD_3_START) <= MAX_RANK;
-        boolean isRank4Valid = ((pkTrick & RANK_MASK_4) >> CARD_4_START) <= MAX_RANK;
+        boolean isRank1Valid = ((pkTrick & RANK_MASK_1) >>> CARD_1_START) <= MAX_RANK;
+        boolean isRank2Valid = ((pkTrick & RANK_MASK_2) >>> CARD_2_START) <= MAX_RANK;
+        boolean isRank3Valid = ((pkTrick & RANK_MASK_3) >>> CARD_3_START) <= MAX_RANK;
+        boolean isRank4Valid = ((pkTrick & RANK_MASK_4) >>> CARD_4_START) <= MAX_RANK;
 
         if (!isRank1Valid) {
             return !isRank2Valid && !isRank3Valid && !isRank4Valid;
