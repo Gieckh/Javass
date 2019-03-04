@@ -90,16 +90,16 @@ public class PackedTrickTest {
     void isEmptyWorks(){
         for (int i = 0 ; i != -1; ++i ) {
             if (PackedTrick.isValid(i)) {
-            if(Bits32.extract(i, 0,24)==0b111111111111111111111111) {
-                assertTrue(PackedTrick.isEmpty(i));
+                if(Bits32.extract(i, 0,24)==0b111111111111111111111111) {
+                    assertTrue(PackedTrick.isEmpty(i));
+                }
+                else {
+                    assertFalse(PackedTrick.isEmpty(i));
+                }
             }
-            else {
-                assertFalse(PackedTrick.isEmpty(i));
-            }
-        }
         }
     }
-    
+    // ce bon vieux marin assume que la carte est correcte ...
     @Test
     void isFullWorks(){
         for (int i = 0 ; i != -1; ++i ) {
@@ -130,7 +130,13 @@ public class PackedTrickTest {
             if (PackedTrick.isValid(i)) {
                 int playerIndex = Bits32.extract(i, 28, 2);
                 for ( int j = 0; j < 4; ++j) {
-                    assertEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
+                    if(j==0) {
+                        assertEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
+                    }
+                    else {
+                        assertNotEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
+
+                    }
     
                 }
             }
@@ -148,13 +154,12 @@ public class PackedTrickTest {
             }
         }
    }
-    
     @Test
     void baseColorWorks(){
         for ( int i = 0 ; i != -1 ; ++i){
             if (PackedTrick.isValid(i)) {
-                Color shouldBeThatColor = Color.toType(Bits32.extract(i, 4, 2)+1);
-                assertEquals(shouldBeThatColor , PackedTrick.baseColor(i));
+                int shouldBeThatColor = Bits32.extract(i, 4, 2);
+                assertEquals(shouldBeThatColor +1, PackedTrick.baseColor(i).type);
             }
         }
    }
@@ -164,6 +169,7 @@ public class PackedTrickTest {
         int Card0,Card1,Card2,Card3, trump,points0,points1,points2,points3,pointBonus;
         for ( int i = 0 ; i != -1 ; ++i){
             if (PackedTrick.isValid(i)) {
+                System.out.println(Integer.toBinaryString(i));
                  Card0 = Bits32.extract(i, 0, 6);
                  Card1 = Bits32.extract(i, 6, 6);
                  Card2 = Bits32.extract(i, 12, 6);
