@@ -156,7 +156,7 @@ public final class PackedTrick {
     }
 
     public static PlayerId player (int pkTrick) {
-        int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_START);
+        int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
         switch (playerIndex) {
         case 0:
             return PlayerId.PLAYER_1;
