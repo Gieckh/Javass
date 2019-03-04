@@ -8,6 +8,7 @@ public final class PackedTrick {
     /** ============================================== **/
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
 
+    private static final int CARD_MASK = 0b111111;
     private static final int CARD_SIZE = 6;
     private static final int CARD_1_START = 0;
     private static final int CARD_2_START = CARD_1_START + CARD_SIZE; //6
@@ -129,7 +130,8 @@ public final class PackedTrick {
 
 
     public static Card.Color trump (int pkTrick) {
-        int firstCard = 0b111111 &
+        int firstCard = pkTrick & CARD_MASK; //Could potentially replace this with a COLOR_MASK
+        return PackedCard.color(firstCard);
     }
 
     public static PlayerId player (int pkTrick) {
