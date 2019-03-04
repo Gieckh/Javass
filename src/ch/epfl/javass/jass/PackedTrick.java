@@ -28,7 +28,7 @@ public final class PackedTrick {
 
     private static final int PLAYER_START = INDEX_START + INDEX_SIZE; //28
     private static final int PLAYER_SIZE = 2;
-    private static final int PLAYER_SHIFT = -1;
+    private static final int PLAYER_SHIFT = 1;
 
     private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE; //30
     private static final int TRUMP_SIZE = 2;
@@ -103,16 +103,16 @@ public final class PackedTrick {
 
     private static boolean containsValidCard(int pkTrick, int cardNo) {
         switch(cardNo) {
-        case 1:
-            return ((RANK_MASK_1 & pkTrick) != RANK_MASK_1);
-        case 2:
-            return (((RANK_MASK_2 & pkTrick)) != RANK_MASK_2);
-        case 3:
-            return (((RANK_MASK_3 & pkTrick)) != RANK_MASK_3);
-        case 4:
-            return (((RANK_MASK_4 & pkTrick)) != RANK_MASK_4);
-        default:
-            throw new IllegalArgumentException();
+            case 1:
+                return ((RANK_MASK_1 & pkTrick) != RANK_MASK_1);
+            case 2:
+                return (((RANK_MASK_2 & pkTrick)) != RANK_MASK_2);
+            case 3:
+                return (((RANK_MASK_3 & pkTrick)) != RANK_MASK_3);
+            case 4:
+                return (((RANK_MASK_4 & pkTrick)) != RANK_MASK_4);
+            default:
+                throw new IllegalArgumentException();
         }
     }
     //TODO: better?
@@ -135,7 +135,19 @@ public final class PackedTrick {
     }
 
     public static PlayerId player (int pkTrick) {
-        return null;
+        int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_START) + PLAYER_SHIFT;
+        switch (playerIndex) {
+            case 1:
+                return PlayerId.PLAYER_1;
+            case 2:
+                return PlayerId.PLAYER_2;
+            case 3:
+                return PlayerId.PLAYER_3;
+            case 4:
+                return PlayerId.PLAYER_4;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public static int index (int pkTrick) {

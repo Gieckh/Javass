@@ -21,7 +21,6 @@ public enum PlayerId {
             Collections.unmodifiableList(Arrays.asList(values()));
 
 
-    // TODO : inutile pour le moment ( et pas demandé) (?? @Marin)
     PlayerId(int type) {
         this.type = type;
     }
