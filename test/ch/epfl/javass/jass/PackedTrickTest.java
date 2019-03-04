@@ -22,22 +22,22 @@ import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.TeamId;
 
 public class PackedTrickTest {
-    //reussi
+    //reussi, pourtant ne reussit plus ... , quelque chose ne tourne pas rond
     @Test
     void firstEmptyWorks() {
-        for(int i = 0; i<4; ++i) {
-                for (int j = 0; j<4; ++j) {
+        for(int j = 0; j<4; ++j) {
+                for (int i = 0; i<4; ++i) {
                     int trick =  PackedTrick.firstEmpty(Color.ALL.get(j), PlayerId.ALL.get(i));
                     int shouldBe1= Bits32.extract(trick, 0, 24);
                     int shouldBe0= Bits32.extract(trick, 24, 4);
                     int shouldBePlayer = Bits32.extract(trick, 28, 2);
                     int shouldBeColor = Bits32.extract(trick, 30, 2);
-                    //System.out.println(i);
-                    //System.out.println(shouldBeColor);
-                    //System.out.println(Integer.toBinaryString(trick) );
+                    System.out.println(i);
+                    System.out.println(shouldBePlayer);
+                    System.out.println(Integer.toBinaryString(trick) );
                     assertTrue( (shouldBeColor == (j)));
                     //System.out.println("color");
-                    assertTrue(shouldBePlayer == (i));
+                    assertTrue((shouldBePlayer == (i)));
                     //System.out.println("player");
                     assertTrue(shouldBe0 ==0);
                     //System.out.println("0");
@@ -74,15 +74,15 @@ public class PackedTrickTest {
   
     @Test
     void isLastWorks(){
-        for (int i = 0 ; i< (133); ++i ) {
+        for (int i = 0 ; i != -1; ++i ) {
             if (isValid(i)) {
-            if(Bits32.extract(i, 24,4)==8) {
-                assertEquals(true, PackedTrick.isLast(i));
+                if(Bits32.extract(i, 24,4)==8) {
+                    assertEquals(true, PackedTrick.isLast(i));
+                }
+                else {
+                    assertEquals(false, PackedTrick.isLast(i));
+                }
             }
-            else {
-                assertEquals(false, PackedTrick.isLast(i));
-            }
-        }
         }
     }
     
@@ -104,13 +104,13 @@ public class PackedTrickTest {
     void isFullWorks(){
         for (int i = 0 ; i != -1; ++i ) {
             if (isValid(i)) {
-            if((Bits32.extract(i, 0,6)!=0)&&(Bits32.extract(i, 6,6)!=0)&&(Bits32.extract(i, 12,6)!=0)&&(Bits32.extract(i, 18,6)!=0)) {
-                assertEquals(true, PackedTrick.isFull(i));
+                if((Bits32.extract(i, 0,6)<9)&&(Bits32.extract(i, 6,6)<9)&&(Bits32.extract(i, 12,6)<9)&&(Bits32.extract(i, 18,6)<9)) {
+                    assertTrue( PackedTrick.isFull(i));
+                }
+                else {
+                    assertFalse(PackedTrick.isFull(i));
+                }
             }
-            else {
-                assertEquals(false, PackedTrick.isFull(i));
-            }
-        }
         }
     }
     
@@ -128,12 +128,12 @@ public class PackedTrickTest {
     void playerWorks(){
         for ( int i = 0 ; i != -1 ; ++i){
             if (isValid(i)) {
-            int playerIndex = Bits32.extract(i, 28, 2);
-            for ( int j = 0; j < 4; ++j) {
-                assertEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
-
+                int playerIndex = Bits32.extract(i, 28, 2);
+                for ( int j = 0; j < 4; ++j) {
+                    assertEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
+    
+                }
             }
-        }
         }
     }
     
@@ -153,9 +153,9 @@ public class PackedTrickTest {
     void baseColorWorks(){
         for ( int i = 0 ; i != -1 ; ++i){
             if (isValid(i)) {
-            int shouldBeThatColor = Bits32.extract(i, 0, 6);
-                assertEquals(shouldBeThatColor , PackedTrick.baseColor(i));
-        }
+                int shouldBeThatColor = Bits32.extract(i, 30, 2);
+                    assertEquals(shouldBeThatColor , PackedTrick.baseColor(i));
+            }
         }
    }
     
