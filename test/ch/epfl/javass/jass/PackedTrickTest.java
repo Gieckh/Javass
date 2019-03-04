@@ -34,15 +34,15 @@ public class PackedTrickTest {
                     int shouldBeColor = Bits32.extract(trick, 30, 2);
                     //System.out.println(i);
                     //System.out.println(shouldBeColor);
-                    System.out.println(Integer.toBinaryString(trick) );
+                    //System.out.println(Integer.toBinaryString(trick) );
                     assertTrue( (shouldBeColor == (j)));
-                    System.out.println("color");
+                    //System.out.println("color");
                     assertTrue(shouldBePlayer == (i));
-                    System.out.println("player");
+                    //System.out.println("player");
                     assertTrue(shouldBe0 ==0);
-                    System.out.println("0");
+                    //System.out.println("0");
                     assertTrue(shouldBe1 == 0b111111111111111111111111);
-                    System.out.println("1");
+                  //  System.out.println("1");
                 }
         }
     }
@@ -58,8 +58,9 @@ public class PackedTrickTest {
                    int nextTrick = PackedTrick.nextEmpty(newTrick);
                    assertEquals(Bits32.extract(nextTrick, 0, 24), 0);
                    assertEquals(i, Bits32.extract(nextTrick, 30, 2));
-                   assertEquals(PackedTrick.winning, Bits32.extract(nextTrick, 28, 2));
-                    }
+                   assertEquals(PackedTrick.winningPlayer(nextTrick), Bits32.extract(nextTrick, 28, 2));
+                   assertEquals(Bits32.extract(trick, 24, 4) + 1 , Bits32.extract(nextTrick, 24, 4));
+                }
                 }
             }
         }
