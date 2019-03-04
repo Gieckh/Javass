@@ -77,10 +77,10 @@ public class PackedTrickTest {
         for (int i = 0 ; i != -1; ++i ) {
             if (isValid(i)) {
                 if(Bits32.extract(i, 24,4)==8) {
-                    assertEquals(true, PackedTrick.isLast(i));
+                    assertTrue(PackedTrick.isLast(i));
                 }
                 else {
-                    assertEquals(false, PackedTrick.isLast(i));
+                    assertFalse(PackedTrick.isLast(i));
                 }
             }
         }
@@ -91,10 +91,10 @@ public class PackedTrickTest {
         for (int i = 0 ; i != -1; ++i ) {
             if (isValid(i)) {
             if(Bits32.extract(i, 0,24)==0b111111111111111111111111) {
-                assertEquals(true, PackedTrick.isEmpty(i));
+                assertTrue(PackedTrick.isEmpty(i));
             }
             else {
-                assertEquals(false, PackedTrick.isEmpty(i));
+                assertFalse(PackedTrick.isEmpty(i));
             }
         }
         }

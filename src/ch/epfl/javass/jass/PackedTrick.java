@@ -1,7 +1,7 @@
 package ch.epfl.javass.jass;
 
-import ch.epfl.javass.bits.Bits32;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
+        import ch.epfl.javass.bits.Bits32;
+        import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 
 public final class PackedTrick {
     /** ============================================== **/
@@ -40,9 +40,9 @@ public final class PackedTrick {
     private static final int TRUMP_SHIFT = -1;
 
     private static final int EMPTY  = (PackedCard.INVALID << CARD_1_START) |
-                                      (PackedCard.INVALID << CARD_2_START) |
-                                      (PackedCard.INVALID << CARD_3_START) |
-                                      (PackedCard.INVALID << CARD_4_START);
+            (PackedCard.INVALID << CARD_2_START) |
+            (PackedCard.INVALID << CARD_3_START) |
+            (PackedCard.INVALID << CARD_4_START);
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -110,16 +110,16 @@ public final class PackedTrick {
     //TODO: not a separate method, cuz it does a copy...
     private static boolean containsValidCard(int pkTrick, int cardNo) {
         switch(cardNo) {
-            case 1:
-                return ((RANK_MASK_1 & pkTrick) != RANK_MASK_1);
-            case 2:
-                return (((RANK_MASK_2 & pkTrick)) != RANK_MASK_2);
-            case 3:
-                return (((RANK_MASK_3 & pkTrick)) != RANK_MASK_3);
-            case 4:
-                return (((RANK_MASK_4 & pkTrick)) != RANK_MASK_4);
-            default:
-                throw new IllegalArgumentException();
+        case 1:
+            return ((RANK_MASK_1 & pkTrick) != RANK_MASK_1);
+        case 2:
+            return (((RANK_MASK_2 & pkTrick)) != RANK_MASK_2);
+        case 3:
+            return (((RANK_MASK_3 & pkTrick)) != RANK_MASK_3);
+        case 4:
+            return (((RANK_MASK_4 & pkTrick)) != RANK_MASK_4);
+        default:
+            throw new IllegalArgumentException();
         }
     }
     //TODO: better?
@@ -158,16 +158,16 @@ public final class PackedTrick {
     public static PlayerId player (int pkTrick) {
         int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_START) + PLAYER_SHIFT;
         switch (playerIndex) {
-            case 1:
-                return PlayerId.PLAYER_1;
-            case 2:
-                return PlayerId.PLAYER_2;
-            case 3:
-                return PlayerId.PLAYER_3;
-            case 4:
-                return PlayerId.PLAYER_4;
-            default: //unreachable statement (2 bits will always be between 0 and 4).
-                throw new IllegalArgumentException();
+        case 1:
+            return PlayerId.PLAYER_1;
+        case 2:
+            return PlayerId.PLAYER_2;
+        case 3:
+            return PlayerId.PLAYER_3;
+        case 4:
+            return PlayerId.PLAYER_4;
+        default: //unreachable statement (2 bits will always be between 0 and 4).
+            throw new IllegalArgumentException();
         }
     }
 
@@ -181,16 +181,16 @@ public final class PackedTrick {
         assert (!isEmpty(pkTrick));
 
         switch(index) {
-            case 0:
-                return pkTrick & CARD_MASK_1;
-            case 1:
-                return (pkTrick & CARD_MASK_2) >>> CARD_2_START;
-            case 2:
-                return (pkTrick & CARD_MASK_3) >>> CARD_3_START;
-            case 3:
-                return (pkTrick & CARD_MASK_4) >>> CARD_4_START;
-            default:
-                throw new IllegalArgumentException();
+        case 0:
+            return pkTrick & CARD_MASK_1;
+        case 1:
+            return (pkTrick & CARD_MASK_2) >>> CARD_2_START;
+        case 2:
+            return (pkTrick & CARD_MASK_3) >>> CARD_3_START;
+        case 3:
+            return (pkTrick & CARD_MASK_4) >>> CARD_4_START;
+        default:
+            throw new IllegalArgumentException();
         }
     }
 
