@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.sun.javafx.fxml.expression.BinaryExpression;
 
+import ch.epfl.javass.jass.Card.Color;
+
 public class test {
     public static void main(String[] args) {
         /*List<Integer> l1 = new ArrayList<>();
@@ -28,7 +30,13 @@ public class test {
         System.out.println("     l1 : " + l1);
         System.out.println("subL1_1 : " + subL1_1);
         */
-        
-        System.out.println(0b111110100001000000011001);
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.SPADE, PlayerId.PLAYER_1)));
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.SPADE, PlayerId.PLAYER_2)));
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.SPADE, PlayerId.PLAYER_3)));
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.SPADE, PlayerId.PLAYER_4)));
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_1)));
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_2)));
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_3)));
+        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_4)));
     }
 }

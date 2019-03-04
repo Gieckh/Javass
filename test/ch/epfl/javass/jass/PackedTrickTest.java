@@ -153,8 +153,8 @@ public class PackedTrickTest {
     void baseColorWorks(){
         for ( int i = 0 ; i != -1 ; ++i){
             if (isValid(i)) {
-                int shouldBeThatColor = Bits32.extract(i, 30, 2);
-                    assertEquals(shouldBeThatColor , PackedTrick.baseColor(i));
+                int shouldBeThatColor = Bits32.extract(i, 4, 2);
+                    assertEquals(shouldBeThatColor , PackedTrick.baseColor(i).type);
             }
         }
    }
