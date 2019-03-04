@@ -1,6 +1,7 @@
 package ch.epfl.javass.jass;
 
 import ch.epfl.javass.bits.Bits32;
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 
 public final class PackedTrick {
     /** ============================================== **/
@@ -133,10 +134,24 @@ public final class PackedTrick {
         return size;
     }
 
-
+    //not using bits32 since it re-extracts.
+    private static Card.Color pkColorToColor(int pkColor) {
+        switch (pkColor) {
+        case 0:
+            return Card.Color.SPADE;
+        case 1:
+            return Card.Color.HEART;
+        case 2:
+            return Card.Color.DIAMOND;
+        case 3:
+            return Card.Color.CLUB;
+        default:
+            throw new IllegalArgumentException();
+        }
+    }
     public static Card.Color trump (int pkTrick) {
-        int firstCard = pkTrick & CARD_MASK_1;
-        return PackedCard.color(firstCard);
+        int pkColor = Bits32.extract(pkTrick, TRUMP_START, TRUMP_START);
+        return pkColorToColor(pkColor);
     }
 
     public static PlayerId player (int pkTrick) {
@@ -150,7 +165,7 @@ public final class PackedTrick {
                 return PlayerId.PLAYER_3;
             case 4:
                 return PlayerId.PLAYER_4;
-            default:
+            default: //unreachable statement (2 bits will always be between 0 and 4).
                 throw new IllegalArgumentException();
         }
     }
@@ -162,6 +177,7 @@ public final class PackedTrick {
     //assuming the card is indeed there.
     public static int card (int pkTrick, int index) {
         assert (0 <= index  &&  index <= 3);
+        assert (!isEmpty(pkTrick));
 
         switch(index) {
             case 0:
@@ -180,6 +196,7 @@ public final class PackedTrick {
     //assuming not full.
     public static int withAddedCard(int pkTrick, int pkCard) {
         assert (isValid(pkTrick));
+        assert (!isFull(pkTrick));
 
         if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) {
             return (pkTrick & (~CARD_MASK_1)) | pkCard;
@@ -199,7 +216,9 @@ public final class PackedTrick {
     public static Card.Color baseColor(int pkTrick) {
         assert (isValid(pkTrick));
 
-        return null;
+        //cuz i dont want to re-extract.
+        int firstCardColor = pkTrick & 0b110000;
+        return pkColorToColor(firstCardColor);
     }
 
     public static int points(int pkTrick) {
