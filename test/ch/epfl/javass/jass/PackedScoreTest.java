@@ -45,10 +45,6 @@ class PackedScoreTest {
         int k1Step = rng.nextInt(20, 150);
         int k2Step = rng.nextInt(20, 150);
 
-        System.out.println("j1Step : " + j1Step);
-        System.out.println("j2Step : " + j2Step);
-        System.out.println("k1Step : " + k1Step);
-        System.out.println("k2Step : " + k2Step);
 
         for (int i1 = 0 ; i1 <= MAX_TRICKS_PER_TURN ; ++i1) {
             for (int j1 = 0 ; j1 <= MAX_POINTS_PER_TURN ; j1+=j1Step) {
@@ -87,11 +83,6 @@ class PackedScoreTest {
         int i2Step = rng.nextInt(2, MAX_TRICKS_PER_TURN + 1);
         int k1Step = rng.nextInt(200, 1000);
         int k2Step = rng.nextInt(180, 1000);
-
-        System.out.println("i1Step : " + i1Step);
-        System.out.println("i2Step : " + i2Step);
-        System.out.println("k1Step : " + k1Step);
-        System.out.println("k2Step : " + k2Step);
 
         for (int i1 = 0 ; i1 <= MAX_TRICKS_PER_TURN ; i1 += i1Step) {
             for (int j1 = 0 ; j1 <= MAX_POINTS_PER_TURN ; ++j1) {
