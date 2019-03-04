@@ -25,6 +25,7 @@ public final class Card {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
+
     /**
      * @brief PRIVATE constructor of the class card. Invoked by method //TODO: "invoked" ?
      *        "of(Color c, Rank r)" and "ofPacked(int packed)".

@@ -6,6 +6,9 @@ public final class PackedTrick {
     /** ============================================== **/
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
 
+    private static final int PLAYER_SHIFT = -1;
+    private static final int COLOR_SHIFT  = -1;
+
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
@@ -22,6 +25,11 @@ public final class PackedTrick {
     }
 
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
+        int player = firstPlayer.type + PLAYER_SHIFT;
+        int color  = trump.type + COLOR_SHIFT;
+
+
+
         return 0;
     }
 
@@ -65,11 +73,7 @@ public final class PackedTrick {
         return 0;
     }
 
-    public static Card.Color baseColor() {
-        return null;
-    }
-
-    public static CardSet playableCards(CardSet hand) {
+    public static Card.Color baseColor(int pkTrick) {
         return null;
     }
 
