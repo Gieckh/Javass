@@ -5,7 +5,6 @@ public final class PackedTrick {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
-    private static final int EMPTY  = 0b00000000_00000000_00000000_00000000;
 
     private static final int CARD_SIZE = 6;
     private static final int CARD_1_START = CARD_SIZE;
@@ -23,6 +22,12 @@ public final class PackedTrick {
     private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE;
     private static final int TRUMP_SIZE = 2;
     private static final int TRUMP_SHIFT = -1;
+
+
+    private static final int EMPTY  = (PackedCard.INVALID << CARD_1_START) |
+                                      (PackedCard.INVALID << CARD_2_START) |
+                                      (PackedCard.INVALID << CARD_3_START) |
+                                      (PackedCard.INVALID << CARD_4_START);
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -47,6 +52,9 @@ public final class PackedTrick {
     }
 
     public static int nextEmpty(int pkTrick) {
+        int winner;
+
+
         return 0;
     }
 
