@@ -5,6 +5,7 @@ public final class PackedTrick {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
+    private static final int EMPTY  = 0b00000000_00000000_00000000_00000000;
 
     private static final int CARD_SIZE = 6;
     private static final int CARD_1_START = CARD_SIZE;
@@ -15,17 +16,19 @@ public final class PackedTrick {
     private static final int INDEX_START = CARD_4_START + CARD_SIZE;
     private static final int INDEX_SIZE = 4;
 
-    private static final int PLAYER_SHIFT = -1;
+    private static final int PLAYER_START = INDEX_START + INDEX_SIZE;
     private static final int PLAYER_SIZE = 2;
+    private static final int PLAYER_SHIFT = -1;
 
-    private static final int TRUMP_SHIFT = -1;
+    private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE;
     private static final int TRUMP_SIZE = 2;
+    private static final int TRUMP_SHIFT = -1;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     private PackedTrick() {
-
+        // not to be instantiated
     }
 
     /** ============================================== **/
@@ -37,12 +40,10 @@ public final class PackedTrick {
     }
 
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
-        int player = firstPlayer.type + PLAYER_SHIFT;
-        int color  = trump.type + TRUMP_SHIFT;
+        int player = (firstPlayer.type + PLAYER_SHIFT) << PLAYER_START;
+        int color  = (trump.type + TRUMP_SHIFT) << TRUMP_START;
 
-
-
-        return 0;
+        return EMPTY | player | color;
     }
 
     public static int nextEmpty(int pkTrick) {
