@@ -15,7 +15,8 @@ public final class PackedTrick {
     private static final int CARD_3_START = CARD_2_START + CARD_SIZE; //12
     private static final int CARD_4_START = CARD_3_START + CARD_SIZE; //18
     private static final int ALL_CARDS_SIZE = 4 * CARD_SIZE;
-
+    private static final int CARD_COLOR_START = 4;
+    
     private static final int CARD_MASK_1 = 0b111111;
     private static final int CARD_MASK_2 = CARD_MASK_1 << CARD_SIZE;
     private static final int CARD_MASK_3 = CARD_MASK_2 << CARD_SIZE;
@@ -77,6 +78,9 @@ public final class PackedTrick {
         if (!isRank3Valid) {
             return !isRank4Valid;
         }
+        //TODO WHAT IF ONLY RANK 4 IS NOT VALID ? 
+        // this is said valid : 001001_000000_000000_000000
+        // althougth it is not : 1001 -> assert error
 
         return true;
     }
@@ -102,7 +106,7 @@ public final class PackedTrick {
     public static boolean isEmpty (int pkTrick) {
         return (pkTrick & EMPTY) == EMPTY;
     }
-
+// TODO : commentaire d'antoine : du coup mon test fail
     public static boolean isFull(int pkTrick) { //Assuming the card is valid
         return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
     }
@@ -218,7 +222,7 @@ public final class PackedTrick {
         assert (isValid(pkTrick));
 
         //cuz i dont want to re-extract.
-        int firstCardColor = (pkTrick & 0b110000)>>4;
+        int firstCardColor = (pkTrick & 0b110000)>>CARD_COLOR_START;
         return pkColorToColor(firstCardColor);
     }
 
@@ -234,11 +238,10 @@ public final class PackedTrick {
     public static int points(int pkTrick) {
         int total = (isLast(pkTrick)) ? 5 : 0;
         Card.Color trump = trump(pkTrick);
-
         total += PackedCard.points(trump, pkTrick & CARD_MASK_1);
-        total += PackedCard.points(trump, pkTrick & CARD_MASK_2);
-        total += PackedCard.points(trump, pkTrick & CARD_MASK_3);
-        total += PackedCard.points(trump, pkTrick & CARD_MASK_4);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_2)>>CARD_2_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_3)>>CARD_3_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_4)>>CARD_4_START);
 
         return total;
     }
