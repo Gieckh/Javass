@@ -93,7 +93,7 @@ public final class PackedTrick {
     }
 
     public static boolean isEmpty (int pkTrick) {
-        return (pkTrick & ALL_CARDS_SIZE) == EMPTY;
+        return (pkTrick & EMPTY) == EMPTY;
     }
 
     public static boolean isFull(int pkTrick) { //Assuming the card is valid
@@ -114,6 +114,7 @@ public final class PackedTrick {
             throw new IllegalArgumentException();
         }
     }
+    //TODO: better?
     public static int size(int pkTrick) {
         int size = 0;
         for (int cardNo = 1 ; cardNo <= 4 ; ++cardNo) {
@@ -126,8 +127,9 @@ public final class PackedTrick {
         return size;
     }
 
+
     public static Card.Color trump (int pkTrick) {
-        return null;
+        int firstCard = 0b111111 &
     }
 
     public static PlayerId player (int pkTrick) {
