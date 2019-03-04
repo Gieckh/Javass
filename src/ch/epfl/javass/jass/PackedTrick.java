@@ -94,12 +94,15 @@ public final class PackedTrick {
             return INVALID;
         }
 
-        int winner;
         //incrementing the index
         pkTrick += 1 << INDEX_START;
 
+        //TODO better
+        int winningPlayer = winningPlayer(pkTrick).type + PLAYER_SHIFT;
+        pkTrick &= Bits32.mask(PLAYER_START, PLAYER_SIZE);
+        pkTrick |= winningPlayer;
 
-        return pkTrick;
+        return pkTrick | EMPTY;
     }
 
     public static boolean isLast(int pkTrick) {
@@ -162,6 +165,7 @@ public final class PackedTrick {
         return pkColorToColor(pkColor);
     }
 
+    //Where "index" ranges from 0 to 3
     private static PlayerId playerFromIndex(int playerIndex) {
         switch (playerIndex) {
             case 0:
