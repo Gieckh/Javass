@@ -14,16 +14,16 @@ public class test {
             l2.add(i);
         }
 
-        List<Integer> subL1 = l1.subList(0, 3);
-        List<Integer> subL2 = l1.subList(0, 3);
+        List<Integer> subL1_1 = l1.subList(0, 3);
+        List<Integer> subL1_2 = l1.subList(0, 3);
 
-        System.out.println("      l1 == l2 ? : " + (l1 == l2));
-        System.out.println("subL1 == subL2 ? : " + (subL1 == subL2));
+        System.out.println("     l1 == l2 ? : " + (l1 == l2));
+        System.out.println("subL1_1 == subL1_2 ? : " + (subL1_1 == subL1_2));
         System.out.println();
-        System.out.println("      l1 == l1 ? : " + (l1 == l1));
-        System.out.println("subL1 == subL1 ? : " + (subL1 == subL1));
+        System.out.println("     l1 == l1 ? : " + (l1 == l1));
+        System.out.println("subL1_1 == subL1_1 ? : " + (subL1_1 == subL1_1));
         System.out.println();
-        System.out.println("   l1 : " + l1);
-        System.out.println("subL1 : " + subL1);
+        System.out.println("     l1 : " + l1);
+        System.out.println("subL1_1 : " + subL1_1);
     }
 }

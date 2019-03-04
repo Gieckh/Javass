@@ -3,11 +3,7 @@ import ch.epfl.javass.bits.Bits64;
 
 import static ch.epfl.javass.bits.Bits64.extract;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.StringJoiner;
-
-import java.util.Hashtable;
+import java.util.*;
 
 //TODO: access rights
 
@@ -406,7 +402,7 @@ public final class PackedCardSet {
         };
     }
 
-    /** TODO
+    /** TODO TESTESTESTESTEST
      * @brief
      *
      * @return
@@ -434,7 +430,7 @@ public final class PackedCardSet {
      * @author - Marin Nguyen (288260)
      */
     private static Map<Integer, Integer> pkCardToIndex() {
-        Hashtable<Integer, Integer> hash = new Hashtable<Integer, Integer>();
+        HashMap<Integer, Integer> hash = new HashMap<>(ranks.length * COLOR_SIZE);
         for (int j = 0 ; j < colors.length ; ++j) {
             for (int i = 0 ; i < ranks.length ; ++i) {
                 
@@ -451,10 +447,11 @@ public final class PackedCardSet {
      *
      * @return
      *
+     * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
      */
     private static Map<Integer, Long> pkCardsToTrumpAbove() {
-        Hashtable<Integer, Long> hash = new Hashtable<Integer, Long>();
+        HashMap<Integer, Long> hash = new HashMap<>(ranks.length * COLOR_SIZE);
         Card.Rank[] trumpRanks = getAllRanksInTrumpCase();
 
         for (Card.Color c : colors) {
