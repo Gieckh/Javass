@@ -96,12 +96,34 @@ public final class PackedTrick {
         return (pkTrick & ALL_CARDS_SIZE) == EMPTY;
     }
 
-    public static boolean isFull(int pkTrick) {
-        return false;
+    public static boolean isFull(int pkTrick) { //Assuming the card is valid
+        return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
     }
 
+    private static boolean containsValidCard(int pkTrick, int cardNo) {
+        switch(cardNo) {
+        case 1:
+            return ((RANK_MASK_1 & pkTrick) != RANK_MASK_1);
+        case 2:
+            return (((RANK_MASK_2 & pkTrick)) != RANK_MASK_2);
+        case 3:
+            return (((RANK_MASK_3 & pkTrick)) != RANK_MASK_3);
+        case 4:
+            return (((RANK_MASK_4 & pkTrick)) != RANK_MASK_4);
+        default:
+            throw new IllegalArgumentException();
+        }
+    }
     public static int size(int pkTrick) {
-        return 0;
+        int size = 0;
+        for (int cardNo = 1 ; cardNo <= 4 ; ++cardNo) {
+            if (containsValidCard(pkTrick, cardNo))
+                size++;
+            else
+                return size;
+        }
+
+        return size;
     }
 
     public static Card.Color trump (int pkTrick) {
