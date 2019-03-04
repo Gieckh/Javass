@@ -28,18 +28,27 @@ public class PackedTrickTest {
         for(int i = 0; i<4; ++i) {
                 for (int j = 0; j<4; ++j) {
                     int trick =  PackedTrick.firstEmpty(Color.ALL.get(j), PlayerId.ALL.get(i));
-                    int shouldBeZero= Bits32.extract(trick, 0, 28);
+                    int shouldBe1= Bits32.extract(trick, 0, 24);
+                    int shouldBe0= Bits32.extract(trick, 24, 4);
                     int shouldBePlayer = Bits32.extract(trick, 28, 2);
                     int shouldBeColor = Bits32.extract(trick, 30, 2);
                     //System.out.println(i);
                     //System.out.println(shouldBeColor);
-                    System.out.println(trick);
-                    assertTrue( (shouldBeColor == j) && (shouldBePlayer == i) && (shouldBeZero == 0) );
+                    System.out.println(Integer.toBinaryString(trick) );
+                    assertTrue( (shouldBeColor == (j)));
+                    System.out.println("color");
+                    assertTrue(shouldBePlayer == (i));
+                    System.out.println("player");
+                    assertTrue(shouldBe0 ==0);
+                    System.out.println("0");
+                    assertTrue(shouldBe1 == 0b111111111111111111111111);
+                    System.out.println("1");
                 }
         }
     }
+
     
-     
+  
     void nextEmptyWorks() {
         for(int i =0; i < 4;++i) {
             for (int j=0; j<4; ++j) {
@@ -47,11 +56,13 @@ public class PackedTrickTest {
                 for (int k = 0; k< (1 <<28) ; ++k) {
                    int newTrick = trick|k;
                    int nextTrick = PackedTrick.nextEmpty(newTrick);
-                   assertEquals(Bits32.extract(nextTrick, 0, 24), actual);
+                   assertEquals(Bits32.extract(nextTrick, 0, 24), 0);
+                   assertEquals(i, Bits32.extract(nextTrick, 30, 2));
+                   assertEquals(PackedTrick.winning, Bits32.extract(nextTrick, 28, 2));
                     }
                 }
             }
         }
     }
     
-}
+
