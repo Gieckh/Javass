@@ -116,7 +116,7 @@ public class PackedTrickTest {
     
     @Test
     void trumpWorks(){
-        for ( int i = 0 ; i != -1 ; ++i){
+        for (int i = 0 ; i != -1 ; ++i){
             if (isValid(i)) {
                 int colorIndex = Bits32.extract(i, 30, 2);
                 assertEquals(Color.ALL.get(colorIndex), PackedTrick.trump(i));

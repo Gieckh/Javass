@@ -151,7 +151,7 @@ public final class PackedTrick {
         }
     }
     public static Card.Color trump (int pkTrick) {
-        int pkColor = Bits32.extract(pkTrick, TRUMP_START, TRUMP_START);
+        int pkColor = Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE);
         return pkColorToColor(pkColor);
     }
 
