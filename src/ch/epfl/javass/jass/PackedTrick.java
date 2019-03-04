@@ -9,7 +9,7 @@ public final class PackedTrick {
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
 
     private static final int CARD_SIZE = 6;
-    private static final int CARD_1_START = CARD_SIZE;
+    private static final int CARD_1_START = 0;
     private static final int CARD_2_START = CARD_1_START + CARD_SIZE;
     private static final int CARD_3_START = CARD_2_START + CARD_SIZE;
     private static final int CARD_4_START = CARD_3_START + CARD_SIZE;

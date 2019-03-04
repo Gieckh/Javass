@@ -17,7 +17,7 @@ public final class PackedCard {
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
-    public final static int INVALID = 111111;
+    public final static int INVALID = 0b111111;
     //TODO: public or private.
     private final static int MAX_RANK = 8;
     private final static int CODED_RANK_START = 0;
