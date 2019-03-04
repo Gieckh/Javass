@@ -1,24 +1,29 @@
 package ch.epfl.javass.jass;
 
-
-import ch.epfl.javass.jass.TeamId;
-
-import java.util.Map;
-
-import static ch.epfl.javass.jass.TeamId.TEAM_1;
-import static ch.epfl.javass.jass.TeamId.TEAM_2;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class test {
     public static void main(String[] args) {
-        long s = PackedScore.INITIAL;
-        System.out.println(PackedScore.toString(s));
-        for (int i = 0; i < Jass.TRICKS_PER_TURN; ++i) {
-            int p = (i == 0 ? 13 : 18);
-            TeamId w = (i % 2 == 0 ? TEAM_1 : TEAM_2);
-            s = PackedScore.withAdditionalTrick(s, w, p);
-            System.out.println(PackedScore.toString(s));
+        List<Integer> l1 = new ArrayList<>();
+        List<Integer> l2 = new ArrayList<>();
+
+        for (int i = 0 ; i < 8 ; ++i) {
+            l1.add(i);
+            l2.add(i);
         }
-        s = PackedScore.nextTurn(s);
-        System.out.println(PackedScore.toString(s));
+
+        List<Integer> subL1 = l1.subList(0, 3);
+        List<Integer> subL2 = l1.subList(0, 3);
+
+        System.out.println("      l1 == l2 ? : " + (l1 == l2));
+        System.out.println("subL1 == subL2 ? : " + (subL1 == subL2));
+        System.out.println();
+        System.out.println("      l1 == l1 ? : " + (l1 == l1));
+        System.out.println("subL1 == subL1 ? : " + (subL1 == subL1));
+        System.out.println();
+        System.out.println("   l1 : " + l1);
+        System.out.println("subL1 : " + subL1);
     }
 }
