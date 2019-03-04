@@ -82,7 +82,10 @@ public final class PackedTrick {
         // this is said valid : 001001_000000_000000_000000
         // althougth it is not : 1001 -> assert error
 
-        return true;
+        // return true; //Si on suppose que les invalides sont de la "bonne forme". END
+
+        // Si on suppose que les invalides peuvent être de n'importe quelle forme //TODO
+        return (isRank4Valid | (pkTrick & RANK_MASK_4) == RANK_MASK_4);
     }
 
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
@@ -116,7 +119,8 @@ public final class PackedTrick {
     public static boolean isEmpty (int pkTrick) {
         return (pkTrick & EMPTY) == EMPTY;
     }
-// TODO : commentaire d'antoine : du coup mon test fail
+
+// TODO : Antoine : du coup mon test fail
     public static boolean isFull(int pkTrick) { //Assuming the card is valid
         return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
     }

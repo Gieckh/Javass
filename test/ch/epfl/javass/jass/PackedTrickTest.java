@@ -21,6 +21,7 @@ import ch.epfl.javass.bits.Bits64;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.TeamId;
 
+//TODO: void isValidWorks()
 public class PackedTrickTest {
     //reussi, pourtant ne reussit plus ... , quelque chose ne tourne pas rond
     @Test
@@ -99,14 +100,16 @@ public class PackedTrickTest {
             }
         }
     }
+
     // ce bon vieux marin assume que la carte est correcte ...
+    // suppose en Français, jeune homme :-) //todo
     @Test
     void isFullWorks(){
         for (int i = 0 ; i != -1; ++i ) {
             if (PackedTrick.isValid(i)) {
                 if((Bits32.extract(i, 0 ,6) < 9) && (Bits32.extract(i, 6 ,6) < 9) &&
                    (Bits32.extract(i, 12,6) < 9) && (Bits32.extract(i, 18,6) < 9)) {
-                    assertTrue( PackedTrick.isFull(i));
+                    assertTrue(PackedTrick.isFull(i));
                 }
 
                 else {
