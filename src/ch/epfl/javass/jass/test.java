@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.sun.javafx.fxml.expression.BinaryExpression;
+
 public class test {
     public static void main(String[] args) {
-        List<Integer> l1 = new ArrayList<>();
+        /*List<Integer> l1 = new ArrayList<>();
         List<Integer> l2 = new ArrayList<>();
 
         for (int i = 0 ; i < 8 ; ++i) {
@@ -25,5 +27,8 @@ public class test {
         System.out.println();
         System.out.println("     l1 : " + l1);
         System.out.println("subL1_1 : " + subL1_1);
+        */
+        
+        System.out.println(0b111110100001000000011001);
     }
 }
