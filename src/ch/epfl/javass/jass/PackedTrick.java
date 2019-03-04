@@ -1,5 +1,7 @@
 package ch.epfl.javass.jass;
 
+import ch.epfl.javass.bits.Bits32;
+
 public final class PackedTrick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -12,8 +14,15 @@ public final class PackedTrick {
     private static final int CARD_3_START = CARD_2_START + CARD_SIZE;
     private static final int CARD_4_START = CARD_3_START + CARD_SIZE;
 
+    private final static int MAX_RANK = 8;
+    private final static int RANK_MASK_1 = 0b001111;
+    private final static int RANK_MASK_2 = RANK_MASK_1 << CARD_SIZE;
+    private final static int RANK_MASK_3 = RANK_MASK_2 << CARD_SIZE;
+    private final static int RANK_MASK_4 = RANK_MASK_3 << CARD_SIZE;
+
     private static final int INDEX_START = CARD_4_START + CARD_SIZE;
     private static final int INDEX_SIZE = 4;
+    private static final int MAX_INDEX = 8;
 
     private static final int PLAYER_START = INDEX_START + INDEX_SIZE;
     private static final int PLAYER_SIZE = 2;
@@ -41,7 +50,28 @@ public final class PackedTrick {
     /** ============================================== **/
 
     public static boolean isValid(int pkTrick) {
-        return false;
+        if (Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE) > MAX_INDEX) {
+            return false;
+        }
+
+        boolean isRank1Valid = ((pkTrick & RANK_MASK_1) >> CARD_1_START) <= MAX_RANK;
+        boolean isRank2Valid = ((pkTrick & RANK_MASK_2) >> CARD_2_START) <= MAX_RANK;
+        boolean isRank3Valid = ((pkTrick & RANK_MASK_3) >> CARD_3_START) <= MAX_RANK;
+        boolean isRank4Valid = ((pkTrick & RANK_MASK_4) >> CARD_4_START) <= MAX_RANK;
+
+        if (!isRank1Valid) {
+            return !isRank2Valid && !isRank3Valid && !isRank4Valid;
+        }
+
+        if (!isRank2Valid) {
+            return !isRank3Valid && !isRank4Valid;
+        }
+
+        if (!isRank3Valid) {
+            return !isRank4Valid;
+        }
+
+        return true;
     }
 
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
