@@ -25,15 +25,32 @@ public class PackedTrickTest {
     
     @Test
     void firstEmptyWorks() {
-        SplittableRandom rng = newRandom();
         for(int i = 0; i<4; ++i) {
                 for (int j = 0; j<4; ++j) {
-                    int set =  PackedTrick.firstEmpty(Color.toType(i), PlayerId.ALL.get(j));
-                    int shouldBeZero= Bits32.extract(set, 0, 28);
-                    int shouldBePlayer = Bits32.extract(set, 28, 2);
-                    int shouldBeColor = Bits32.extract(set, 30, 2);
-                    assertTrue(shouldBeZero==0 && shouldBePlayer == j && shouldBeColor == i);
+                    int trick =  PackedTrick.firstEmpty(Color.ALL.get(i), PlayerId.ALL.get(j));
+                    int shouldBeZero= Bits32.extract(trick, 0, 28);
+                    int shouldBePlayer = Bits32.extract(trick, 28, 2);
+                    int shouldBeColor = Bits32.extract(trick, 30, 2);
+                    assertTrue((shouldBeZero==0) && (shouldBePlayer == j) && (shouldBeColor == i));
                 }
+        }
+    }
+    
+     
+    void nextEmptyWorks() {
+        for(int i =0; i < 4;++i) {
+            for (int j=0; j<4; ++j) {
+                int trick =  PackedTrick.firstEmpty(Color.toType(i), PlayerId.ALL.get(j));
+                for (int k = 0; k < 9; ++k) {
+                    for(int l = 0 ; l <4 ; ++l) {
+                        for ( int m = 0; m < 4 ; ++m) {
+                            for (int n = 0; n<9; ++n) {
+                                
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
