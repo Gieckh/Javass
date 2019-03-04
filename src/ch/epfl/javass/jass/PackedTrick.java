@@ -59,6 +59,7 @@ public final class PackedTrick {
             return false;
         }
 
+        //We suppose the color is always right
         boolean isRank1Valid = ((pkTrick & RANK_MASK_1) >>> CARD_1_START) <= MAX_RANK;
         boolean isRank2Valid = ((pkTrick & RANK_MASK_2) >>> CARD_2_START) <= MAX_RANK;
         boolean isRank3Valid = ((pkTrick & RANK_MASK_3) >>> CARD_3_START) <= MAX_RANK;
@@ -158,6 +159,7 @@ public final class PackedTrick {
         return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE);
     }
 
+    //assuming the card is indeed there.
     public static int card (int pkTrick, int index) {
         switch(index) {
             case 0:
@@ -173,8 +175,21 @@ public final class PackedTrick {
         }
     }
 
+    //assuming not full.
     public static int withAddedCard(int pkTrick, int pkCard) {
-        return 0;
+        if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) {
+            return (pkTrick & (~CARD_MASK_1)) | pkCard;
+        }
+
+        if ((pkTrick & CARD_MASK_2) == CARD_MASK_2) {
+            return (pkTrick & (~CARD_MASK_2)) | (pkCard << CARD_2_START);
+        }
+
+        if ((pkTrick & CARD_MASK_3) == CARD_MASK_3) {
+            return (pkTrick & (~CARD_MASK_3)) | (pkCard << CARD_3_START);
+        }
+
+        return (pkTrick & (~CARD_MASK_4)) | (pkCard << CARD_4_START);
     }
 
     public static Card.Color baseColor(int pkTrick) {
