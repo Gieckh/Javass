@@ -8,13 +8,17 @@ public final class PackedTrick {
     /** ============================================== **/
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
 
-    private static final int CARD_MASK = 0b111111;
     private static final int CARD_SIZE = 6;
     private static final int CARD_1_START = 0;
     private static final int CARD_2_START = CARD_1_START + CARD_SIZE; //6
     private static final int CARD_3_START = CARD_2_START + CARD_SIZE; //12
     private static final int CARD_4_START = CARD_3_START + CARD_SIZE; //18
     private static final int ALL_CARDS_SIZE = 4 * CARD_SIZE;
+
+    private static final int CARD_MASK_1 = 0b111111;
+    private static final int CARD_MASK_2 = CARD_MASK_1 << CARD_SIZE;
+    private static final int CARD_MASK_3 = CARD_MASK_2 << CARD_SIZE;
+    private static final int CARD_MASK_4 = CARD_MASK_3 << CARD_SIZE;
 
     private final static int MAX_RANK = 8;
     private final static int RANK_MASK_1 = 0b001111;
@@ -130,7 +134,7 @@ public final class PackedTrick {
 
 
     public static Card.Color trump (int pkTrick) {
-        int firstCard = pkTrick & CARD_MASK; //Could potentially replace this with a COLOR_MASK
+        int firstCard = pkTrick & CARD_MASK_1;
         return PackedCard.color(firstCard);
     }
 
@@ -154,8 +158,19 @@ public final class PackedTrick {
         return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE);
     }
 
-    public static int card (int pkTrick, int pkCard) {
-        return 0;
+    public static int card (int pkTrick, int index) {
+        switch(index) {
+            case 0:
+                return pkTrick & CARD_MASK_1;
+            case 1:
+                return (pkTrick & CARD_MASK_2) >>> CARD_2_START;
+            case 2:
+                return (pkTrick & CARD_MASK_3) >>> CARD_3_START;
+            case 3:
+                return (pkTrick & CARD_MASK_4) >>> CARD_4_START;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public static int withAddedCard(int pkTrick, int pkCard) {
