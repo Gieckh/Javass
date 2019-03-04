@@ -107,6 +107,7 @@ public final class PackedTrick {
         return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
     }
 
+    //TODO: not a separate method, cuz it does a copy...
     private static boolean containsValidCard(int pkTrick, int cardNo) {
         switch(cardNo) {
             case 1:
@@ -221,8 +222,25 @@ public final class PackedTrick {
         return pkColorToColor(firstCardColor);
     }
 
+    //TODO: the hardest.
+    //assumed not full
+    public static long playableCards(int pkCard, long pkHand) {
+        int trump;
+        int colorPlayed;
+
+        return 0L;
+    }
+
     public static int points(int pkTrick) {
-        return 0;
+        int total = (isLast(pkTrick)) ? 5 : 0;
+        Card.Color trump = trump(pkTrick);
+
+        total += PackedCard.points(trump, pkTrick & CARD_MASK_1);
+        total += PackedCard.points(trump, pkTrick & CARD_MASK_2);
+        total += PackedCard.points(trump, pkTrick & CARD_MASK_3);
+        total += PackedCard.points(trump, pkTrick & CARD_MASK_4);
+
+        return total;
     }
 
     public static PlayerId winningPlayer(int pkTrick) {
