@@ -114,7 +114,6 @@ public class PackedTrickTest {
                 }
 
                 else {
-                    System.out.println("i : " + Integer.toBinaryString(i));
                     assertFalse(PackedTrick.isFull(i));
                 }
             }

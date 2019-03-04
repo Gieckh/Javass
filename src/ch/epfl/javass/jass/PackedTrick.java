@@ -67,12 +67,13 @@ public final class PackedTrick {
         int masked3 = pkTrick & CARD_MASK_3;
         int masked4 = pkTrick & CARD_MASK_4;
 
+
         //TODO: simplify
         //We don't check whether we have the same card 2 times.
-        boolean isRank1Valid = (masked1 & RANK_MASK_1 >>> CARD_1_START) <= MAX_RANK;
-        boolean isRank2Valid = (masked2 & RANK_MASK_2 >>> CARD_2_START) <= MAX_RANK;
-        boolean isRank3Valid = (masked3 & RANK_MASK_3 >>> CARD_3_START) <= MAX_RANK;
-        boolean isRank4Valid = (masked4 & RANK_MASK_4 >>> CARD_4_START) <= MAX_RANK;
+        boolean isRank1Valid = ((masked1 & RANK_MASK_1) >>> CARD_1_START) <= MAX_RANK;
+        boolean isRank2Valid = ((masked2 & RANK_MASK_2) >>> CARD_2_START) <= MAX_RANK;
+        boolean isRank3Valid = ((masked3 & RANK_MASK_3) >>> CARD_3_START) <= MAX_RANK;
+        boolean isRank4Valid = ((masked4 & RANK_MASK_4) >>> CARD_4_START) <= MAX_RANK;
 
         if (!isRank1Valid) {
             return  (masked1 == CARD_MASK_1) && (masked2 == CARD_MASK_2) &&
