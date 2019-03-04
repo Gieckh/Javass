@@ -218,7 +218,7 @@ public final class PackedTrick {
         assert (isValid(pkTrick));
 
         //cuz i dont want to re-extract.
-        int firstCardColor = pkTrick & 0b110000;
+        int firstCardColor = (pkTrick & 0b110000)>>4;
         return pkColorToColor(firstCardColor);
     }
 
