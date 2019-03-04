@@ -90,7 +90,7 @@ public final class PackedTrick {
     }
 
     public static boolean isLast(int pkTrick) {
-        return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE) == MAX_INDEX;
+        return index(pkTrick) == MAX_INDEX;
     }
 
     public static boolean isEmpty (int pkTrick) {
@@ -151,7 +151,7 @@ public final class PackedTrick {
     }
 
     public static int index (int pkTrick) {
-        return 0;
+        return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE);
     }
 
     public static int card (int pkTrick, int pkCard) {
