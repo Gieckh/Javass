@@ -48,22 +48,116 @@ public class PackedTrickTest {
     }
 
     
-  
+  @Test
     void nextEmptyWorks() {
         for(int i =0; i < 4;++i) {
             for (int j=0; j<4; ++j) {
                 int trick =  PackedTrick.firstEmpty(Color.toType(i), PlayerId.ALL.get(j));
-                for (int k = 0; k< (1 <<28) ; ++k) {
-                   int newTrick = trick|k;
-                   int nextTrick = PackedTrick.nextEmpty(newTrick);
-                   assertEquals(Bits32.extract(nextTrick, 0, 24), 0);
-                   assertEquals(i, Bits32.extract(nextTrick, 30, 2));
-                   assertEquals(PackedTrick.winningPlayer(nextTrick), Bits32.extract(nextTrick, 28, 2));
-                   assertEquals(Bits32.extract(trick, 24, 4) + 1 , Bits32.extract(nextTrick, 24, 4));
-                }
+                for (int k = 0; k< (1 <<29) ; ++k) {               
+                       int newTrick = trick|k;
+                       if(Bits32.extract(trick, 24, 4) == 8) {
+                           System.out.println("on passe bien par ici ?");
+                           assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(newTrick));
+                       
+                       }
+                       else {
+                           int nextTrick = PackedTrick.nextEmpty(newTrick);
+                           assertEquals(Bits32.extract(nextTrick, 0, 24), 0);
+                           assertEquals(i, Bits32.extract(nextTrick, 30, 2));
+                           assertEquals(PackedTrick.winningPlayer(nextTrick), Bits32.extract(nextTrick, 28, 2));
+                           assertEquals(Bits32.extract(trick, 24, 4) + 1 , Bits32.extract(nextTrick, 24, 4));
+                    }
                 }
             }
         }
     }
+    @Test
+    void isLastWorks(){
+        for (int i = 0 ; i< (1<<33); ++i ) {
+            if(Bits32.extract(i, 24,4)==8) {
+                assertEquals(true, PackedTrick.isLast(i));
+            }
+            else {
+                assertEquals(false, PackedTrick.isLast(i));
+            }
+        }
+    }
+    
+    @Test
+    void isEmptyWorks(){
+        for (int i = 0 ; i< (1<<33); ++i ) {
+            if(Bits32.extract(i, 0,24)==0) {
+                assertEquals(true, PackedTrick.isEmpty(i));
+            }
+            else {
+                assertEquals(false, PackedTrick.isEmpty(i));
+            }
+        }
+    }
+    
+    @Test
+    void isFullWorks(){
+        for (int i = 0 ; i< (1<<33); ++i ) {
+            if((Bits32.extract(i, 0,6)!=0)&&(Bits32.extract(i, 6,6)!=0)&&(Bits32.extract(i, 12,6)!=0)&&(Bits32.extract(i, 18,6)!=0)) {
+                assertEquals(true, PackedTrick.isFull(i));
+            }
+            else {
+                assertEquals(false, PackedTrick.isFull(i));
+            }
+        }
+    }
+    
+    @Test
+    void trumpWorks(){
+        for ( int i = 0 ; i< (1<<33) ; ++i){
+            int colorIndex = Bits32.extract(i, 30, 2);
+            assertEquals(Color.ALL.get(colorIndex), PackedTrick.trump(i));
+            }
+        }
+    
+    @Test
+    void playerWorks(){
+        for ( int i = 0 ; i< (1<<33) ; ++i){
+            int playerIndex = Bits32.extract(i, 28, 2);
+            for ( int j = 0; j < 4; ++j) {
+                assertEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
+
+            }
+        }
+    }
+    
+    @Test
+    void indexWorks(){
+        for ( int i = 0 ; i< (1<<33) ; ++i){
+            int index = Bits32.extract(i, 24, 4);
+                assertEquals(index , PackedTrick.index(i));
+        }
+   }
+    
+    @Test
+    void indexWorks(){
+        for ( int i = 0 ; i< (1<<33) ; ++i){
+            int index = Bits32.extract(i, 24, 4);
+                assertEquals(index , PackedTrick.index(i));
+        }
+   }
+
+
+
+
+
+
+
+
+}
+    
+        
+
+    
+    
+    
+  
+    
+ 
     
 
