@@ -6,8 +6,16 @@ public final class PackedTrick {
     /** ============================================== **/
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
 
+    private static final int CARD_SIZE = 6;
+    private static final int CARD_1_START = CARD_SIZE;
+    private static final int CARD_2_START = CARD_1_START + CARD_1_START;
+
+
     private static final int PLAYER_SHIFT = -1;
+    private static final int PLAYER_SIZE = 2;
+
     private static final int COLOR_SHIFT  = -1;
+    private static final int COLOR_SIZE = 2;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
