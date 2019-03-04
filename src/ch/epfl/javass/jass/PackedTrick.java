@@ -8,14 +8,18 @@ public final class PackedTrick {
 
     private static final int CARD_SIZE = 6;
     private static final int CARD_1_START = CARD_SIZE;
-    private static final int CARD_2_START = CARD_1_START + CARD_1_START;
+    private static final int CARD_2_START = CARD_1_START + CARD_SIZE;
+    private static final int CARD_3_START = CARD_2_START + CARD_SIZE;
+    private static final int CARD_4_START = CARD_3_START + CARD_SIZE;
 
+    private static final int INDEX_START = CARD_4_START + CARD_SIZE;
+    private static final int INDEX_SIZE = 4;
 
     private static final int PLAYER_SHIFT = -1;
     private static final int PLAYER_SIZE = 2;
 
-    private static final int COLOR_SHIFT  = -1;
-    private static final int COLOR_SIZE = 2;
+    private static final int TRUMP_SHIFT = -1;
+    private static final int TRUMP_SIZE = 2;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -34,7 +38,7 @@ public final class PackedTrick {
 
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         int player = firstPlayer.type + PLAYER_SHIFT;
-        int color  = trump.type + COLOR_SHIFT;
+        int color  = trump.type + TRUMP_SHIFT;
 
 
 
