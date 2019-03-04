@@ -7,12 +7,13 @@ public final class PackedTrick {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     public static final int INVALID = 0b11111111_11111111_11111111_11111111;
+    private static final int EMPTY = 0;
 
     private static final int CARD_SIZE = 6;
     private static final int CARD_1_START = 0;
-    private static final int CARD_2_START = CARD_1_START + CARD_SIZE;
-    private static final int CARD_3_START = CARD_2_START + CARD_SIZE;
-    private static final int CARD_4_START = CARD_3_START + CARD_SIZE;
+    private static final int CARD_2_START = CARD_1_START + CARD_SIZE; //6
+    private static final int CARD_3_START = CARD_2_START + CARD_SIZE; //12
+    private static final int CARD_4_START = CARD_3_START + CARD_SIZE; //18
 
     private final static int MAX_RANK = 8;
     private final static int RANK_MASK_1 = 0b001111;
@@ -20,23 +21,17 @@ public final class PackedTrick {
     private final static int RANK_MASK_3 = RANK_MASK_2 << CARD_SIZE;
     private final static int RANK_MASK_4 = RANK_MASK_3 << CARD_SIZE;
 
-    private static final int INDEX_START = CARD_4_START + CARD_SIZE;
+    private static final int INDEX_START = CARD_4_START + CARD_SIZE; //24
     private static final int INDEX_SIZE = 4;
     private static final int MAX_INDEX = 8;
 
-    private static final int PLAYER_START = INDEX_START + INDEX_SIZE;
+    private static final int PLAYER_START = INDEX_START + INDEX_SIZE; //28
     private static final int PLAYER_SIZE = 2;
     private static final int PLAYER_SHIFT = -1;
 
-    private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE;
+    private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE; //30
     private static final int TRUMP_SIZE = 2;
     private static final int TRUMP_SHIFT = -1;
-
-
-    private static final int EMPTY  = (PackedCard.INVALID << CARD_1_START) |
-                                      (PackedCard.INVALID << CARD_2_START) |
-                                      (PackedCard.INVALID << CARD_3_START) |
-                                      (PackedCard.INVALID << CARD_4_START);
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
