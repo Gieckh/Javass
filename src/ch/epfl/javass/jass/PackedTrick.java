@@ -257,17 +257,21 @@ public final class PackedTrick {
 
     private static int winningCardIndex(int pkTrick, Card.Color trump) {
         int winningCard = pkTrick & CARD_MASK_1;
+        int winningIndex = 0;
         for (int i = 2 ; i <= 4 ; ++i) {
             if (containsValidCard(pkTrick, i)) { //TODO: on trouve plusieurs fois la carte là
                 int pkCard = card(pkTrick, i-1);
-                if (PackedCard.isBetter(trump, winningCard, pkCard));
+                if (PackedCard.isBetter(trump, winningCard, pkCard)) {
+                    winningCard = pkCard;
+                    winningIndex = i - 1;
+                }
             }
             else {
-                return winningCard;
+                return winningIndex;
             }
         }
 
-        return winningCard;
+        return winningIndex;
     }
 
     public static PlayerId winningPlayer(int pkTrick) {
