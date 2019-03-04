@@ -33,7 +33,7 @@ public final class PackedTrick {
 
     private static final int PLAYER_START = INDEX_START + INDEX_SIZE; //28
     private static final int PLAYER_SIZE = 2;
-    private static final int PLAYER_SHIFT = 1;
+    private static final int PLAYER_SHIFT = -1;
 
     private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE; //30
     private static final int TRUMP_SIZE = 2;
@@ -156,15 +156,15 @@ public final class PackedTrick {
     }
 
     public static PlayerId player (int pkTrick) {
-        int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_START) + PLAYER_SHIFT;
+        int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_START);
         switch (playerIndex) {
-        case 1:
+        case 0:
             return PlayerId.PLAYER_1;
-        case 2:
+        case 1:
             return PlayerId.PLAYER_2;
-        case 3:
+        case 2:
             return PlayerId.PLAYER_3;
-        case 4:
+        case 3:
             return PlayerId.PLAYER_4;
         default: //unreachable statement (2 bits will always be between 0 and 4).
             throw new IllegalArgumentException();
