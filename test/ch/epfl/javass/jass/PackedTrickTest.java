@@ -41,25 +41,24 @@ public class PackedTrickTest {
         }
     }
 
-    // rate tant que winning player n'est pas fait
-  @Test
+// marchera des que winnig player marchera
+    @Test
     void nextEmptyWorks() {
       for (int i = 0 ; i != -1; ++i ) {
-          if (PackedTrick.isValid(i)) {
-                   if(Bits32.extract(i, 24, 4) == 8) {
-                       assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(i));
-                   }
-                   else {
-                       int nextTrick = PackedTrick.nextEmpty(i);
-
-                       System.out.println("i : " + Integer.toBinaryString(i));
-
-                       assertEquals(0b111111111111111111111111, Bits32.extract(nextTrick, 0, 24)); //It is indeed empty
-                       assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2)); //Trump stays the same
-                       assertEquals(PackedTrick.winningPlayer(i).ordinal(), Bits32.extract(nextTrick, 28, 2)); //winningPlayer is good
-                       assertEquals(Bits32.extract(i, 24, 4)  , Bits32.extract(nextTrick, 24, 4));
-
-                }
+          if (PackedTrick.isValid(i)&&(Bits32.extract(i, 0, 6)!=0b111111)&&(Bits32.extract(i, 6, 6)!=0b111111)&&(Bits32.extract(i, 12, 6)!=0b111111)&&(Bits32.extract(i, 18, 6)!=0b111111)) {
+                       if(Bits32.extract(i, 24, 4) == 8) {
+                           assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(i));
+                       }
+                       else {
+                           int nextTrick = PackedTrick.nextEmpty(i);
+                           assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
+                           assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
+                           assertEquals(PackedTrick.winningPlayer(i).ordinal(), Bits32.extract(nextTrick, 28, 2));
+                           //System.out.println(Integer.toBinaryString(i));
+                           //System.out.println(Integer.toBinaryString(nextTrick));
+                           assertEquals(Bits32.extract(i, 24, 4) +1  , Bits32.extract(nextTrick, 24, 4));
+            
+                    }
             }
         }
     }
@@ -185,7 +184,7 @@ public class PackedTrickTest {
                 if (Bits32.extract(i, 24, 4) == 8) {
                     pointBonus += 5;
                 }
-                // les cartes entrées dans points sont toutes valides
+                // les cartes entrée dans points sont toutes valides
                 // si on entre des mauvaises cartes , assertError
                 if(PackedCard.isValid(Card0)&&PackedCard.isValid(Card1)&&PackedCard.isValid(Card2)&&PackedCard.isValid(Card3)) {
                 int sum = points0 + points1+ points2 + points3 + pointBonus;
