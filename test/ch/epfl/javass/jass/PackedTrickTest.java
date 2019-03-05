@@ -21,9 +21,40 @@ import ch.epfl.javass.bits.Bits64;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.TeamId;
 
-//TODO: void isValidWorks()
 public class PackedTrickTest {
-    //reussi, pourtant ne reussit plus ... , quelque chose ne tourne pas rond
+    
+    @Test
+    void isValidWorks() {
+        for(int i = 0; i != -1 ; ++i) {
+            assertEquals(IsValidTest(i),PackedTrick.isValid(i));
+        }
+    }
+    
+    private boolean IsValidTest(int pkTrick) {
+        if((Bits32.extract(pkTrick, 24, 4)<9)) {
+            int Card0 = Bits32.extract(pkTrick, 0, 6);
+            int Card1 = Bits32.extract(pkTrick, 6, 6);
+            int Card2 = Bits32.extract(pkTrick, 12, 6);
+            int Card3 = Bits32.extract(pkTrick, 18, 6);
+            if ((PackedCard.isValid(Card0)&&PackedCard.isValid(Card1)&&PackedCard.isValid(Card2)&&PackedCard.isValid(Card3))){
+                return true;
+            }
+            if ((PackedCard.isValid(Card0)&&PackedCard.isValid(Card1)&&PackedCard.isValid(Card2)&&(Card3==0b111111))){
+                return true;
+            }
+            if ((PackedCard.isValid(Card0)&&PackedCard.isValid(Card1)&&(Card2==0b111111)&&(Card3==0b111111))){
+                return true;
+            }
+            if ((PackedCard.isValid(Card0)&&(Card1==0b111111)&&(Card2==0b111111))&&(Card3==0b111111)){
+                return true;
+            }
+            if ((Card0==0b111111)&&(Card1==0b111111)&&(Card2==0b111111)&&(Card3==0b111111)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     @Test
     void firstEmptyWorks() {
         for(int j = 0; j<4; ++j) {
@@ -59,11 +90,11 @@ public class PackedTrickTest {
                     assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
                     assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
 
-                    System.out.println("i : " + Integer.toBinaryString(i));
-                    System.out.println("winningPlayer : " + PackedTrick.winningPlayer(i) );
-                    System.out.println("nextTrick : " + Integer.toBinaryString(nextTrick));
-                    System.out.println("nextEmptyWinner : " + PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
-                    System.out.println();
+//                    System.out.println("i : " + Integer.toBinaryString(i));
+//                    System.out.println("winningPlayer : " + PackedTrick.winningPlayer(i) );
+//                    System.out.println("nextTrick : " + Integer.toBinaryString(nextTrick));
+//                    System.out.println("nextEmptyWinner : " + PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
+//                    System.out.println();
 
                     assertEquals(PackedTrick.winningPlayer(i), PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
                     //System.out.println(Integer.toBinaryString(i));
