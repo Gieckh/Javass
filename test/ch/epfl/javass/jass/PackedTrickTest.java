@@ -44,7 +44,7 @@ public class PackedTrickTest {
     // rate tant que winning player n'est pas fait
   @Test
     void nextEmptyWorks() {
-        for(int i =0; i < 4;++i) {
+        for(int i=0; i < 4;++i) {
             for (int j=0; j<4; ++j) {
                 int trick =  PackedTrick.firstEmpty(Color.ALL.get(i), PlayerId.ALL.get(j));
                 for (int k = 0; k< (1 <<29) ; ++k) {               
