@@ -133,8 +133,6 @@ public final class PackedTrick {
         pkTrick &= ~Bits32.mask(PLAYER_START, PLAYER_SIZE);
         System.out.println(Integer.toBinaryString(pkTrick));
         pkTrick |= (winningPlayer << PLAYER_START);
-        System.out.println(Integer.toBinaryString(pkTrick));
-        System.out.println(Integer.toBinaryString(EMPTY));
         return pkTrick | EMPTY;
     }
 
