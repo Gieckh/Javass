@@ -20,10 +20,16 @@ public class test {
         //        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_3)));
         //        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_4)));
 
-        for (int i = 0; i < 8; ++i) {
-            System.out.println(i);
-            System.out.println(Integer.toBinaryString(PackedTrick.nextEmpty(8 | (i << 24))));
-            System.out.println();
-        }
+//        for (int i = 0; i < 8; ++i) {
+//            System.out.println(i);
+//            System.out.println(Integer.toBinaryString(PackedTrick.nextEmpty(8 | (i << 24))));
+//            System.out.println();
+//        }
+
+        System.out.println(PackedTrick.winningPlayer(0b1000));
+        System.out.println(PackedTrick.winningPlayer(0b10000));
+        System.out.println( Integer.toBinaryString( PackedTrick.nextEmpty(0b1000) ) );
+        System.out.println();
+        System.out.println( Integer.toBinaryString( PackedTrick.nextEmpty(0b10000) ) );
     }
 }
