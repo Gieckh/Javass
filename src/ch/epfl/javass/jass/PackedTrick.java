@@ -224,6 +224,7 @@ public final class PackedTrick {
 
     //assuming the card is indeed there.
     public static int card (int pkTrick, int index) {
+        assert (isValid(pkTrick));
         assert (0 <= index  &&  index <= 3);
         assert (!isEmpty(pkTrick));
 
