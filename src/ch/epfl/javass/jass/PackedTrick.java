@@ -268,13 +268,67 @@ public final class PackedTrick {
         return pkColorToColor(firstCardColor);
     }
 
+    //Here we don't assume 4 cards have been played during this trick.
+    //But we assume at least one has been
+    private static int winningCard(int pkTrick, Card.Color trump) {
+        assert (!isEmpty(pkTrick));
+
+        int winningCard = pkTrick & CARD_MASK_1;
+        for (int i = 2 ; i <= 4 ; ++i) {
+            if (containsValidCard(pkTrick, i)) {
+                int pkCard = card(pkTrick, i-1);
+                if (PackedCard.isBetter(trump, winningCard, pkCard)) {
+                    winningCard = pkCard;
+                }
+            }
+            else {
+                return winningCard;
+            }
+        }
+
+        return winningCard;
+    }
+
     //TODO: the hardest.
     //assumed not full
-    public static long playableCards(int pkCard, long pkHand) {
-        int trump;
-        int colorPlayed;
+    //first implementation
+    //easily simplifiable
+    public static long playableCards(int pkTrick, long pkHand) {
+        if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) { //If you are the first player to play.
+            return pkHand;
+        }
 
-        return 0L;
+        Card.Color trump = trump(pkTrick);
+        Card.Color baseColor = baseColor(pkTrick);
+        int winningCard = winningCard(pkTrick, trump);
+
+        if (trump == baseColor) {
+            long betterTrumps = PackedCardSet.trumpAbove(winningCard);
+            long tmp = pkHand & betterTrumps;
+            if (tmp != PackedCardSet.EMPTY) { //we have a better card
+                return tmp;
+            }
+            else { //We don't
+                return PackedCardSet.subsetOfColor(pkHand, trump);
+            }
+        }
+
+        //trump != baseColor
+        long playableNotTrump = PackedCardSet.subsetOfColor(pkHand, baseColor);
+        boolean isBestTrump = PackedCard.color(winningCard) == trump;
+        long trumpHand = (isBestTrump) ? (pkHand & PackedCardSet.trumpAbove(winningCard)) : 0L;
+
+        if ((playableNotTrump | trumpHand) != PackedCardSet.EMPTY) {
+            return pkHand | trumpHand;
+        }
+
+        long pkHandWOTrumps = PackedCardSet.difference(pkHand, PackedCardSet.subsetOfColor(pkHand, trump));
+        //Only got trumps
+        if (pkHandWOTrumps == PackedCardSet.EMPTY) {
+            return pkHand;
+        }
+
+        return pkHandWOTrumps;
     }
 
 
@@ -290,11 +344,15 @@ public final class PackedTrick {
     }
 
 
+    //Here we don't assume 4 cards have been played during this trick.
+    //But we assume at least one has been
     private static int winningCardIndex(int pkTrick, Card.Color trump) {
+        assert (!isEmpty(pkTrick));
+
         int winningCard = pkTrick & CARD_MASK_1;
         int winningIndex = 0;
         for (int i = 2 ; i <= 4 ; ++i) {
-            if (containsValidCard(pkTrick, i)) { //TODO: on trouve plusieurs fois la carte là
+            if (containsValidCard(pkTrick, i)) {
                 int pkCard = card(pkTrick, i-1);
                 if (PackedCard.isBetter(trump, winningCard, pkCard)) {
                     winningCard = pkCard;
