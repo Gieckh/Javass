@@ -126,24 +126,19 @@ public class PackedTrickTest {
         }
     }
     
-//    @Test
-//    void playerWorks(){
-//        for ( int i = 0 ; i != -1 ; ++i){
-//            if (PackedTrick.isValid(i)) {
-//                int playerIndex = Bits32.extract(i, 28, 2);
-//                for ( int j = 0; j < 4; ++j) {
-//                    if(j==0) {
-//                        assertEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
-//                    }
-//                    else {
-//                        assertNotEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i));
-//
-//                    }
-//
-//                }
-//            }
-//        }
-//    }
+        @Test
+        void playerWorks(){
+            for ( int i = 0 ; i != -1 ; ++i){
+                if (PackedTrick.isValid(i)) {
+                    int playerIndex = Bits32.extract(i, 28, 2);
+                    for ( int j = 0; j < 4; ++j) {
+                            assertEquals(PlayerId.ALL.get((playerIndex + j)%4), PackedTrick.player(i,j));
+                        
+    
+                   }
+                }
+            }
+        }
     
     
     void indexWorks(){
@@ -169,23 +164,38 @@ public class PackedTrickTest {
     void pointsWorks(){
         int Card0,Card1,Card2,Card3, trump,points0,points1,points2,points3,pointBonus;
         for ( int i = 0 ; i != -1 ; ++i){
-            if (PackedTrick.isValid(i)) {
-                System.out.println(Integer.toBinaryString(i));
+            if (PackedTrick.isValid(i)){
                  Card0 = Bits32.extract(i, 0, 6);
                  Card1 = Bits32.extract(i, 6, 6);
                  Card2 = Bits32.extract(i, 12, 6);
                  Card3 = Bits32.extract(i, 18, 6);
                  trump = Bits32.extract(i, 30, 2);
-                 points0 = PackedCard.points(Color.ALL.get(trump), Card0);
-                 points1 = PackedCard.points(Color.ALL.get(trump), Card1);
-                 points2 = PackedCard.points(Color.ALL.get(trump), Card2);
-                 points3 = PackedCard.points(Color.ALL.get(trump), Card3);                        
                  pointBonus = 0;
+                 points0 = 0;
+                 points1 = 0;
+                 points2=0;
+                 points3 = 0;
+                 if (PackedCard.isValid(Card0)) {
+                 points0 = PackedCard.points(Color.ALL.get(trump), Card0);
+                 }
+                 if(PackedCard.isValid(Card1)) {
+                 points1 = PackedCard.points(Color.ALL.get(trump), Card1);
+                 }
+                 if(PackedCard.isValid(Card2)) {
+                 points2 = PackedCard.points(Color.ALL.get(trump), Card2);
+                 }
+                 if(PackedCard.isValid(Card3)) {
+                 points3 = PackedCard.points(Color.ALL.get(trump), Card3);      
+                 }
                 if (Bits32.extract(i, 24, 4) == 8) {
                     pointBonus += 5;
                 }
+                // les cartes entrées dans points sont toutes valides
+                // si on entre des mauvaises cartes , assertError
+                if(PackedCard.isValid(Card0)&&PackedCard.isValid(Card1)&&PackedCard.isValid(Card2)&&PackedCard.isValid(Card3)) {
                 int sum = points0 + points1+ points2 + points3 + pointBonus;
                 assertEquals(sum , PackedTrick.points(i));
+                }
             }
         }
    }
