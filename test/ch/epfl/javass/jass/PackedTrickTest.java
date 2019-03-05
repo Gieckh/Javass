@@ -44,23 +44,18 @@ public class PackedTrickTest {
     // rate tant que winning player n'est pas fait
   @Test
     void nextEmptyWorks() {
-        for(int i =0; i < 4;++i) {
-            for (int j=0; j<4; ++j) {
-                int trick =  PackedTrick.firstEmpty(Color.ALL.get(i), PlayerId.ALL.get(j));
-                for (int k = 0; k< (1 <<29) ; ++k) {               
-                       int newTrick = trick|k;
-                       if(Bits32.extract(trick, 24, 4) == 8) {
-                           assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(newTrick));
-                       
+      for (int i = 0 ; i != -1; ++i ) {
+          if (PackedTrick.isValid(i)) {
+                       if(Bits32.extract(i, 24, 4) == 8) {
+                           assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(i));
                        }
                        else {
-                           int nextTrick = PackedTrick.nextEmpty(newTrick);
-                           assertEquals(Bits32.extract(nextTrick, 0, 24), 0);
-                           assertEquals(i, Bits32.extract(nextTrick, 30, 2));
-                           assertEquals(PackedTrick.winningPlayer(nextTrick), Bits32.extract(nextTrick, 28, 2));
-                           assertEquals(Bits32.extract(trick, 24, 4) + 1 , Bits32.extract(nextTrick, 24, 4));
+                           int nextTrick = PackedTrick.nextEmpty(i);
+                           assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
+                           assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
+                           assertEquals(PackedTrick.winningPlayer(i).ordinal(), Bits32.extract(nextTrick, 28, 2));
+                           assertEquals(Bits32.extract(i, 24, 4)  , Bits32.extract(nextTrick, 24, 4));
                     }
-                }
             }
         }
     }
