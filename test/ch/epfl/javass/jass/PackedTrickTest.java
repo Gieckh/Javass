@@ -54,9 +54,9 @@ public class PackedTrickTest {
                            assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
                            assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
                           System.out.println(Integer.toBinaryString(i));
-                          System.out.println(PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
+                          System.out.println(PackedTrick.winningPlayer(i) );
                           System.out.println(Integer.toBinaryString(nextTrick));
-                           System.out.println(PackedTrick.winningPlayer(i) );
+                          System.out.println(PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
                           System.out.println();
                            assertEquals(PackedTrick.winningPlayer(i), PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
                            //System.out.println(Integer.toBinaryString(i));
