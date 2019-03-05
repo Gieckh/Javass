@@ -88,6 +88,21 @@ public class PackedTrickTest {
             }
         }
     }
+    
+    @Test
+    void cardWorks() {
+        for(int i = 0; i!= -1 ; ++i) {
+            if ( PackedTrick.isValid(i)) {
+                for (int j = 0 ; j<4 ;++j ) {
+                    int shouldBeThatCard = Bits32.extract(i, 6*j, 6); 
+                    if(PackedCard.isValid(shouldBeThatCard)) {
+                        assertEquals(shouldBeThatCard, PackedTrick.card(i,j));
+
+                    }
+                }
+            }
+        }
+    }
   
     @Test
     void isLastWorks(){
