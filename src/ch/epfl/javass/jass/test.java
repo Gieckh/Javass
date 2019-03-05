@@ -23,7 +23,5 @@ public class test {
 //        for (int i = 0 ; i < 9 ; ++i)
         ////            System.out.println("i : " + PackedTrick.winningPlayer(i));
 
-        for (int i = 0 ; i < 9 ; ++i)
-            System.out.println("i : " + PackedTrick.winningCardIndex(i, Color.SPADE));
     }
 }

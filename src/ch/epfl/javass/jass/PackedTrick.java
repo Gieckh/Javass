@@ -360,7 +360,7 @@ public final class PackedTrick {
         for (int i = 2 ; i <= 4 ; ++i) {
             if (containsValidCard(pkTrick, i)) {
                 int pkCard = card(pkTrick, i-1);
-                if (PackedCard.isBetter(trump, winningCard, pkCard)) {
+                if (PackedCard.isBetter(trump, pkCard, winningCard)) {
                     winningCard = pkCard;
                     winningIndex = i - 1;
                 }
