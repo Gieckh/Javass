@@ -105,6 +105,34 @@ public class PackedTrickTest {
             }
         }
     }
+    
+    @Test
+    void withAddedCardWorks() {
+        int k;
+        int index;
+        int ones = 0b111111;
+        for (int i = 0; i!=-1; ++i) {
+            if(PackedTrick.isValid(i)&&((i&0b111111000000000000000000)==(0b111111<<18))) {
+                for (int j = 0 ; j < 64; ++j) {
+                    if (PackedCard.isValid(j)) {
+                        k = 0;
+                        index = 0;
+                        while(k<4) {
+                            if(Bits32.extract(i, k*6, 6)==0b111111) {
+                                index = k;
+                                k=5;
+                            }
+                            else {
+                                k++;
+                            }
+                        }
+                        
+                       assertEquals((i-(ones<<6*index))+(j<<6*index), PackedTrick.withAddedCard(i, j));
+                    }
+                }
+            }
+        }
+    }
   
     @Test
     void isLastWorks(){
