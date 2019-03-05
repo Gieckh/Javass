@@ -212,9 +212,9 @@ public final class PackedTrick {
                 throw new IllegalArgumentException();
         }
     }
-    public static PlayerId player (int pkTrick) {
-        int playerIndex = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
-        return playerFromIndex(playerIndex);
+    public static PlayerId player (int pkTrick, int index) {
+        int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
+        return playerFromIndex((firstPlayer + index) % 4);
     }
 
     public static int index (int pkTrick) {
@@ -369,11 +369,7 @@ public final class PackedTrick {
 
     public static PlayerId winningPlayer(int pkTrick) {
         Card.Color trump = trump(pkTrick);
-        int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
 
-        int winningPlayer = firstPlayer + winningCardIndex(pkTrick, trump);
-        winningPlayer %= 4;
-
-        return playerFromIndex(winningPlayer);
+        return player(pkTrick, winningCardIndex(pkTrick, trump));
     }
 }
