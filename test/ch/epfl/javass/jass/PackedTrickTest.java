@@ -52,15 +52,7 @@ public class PackedTrickTest {
                    else {
                        int nextTrick = PackedTrick.nextEmpty(i);
 
-                       System.out.println("Trick : " + Integer.toBinaryString(nextTrick));
-                       System.out.println("First Player : " + PackedTrick.player(nextTrick, 0));
-                       System.out.println("Card 1 : " + PackedTrick.card(nextTrick, 0));
-                       System.out.println("Card 2 : " + PackedTrick.card(nextTrick, 1));
-                       System.out.println("Card 3 : " + PackedTrick.card(nextTrick, 2));
-                       System.out.println("Card 4 : " + PackedTrick.card(nextTrick, 3));
-                       System.out.println("Winning Player : " + PackedTrick.winningPlayer(nextTrick));
-
-                       assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
+                       assertEquals(0b111111111111111111111111, Bits32.extract(nextTrick, 0, 24));
                        assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
                        assertEquals(PackedTrick.winningPlayer(i).ordinal(), Bits32.extract(nextTrick, 28, 2));
                        assertEquals(Bits32.extract(i, 24, 4)  , Bits32.extract(nextTrick, 24, 4));
