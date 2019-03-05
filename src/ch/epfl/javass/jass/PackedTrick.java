@@ -145,7 +145,8 @@ public final class PackedTrick {
     }
 
 // TODO : Antoine : du coup mon test fail
-    public static boolean isFull(int pkTrick) { //Assuming the card is valid
+    //Assuming the card is valid
+    public static boolean isFull(int pkTrick) {
         return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
     }
 
@@ -332,7 +333,11 @@ public final class PackedTrick {
     }
 
 
+    //only called with a valid, full trick
     public static int points(int pkTrick) {
+        assert (isValid(pkTrick));
+        assert (isFull(pkTrick));
+
         int total = (isLast(pkTrick)) ? 5 : 0;
         Card.Color trump = trump(pkTrick);
         total += PackedCard.points(trump, pkTrick & CARD_MASK_1);

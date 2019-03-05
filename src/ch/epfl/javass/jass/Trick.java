@@ -19,5 +19,18 @@ public class Trick {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    public static Trick firstEmpty(Card.Color trump, PlayerId firstPlayer) {
+        return new Trick(PackedTrick.firstEmpty(trump, firstPlayer));
+    }
 
+    public static Trick ofPacked(int packed) {
+        return new Trick(packed);
+    }
+
+
+    public int packed() {
+        return trick;
+    }
+
+    public
 }
