@@ -7,6 +7,7 @@ import java.util.List;
 import com.sun.javafx.fxml.expression.BinaryExpression;
 
 import ch.epfl.javass.jass.Card.Color;
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 
 public class test {
     public static void main(String[] args) {
@@ -19,7 +20,10 @@ public class test {
 //        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_3)));
 //        System.out.println(Integer.toBinaryString(PackedTrick.firstEmpty(Color.CLUB, PlayerId.PLAYER_4)));
 
-        System.out.println(0b1001000000 >>> 6);
-        System.out.println(PackedTrick.isValid(0b1001000000));
+//        for (int i = 0 ; i < 9 ; ++i)
+        ////            System.out.println("i : " + PackedTrick.winningPlayer(i));
+
+        for (int i = 0 ; i < 9 ; ++i)
+            System.out.println("i : " + PackedTrick.winningCardIndex(i, Color.SPADE));
     }
 }

@@ -52,9 +52,11 @@ public class PackedTrickTest {
                    else {
                        int nextTrick = PackedTrick.nextEmpty(i);
 
-                       assertEquals(0b111111111111111111111111, Bits32.extract(nextTrick, 0, 24));
-                       assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
-                       assertEquals(PackedTrick.winningPlayer(i).ordinal(), Bits32.extract(nextTrick, 28, 2));
+                       System.out.println("i : " + Integer.toBinaryString(i));
+
+                       assertEquals(0b111111111111111111111111, Bits32.extract(nextTrick, 0, 24)); //It is indeed empty
+                       assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2)); //Trump stays the same
+                       assertEquals(PackedTrick.winningPlayer(i).ordinal(), Bits32.extract(nextTrick, 28, 2)); //winningPlayer is good
                        assertEquals(Bits32.extract(i, 24, 4)  , Bits32.extract(nextTrick, 24, 4));
 
                 }

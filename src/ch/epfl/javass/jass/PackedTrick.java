@@ -130,7 +130,7 @@ public final class PackedTrick {
 
         //TODO better
         int winningPlayer = winningPlayer(pkTrick).type + PLAYER_SHIFT;
-        pkTrick &= Bits32.mask(PLAYER_START, PLAYER_SIZE);
+        pkTrick &= ~Bits32.mask(PLAYER_START, PLAYER_SIZE);
         pkTrick |= winningPlayer;
 
         return pkTrick | EMPTY;
@@ -352,7 +352,7 @@ public final class PackedTrick {
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
-    private static int winningCardIndex(int pkTrick, Card.Color trump) {
+    public static int winningCardIndex(int pkTrick, Card.Color trump) {
         assert (!isEmpty(pkTrick));
 
         int winningCard = pkTrick & CARD_MASK_1;
@@ -371,7 +371,7 @@ public final class PackedTrick {
         }
 
         return winningIndex;
-    }
+    } //TODO private
 
     public static PlayerId winningPlayer(int pkTrick) {
         Card.Color trump = trump(pkTrick);
