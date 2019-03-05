@@ -44,27 +44,31 @@ public class PackedTrickTest {
 // marchera des que winnig player marchera
     @Test
     void nextEmptyWorks() {
-      for (int i = 0 ; i != -1; ++i ) {
-          if (PackedTrick.isValid(i)&&(Bits32.extract(i, 0, 6)!=0b111111)&&(Bits32.extract(i, 6, 6)!=0b111111)&&(Bits32.extract(i, 12, 6)!=0b111111)&&(Bits32.extract(i, 18, 6)!=0b111111)) {
-                       if(Bits32.extract(i, 24, 4) == 8) {
-                           assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(i));
-                       }
-                       else {
-                           int nextTrick = PackedTrick.nextEmpty(i);
-                           assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
-                           assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
-                          System.out.println(Integer.toBinaryString(i));
-                          System.out.println(PackedTrick.winningPlayer(i) );
-                          System.out.println(Integer.toBinaryString(nextTrick));
-                          System.out.println(PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
-                          System.out.println();
-                           assertEquals(PackedTrick.winningPlayer(i), PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
-                           //System.out.println(Integer.toBinaryString(i));
-                           //System.out.println(Integer.toBinaryString(nextTrick));
-                           
-                           assertEquals(Bits32.extract(i, 24, 4) +1  , Bits32.extract(nextTrick, 24, 4));
-            
-                    }
+        for (int i = 0 ; i != -1; ++i ) {
+            if (PackedTrick.isValid(i) && (Bits32.extract(i, 0, 6)!=0b111111) &&
+                    (Bits32.extract(i, 6, 6)!=0b111111) &&
+                    (Bits32.extract(i, 12, 6)!=0b111111) &&
+                    (Bits32.extract(i, 18, 6)!=0b111111))
+            {
+                if(Bits32.extract(i, 24, 4) == 8) {
+                    assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(i));
+                }
+                else {
+                    System.out.println(Integer.toBinaryString(i));
+                    int nextTrick = PackedTrick.nextEmpty(i);
+                    assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
+                    assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
+                    System.out.println("i : " + Integer.toBinaryString(i));
+                    System.out.println("winningPlayer : " + PackedTrick.winningPlayer(i) );
+                    System.out.println("nextTrick : " + Integer.toBinaryString(nextTrick));
+                    System.out.println(PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
+                    System.out.println();
+                    assertEquals(PackedTrick.winningPlayer(i), PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
+                    //System.out.println(Integer.toBinaryString(i));
+                    // System.out.println(Integer.toBinaryString(nextTrick));
+
+                    assertEquals(Bits32.extract(i, 24, 4) +1  , Bits32.extract(nextTrick, 24, 4));
+                }
             }
         }
     }
