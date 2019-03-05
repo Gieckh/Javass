@@ -166,6 +166,7 @@ public class PackedTrickTest {
         int Card0,Card1,Card2,Card3, trump,points0,points1,points2,points3,pointBonus;
         for ( int i = 0 ; i != -1 ; ++i){
             if (PackedTrick.isValid(i)) {
+                System.out.println(Integer.toBinaryString(i));
                  Card0 = Bits32.extract(i, 0, 6);
                  Card1 = Bits32.extract(i, 6, 6);
                  Card2 = Bits32.extract(i, 12, 6);

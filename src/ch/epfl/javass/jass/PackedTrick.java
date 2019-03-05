@@ -88,7 +88,8 @@ public final class PackedTrick {
         if (!isRank3Valid) {
             return (masked3 == CARD_MASK_3) && (masked4 == CARD_MASK_4);
         }
-
+        // TODO : 111111 pour le rank 4 retourne true
+        // test : 111111_000000_000000_000000 fait retourner true
         return (isRank4Valid || masked4 == CARD_MASK_4);
     }
 
