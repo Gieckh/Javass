@@ -73,7 +73,6 @@ public class PackedTrickTest {
         }
     }
 
-// marchera des que winnig player marchera
     @Test
     void nextEmptyWorks() {
         for (int i = 0 ; i != -1; ++i ) {
