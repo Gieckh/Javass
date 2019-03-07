@@ -131,7 +131,6 @@ public final class PackedTrick {
         //TODO better
         int winningPlayer = winningPlayer(pkTrick).type + PLAYER_SHIFT;
         pkTrick &= ~Bits32.mask(PLAYER_START, PLAYER_SIZE);
-        System.out.println(Integer.toBinaryString(pkTrick));
         pkTrick |= (winningPlayer << PLAYER_START);
         return pkTrick | EMPTY;
     }

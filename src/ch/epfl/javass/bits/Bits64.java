@@ -60,10 +60,6 @@ public class Bits64 {
         return (mask & bits) >>> start;
     }
 
-
-
-
-
     /**
      * @param value the bit whose MSB position we want to know, NOT 0.
      * @return (int) the MSB position (an int between 0 and 31)

@@ -21,15 +21,16 @@ import ch.epfl.javass.bits.Bits64;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.TeamId;
 
+//TODO: void isValidWorks()
 public class PackedTrickTest {
-    
+
     @Test
     void isValidWorks() {
         for(int i = 0; i != -1 ; ++i) {
             assertEquals(IsValidTest(i),PackedTrick.isValid(i));
         }
     }
-    
+
     private boolean IsValidTest(int pkTrick) {
         if((Bits32.extract(pkTrick, 24, 4)<9)) {
             int Card0 = Bits32.extract(pkTrick, 0, 6);
@@ -54,7 +55,7 @@ public class PackedTrickTest {
         }
         return false;
     }
-    
+
     @Test
     void firstEmptyWorks() {
         for(int j = 0; j<4; ++j) {
@@ -85,21 +86,11 @@ public class PackedTrickTest {
                     assertEquals(PackedTrick.INVALID, PackedTrick.nextEmpty(i));
                 }
                 else {
-                    System.out.println(Integer.toBinaryString(i));
                     int nextTrick = PackedTrick.nextEmpty(i);
+
                     assertEquals(Bits32.extract(nextTrick, 0, 24), 0b111111111111111111111111);
                     assertEquals(Bits32.extract(i, 30, 2), Bits32.extract(nextTrick, 30, 2));
-
-//                    System.out.println("i : " + Integer.toBinaryString(i));
-//                    System.out.println("winningPlayer : " + PackedTrick.winningPlayer(i) );
-//                    System.out.println("nextTrick : " + Integer.toBinaryString(nextTrick));
-//                    System.out.println("nextEmptyWinner : " + PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
-//                    System.out.println();
-
                     assertEquals(PackedTrick.winningPlayer(i), PlayerId.ALL.get(Bits32.extract(nextTrick, 28, 2)));
-                    //System.out.println(Integer.toBinaryString(i));
-                    // System.out.println(Integer.toBinaryString(nextTrick));
-
                     assertEquals(Bits32.extract(i, 24, 4) +1  , Bits32.extract(nextTrick, 24, 4));
                 }
             }
@@ -136,7 +127,7 @@ public class PackedTrickTest {
             }
         }
     }
-    
+
     @Test
     void withAddedCardWorks() {
         int k;
@@ -157,14 +148,14 @@ public class PackedTrickTest {
                                 k++;
                             }
                         }
-                        
+
                        assertEquals((i-(ones<<6*index))+(j<<6*index), PackedTrick.withAddedCard(i, j));
                     }
                 }
             }
         }
     }
-  
+
     @Test
     void isLastWorks(){
         for (int i = 0 ; i != -1; ++i ) {
