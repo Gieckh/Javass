@@ -149,7 +149,7 @@ public final class PackedCardSet {
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
      */
-    public static int get(long pkCardSet, int index) { //TODO: more tests
+    public static int get2(long pkCardSet, int index) { //TODO: more tests
         assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
         //int i = Long.numberOfTrailingZeros(pkCardSet);
         int i = 0;
@@ -162,8 +162,9 @@ public final class PackedCardSet {
     }
 
     //TODO : benchmark which one is the best.
-    public static int get2(long pkCardSet, int index) {
-        for(int i = 0 ; i < index ; ++i)
+    public static int get(long pkCardSet, int index) {
+        assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
+        for (int i = 0 ; i < index ; ++i)
             pkCardSet ^= Long.lowestOneBit(pkCardSet);
 
         return Long.numberOfTrailingZeros(pkCardSet);

@@ -23,53 +23,53 @@ import ch.epfl.javass.jass.TeamId;
 //TODO: void isValidWorks()
 public class PackedTrickTest {
 
-    private void playerIfCard(int i , int nbCard) {
-        assertEquals(PlayerId.ALL.get(PackedTrick.player(i, nbCard)), PackedTrick.winningPlayer(i));
+//    private void playerIfCard(int i , int nbCard) {
+//        assertEquals(PlayerId.ALL.get(PackedTrick.player(i, nbCard)), PackedTrick.winningPlayer(i));
+//    }
 
-    }
-    @Test
-    void winningPlayerTest() {
-        int counter = 0;
-         new ArrayList<>();
-        int trump = 0;
-        int noIdea = 0;
-        boolean winnter = false;
-        boolean is = false;
-        boolean comming = false;
-        for (int i = 0 ; i != -1 ; ++i) {
-            if ( PackedTrick.isValid(i)&&((Bits32.extract(i, 0, 6) != 0b111111)||Bits32.extract(i, 6, 6) != 0b111111||Bits32.extract(i, 12, 6) != 0b111111||Bits32.extract(i, 18, 6) != 0b111111)){
-                for (int j = 0; j< 4 ; ++j) {
-                    counter = 0;
-                    trump = Bits32.extract(i, 30, 2);
-                    if (Bits32.extract(i, 6*j, 6)!=0b111111) {
-                       cards.add(Bits32.extract(i, 6*j, 6));
-                       counter +=1;
-                    }
-                    if(counter == 1) {
-                    }
-                    if(counter == 2) {
-                        winnter = PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
-                        
-                    }
-                    if(counter == 3 ) {
-                        winnter =  PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
-                        is = PackedCard.isBetter(Color.toType(trump), cards.get(1), cards.get(2));
-                    }
-                    if(counter == 3 ) {
-                        winnter =  PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
-                        is = PackedCard.isBetter(Color.toType(trump), cards.get(1), cards.get(2));
-                        comming =  PackedCard.isBetter(Color.toType(trump), cards.get(2), cards.get(3));
-                    }
-                    
-                    
-                    
-                    
-                    
-                    
-                }
-            }
-        }
-    }
+//    @Test
+//    void winningPlayerTest() {
+//        int counter = 0;
+//         new ArrayList<>();
+//        int trump = 0;
+//        int noIdea = 0;
+//        boolean winnter = false;
+//        boolean is = false;
+//        boolean comming = false;
+//        for (int i = 0 ; i != -1 ; ++i) {
+//            if ( PackedTrick.isValid(i)&&((Bits32.extract(i, 0, 6) != 0b111111)||Bits32.extract(i, 6, 6) != 0b111111||Bits32.extract(i, 12, 6) != 0b111111||Bits32.extract(i, 18, 6) != 0b111111)){
+//                for (int j = 0; j< 4 ; ++j) {
+//                    counter = 0;
+//                    trump = Bits32.extract(i, 30, 2);
+//                    if (Bits32.extract(i, 6*j, 6)!=0b111111) {
+//                       cards.add(Bits32.extract(i, 6*j, 6));
+//                       counter +=1;
+//                    }
+//                    if(counter == 1) {
+//                    }
+//                    if(counter == 2) {
+//                        winnter = PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
+//
+//                    }
+//                    if(counter == 3 ) {
+//                        winnter =  PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
+//                        is = PackedCard.isBetter(Color.toType(trump), cards.get(1), cards.get(2));
+//                    }
+//                    if(counter == 3 ) {
+//                        winnter =  PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
+//                        is = PackedCard.isBetter(Color.toType(trump), cards.get(1), cards.get(2));
+//                        comming =  PackedCard.isBetter(Color.toType(trump), cards.get(2), cards.get(3));
+//                    }
+//
+//
+//
+//
+//
+//
+//                }
+//            }
+//        }
+//    }
 
         @Test
         void playableCardTestUnit() {

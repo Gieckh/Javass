@@ -14,9 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SplittableRandom;
-
-import org.junit.jupiter.api.Test;
 
 import ch.epfl.javass.jass.Card.Color;
 
