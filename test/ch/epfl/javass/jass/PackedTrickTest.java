@@ -1,5 +1,6 @@
 package ch.epfl.javass.jass;
 
+import java.util.ArrayList;
 import java.util.SplittableRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,8 +13,6 @@ import static ch.epfl.test.TestRandomizer.RANDOM_ITERATIONS;
 import static ch.epfl.test.TestRandomizer.newRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-
 import org.junit.jupiter.api.Test;
 
 import ch.epfl.javass.bits.Bits32;
@@ -24,18 +23,49 @@ import ch.epfl.javass.jass.TeamId;
 //TODO: void isValidWorks()
 public class PackedTrickTest {
 
+    private void playerIfCard(int i , int nbCard) {
+        assertEquals(PlayerId.ALL.get(PackedTrick.player(i, nbCard)), PackedTrick.winningPlayer(i));
+
+    }
     @Test
     void winningPlayerTest() {
         int counter = 0;
-        int[] cards = {};
+         new ArrayList<>();
+        int trump = 0;
+        int noIdea = 0;
+        boolean winnter = false;
+        boolean is = false;
+        boolean comming = false;
         for (int i = 0 ; i != -1 ; ++i) {
-            if ( PackedTrick.isValid(i)&&((Bits32.extract(i, 0, 6) != 111111)||Bits32.extract(i, 6, 6) != 111111||Bits32.extract(i, 12, 6) != 111111||Bits32.extract(i, 18, 6) != 111111)){
-               counter =0;
+            if ( PackedTrick.isValid(i)&&((Bits32.extract(i, 0, 6) != 0b111111)||Bits32.extract(i, 6, 6) != 0b111111||Bits32.extract(i, 12, 6) != 0b111111||Bits32.extract(i, 18, 6) != 0b111111)){
                 for (int j = 0; j< 4 ; ++j) {
-                    
-                    if (Bits32.extract(i, 6*j, 6)!=111111) {
-                        counter +=1;
+                    counter = 0;
+                    trump = Bits32.extract(i, 30, 2);
+                    if (Bits32.extract(i, 6*j, 6)!=0b111111) {
+                       cards.add(Bits32.extract(i, 6*j, 6));
+                       counter +=1;
                     }
+                    if(counter == 1) {
+                    }
+                    if(counter == 2) {
+                        winnter = PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
+                        
+                    }
+                    if(counter == 3 ) {
+                        winnter =  PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
+                        is = PackedCard.isBetter(Color.toType(trump), cards.get(1), cards.get(2));
+                    }
+                    if(counter == 3 ) {
+                        winnter =  PackedCard.isBetter(Color.toType(trump), cards.get(0), cards.get(1));
+                        is = PackedCard.isBetter(Color.toType(trump), cards.get(1), cards.get(2));
+                        comming =  PackedCard.isBetter(Color.toType(trump), cards.get(2), cards.get(3));
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
                 }
             }
         }
@@ -59,6 +89,7 @@ public class PackedTrickTest {
                     PackedCard.INVALID, 6, PackedCard.INVALID, 6, 0, 4, 0, 2, 0b1,
                     2);
             long pkHand5 = 0b0000_0000_0000_0000_0000_0000_1000_0000_0000_0000_0000_0100_0000_0000_1000_0001L;
+            System.out.println(pkTrick5);
             int pkTrick6 = Bits32.pack(0b1_0101, 6, PackedCard.INVALID, 6,
                     PackedCard.INVALID, 6, PackedCard.INVALID, 6, 0, 4, 0, 2, 0, 2);
             long pkHand6 = 0b0000_0000_0000_0001_0000_0000_0001_0000_0000_0000_1000_0000_0000_0000_0000_1000L;
