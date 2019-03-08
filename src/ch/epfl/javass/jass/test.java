@@ -1,13 +1,5 @@
 package ch.epfl.javass.jass;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import com.sun.javafx.fxml.expression.BinaryExpression;
-
-import ch.epfl.javass.jass.Card.Color;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 
 public class test {
     public static void main(String[] args) {

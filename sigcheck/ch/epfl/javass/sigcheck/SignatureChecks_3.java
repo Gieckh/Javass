@@ -63,3 +63,4 @@ public final class SignatureChecks_3 {
         s = s.subsetOfColor(c2);
     }
 }
+

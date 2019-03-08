@@ -1,7 +1,6 @@
 package ch.epfl.javass.jass;
 
 import ch.epfl.javass.bits.Bits32;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 
 public final class PackedTrick {
     /** ============================================== **/
