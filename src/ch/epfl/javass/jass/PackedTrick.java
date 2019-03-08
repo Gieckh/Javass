@@ -1,6 +1,7 @@
 package ch.epfl.javass.jass;
 
 import ch.epfl.javass.bits.Bits32;
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 
 public final class PackedTrick {
     /** ============================================== **/
@@ -300,30 +301,45 @@ public final class PackedTrick {
 
         Card.Color trump = trump(pkTrick);
         Card.Color baseColor = baseColor(pkTrick);
-        int winningCard = winningCard(pkTrick, trump);
+        long myTrumps = pkHand & PackedCardSet.subsetOfColor(pkHand, trump);
 
+        //If the pli is fonded trump, then you don't have to play a higher card.
         if (trump == baseColor) {
-            long myTrumps = pkHand & PackedCardSet.subsetOfColor(pkHand, trump) {
-
+            if (myTrumps == PackedCardSet.EMPTY |
+                myTrumps == PackedCardSet.singleton(PackedCard.pack(trump, Card.Rank.JACK))) { //The special rule
+                return pkHand;
+            }
+            else {
+                return myTrumps;
             }
         }
 
         //trump != baseColor
+        int winningCard = winningCard(pkTrick, trump);
         long playableNotTrump = PackedCardSet.subsetOfColor(pkHand, baseColor);
         boolean isBestTrump = PackedCard.color(winningCard) == trump;
-        long trumpHand = (isBestTrump) ? (pkHand & PackedCardSet.trumpAbove(winningCard)) : 0L;
+        if (isBestTrump) {
+            long betterTrumps = PackedCardSet.trumpAbove(winningCard);
+            if (playableNotTrump != PackedCardSet.EMPTY) {
+                return playableNotTrump | betterTrumps;
+            }
 
-        if ((playableNotTrump | trumpHand) != PackedCardSet.EMPTY) {
-            return pkHand | trumpHand;
-        }
+            //We got no card of the base color
+            long inferiorTrumps = PackedCardSet.difference(myTrumps, betterTrumps);
+            long defaultCase = PackedCardSet.difference(pkHand, inferiorTrumps);
+            if (defaultCase != PackedCardSet.EMPTY) {
+                return defaultCase;
+            }
 
-        long pkHandWOTrumps = PackedCardSet.difference(pkHand, PackedCardSet.subsetOfColor(pkHand, trump));
-        //Only got trumps
-        if (pkHandWOTrumps == PackedCardSet.EMPTY) {
+            //We only got inferior trumps
             return pkHand;
         }
 
-        return pkHandWOTrumps;
+        if (playableNotTrump != PackedCardSet.EMPTY) {
+            return playableNotTrump | myTrumps;
+        }
+
+        return pkHand;
     }
 
     
