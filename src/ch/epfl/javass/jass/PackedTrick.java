@@ -316,8 +316,8 @@ public final class PackedTrick {
 
         //trump != baseColor
         int winningCard = winningCard(pkTrick, trump);
-        long playableNotTrump = PackedCardSet.subsetOfColor(pkHand, baseColor);
         boolean isBestTrump = PackedCard.color(winningCard) == trump;
+        long playableNotTrump = PackedCardSet.subsetOfColor(pkHand, baseColor);
         if (isBestTrump) {
             long betterTrumps = PackedCardSet.trumpAbove(winningCard);
             if (playableNotTrump != PackedCardSet.EMPTY) {
