@@ -1,7 +1,6 @@
 package ch.epfl.javass.jass;
 
-        import ch.epfl.javass.bits.Bits32;
-        import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
+import ch.epfl.javass.bits.Bits32;
 
 public final class PackedTrick {
     /** ============================================== **/
@@ -304,13 +303,8 @@ public final class PackedTrick {
         int winningCard = winningCard(pkTrick, trump);
 
         if (trump == baseColor) {
-            long betterTrumps = PackedCardSet.trumpAbove(winningCard);
-            long tmp = pkHand & betterTrumps;
-            if (tmp != PackedCardSet.EMPTY) { //we have a better card
-                return tmp;
-            }
-            else { //We don't
-                return PackedCardSet.subsetOfColor(pkHand, trump);
+            long myTrumps = pkHand & PackedCardSet.subsetOfColor(pkHand, trump) {
+
             }
         }
 
@@ -332,6 +326,7 @@ public final class PackedTrick {
         return pkHandWOTrumps;
     }
 
+    
 
     //only called with a valid, full trick
     public static int points(int pkTrick) {
