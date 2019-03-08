@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.bits.Bits64;
 import ch.epfl.javass.jass.Card.Color;
+import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.TeamId;
 
 //TODO: void isValidWorks()
@@ -70,7 +71,123 @@ public class PackedTrickTest {
 //            }
 //        }
 //    }
-
+    @Test
+    void playableCardsWorks() {
+        // deux cartes jouables: valet de pique, as de coeur
+        // en main: 8 de pique, valet de pique, as de coeur, 7 de trèfle
+        // premiere carte jouée: 6 de coeur, as de pique, 6 de trèfle, atout pique
+        assertEquals(0b100000000_0000000000100000L, PackedTrick.playableCards(0b00_11_0000_111111_110000_001000_010000, 0b10_0000000000000000_0000000100000000_0000000000100100L));
+        
+        // en main: 9 de pique, valet de pique, 6 de coeur, 7 coeur;
+        // premiere carte jouée: 10 de coeur, atout carreau
+        assertEquals(0b11_0000000000000000L, PackedTrick.playableCards(0b10_11_0000_111111_111111_111111_010100, 0b00_0000000000000000_0000000000000011_0000000000101000L));
+        
+        // en main: 6 de pique, 7 de pique, 8 de pique, 6 de coeur
+        // premiere carte jouée: 9 de pique, 2nd: 10 de pique, atout pique
+        assertEquals(0b0_0000000000000111L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_000011,0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        // en main: 6 de pique, 7 de pique, 8 de pique, 6 de coeur
+        // premiere carte jouée: 9 de carreau, 2nd: 10 de pique, atout carreau
+        assertEquals(0b1_0000000000000111L, PackedTrick.playableCards(0b10_11_0000_111111_111111_000100_100011,0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        // en main: 6 de pique, 7 de pique, 8 de pique, as de pique
+        // premiere carte jouée: 9 de carreau, 2nd: 10 de pique, atout pique
+        assertEquals(0b0_0000000100000000L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_100011,0b00_0000000000000000_0000000000000000_0000000100000111L));
+        
+        //atout pas demandé, mais pas coupé, et peut pas suivre
+        assertEquals(0b1000000000000000000000001000000000000000000100100L, PackedTrick.playableCards(0b00_11_0000_111111_110001_010000_100000, 0b1000000000000000000000001000000000000000000100100L));
+        assertEquals(0b1000000000000000000100000L, PackedTrick.playableCards(0b00_10_0000_111111_111111_001000_010000, 0b1000000000000000000000001000000000000000000100100L));
+    
+        // que des atouts dans la main, pas atout demandé, mais qqn coupe et pas moyen de surcouper
+        // en main: 6, 7 et 8 de pique
+        // première carte jouée: 9 de carreau, deuxieme carte jouée: 10 de pique, atout pique
+        assertEquals(0b0_0000000000000111L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_100011,0b00_0000000000000000_0000000000000000_0000000000000111L));
+        
+        // quand qqn a couper, tu peux pas sous couper, tu peux pas suivre, et t'as une carte qui n'est pas d'atout
+        // 6, 7 ,8 de pique et 6 de coeur, atout pique,
+        // premiere carte jouee 9 de carreau, deuxieme carte 10 de pique
+        assertEquals(0b1_0000000000000000L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_100011,0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        // qqn a coupé, peut surcouper, peut pas suivre
+        // 6, 7 ,9 de pique et 6 de coeur, atout pique,
+        // premiere carte jouee 9 de carreau, deuxieme carte 10 de pique
+        assertEquals(0b1_0000000000001000L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_100011,0b00_0000000000000000_0000000000000001_0000000000001011L));
+        
+        // qqn a coupé, pas surcouper, peut suivre
+        // 6, 7 ,8 de pique et 6 de coeur, atout pique,
+        // premiere carte jouee 9 de coeur, deuxieme carte 10 de pique
+        assertEquals(0b1_0000000000000000L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_010011,0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        // on est le quatrieme joueur, les deux joueurs precedents ont coupe
+        // 6, 7 ,8 de pique et 6 de coeur, atout pique,
+        // premiere carte jouee 9 de coeur, deuxieme carte 10 de pique, troisième carte bourre
+        assertEquals(0b1_0000000000000000L, PackedTrick.playableCards(0b00_11_0000_111111_000101_000100_010011,0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        // on est le quatrieme joueur, les deux joueurs precedents ont coupe
+        // 6, 7 ,9 de pique et 6 de coeur, atout pique,
+        // premiere carte jouee 9 de coeur, deuxieme carte 10 de pique, troisième carte bourre
+        assertEquals(0b1_0000000000000000L, PackedTrick.playableCards(0b00_11_0000_111111_000101_000100_010011,0b00_0000000000000000_0000000000000001_0000000000001011L));
+        
+        // qqn a coupé, peut surcouper, peut suivre
+        // 6, 7 ,9 de pique et 6 de coeur, atout pique
+        // premiere carte jouee 9 de coeur, deuxieme carte 10 de pique
+        assertEquals(0b00_0000000000000000_0000000000000001_0000000000001000L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_010011, 0b00_0000000000000000_0000000000000001_0000000000001011L));
+        
+        // qqn a coupé, pas d'atout plus haut, soit autre couleur, pas de couleur de base
+        // 6, 7 ,8 de pique et 6 de coeur, atout pique
+        // premiere carte jouee 9 de carreau, deuxieme carte 10 de pique
+        assertEquals(0b1_0000000000000000L, PackedTrick.playableCards(0b00_11_0000_111111_111111_000100_100011, 0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        
+        //cas normal: atout demandé, tout le monde a atout, atout pique
+        // en main: 6, 7, 8 de pique, 6 de coeur
+        // première carte jouée: 9 de pique, après 10 de pique, après bourre
+        assertEquals(0b0_0000000000000111L, PackedTrick.playableCards(0b00_11_0000_111111_000101_000100_000011, 0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        //personne n'a coupé, on a de l'atout
+        // en main: 6, 7, 8 de pique
+        // première carte jouée: 9 de coeur, après 10 de coeur, après valet de coeur
+        assertEquals(0b0_0000000000000111L, PackedTrick.playableCards(0b00_11_0000_111111_010101_010100_010011, 0b00_0000000000000000_0000000000000000_0000000000000111L));
+        
+        // peut couper mais peut pas suivre
+        // en main: 6, 7, 8 de pique, 6 de coeur
+        // première carte jouée: 9 de coeur, après 10 de coeur, après valet de coeur
+        assertEquals(0b1_0000000000000111L, PackedTrick.playableCards(0b00_11_0000_111111_010101_010100_010011, 0b00_0000000000000000_0000000000000001_0000000000000111L));
+        
+        // cas de la dernière pli, on peut jouer tout ce qu'on a en main
+        // en main: 6 de pique
+        // première carte jouée: 7 de coeur, atout coeur
+        assertEquals(0b0_0000000000000001L, PackedTrick.playableCards(0b01_11_0000_111111_111111_111111_010001, 0b00_0000000000000000_0000000000000000_0000000000000001L));
+        
+        // cas de la dernière pli, on peut jouer tout ce qu'on a en main
+        // en main: 6 de pique
+        // première carte jouée: 7 de coeur, deuxieme carte: 8 de carreau atout coeur
+        assertEquals(0b0_0000000000000001L, PackedTrick.playableCards(0b01_11_0000_111111_111111_100011_010001, 0b00_0000000000000000_0000000000000000_0000000000000001L));
+        
+        // cas de la dernière pli, on peut jouer tout ce qu'on a en main
+        // en main: 6 de pique
+        // première carte jouée: 7 de coeur, deuxieme carte: 8 de carreau, troisieme carte: as de trefle, atout coeur
+        assertEquals(0b0_0000000000000001L, PackedTrick.playableCards(0b01_11_0000_111111_111000_100011_010001, 0b00_0000000000000000_0000000000000000_0000000000000001L));
+ 
+        
+        // jamais une main vide, set retourné toujours un subset de la main donnée
+        
+        ArrayList<Integer> cards = new ArrayList<>();
+        for(int i = 0; i<Card.Rank.COUNT; ++i) {
+            for(int j = 0; j<Card.Color.COUNT; ++j) {
+                cards.add(PackedCard.pack(Color.ALL.get(j), Rank.ALL.get(i)));
+            }
+        }
+        for(int i = 1; i<PackedCardSet.subsetOfColor(PackedCardSet.ALL_CARDS, Color.SPADE); ++i) {
+            for(int j = 0; j<cards.size(); ++j) {
+                for(int m = 0; m<cards.size(); ++m) {
+               // System.out.println(PackedCardSet.toString(PackedTrick.playableCards((0b00_11_0000_111111_111111 << 12)|(cards.get(j)<<6)|cards.get(m), ((i<<48)|(i<<32)|(i<<16)|i))));
+                assertTrue(PackedTrick.playableCards((0b00_11_0000_111111_111111 << 12)|(cards.get(j)<<6)|cards.get(m), ((i<<48)|(i<<32)|(i<<16)|i))>0);
+                assertTrue((PackedTrick.playableCards((0b00_11_0000_111111_111111 << 12)|(cards.get(j)<<6)|cards.get(m), ((i<<48)|(i<<32)|(i<<16)|i)) & ((i<<48)|(i<<32)|(i<<16)|i)) > 0);
+                }
+            }
+        }
+    }
         @Test
         void playableCardTestUnit() {
             int pkTrick1 = PackedTrick.firstEmpty(Card.Color.SPADE,
