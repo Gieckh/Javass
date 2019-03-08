@@ -92,10 +92,12 @@ public final class Card {
                 return "\u2660";
             case HEART:
                 //2661
-                return "\u2665";
+                //2665
+                return "\u2661";
             case DIAMOND:
                 //2662
-                return "\u2666";
+                //2666
+                return "\u2662";
             case CLUB:
                 return "\u2663";
             default:
