@@ -106,16 +106,15 @@ public final class CardSet {
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
      */
-    public Card get( int index) {
+    public Card get(int index) {
         return Card.ofPacked(PackedCardSet.get(pkCardSet, index));
     }
     /**
      * @brief If the packed card "pkCard" is not already in the set "pkCardSet",
-     *        this method puts it in [the corresponding bit is shifted from 0 to 1]. //TODO: "shifted" ?
+     *        this method puts it in [the corresponding bit is shifted from 0 to 1].
      *        Otherwise, does nothing.
      *
-     * @param pkCardSet (long) the set we want to put the packed card in
-     * @param pkCard (int) the packed card we want to put in the set
+     * @param card (Card) the Card we want to add in the set
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 1.
      *
@@ -123,7 +122,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet add(Card card) {
-        return CardSet.ofPacked(PackedCardSet.add(pkCardSet, card.packed()));
+        return new CardSet( PackedCardSet.add(pkCardSet, card.packed()) );
     }
     /**
      * @brief If the card "card" is already in this set,
@@ -138,11 +137,12 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet remove(Card card) {
-        return CardSet.ofPacked(PackedCardSet.remove(pkCardSet, card.packed()));
+        return new CardSet( PackedCardSet.remove(pkCardSet, card.packed()) );
     }
+
     /**
      * @brief Indicates whether this set of card contains the
-     *        given card [pkCard].
+     *        given card [Card].
      *
      * @param card (Card)
      * @return (boolean) true if this set contains "card".
@@ -161,8 +161,9 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet complement() {
-        return CardSet.ofPacked(PackedCardSet.complement(pkCardSet));
+        return new CardSet (PackedCardSet.complement(pkCardSet));
     }
+
     /**
     * @brief the union of this set with one in the parameters.
     *
@@ -172,8 +173,9 @@ public final class CardSet {
     * @author - Antoine Scardigli (299905)
     */
     public CardSet union(CardSet that) {
-        return CardSet.ofPacked(PackedCardSet.union(pkCardSet, that.pkCardSet));
+        return new CardSet (PackedCardSet.union(pkCardSet, that.pkCardSet));
     }
+
     /**
      * @brief the intersection of this set of cards with one in the parameters.
      *
@@ -183,7 +185,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet intersection(CardSet that) {
-        return CardSet.ofPacked(PackedCardSet.intersection(pkCardSet, that.pkCardSet));
+        return new CardSet (PackedCardSet.intersection(pkCardSet, that.pkCardSet));
     }
     
     /**
@@ -200,7 +202,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet difference(CardSet that) {
-        return CardSet.ofPacked(PackedCardSet.difference(pkCardSet, that.pkCardSet));
+        return new CardSet (PackedCardSet.difference(pkCardSet, that.pkCardSet));
     }
     
     /**
@@ -219,15 +221,17 @@ public final class CardSet {
     
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  !(thatO instanceof CardSet)) {//todo: test
+        //using "instanceof", since final class
+        if (thatO == null  ||  !(thatO instanceof CardSet)) {//todo: test //TODO: remove "== null" ?
             return false;
         }
 
-        CardSet thatOSet= (CardSet) thatO; // Or do 2 "conversions, idk"
-            return (thatOSet.pkCardSet == this.pkCardSet);
+        CardSet thatOSet = (CardSet) thatO;
+        return (thatOSet.pkCardSet == this.pkCardSet);
     }
 
-    //hashcode n'est pas verifié par signcheck
+    //todo what
+    //hashcode n'est pas vérifié par signcheck
     @Override
     public int hashCode() {
         return Long.hashCode(pkCardSet);
@@ -235,7 +239,7 @@ public final class CardSet {
     /**
      * @brief returns the string with the cards included in the set .
      * 
-     * @return a string with the cards in the set
+     * @return a (String) with the cards in the set
      *
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
