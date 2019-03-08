@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.javass.bits.Bits32;
 import com.sun.javafx.fxml.expression.BinaryExpression;
 
 import ch.epfl.javass.jass.Card.Color;
@@ -26,9 +25,11 @@ public class test {
 //            System.out.println(Integer.toBinaryString(PackedTrick.nextEmpty(8 | (i << 24))));
 //            System.out.println();
 //        }
-
-        System.out.println(PackedTrick.winningCardIndex(Bits32.pack(0b11_0001, 6, 0b1_0011, 6,
-                PackedCard.INVALID, 6, PackedCard.INVALID, 6, 0, 4, 0, 2, 0b1,
-                2), Color.HEART));
+        System.out.println(PackedCard.toString(49));
+        System.out.println(PackedTrick.winningPlayer(0b1000));
+        System.out.println(PackedTrick.winningPlayer(0b10000));
+        System.out.println( Integer.toBinaryString( PackedTrick.nextEmpty(0b1000) ) );
+        System.out.println();
+        System.out.println( Integer.toBinaryString( PackedTrick.nextEmpty(0b10000) ) );
     }
 }
