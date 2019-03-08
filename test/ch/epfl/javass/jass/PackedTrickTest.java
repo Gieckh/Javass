@@ -24,6 +24,22 @@ import ch.epfl.javass.jass.TeamId;
 //TODO: void isValidWorks()
 public class PackedTrickTest {
 
+    @Test
+    void winningPlayerTest() {
+        int counter = 0;
+        int[] cards = {};
+        for (int i = 0 ; i != -1 ; ++i) {
+            if ( PackedTrick.isValid(i)&&((Bits32.extract(i, 0, 6) != 111111)||Bits32.extract(i, 6, 6) != 111111||Bits32.extract(i, 12, 6) != 111111||Bits32.extract(i, 18, 6) != 111111)){
+               counter =0;
+                for (int j = 0; j< 4 ; ++j) {
+                    
+                    if (Bits32.extract(i, 6*j, 6)!=111111) {
+                        counter +=1;
+                    }
+                }
+            }
+        }
+    }
 
         @Test
         void playableCardTestUnit() {
