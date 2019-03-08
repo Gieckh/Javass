@@ -38,7 +38,7 @@ public final class PackedTrick {
 
     private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE; //30
     private static final int TRUMP_SIZE = 2;
-    private static final int TRUMP_SHIFT = -1;
+    private static final int TRUMP_SHIFT = 1;
 
     private static final int EMPTY  = (PackedCard.INVALID << CARD_1_START) |
             (PackedCard.INVALID << CARD_2_START) |
@@ -114,7 +114,8 @@ public final class PackedTrick {
 
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         int player = (firstPlayer.type + PLAYER_SHIFT) << PLAYER_START;
-        int color  = (trump.type + TRUMP_SHIFT) << TRUMP_START;
+//        int color  = (trump.type - TRUMP_SHIFT) << TRUMP_START; todo
+        int color  = trump.ordinal() << TRUMP_START;
 
         return EMPTY | player | color;
     }
@@ -278,7 +279,7 @@ public final class PackedTrick {
         for (int i = 2 ; i <= 4 ; ++i) {
             if (containsValidCard(pkTrick, i)) {
                 int pkCard = card(pkTrick, i-1);
-                if (PackedCard.isBetter(trump, winningCard, pkCard)) {
+                if (PackedCard.isBetter(trump, pkCard, winningCard)) {
                     winningCard = pkCard;
                 }
             }
@@ -301,7 +302,7 @@ public final class PackedTrick {
 
         Card.Color trump = trump(pkTrick);
         Card.Color baseColor = baseColor(pkTrick);
-        long myTrumps = pkHand & PackedCardSet.subsetOfColor(pkHand, trump);
+        long myTrumps = PackedCardSet.subsetOfColor(pkHand, trump);
 
         //If the pli is fonded trump, then you don't have to play a higher card.
         if (trump == baseColor) {
@@ -319,7 +320,7 @@ public final class PackedTrick {
         boolean isBestTrump = PackedCard.color(winningCard) == trump;
         long playableNotTrump = PackedCardSet.subsetOfColor(pkHand, baseColor);
         if (isBestTrump) {
-            long betterTrumps = PackedCardSet.trumpAbove(winningCard);
+            long betterTrumps = PackedCardSet.trumpAbove(winningCard) & myTrumps;
             if (playableNotTrump != PackedCardSet.EMPTY) {
                 return playableNotTrump | betterTrumps;
             }
@@ -366,26 +367,43 @@ public final class PackedTrick {
         assert (!isEmpty(pkTrick));
 
         int winningCard = pkTrick & CARD_MASK_1;
+        System.out.println("winningCard : " + PackedCard.toString(winningCard));
         int winningIndex = 0;
-        for (int i = 2 ; i <= 4 ; ++i) {
+        for (int i = 2; i <= 4; ++i) {
             if (containsValidCard(pkTrick, i)) {
-                int pkCard = card(pkTrick, i-1);
+                int pkCard = card(pkTrick, i - 1);
                 if (PackedCard.isBetter(trump, pkCard, winningCard)) {
                     winningCard = pkCard;
+                    System.out.println("winningCard : " + PackedCard.toString(winningCard));
                     winningIndex = i - 1;
                 }
-            }
-            else {
+            } else {
                 return winningIndex;
             }
         }
-
         return winningIndex;
-    } //TODO private
+    }
 
     public static PlayerId winningPlayer(int pkTrick) {
         Card.Color trump = trump(pkTrick);
 
         return player(pkTrick, winningCardIndex(pkTrick, trump));
+    }
+
+    public static String toString(int pkTrick) {
+        String str = "trump : " + Card.Color.toType(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE) + TRUMP_SHIFT) + "\n";
+        str += "base color : " + baseColor(pkTrick) + "\n";
+        str += "{";
+        for (int i = 0 ; i < 4 ; ++i) {
+            int pkCard = card(pkTrick, i);
+            if (pkCard == 0b111111) {
+                str += "_ ,";
+            }
+            else {
+                str += PackedCard.toString(pkCard) + ", ";
+            }
+        }
+        str += "}";
+        return str;
     }
 }
