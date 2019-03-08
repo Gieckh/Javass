@@ -236,6 +236,7 @@ public final class CardSet {
     public int hashCode() {
         return Long.hashCode(pkCardSet);
     }
+
     /**
      * @brief returns the string with the cards included in the set .
      * 

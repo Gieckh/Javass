@@ -331,7 +331,7 @@ class PackedCardSetTest {
     @Test
     void containsWorks() {
     }
-/*// does work 
+// does work
    @Test
    void subsetOfColorWorks() {
         for (int c = 0; c < 4; ++c) {
@@ -348,7 +348,7 @@ class PackedCardSetTest {
             }
         }
     }
-*/
+
 //    @Test
 //    void toStringWorks() { //TODO ???
 //        long s = PackedCardSet.EMPTY;
@@ -541,19 +541,19 @@ class PackedCardSetTest {
         }
     }
 
-    @Test
-    void subsetOfColorWorks() {
-        SplittableRandom rng = newRandom();
-        for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
-            long pkCardSet = rng.nextLong() & mask;
-            long pkCardSetRes =
-                    PackedCardSet.subsetOfColor(pkCardSet, Color.SPADE) |
-                    PackedCardSet.subsetOfColor(pkCardSet, Color.HEART) |
-                    PackedCardSet.subsetOfColor(pkCardSet, Color.DIAMOND) |
-                    PackedCardSet.subsetOfColor(pkCardSet, Color.CLUB);
-            assertEquals(pkCardSet, pkCardSetRes);
-        }
-    }
+//    @Test
+//    void subsetOfColorWorks() {
+//        SplittableRandom rng = newRandom();
+//        for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
+//            long pkCardSet = rng.nextLong() & mask;
+//            long pkCardSetRes =
+//                    PackedCardSet.subsetOfColor(pkCardSet, Color.SPADE) |
+//                    PackedCardSet.subsetOfColor(pkCardSet, Color.HEART) |
+//                    PackedCardSet.subsetOfColor(pkCardSet, Color.DIAMOND) |
+//                    PackedCardSet.subsetOfColor(pkCardSet, Color.CLUB);
+//            assertEquals(pkCardSet, pkCardSetRes);
+//        }
+//    }
 
     Map<Long, String> toStringList = new HashMap<Long, String>() {
         private static final long serialVersionUID = 1L;

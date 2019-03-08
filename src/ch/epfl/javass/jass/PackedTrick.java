@@ -367,14 +367,12 @@ public final class PackedTrick {
         assert (!isEmpty(pkTrick));
 
         int winningCard = pkTrick & CARD_MASK_1;
-        System.out.println("winningCard : " + PackedCard.toString(winningCard));
         int winningIndex = 0;
         for (int i = 2; i <= 4; ++i) {
             if (containsValidCard(pkTrick, i)) {
                 int pkCard = card(pkTrick, i - 1);
                 if (PackedCard.isBetter(trump, pkCard, winningCard)) {
                     winningCard = pkCard;
-                    System.out.println("winningCard : " + PackedCard.toString(winningCard));
                     winningIndex = i - 1;
                 }
             } else {
