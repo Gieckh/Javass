@@ -1,5 +1,6 @@
 package ch.epfl.javass.jass;
 
+import ch.epfl.javass.jass.Card.Color;
 
 public class test {
     public static void main(String[] args) {

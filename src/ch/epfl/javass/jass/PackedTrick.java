@@ -1,6 +1,7 @@
 package ch.epfl.javass.jass;
 
 import ch.epfl.javass.bits.Bits32;
+import ch.epfl.javass.jass.Card.Color;
 
 public final class PackedTrick {
     /** ============================================== **/
@@ -127,7 +128,6 @@ public final class PackedTrick {
 
         //incrementing the index
         pkTrick += 1 << INDEX_START;
-
         //TODO better
         int winningPlayer = winningPlayer(pkTrick).type + PLAYER_SHIFT;
         pkTrick &= ~Bits32.mask(PLAYER_START, PLAYER_SIZE);
@@ -177,6 +177,7 @@ public final class PackedTrick {
         return size;
     }
 
+    // pareille : regarde le TODO plus bas : tu voulais peut etre faire Color.ALL.get(pkColor)?
     //not using bits32 since it re-extracts.
     private static Card.Color pkColorToColor(int pkColor) {
         switch (pkColor) {
@@ -196,7 +197,7 @@ public final class PackedTrick {
         int pkColor = Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE);
         return pkColorToColor(pkColor);
     }
-
+    //TODO : je ne suis pas sur de saisir l'interet ... ne pourrais tu pas simplement utiliser PlayerId.ALL.get(playerIndex);
     //Where "index" ranges from 0 to 3
     private static PlayerId playerFromIndex(int playerIndex) {
         switch (playerIndex) {
