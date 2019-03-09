@@ -254,7 +254,6 @@ public class PackedTrickTest {
         for(int i = 1; i<PackedCardSet.subsetOfColor(PackedCardSet.ALL_CARDS, Color.SPADE); ++i) {
             for(int j = 0; j<cards.size(); ++j) {
                 for(int m = 0; m<cards.size(); ++m) {
-               // System.out.println(PackedCardSet.toString(PackedTrick.playableCards((0b00_11_0000_111111_111111 << 12)|(cards.get(j)<<6)|cards.get(m), ((i<<48)|(i<<32)|(i<<16)|i))));
                 assertTrue(PackedTrick.playableCards((0b00_11_0000_111111_111111 << 12)|(cards.get(j)<<6)|cards.get(m), ((i<<48)|(i<<32)|(i<<16)|i))>0);
                 assertTrue((PackedTrick.playableCards((0b00_11_0000_111111_111111 << 12)|(cards.get(j)<<6)|cards.get(m), ((i<<48)|(i<<32)|(i<<16)|i)) & ((i<<48)|(i<<32)|(i<<16)|i)) > 0);
                 }
@@ -490,13 +489,10 @@ public class PackedTrickTest {
         }
     }
 
-    // ce bon vieux marin assume que la carte est correcte ...
-    // suppose en Français, jeune homme :-) //todo
     @Test
     void isFullWorks(){
         for (int i = 0 ; i != -1; ++i ) {
             if (PackedTrick.isValid(i)) {
-                //TODO [highlight]: tu avais oublié la couleur : size 6 -> 4 (@author : Marin)
                 if((Bits32.extract(i, 0 ,4) < 9) && (Bits32.extract(i, 6 ,4) < 9) &&
                    (Bits32.extract(i, 12,4) < 9) && (Bits32.extract(i, 18,4) < 9)) {
                     assertTrue(PackedTrick.isFull(i));
@@ -533,11 +529,10 @@ public class PackedTrickTest {
             }
         }
     
-    
+    @Test
     void indexWorks(){
         for ( int i = 0 ; i != -1 ; ++i){
             if (PackedTrick.isValid(i)) {
-                //s'arrete a 111110100001000000011001 : bizarre TODO
                 int index = Bits32.extract(i, 24, 4);
                     assertEquals(index , PackedTrick.index(i));
             }
