@@ -75,7 +75,7 @@ public final class PackedCard {
     public static Card.Color color(int pkCard) {
         assert (isValid(pkCard));
 
-        return Card.Color.toType(extract(pkCard, CODED_COLOR_START, CODED_COLOR_SIZE) + COLOR_SHIFT);
+        return Card.Color.ALL.get(extract(pkCard, CODED_COLOR_START, CODED_COLOR_SIZE)); //TODO: test again
     }
 
     /**

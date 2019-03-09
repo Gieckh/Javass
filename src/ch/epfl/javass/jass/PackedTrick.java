@@ -387,8 +387,9 @@ public final class PackedTrick {
         return player(pkTrick, winningCardIndex(pkTrick, trump));
     }
 
-    public static String toString(int pkTrick) {
-        String str = "trump : " + Card.Color.toType(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE) + TRUMP_SHIFT) + "\n";
+
+    public static String toString(int pkTrick) {//TODO: Test again
+        String str = "trump : " + Card.Color.ALL.get(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE)) + "\n";
         str += "base color : " + baseColor(pkTrick) + "\n";
         str += "{";
         for (int i = 0 ; i < 4 ; ++i) {

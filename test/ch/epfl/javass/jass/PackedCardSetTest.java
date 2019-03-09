@@ -332,22 +332,22 @@ class PackedCardSetTest {
     void containsWorks() {
     }
 // does work
-   @Test
-   void subsetOfColorWorks() {
-        for (int c = 0; c < 4; ++c) {
-            for (int i = 1; i < 512; ++i) {
-                
-                for (int j = 1; j < 512; ++j) {
-                    for (int k = 1; k < 512; ++k) {
-                        for (int l = 1; l < 512; ++l) {
-                            long cardSet = i | j << 16 | k << 32 | l << 48;
-                            assertEquals(cardSet & Bits64.mask(c * 16, 9), PackedCardSet.subsetOfColor(cardSet, Card.Color.values()[c]));
-                        }
-                    }
-                }
-            }
-        }
-    }
+//   @Test
+//   void subsetOfColorWorks() {
+//        for (int c = 0; c < 4; ++c) {
+//            for (int i = 1; i < 512; ++i) {
+//
+//                for (int j = 1; j < 512; ++j) {
+//                    for (int k = 1; k < 512; ++k) {
+//                        for (int l = 1; l < 512; ++l) {
+//                            long cardSet = i | j << 16 | k << 32 | l << 48;
+//                            assertEquals(cardSet & Bits64.mask(c * 16, 9), PackedCardSet.subsetOfColor(cardSet, Card.Color.values()[c]));
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 //    @Test
 //    void toStringWorks() { //TODO ???
