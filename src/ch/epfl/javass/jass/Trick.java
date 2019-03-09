@@ -6,7 +6,7 @@ public class Trick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    public static final int INVALID = PackedTrick.INVALID;
+    public static final Trick INVALID = ofPacked(PackedTrick.INVALID);
     private final int pkTrick;
 
 
@@ -42,7 +42,7 @@ public class Trick {
 
     public Trick nextEmpty() {
         int nextEmpty = PackedTrick.nextEmpty(pkTrick);
-        if (nextEmpty == INVALID) {
+        if (nextEmpty == PackedTrick.INVALID) {
             throw new IllegalStateException();
         }
 
@@ -94,7 +94,57 @@ public class Trick {
         return Trick.ofPacked(PackedTrick.withAddedCard(pkTrick, c.packed()));
     }
     
+    public Color baseColor() {
+        if(PackedTrick.isEmpty(pkTrick)) {
+            throw new IllegalStateException();
+        }
+        return PackedTrick.baseColor(pkTrick);
+    }
     
+    public CardSet playableCards(CardSet hand) {
+        if( PackedTrick.isFull(pkTrick)) {
+            throw new IllegalStateException();
+        }
+        return CardSet.ofPacked(PackedTrick.playableCards(pkTrick, hand.packed()));
+    }
     
+    public int points() {
+        return PackedTrick.points(pkTrick);
+    }
+    
+    public PlayerId winningPlayer() {
+        if(PackedTrick.isEmpty(pkTrick)) {
+            throw new IllegalStateException();
+        }
+        return PackedTrick.winningPlayer(pkTrick);
+    }
+    
+    @Override
+    public boolean equals(Object thatO) {
+        if (thatO == null  ||  !(thatO instanceof Trick)) { //todo: test
+            return false;
+        }
+
+        Trick thatOTrick = (Trick) thatO; // Or do 2 "conversions, idk"
+            return (thatOTrick.pkTrick== this.pkTrick);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Long.hashCode(pkTrick);
+    }
+    
+    /**
+     * @brief 
+     *
+     * @return 
+     *
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
+    @Override
+    public String toString() {
+        return PackedScore.toString(pkTrick);
+    }
     
 }
