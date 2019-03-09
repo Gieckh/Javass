@@ -62,7 +62,7 @@ public final class PackedCard {
      * @return (int) the corresponding packed card.
      */
     public static int pack(Card.Color c, Card.Rank r) {
-        return Bits32.pack(r.type - RANK_SHIFT, CODED_RANK_SIZE, c.type - COLOR_SHIFT, CODED_COLOR_SIZE);
+        return Bits32.pack(r.type - RANK_SHIFT, CODED_RANK_SIZE, c.ordinal(), CODED_COLOR_SIZE); //TODO: test
     }
 
     

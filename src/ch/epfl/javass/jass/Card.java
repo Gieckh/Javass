@@ -57,29 +57,29 @@ public final class Card {
             this.type = type;
         }
 
-        /**
-         * returns the color.
-         *
-         * @param number
-         * @return color
-         * @author Antoine Scardigli - (299905)
-         * @author Marin Nguyen - (288260)
-         */
-        public static Color toType(int number) {
-            // for all the switches which returns something for any value, it is not necessary to use break
-            switch (number) {
-            case 1:
-                return SPADE;
-            case 2:
-                return HEART;
-            case 3:
-                return DIAMOND;
-            case 4:
-                return CLUB;
-            default:
-                throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a color");
-            }
-        }
+//        /**
+//         * returns the color.
+//         *
+//         * @param number
+//         * @return color
+//         * @author Antoine Scardigli - (299905)
+//         * @author Marin Nguyen - (288260)
+//         */
+//        public static Color toType(int number) {
+//            // for all the switches which returns something for any value, it is not necessary to use break
+//            switch (number) {
+//            case 1:
+//                return SPADE;
+//            case 2:
+//                return HEART;
+//            case 3:
+//                return DIAMOND;
+//            case 4:
+//                return CLUB;
+//            default:
+//                throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a color");
+//            }
+//        }
 
         /**
          * returns the character corresponding to the rank of the card
