@@ -362,7 +362,8 @@ public final class PackedTrick {
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
-    public static int winningCardIndex(int pkTrick, Card.Color trump) {
+    
+    private static int winningCardIndex(int pkTrick, Card.Color trump) {
         assert (!isEmpty(pkTrick));
 
         int winningCard = pkTrick & CARD_MASK_1;
