@@ -125,6 +125,13 @@ public final class PackedTrick {
         return true;
     }
 
+    /**
+     * @brief
+     *
+     * @param trump
+     * @param firstPlayer
+     * @return
+     */
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         int player = (firstPlayer.type + PLAYER_SHIFT) << PLAYER_START;
 //        int color  = (trump.type - TRUMP_SHIFT) << TRUMP_START; todo
@@ -134,6 +141,13 @@ public final class PackedTrick {
     }
 
     //TODO
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static int nextEmpty(int pkTrick) {
         if (isLast(pkTrick)) {
             return INVALID;
@@ -148,21 +162,47 @@ public final class PackedTrick {
         return pkTrick | EMPTY;
     }
 
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static boolean isLast(int pkTrick) {
         return index(pkTrick) == MAX_INDEX;
     }
 
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static boolean isEmpty (int pkTrick) {
         return (pkTrick & EMPTY) == EMPTY;
     }
 
-// TODO : Antoine : du coup mon test fail
     //Assuming the card is valid
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static boolean isFull(int pkTrick) {
         return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
     }
 
     //TODO: not a separate method, cuz it does a copy...
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @param cardNo
+     * @return
+     */
     private static boolean containsValidCard(int pkTrick, int cardNo) {
         switch(cardNo) {
         case 1:
@@ -177,7 +217,15 @@ public final class PackedTrick {
             throw new IllegalArgumentException();
         }
     }
+
     //TODO: better?
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static int size(int pkTrick) {
         int size = 0;
         for (int cardNo = 1 ; cardNo <= 4 ; ++cardNo) {
@@ -190,52 +238,49 @@ public final class PackedTrick {
         return size;
     }
 
-    // pareille : regarde le TODO plus bas : tu voulais peut etre faire Color.ALL.get(pkColor)?
-    //not using bits32 since it re-extracts.
-    private static Card.Color pkColorToColor(int pkColor) {
-        switch (pkColor) {
-        case 0:
-            return Card.Color.SPADE;
-        case 1:
-            return Card.Color.HEART;
-        case 2:
-            return Card.Color.DIAMOND;
-        case 3:
-            return Card.Color.CLUB;
-        default:
-            throw new IllegalArgumentException();
-        }
-    }
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static Card.Color trump (int pkTrick) {
         int pkColor = Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE);
-        return pkColorToColor(pkColor);
-    }
-    //TODO : je ne suis pas sur de saisir l'interet ... ne pourrais tu pas simplement utiliser PlayerId.ALL.get(playerIndex);
-    //Where "index" ranges from 0 to 3
-    private static PlayerId playerFromIndex(int playerIndex) {
-        switch (playerIndex) {
-            case 0:
-                return PlayerId.PLAYER_1;
-            case 1:
-                return PlayerId.PLAYER_2;
-            case 2:
-                return PlayerId.PLAYER_3;
-            case 3:
-                return PlayerId.PLAYER_4;
-            default: //unreachable statement (2 bits will always be between 0 and 4).
-                throw new IllegalArgumentException();
-        }
-    }
-    public static PlayerId player (int pkTrick, int index) {
-        int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
-        return playerFromIndex((firstPlayer + index) % 4);
+        return Color.ALL.get(pkColor);
     }
 
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @param index
+     * @return
+     */
+    public static PlayerId player (int pkTrick, int index) {
+        int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
+        return PlayerId.ALL.get((firstPlayer + index) % 4);
+    }
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static int index (int pkTrick) {
         return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE);
     }
 
+
     //assuming the card is indeed there.
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @param index
+     * @return
+     */
     public static int card (int pkTrick, int index) {
         assert (isValid(pkTrick));
         assert (0 <= index  &&  index <= 3);
@@ -256,6 +301,14 @@ public final class PackedTrick {
     }
 
     //assuming not full.
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @param pkCard
+     * @return
+     */
     public static int withAddedCard(int pkTrick, int pkCard) {
         assert (isValid(pkTrick));
         assert (!isFull(pkTrick));
@@ -275,16 +328,30 @@ public final class PackedTrick {
         return (pkTrick & (~CARD_MASK_4)) | (pkCard << CARD_4_START);
     }
 
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static Card.Color baseColor(int pkTrick) {
         assert (isValid(pkTrick));
 
         //cuz i dont want to re-extract.
         int firstCardColor = (pkTrick & 0b110000) >>> CARD_COLOR_START;
-        return pkColorToColor(firstCardColor);
+        return Color.ALL.get(firstCardColor);
     }
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @param trump
+     * @return
+     */
     private static int winningCard(int pkTrick, Card.Color trump) {
         assert (!isEmpty(pkTrick));
 
@@ -308,6 +375,14 @@ public final class PackedTrick {
     //assumed not full
     //first implementation
     //easily simplifiable
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @param pkHand
+     * @return
+     */
     public static long playableCards(int pkTrick, long pkHand) {
         if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) { //If you are the first player to play.
             return pkHand;
@@ -359,6 +434,13 @@ public final class PackedTrick {
     
 
     //only called with a valid, full trick
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static int points(int pkTrick) {
         assert (isValid(pkTrick));
         assert (isFull(pkTrick));
@@ -376,7 +458,13 @@ public final class PackedTrick {
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
-    
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @param trump
+     * @return
+     */
     private static int winningCardIndex(int pkTrick, Card.Color trump) {
         assert (!isEmpty(pkTrick));
 
@@ -396,16 +484,27 @@ public final class PackedTrick {
         return winningIndex;
     }
 
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static PlayerId winningPlayer(int pkTrick) {
         Card.Color trump = trump(pkTrick);
 
         return player(pkTrick, winningCardIndex(pkTrick, trump));
     }
 
-
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static String toString(int pkTrick) {//TODO: Test again
         String str = "trump : " + Card.Color.ALL.get(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE)) + "\n";
-        str += "base color : " + baseColor(pkTrick) + "\n";
+        str += "base color : " + baseColor(pkTrick) + "\n"; //TODO: StringJoiner
         str += "{";
         for (int i = 0 ; i < 4 ; ++i) {
             int pkCard = card(pkTrick, i);
