@@ -3,6 +3,12 @@ package ch.epfl.javass.jass;
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
 
+/**
+ * @brief
+ *
+ * @author - Marin Nguyen (288260)
+ * @author - Antoine Scardigli (299905)
+ */
 public final class PackedTrick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -57,6 +63,13 @@ public final class PackedTrick {
     /** ============================================== **/
 
     //Here we are ready to face all kinds of invalid cards
+
+    /**
+     * @brief
+     *
+     * @param pkTrick
+     * @return
+     */
     public static boolean isValid(int pkTrick) {
         if (Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE) > MAX_INDEX) {
             return false;
