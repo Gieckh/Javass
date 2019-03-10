@@ -63,12 +63,11 @@ public final class PackedTrick {
     /** ============================================== **/
 
     //Here we are ready to face all kinds of invalid cards
-
     /**
-     * @brief
+     * @brief Indicates whether the given "pkTrick" is packed correctly
      *
      * @param pkTrick
-     * @return
+     * @return true if "pkTrick" encodes a valid trick
      */
     public static boolean isValid(int pkTrick) {
         if (Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE) > MAX_INDEX) {
