@@ -31,6 +31,8 @@ public final class JassGame {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    
+    
     public boolean isGameOver() {
         if(turnstate != null) {
             return  (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
