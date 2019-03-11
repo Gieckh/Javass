@@ -217,7 +217,7 @@ public final class CardSet {
      * @author - Antoine Scardigli (299905)
      */
     public CardSet subsetOfColor(Card.Color color) {
-        return CardSet.ofPacked(PackedCardSet.subsetOfColor(pkCardSet, color));
+        return new CardSet (PackedCardSet.subsetOfColor(pkCardSet, color));
     }
     
     @Override

@@ -9,7 +9,7 @@ public class Trick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    public static final Trick INVALID = ofPacked(PackedTrick.INVALID);
+    public static final Trick INVALID = new Trick(PackedTrick.INVALID);
     private final int pkTrick;
 
     /** ============================================== **/
@@ -74,10 +74,8 @@ public class Trick {
         return PackedTrick.player(pkTrick, index);
     }
     
-    public Card card (int index) {
-        if((index < 0) ||(index >= PackedTrick.size(pkTrick))) {
-            throw new IndexOutOfBoundsException();
-        }
+    public Card card (int index) { //TODO: test
+        checkIndex(index, PackedTrick.size(pkTrick));
         return Card.ofPacked(PackedTrick.card(pkTrick, index));
     }
     
@@ -85,7 +83,8 @@ public class Trick {
         if (PackedTrick.isFull(pkTrick)){
             throw new IllegalStateException();
         }
-        return Trick.ofPacked(PackedTrick.withAddedCard(pkTrick, c.packed()));
+
+        return new Trick ( PackedTrick.withAddedCard(pkTrick, c.packed()) );
     }
     
     public Color baseColor() {
@@ -100,6 +99,7 @@ public class Trick {
         if( PackedTrick.isFull(pkTrick)) {
             throw new IllegalStateException();
         }
+
         return CardSet.ofPacked(PackedTrick.playableCards(pkTrick, hand.packed()));
     }
     
@@ -111,9 +111,9 @@ public class Trick {
         if(PackedTrick.isEmpty(pkTrick)) {
             throw new IllegalStateException();
         }
+
         return PackedTrick.winningPlayer(pkTrick);
     }
-
 
 
     @Override
@@ -123,7 +123,7 @@ public class Trick {
         }
 
         Trick thatOTrick = (Trick) thatO; // Or do 2 "conversions, idk"
-            return (thatOTrick.pkTrick== this.pkTrick);
+            return (thatOTrick.pkTrick == this.pkTrick);
     }
     
     @Override
