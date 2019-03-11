@@ -86,32 +86,44 @@ public final class TurnState {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
         }
-        else {
-            return new TurnState(pkScore, PackedCardSet.remove(pkUnplayedCards, card.packed()),PackedTrick.withAddedCard(pkCurrentTrick, card.packed()));
-        }
+
+        int pkCard = card.packed();
+        return new TurnState(pkScore, PackedCardSet.remove(pkUnplayedCards, pkCard),
+                             PackedTrick.withAddedCard(pkCurrentTrick, pkCard) );
+    }
+
+
+    //TODO: check all that follows
+    private TurnState collectTrick(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
+        long withAdditionalTrick = PackedScore.withAdditionalTrick(pkScore,
+                PackedTrick.winningPlayer(pkCurrentTrick).team(),
+                PackedTrick.points(pkCurrentTrick));
+
+        return new TurnState(PackedScore.nextTurn(withAdditionalTrick), pkUnplayedCards,
+                PackedTrick.nextEmpty(pkCurrentTrick));
     }
 
     public TurnState withTrickCollected() {
         if(!PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
         }
-        else {
-            return new TurnState(PackedScore.nextTurn(pkScore), pkUnplayedCards , pkCurrentTrick);
-        }
-        
+
+        return collectTrick(pkScore, pkUnplayedCards, pkCurrentTrick);
     }
 
     public TurnState withNewCardPlayedAndTrickCollected(Card card) {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
         }
-        else {
-            if(!PackedTrick.isFull(pkCurrentTrick)) {
-                throw new IllegalStateException();
-            }
-            else {
-                return new TurnState(PackedScore.nextTurn(pkScore), PackedCardSet.remove(pkUnplayedCards, card.packed()),PackedTrick.withAddedCard(pkCurrentTrick, card.packed()));
-            }
+
+        int pkCard = card.packed();
+        long newUnplayedCards = PackedCardSet.remove(pkUnplayedCards, pkCard);
+        int newTrick = PackedTrick.withAddedCard(pkCurrentTrick, pkCard);
+
+        if (!PackedTrick.isFull(newTrick)) {
+            throw new IllegalStateException();
         }
+
+        return collectTrick(pkScore, newUnplayedCards, newTrick);
     }
 }
