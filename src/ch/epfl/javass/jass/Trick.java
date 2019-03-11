@@ -1,5 +1,8 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.Preconditions.checkArgument;
+import static ch.epfl.javass.jass.PackedScore.isValid;
+
 import ch.epfl.javass.jass.Card.Color;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
