@@ -43,7 +43,7 @@ public class Trick {
 
     public Trick nextEmpty() {
         int nextEmpty = PackedTrick.nextEmpty(pkTrick);
-        checkArgument(nextEmpty != PackedTrick.INVALID);
+        checkArgument(!PackedTrick.isFull(pkTrick));
 
         return new Trick(nextEmpty);
     }
