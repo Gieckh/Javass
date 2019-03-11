@@ -15,7 +15,6 @@ public final class RandomJassGame {
         players.put(pId, player);
         playerNames.put(pId, pId.name());
       }
-
       JassGame g = new JassGame(2019, players, playerNames);
       while (! g.isGameOver()) {
         g.advanceToEndOfNextTrick();
