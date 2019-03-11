@@ -55,7 +55,7 @@ public final class CardSet {
      * @author Marin Nguyen - (288260)
     */
     public static CardSet ofPacked(long packed) {
-        checkArgument(isValid(packed));
+        checkArgument(PackedCardSet.isValid(packed));
         return new CardSet(packed);
     }
            
