@@ -13,7 +13,8 @@ public final class PackedTrick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    public static final int INVALID = 0b11111111_11111111_11111111_11111111;
+    // ~0 = 0b11111111111111111111111111111111
+    public static final int INVALID = ~0;
 
     private static final int CARD_SIZE = 6;
     private static final int CARD_1_START = 0;

@@ -13,8 +13,7 @@ public final class TurnState {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-  //  private TurnState() {
-     //}
+
     
     private TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
         this.pkScore = pkScore;
