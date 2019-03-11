@@ -105,25 +105,6 @@ public final class PackedTrick {
         return (isRank4Valid || masked4 == CARD_MASK_4);
     }
 
-    //Here we suppose that an invalid card always is 111111
-    public static boolean isValid2(int pkTrick) {
-        boolean isRank1Invalid = (pkTrick & RANK_MASK_1) == RANK_MASK_1;
-        boolean isRank2Invalid = (pkTrick & RANK_MASK_2) == RANK_MASK_2;
-        boolean isRank3Invalid = (pkTrick & RANK_MASK_3) == RANK_MASK_3;
-        boolean isRank4Invalid = (pkTrick & RANK_MASK_4) == RANK_MASK_4;
-
-        if (isRank1Invalid)
-            return isRank2Invalid && isRank3Invalid && isRank4Invalid;
-
-        if (isRank2Invalid)
-            return isRank3Invalid && isRank4Invalid;
-
-        if (isRank3Invalid)
-            return isRank4Invalid;
-
-        return true;
-    }
-
     /**
      * @brief
      *
@@ -133,7 +114,6 @@ public final class PackedTrick {
      */
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         int player = (firstPlayer.type + PLAYER_SHIFT) << PLAYER_START;
-//        int color  = (trump.type - TRUMP_SHIFT) << TRUMP_START; todo
         int color  = trump.ordinal() << TRUMP_START;
 
         return EMPTY | player | color;
@@ -257,7 +237,7 @@ public final class PackedTrick {
      */
     public static PlayerId player (int pkTrick, int index) {
         int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
-        return PlayerId.ALL.get((firstPlayer + index) % 4);
+        return PlayerId.ALL.get((firstPlayer + index) % PlayerId.COUNT);
     }
 
     /**
