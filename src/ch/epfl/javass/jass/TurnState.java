@@ -1,6 +1,6 @@
 package ch.epfl.javass.jass;
 
-public class TurnState {
+public final class TurnState {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
