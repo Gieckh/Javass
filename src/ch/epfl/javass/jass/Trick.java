@@ -42,10 +42,9 @@ public class Trick {
     }
 
     public Trick nextEmpty() {
-        int nextEmpty = PackedTrick.nextEmpty(pkTrick);
-        checkArgument(!PackedTrick.isFull(pkTrick));
+        checkArgument(PackedTrick.isFull(pkTrick));
 
-        return new Trick(nextEmpty);
+        return new Trick(PackedTrick.nextEmpty(pkTrick));
     }
 
     public boolean isEmpty() {
