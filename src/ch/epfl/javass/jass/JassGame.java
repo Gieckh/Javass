@@ -32,8 +32,8 @@ public final class JassGame {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     public boolean isGameOver() {
-        return  (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1)>=1000) ||
-                (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_2)>=1000);
+        return  (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1) >= 1000) ||
+                (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_2) >= 1000);
     }
 
     private List<Card> deckShuffled(Random shuffleRng){
@@ -57,10 +57,6 @@ public final class JassGame {
         if(turnstate == null) {
             
             turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
-                    
-                    
-           
-            
         }
 
     }
