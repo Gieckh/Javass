@@ -71,45 +71,46 @@ public class TrickTest {
 
             @Test
             void playableCardTestUnit2() {
-                int pkTrick1 = Trick.firstEmpty(Card.Color.SPADE,
-                        PlayerId.PLAYER_1);
+               Trick pkTrick1 = Trick.ofPacked(PackedTrick.firstEmpty(Card.Color.SPADE,
+                        PlayerId.PLAYER_1));
                 long pkHand1 = 0b0000_0000_0010_0000_0000_0000_0000_0000_0000_0000_0001_0000_0000_0000_0000_0000L;
-                int pkTrick2 = Bits32.pack(0b110, 6, Card.INVALID, 6,
-                        Card.INVALID, 6, Card.INVALID, 6, 0, 4, 0, 2, 0, 2);
+               Trick pkTrick2 = Trick.ofPacked(Bits32.pack(0b110, 6,PackedCard.INVALID, 6,
+                       PackedCard.INVALID, 6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0, 2));
                 long pkHand2 = 0b0000_0000_0001_0000_0000_0000_0000_0000_0000_0000_0000_1010_0000_0000_0010_0000L;
-                int pkTrick3 = Bits32.pack(0b110, 6, Card.INVALID, 6,
-                        Card.INVALID, 6, Card.INVALID, 6, 0, 4, 0, 2, 0, 2);
+               Trick pkTrick3 = Trick.ofPacked(Bits32.pack(0b110, 6,PackedCard.INVALID, 6,
+                       PackedCard.INVALID, 6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0, 2));
                 long pkHand3 = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001_0000_0000_0000_1010_0000L;
-                int pkTrick4 = Bits32.pack(0b10_0110, 6, 0b0, 6, Card.INVALID, 6,
-                        Card.INVALID, 6, 0, 4, 0, 2, 0, 2);
+               Trick pkTrick4 = Trick.ofPacked(Bits32.pack(0b10_0110, 6, 0b0, 6,PackedCard.INVALID, 6,
+                       PackedCard.INVALID, 6, 0, 4, 0, 2, 0, 2));
                 long pkHand4 = 0b0000_0000_0010_0000_0000_0000_0001_0000_0000_0000_0000_0000_0000_0000_0000_0010L;
-                int pkTrick5 = Bits32.pack(0b11_0001, 6, 0b1_0011, 6,
-                        Card.INVALID, 6, Card.INVALID, 6, 0, 4, 0, 2, 0b1,
-                        2);
+               Trick pkTrick5 = Trick.ofPacked(Bits32.pack(0b11_0001, 6, 0b1_0011, 6,
+                       PackedCard.INVALID, 6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0b1,
+                        2));
                 long pkHand5 = 0b0000_0000_0000_0000_0000_0000_1000_0000_0000_0000_0000_0100_0000_0000_1000_0001L;
-                int pkTrick6 = Bits32.pack(0b1_0101, 6, Card.INVALID, 6,
-                        Card.INVALID, 6, Card.INVALID, 6, 0, 4, 0, 2, 0, 2);
+               Trick pkTrick6 = Trick.ofPacked(Bits32.pack(0b1_0101, 6,PackedCard.INVALID, 6,
+                       PackedCard.INVALID, 6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0, 2));
                 long pkHand6 = 0b0000_0000_0000_0001_0000_0000_0001_0000_0000_0000_1000_0000_0000_0000_0000_1000L;
-                int pkTrick7 = Bits32.pack(0b11_0011, 6, Card.INVALID, 6,
-                        Card.INVALID, 6, Card.INVALID, 6, 0, 4, 0, 2, 0b11,
-                        2);
+               Trick pkTrick7 = Trick.ofPacked(Bits32.pack(0b11_0011, 6,PackedCard.INVALID, 6,
+                       PackedCard.INVALID, 6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0b11,
+                        2));
                 long pkHand7 = 0b0000_0000_0000_0000_0000_0000_1000_1000_0000_0000_0100_0000_0000_0001_0000_0000L;
-                int pkTrick8 = Bits32.pack(0b1000, 6, Card.INVALID, 6,
-                        Card.INVALID, 6, Card.INVALID, 6, 0, 4, 0, 2, 0b10,
-                        2);
+               Trick pkTrick8 = Trick.ofPacked(Bits32.pack(0b1000, 6,PackedCard.INVALID, 6,
+                       PackedCard.INVALID, 6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0b10,
+                        2));
                 long pkHand8 = 0b0000_0000_0000_0000_0000_0000_0010_0010_0000_0000_0100_0000_0000_0000_1000_0000L;
-                int pkTrick9 = Bits32.pack(0b11_0100, 6, Card.INVALID, 6,
-                        Card.INVALID, 6, Card.INVALID, 6, 0, 4, 0, 2, 0b10,
-                        2);
+               Trick pkTrick9 = Trick.ofPacked(Bits32.pack(0b11_0100, 6,PackedCard.INVALID, 6,
+                       PackedCard.INVALID, 6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0b10,
+                        2));
                 long pkHand9 = 0b0000_0000_0000_0010_0000_0000_0000_1000_0000_0000_0001_0001_0000_0000_0000_0000L;
-                int pkTrick10 = Bits32.pack(0b10_0100, 6, 0b0100, 6, Card.INVALID,
-                        6, Card.INVALID, 6, 0, 4, 0, 2, 0, 2);
+               Trick pkTrick10 = Trick.ofPacked(Bits32.pack(0b10_0100, 6, 0b0100, 6,PackedCard.INVALID,
+                        6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0, 2));
                 long pkHand10 = 0b0000_0000_1000_0000_0000_0000_1010_0000_0000_0000_0000_0001_0000_0000_0000_0000L;
-                int pkTrick11 = Bits32.pack(0b10_0100, 6, 0b0100, 6, Card.INVALID,
-                        6, Card.INVALID, 6, 0, 4, 0, 2, 0, 2);
+               Trick pkTrick11 = Trick.ofPacked(Bits32.pack(0b10_0100, 6, 0b0100, 6,PackedCard.INVALID,
+                        6,PackedCard.INVALID, 6, 0, 4, 0, 2, 0, 2));
                 long pkHand11 = 0b0000_0000_0000_0000_0000_0000_1010_0000_0000_0000_0000_0001_0000_0000_0000_0100L;
-                System.out.println("{\u266110 \u2663J} expected\n" + CardSet
-                        .toString(Trick.playableCards(pkTrick1, pkHand1)));
+                System.out.println("{\u266110 \u2663J} expected\n" + 
+                (pkTrick1.playableCards(CardSet.ofPacked(pkHand1))).toString());
+                
                 System.out.println();
                 System.out.println("{\u2660J \u26617 \u26619 \u266310} expected\n"
                         + CardSet.toString(
