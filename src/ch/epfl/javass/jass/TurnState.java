@@ -14,7 +14,6 @@ public final class TurnState {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    
     private TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
         this.pkScore = pkScore;
         this.pkUnplayedCards = pkUnplayedCards;
@@ -29,7 +28,10 @@ public final class TurnState {
     }
 
     public static TurnState ofPackedComponents(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
-        if(PackedScore.isValid(pkScore)&&PackedCardSet.isValid(pkUnplayedCards)&&PackedTrick.isValid(pkCurrentTrick)) {
+        if(PackedScore.isValid(pkScore) &&
+           PackedCardSet.isValid(pkUnplayedCards) &&
+           PackedTrick.isValid(pkCurrentTrick))
+        {
             return new TurnState(pkScore, pkUnplayedCards, pkCurrentTrick);
         }
         else {
@@ -39,15 +41,15 @@ public final class TurnState {
     }
 
     public long packedScore() {
-        return this.pkScore;
+        return pkScore;
     }
 
     public long packedUnplayedCards() {
-        return this.pkUnplayedCards;
+        return pkUnplayedCards;
     }
 
     public int packedTrick() {
-        return this.pkCurrentTrick;
+        return pkCurrentTrick;
     }
 
     public Score score() {
@@ -64,17 +66,15 @@ public final class TurnState {
 
 
     public boolean isTerminal() {
-        return (PackedTrick.nextEmpty(pkCurrentTrick)==PackedTrick.INVALID);
+        return (PackedTrick.nextEmpty(pkCurrentTrick) == PackedTrick.INVALID);
     }
 
     public PlayerId nextPlayer() {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
         }
-        else {
-            return PackedTrick.player(pkCurrentTrick, PackedTrick.size(pkCurrentTrick));
-        }
-         
+
+        return PackedTrick.player(pkCurrentTrick, PackedTrick.size(pkCurrentTrick));
     }
 
     public TurnState withNewCardPlayed(Card card) {

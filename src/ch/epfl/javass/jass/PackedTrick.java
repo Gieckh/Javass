@@ -13,7 +13,6 @@ public final class PackedTrick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    // ~0 = 0b11111111111111111111111111111111
     public static final int INVALID = ~0;
 
     private static final int CARD_SIZE = 6;
@@ -428,9 +427,9 @@ public final class PackedTrick {
         int total = (isLast(pkTrick)) ? 5 : 0;
         Card.Color trump = trump(pkTrick);
         total += PackedCard.points(trump, pkTrick & CARD_MASK_1);
-        total += PackedCard.points(trump, (pkTrick & CARD_MASK_2) >>>CARD_2_START);
-        total += PackedCard.points(trump, (pkTrick & CARD_MASK_3) >>>CARD_3_START);
-        total += PackedCard.points(trump, (pkTrick & CARD_MASK_4) >>>CARD_4_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_2) >>> CARD_2_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_3) >>> CARD_3_START);
+        total += PackedCard.points(trump, (pkTrick & CARD_MASK_4) >>> CARD_4_START);
 
         return total;
     }
