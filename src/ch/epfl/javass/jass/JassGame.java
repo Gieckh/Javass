@@ -31,9 +31,14 @@ public final class JassGame {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    
+    
     public boolean isGameOver() {
-        return  (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1) >= 1000) ||
-                (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_2) >= 1000);
+        if(turnstate != null) {
+            return  (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
+                    (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_2)>=Jass.WINNING_POINTS);
+            }
+        return false;
     }
 
     private List<Card> deckShuffled(Random shuffleRng){

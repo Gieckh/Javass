@@ -106,11 +106,12 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns the first PackedTrick of a Trick, 
+     * depending of the trumpCOlor and the starting player.
      *
-     * @param trump
-     * @param firstPlayer
-     * @return
+     * @param trump the Color of the trump
+     * @param firstPlayer the Id of the fist Player to play
+     * @return the first PackedTrick of a trick
      */
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         int player = (firstPlayer.type + PLAYER_SHIFT) << PLAYER_START;
@@ -122,10 +123,11 @@ public final class PackedTrick {
     //TODO
 
     /**
-     * @brief
+     * @brief returns the n+1th PackedTrick of a trick
+     * return invalid if the last trick was the 9th.
      *
      * @param pkTrick
-     * @return
+     * @return the n+1th PackedTrick of a trick
      */
     public static int nextEmpty(int pkTrick) {
         if (isLast(pkTrick)) {
@@ -142,20 +144,20 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns true iff this trick is the 9th.
      *
      * @param pkTrick
-     * @return
+     * @return a boolean that is true iff this trick is the 9th
      */
     public static boolean isLast(int pkTrick) {
         return index(pkTrick) == MAX_INDEX;
     }
 
     /**
-     * @brief
+     * @brief returns true iff this trick is empty : if it has no card.
      *
      * @param pkTrick
-     * @return
+     * @return a boolean that is true iff this trick has 0 card
      */
     public static boolean isEmpty (int pkTrick) {
         return (pkTrick & EMPTY) == EMPTY;
@@ -176,11 +178,10 @@ public final class PackedTrick {
     //TODO: not a separate method, cuz it does a copy...
 
     /**
-     * @brief
+     * @brief returns true iff this trick is full : if it has 4 cards.
      *
      * @param pkTrick
-     * @param cardNo
-     * @return
+     * @return a boolean that is true iff this trick has 4 card
      */
     private static boolean containsValidCard(int pkTrick, int cardNo) {
         switch(cardNo) {
@@ -200,10 +201,10 @@ public final class PackedTrick {
     //TODO: better?
 
     /**
-     * @brief
+     * @brief returns the number of cards in the pkTrick.
      *
-     * @param pkTrick
-     * @return
+     * @param pkTrick a trick
+     * @return the number of cards in pkTrick
      */
     public static int size(int pkTrick) {
         int size = 0;
@@ -218,10 +219,10 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns the trump color in the pkTrick.
      *
-     * @param pkTrick
-     * @return
+     * @param pkTrick a trick
+     * @return the color of the trump in pkTrick
      */
     public static Card.Color trump (int pkTrick) {
         int pkColor = Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE);
@@ -229,11 +230,11 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns the player that will play at the index'th position .
      *
      * @param pkTrick
      * @param index
-     * @return
+     * @return playerId of the index'th player to play at this trick
      */
     public static PlayerId player (int pkTrick, int index) {
         int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
@@ -241,10 +242,10 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns the number of this trick.
      *
      * @param pkTrick
-     * @return
+     * @return int from 0 to 8 
      */
     public static int index (int pkTrick) {
         return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE);
@@ -254,11 +255,11 @@ public final class PackedTrick {
     //assuming the card is indeed there.
 
     /**
-     * @brief
+     * @brief returns the Card at the index'th position (from 0 to 3).
      *
      * @param pkTrick
      * @param index
-     * @return
+     * @return the card at the index'th position
      */
     public static int card (int pkTrick, int index) {
         assert (isValid(pkTrick));
@@ -282,11 +283,11 @@ public final class PackedTrick {
     //assuming not full.
 
     /**
-     * @brief
+     * @brief returns a new pkTrick whose difference is that a card has been added.
      *
      * @param pkTrick
      * @param pkCard
-     * @return
+     * @return a packedTrick with a card added
      */
     public static int withAddedCard(int pkTrick, int pkCard) {
         assert (isValid(pkTrick));
@@ -308,10 +309,10 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns the base color of this trick.
      *
      * @param pkTrick
-     * @return
+     * @return the color of the 1st card
      */
     public static Card.Color baseColor(int pkTrick) {
         assert (isValid(pkTrick));
@@ -324,13 +325,6 @@ public final class PackedTrick {
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
 
-    /**
-     * @brief
-     *
-     * @param pkTrick
-     * @param trump
-     * @return
-     */
     private static int winningCard(int pkTrick, Card.Color trump) {
         assert (!isEmpty(pkTrick));
 
@@ -356,11 +350,12 @@ public final class PackedTrick {
     //easily simplifiable
 
     /**
-     * @brief
+     * @brief returns all playable cards from a set of Cards ( pkHand)
+     *  in the current trick case.
      *
-     * @param pkTrick
-     * @param pkHand
-     * @return
+     * @param pkTrick this trick 
+     * @param pkHand the set with all the cards you have
+     * @return a PackedCardSet with only the cards you had ,and you can play in current case
      */
     public static long playableCards(int pkTrick, long pkHand) {
         if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) { //If you are the first player to play.
@@ -415,10 +410,10 @@ public final class PackedTrick {
     //only called with a valid, full trick
 
     /**
-     * @brief
+     * @brief returns the points of this trick.
      *
      * @param pkTrick
-     * @return
+     * @return int : the sum of all cards in this trick
      */
     public static int points(int pkTrick) {
         assert (isValid(pkTrick));
@@ -464,10 +459,10 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns the Id of the player winning this trick.
      *
      * @param pkTrick
-     * @return
+     * @return PlayerId : the Id of the player which have played the best card in this trick
      */
     public static PlayerId winningPlayer(int pkTrick) {
         Card.Color trump = trump(pkTrick);
@@ -476,10 +471,10 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief
+     * @brief returns a String representation of the trick.
      *
      * @param pkTrick
-     * @return
+     * @return String : a string with all informations about this trick
      */
     public static String toString(int pkTrick) {//TODO: Test again
         String str = "trump : " + Card.Color.ALL.get(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE)) + "\n";
