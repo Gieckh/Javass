@@ -25,7 +25,7 @@ public final class JassGame {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     public boolean isGameOver() {
-
+        return false;
     }
 
     public void advanceToEndOfNextTrick() {
