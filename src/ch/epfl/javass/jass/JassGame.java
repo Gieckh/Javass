@@ -41,7 +41,7 @@ public final class JassGame {
 
     private List<Card> deckShuffled(Random shuffleRng){
         List<Card> deck = new ArrayList<>();
-        for(int i = 0 ; i<0b111111; ++i) {
+        for(int i = 0 ; i < 0b111111; ++i) {
             
         }
     }
@@ -60,10 +60,6 @@ public final class JassGame {
         if(turnstate == null) {
             
             turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
-                    
-                    
-           
-            
         }
 
     }

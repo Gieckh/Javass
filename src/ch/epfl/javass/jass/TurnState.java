@@ -1,5 +1,7 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.Preconditions.checkArgument;
+
 public final class TurnState {
     
     /** ============================================== **/
@@ -10,36 +12,36 @@ public final class TurnState {
     private final long pkUnplayedCards;
     private final int pkCurrentTrick;
 
+
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
     private TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
-        this.pkScore = pkScore;
+        this.pkScore =  pkScore;
         this.pkUnplayedCards = pkUnplayedCards;
-        this.pkCurrentTrick = pkCurrentTrick;
+        this.pkCurrentTrick  = pkCurrentTrick;
     }
+
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+
+    //fake constructors
     public static TurnState initial(Card.Color trump, Score score, PlayerId firstPlayer) {
         return new TurnState(score.packed(), PackedCardSet.ALL_CARDS, PackedTrick.firstEmpty(trump, firstPlayer)); 
     }
 
     public static TurnState ofPackedComponents(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
-        if(PackedScore.isValid(pkScore) &&
-           PackedCardSet.isValid(pkUnplayedCards) &&
-           PackedTrick.isValid(pkCurrentTrick))
-        {
-            return new TurnState(pkScore, pkUnplayedCards, pkCurrentTrick);
-        }
-        else {
-            throw new IllegalArgumentException();
-        }
-        
+        checkArgument(PackedScore.isValid(pkScore) &&
+                         PackedCardSet.isValid(pkUnplayedCards) &&
+                         PackedTrick.isValid(pkCurrentTrick));
+
+        return new TurnState(pkScore, pkUnplayedCards, pkCurrentTrick);
     }
 
+    //packed accessors
     public long packedScore() {
         return pkScore;
     }
@@ -52,6 +54,7 @@ public final class TurnState {
         return pkCurrentTrick;
     }
 
+    //unpacked accessors
     public Score score() {
         return Score.ofPacked(pkScore);
     }
@@ -65,7 +68,9 @@ public final class TurnState {
     }
 
 
+    //the real methods:
     public boolean isTerminal() {
+        assert (PackedTrick.isFull(pkCurrentTrick));
         return (PackedTrick.nextEmpty(pkCurrentTrick) == PackedTrick.INVALID);
     }
 
