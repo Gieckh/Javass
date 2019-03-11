@@ -41,7 +41,7 @@ public final class TurnState {
         return new TurnState(pkScore, pkUnplayedCards, pkCurrentTrick);
     }
 
-    //accessors
+    //packed accessors
     public long packedScore() {
         return pkScore;
     }
@@ -54,6 +54,7 @@ public final class TurnState {
         return pkCurrentTrick;
     }
 
+    //unpacked accessors
     public Score score() {
         return Score.ofPacked(pkScore);
     }
@@ -67,7 +68,9 @@ public final class TurnState {
     }
 
 
+    //the real methods:
     public boolean isTerminal() {
+        assert (PackedTrick.isFull(pkCurrentTrick));
         return (PackedTrick.nextEmpty(pkCurrentTrick) == PackedTrick.INVALID);
     }
 
