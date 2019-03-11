@@ -18,11 +18,11 @@ public class test {
 //            System.out.println(Integer.toBinaryString(PackedTrick.nextEmpty(8 | (i << 24))));
 //            System.out.println();
 //        }
-        System.out.println(PackedCard.toString(49));
-        System.out.println(PackedTrick.winningPlayer(0b1000));
-        System.out.println(PackedTrick.winningPlayer(0b10000));
-        System.out.println( Integer.toBinaryString( PackedTrick.nextEmpty(0b1000) ) );
-        System.out.println();
-        System.out.println( Integer.toBinaryString( PackedTrick.nextEmpty(0b10000) ) );
+
+        if(PackedTrick.isValid(0)) {
+            System.out.println("coucou");
+        System.out.println(Trick.ofPacked(0).toString());
+        }
+
     }
 }

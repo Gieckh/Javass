@@ -1,12 +1,15 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.Preconditions.checkArgument;
+import static ch.epfl.javass.jass.PackedScore.isValid;
+
 import ch.epfl.javass.jass.Card.Color;
 
 public class Trick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    public static final Trick INVALID = ofPacked(PackedTrick.INVALID);
+    public static final Trick INVALID = new Trick(PackedTrick.INVALID);
     private final int pkTrick;
 
 
@@ -29,9 +32,10 @@ public class Trick {
 
     public static Trick ofPacked(int packed) {
         //TODO isVALID1 ou isValid2 ?
-        if(!PackedTrick.isValid(packed)) {
-            throw new IllegalArgumentException();
-        }
+        checkArgument(PackedTrick.isValid(packed));
+       // if(!PackedTrick.isValid(packed)) {
+         //   throw new IllegalArgumentException();
+        //}
         return new Trick(packed);
     }
 
