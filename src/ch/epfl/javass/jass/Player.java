@@ -3,6 +3,7 @@ package ch.epfl.javass.jass;
 import java.util.Map;
 
 public interface Player {
+    
     abstract public Card cardToPlay(TurnState state, CardSet hand);
 
     default public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
