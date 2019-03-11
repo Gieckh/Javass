@@ -37,11 +37,12 @@ public final class CardSet {
      * @author Marin Nguyen - (288260)
     */
     public static CardSet of(List<Card> cards) {
-        CardSet ofCardSet = new CardSet(0L);
-        for (Card card: cards ) {
-            ofCardSet.add(card);
+        long packed = 0L;
+        for (Card card : cards) {
+            packed = PackedCardSet.add(packed, card.packed());
         }
-        return ofCardSet;
+
+        return new CardSet(packed);
     }
 
 
