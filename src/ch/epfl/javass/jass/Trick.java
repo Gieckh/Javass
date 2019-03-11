@@ -5,13 +5,15 @@ import static ch.epfl.javass.jass.PackedScore.isValid;
 
 import ch.epfl.javass.jass.Card.Color;
 
+import static ch.epfl.javass.Preconditions.checkArgument;
+import static ch.epfl.javass.Preconditions.checkIndex;
+
 public class Trick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     public static final Trick INVALID = new Trick(PackedTrick.INVALID);
     private final int pkTrick;
-
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -25,20 +27,15 @@ public class Trick {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
-    //TODO faire des tests ou passer des tests, ou s'assurer que tout cela est correct vis a vis de l'ennoncé , car vite fait
+    //TODO faire des tests ou passer des tests, ou s'assurer que tout cela est correct vis a vis de l'énoncé , car vite fait
     public static Trick firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         return new Trick(PackedTrick.firstEmpty(trump, firstPlayer));
     }
 
     public static Trick ofPacked(int packed) {
-        //TODO isVALID1 ou isValid2 ?
         checkArgument(PackedTrick.isValid(packed));
-       // if(!PackedTrick.isValid(packed)) {
-         //   throw new IllegalArgumentException();
-        //}
         return new Trick(packed);
     }
-
 
     public int packed() {
         return pkTrick;
@@ -46,9 +43,7 @@ public class Trick {
 
     public Trick nextEmpty() {
         int nextEmpty = PackedTrick.nextEmpty(pkTrick);
-        if (nextEmpty == PackedTrick.INVALID) {
-            throw new IllegalStateException();
-        }
+        checkArgument(nextEmpty != PackedTrick.INVALID);
 
         return new Trick(nextEmpty);
     }
@@ -77,14 +72,12 @@ public class Trick {
         return PackedTrick.index(pkTrick);
     }
     
-    public PlayerId player( int index) {
-        if ( (index>=4)||(index<0)) {
-            throw new IndexOutOfBoundsException();
-        }
-        return PackedTrick.player(pkTrick,index );
+    public PlayerId player(int index) {
+        checkIndex(index, PlayerId.COUNT);
+        return PackedTrick.player(pkTrick, index);
     }
     
-    public Card card ( int index) {
+    public Card card (int index) {
         if((index < 0) ||(index >= PackedTrick.size(pkTrick))) {
             throw new IndexOutOfBoundsException();
         }
@@ -102,6 +95,7 @@ public class Trick {
         if(PackedTrick.isEmpty(pkTrick)) {
             throw new IllegalStateException();
         }
+
         return PackedTrick.baseColor(pkTrick);
     }
     
@@ -122,7 +116,9 @@ public class Trick {
         }
         return PackedTrick.winningPlayer(pkTrick);
     }
-    
+
+
+
     @Override
     public boolean equals(Object thatO) {
         if (thatO == null  ||  !(thatO instanceof Trick)) { //todo: test
@@ -134,17 +130,14 @@ public class Trick {
     }
     
     @Override
-    public int hashCode() {
-        return Long.hashCode(pkTrick);
+    public int hashCode() { //TODO: assistant
+        return pkTrick;
     }
     
     /**
      * @brief 
      *
-     * @return 
-     *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
+     * @return
     */
     @Override
     public String toString() {
