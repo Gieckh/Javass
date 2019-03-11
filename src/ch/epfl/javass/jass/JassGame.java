@@ -1,15 +1,22 @@
 package ch.epfl.javass.jass;
 
-public final class PacedPlayer implements Player{
+import java.util.Map;
+import java.util.Random;
+
+public final class JassGame {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    //private Player player; ?
+    private Random shuffleRng;
+    private Random trumpRng;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    public PacedPlayer(Player underlyingPlayer, double minTime) {
+    public JassGame(long rngSeed, Map<PlayerId, Player> players, Map<PlayerId, String> playerNames) {
+        Random rng = new Random(rngSeed);
+        this.shuffleRng = new Random(rng.nextLong());
+        this.trumpRng = new Random(rng.nextLong());
         //TODO
     }
 
@@ -17,9 +24,11 @@ public final class PacedPlayer implements Player{
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    @Override
-    public Card cardToPlay(TurnState state, CardSet hand) {
-        //TODO
-        return null;
+    public boolean isGameOver() {
+
+    }
+
+    public void advanceToEndOfNextTrick() {
+
     }
 }
