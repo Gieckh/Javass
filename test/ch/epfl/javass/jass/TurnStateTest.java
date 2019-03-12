@@ -65,12 +65,13 @@ class TurnStateTest {
             long pkScore = rng.nextLong();
             long pkUnplayedCards = rng.nextLong();
             int pkTrick = rng.nextInt();
-            if (!PackedScore.isValid(pkScore)
-                    || !PackedCardSet.isValid(pkUnplayedCards)
-                    || !PackedTrick.isValid(pkTrick)) {
+
+            if (!PackedScore.isValid(pkScore)           ||
+                !PackedCardSet.isValid(pkUnplayedCards) ||
+                !PackedTrick.isValid(pkTrick))
+            {
                 assertThrows(IllegalArgumentException.class, () -> {
-                    TurnState.ofPackedComponents(pkScore, pkUnplayedCards,
-                            pkTrick);
+                    TurnState.ofPackedComponents(pkScore, pkUnplayedCards, pkTrick);
                 });
             }
         }
@@ -83,11 +84,11 @@ class TurnStateTest {
             long pkScore = randomValidPkScore(rng);
             long pkUnplayedCards = randomValidCardSet(rng);
             int pkTrick = randomValidPkTrick(rng);
-            TurnState turn = TurnState.ofPackedComponents(pkScore,
-                    pkUnplayedCards, pkTrick);
+
+            TurnState turn = TurnState.ofPackedComponents(pkScore, pkUnplayedCards, pkTrick);
+
             assertEquals(Score.ofPacked(pkScore), turn.score());
-            assertEquals(CardSet.ofPacked(pkUnplayedCards),
-                    turn.unplayedCards());
+            assertEquals(CardSet.ofPacked(pkUnplayedCards), turn.unplayedCards());
             assertEquals(Trick.ofPacked(pkTrick), turn.trick());
         }
     }
@@ -226,6 +227,7 @@ class TurnStateTest {
 
                     TurnState theoreticalTurn = turn.withNewCardPlayed(card);
                     TurnState practicalTurn = turn.withNewCardPlayedAndTrickCollected(card);
+                    //assertTrue(equalForTurns(theoreticalTurn, practicalTurn));
                     assertEquals(theoreticalTurn.trick(), practicalTurn.trick());
                     assertEquals(theoreticalTurn.score(), practicalTurn.score());
                     assertEquals(theoreticalTurn.unplayedCards(), practicalTurn.unplayedCards());
@@ -276,6 +278,12 @@ class TurnStateTest {
     }
 
 
+    //Jsp pk "assertTrue(equal...(turn1, turn2));" ne semble pas marcher
+    private boolean equalForTurns(TurnState expectedTurn, TurnState obtainedTurn) {
+        return (expectedTurn.trick() == obtainedTurn.trick() &&
+                expectedTurn.score() == obtainedTurn.score() &&
+                expectedTurn.unplayedCards() == obtainedTurn.unplayedCards());
+    }
     @Test
     void testReferences() {
         TurnState     turn = TurnState.ofPackedComponents(0L, PackedCardSet.ALL_CARDS, 0);
