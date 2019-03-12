@@ -2,8 +2,7 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.test.TestRandomizer.RANDOM_ITERATIONS;
 import static ch.epfl.test.TestRandomizer.newRandom;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.SplittableRandom;
 
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
+import org.opentest4j.AssertionFailedError;
 
 class TurnStateTest {
 
@@ -213,17 +213,22 @@ class TurnStateTest {
                 if (PackedTrick.isFull(
                         turn.withNewCardPlayed(card).packedTrick()) )
                 {
-                    TurnState turn2 = turn
-                            .withNewCardPlayed(card)
-                            .withTrickCollected();
+                    TurnState turn2 = turn.withNewCardPlayed(card).withTrickCollected();
                     TurnState turn3 = turn.withNewCardPlayedAndTrickCollected(card);
+
                     assertEquals(turn2.trick(), turn3.trick());
                     assertEquals(turn2.score(), turn3.score());
                     assertEquals(turn2.unplayedCards(), turn3.unplayedCards());
                 } else {
-                    //TODO: pourquoi ça fail là
-                    assertEquals(turn.withNewCardPlayed(card),
-                            turn.withNewCardPlayedAndTrickCollected(card));
+                    //TODO: [done]: replaced because assert compares references.
+//                    assertEquals(turn.withNewCardPlayed(card),
+//                            turn.withNewCardPlayedAndTrickCollected(card));
+
+                    TurnState theoreticalTurn = turn.withNewCardPlayed(card);
+                    TurnState practicalTurn = turn.withNewCardPlayedAndTrickCollected(card);
+                    assertEquals(theoreticalTurn.trick(), practicalTurn.trick());
+                    assertEquals(theoreticalTurn.score(), practicalTurn.score());
+                    assertEquals(theoreticalTurn.unplayedCards(), practicalTurn.unplayedCards());
                 }
             }
         }
@@ -270,5 +275,16 @@ class TurnStateTest {
         return rng.nextInt(4) << 4 | rng.nextInt(9);
     }
 
+
+    @Test
+    void testReferences() {
+        TurnState     turn = TurnState.ofPackedComponents(0L, PackedCardSet.ALL_CARDS, 0);
+        TurnState sameTurn = TurnState.ofPackedComponents(0L, PackedCardSet.ALL_CARDS, 0);
+        //assertNotEquals(turn, sameTurn);
+
+        assertThrows(AssertionFailedError.class, () -> {
+            assertEquals(turn, sameTurn);
+        });
+    }
 }
 
