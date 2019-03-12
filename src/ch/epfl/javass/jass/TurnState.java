@@ -70,8 +70,8 @@ public final class TurnState {
 
     //the real methods:
     public boolean isTerminal() {
-        assert (PackedTrick.isFull(pkCurrentTrick));
-        return (PackedTrick.nextEmpty(pkCurrentTrick) == PackedTrick.INVALID);
+        //assert (PackedTrick.isFull(pkCurrentTrick)); //TODO: pourquoi ce assert ?
+        return (pkCurrentTrick == PackedTrick.INVALID);
     }
 
     public PlayerId nextPlayer() {
