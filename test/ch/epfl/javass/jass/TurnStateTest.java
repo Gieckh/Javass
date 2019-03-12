@@ -202,28 +202,28 @@ class TurnStateTest {
             TurnState turn = TurnState.ofPackedComponents(pkScore,
                     pkUnplayedCards, pkTrick);
             int pkCard = randomValidPkCard(rng);
+            Card card = Card.ofPacked(pkCard);
+
             if (PackedTrick.isFull(turn.packedTrick())) {
                 assertThrows(IllegalStateException.class, () -> {
                     turn.withNewCardPlayedAndTrickCollected(
-                            Card.ofPacked(pkCard));
+                            card);
                 });
             } else {
-                if (PackedTrick
-                        .isFull(turn.withNewCardPlayed(Card.ofPacked(pkCard))
-                                .packedTrick())) {
+                if (PackedTrick.isFull(
+                        turn.withNewCardPlayed(card).packedTrick()) )
+                {
                     TurnState turn2 = turn
-                            .withNewCardPlayed(Card.ofPacked(pkCard))
+                            .withNewCardPlayed(card)
                             .withTrickCollected();
-                    TurnState turn3 = turn.withNewCardPlayedAndTrickCollected(
-                            Card.ofPacked(pkCard));
+                    TurnState turn3 = turn.withNewCardPlayedAndTrickCollected(card);
                     assertEquals(turn2.trick(), turn3.trick());
                     assertEquals(turn2.score(), turn3.score());
                     assertEquals(turn2.unplayedCards(), turn3.unplayedCards());
                 } else {
-                    //TODO: pourquoi ça serait égal ???
-                    assertEquals(turn.withNewCardPlayed(Card.ofPacked(pkCard)),
-                            turn.withNewCardPlayedAndTrickCollected(
-                                    Card.ofPacked(pkCard)));
+                    //TODO: pourquoi ça fail là
+                    assertEquals(turn.withNewCardPlayed(card),
+                            turn.withNewCardPlayedAndTrickCollected(card));
                 }
             }
         }
