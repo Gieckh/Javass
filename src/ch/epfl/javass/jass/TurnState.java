@@ -34,6 +34,9 @@ public final class TurnState {
     }
 
     public static TurnState ofPackedComponents(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
+       // System.out.println(PackedScore.isValid(pkScore));
+       // System.out.println(PackedScore.isValid(pkUnplayedCards));
+       // System.out.println(PackedScore.isValid(pkCurrentTrick));
         checkArgument(PackedScore.isValid(pkScore) &&
                          PackedCardSet.isValid(pkUnplayedCards) &&
                          PackedTrick.isValid(pkCurrentTrick));
