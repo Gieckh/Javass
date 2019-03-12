@@ -171,6 +171,7 @@ class TurnStateTest {
                     turn.withTrickCollected();
                 });
             } else {
+                //TODO: on essaye d'empaqueter un truc invalide dans ce test
                 TurnState turn2 = TurnState
                         .ofPackedComponents(
                                 PackedScore.withAdditionalTrick(
@@ -182,6 +183,7 @@ class TurnStateTest {
                                         PackedTrick.points(turn.packedTrick())),
                                 PackedCardSet.ALL_CARDS,
                                 PackedTrick.nextEmpty(turn.packedTrick()));
+
                 TurnState turn3 = turn.withTrickCollected();
                 assertEquals(turn2.trick(), turn3.trick());
                 assertEquals(turn2.score(), turn3.score());
@@ -218,6 +220,7 @@ class TurnStateTest {
                     assertEquals(turn2.score(), turn3.score());
                     assertEquals(turn2.unplayedCards(), turn3.unplayedCards());
                 } else {
+                    //TODO: pourquoi ça serait égal ???
                     assertEquals(turn.withNewCardPlayed(Card.ofPacked(pkCard)),
                             turn.withNewCardPlayedAndTrickCollected(
                                     Card.ofPacked(pkCard)));
