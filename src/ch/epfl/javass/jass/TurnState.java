@@ -60,7 +60,7 @@ public final class TurnState {
     }
 
     public CardSet unplayedCards() {
-        return CardSet.ofPacked(pkScore);
+        return CardSet.ofPacked(pkUnplayedCards);
     }
 
     public Trick trick() {
@@ -70,7 +70,7 @@ public final class TurnState {
 
     //the real methods:
     public boolean isTerminal() {
-        assert (PackedTrick.isFull(pkCurrentTrick));
+        assert (PackedTrick.    isFull(pkCurrentTrick));
         return (PackedTrick.nextEmpty(pkCurrentTrick) == PackedTrick.INVALID);
     }
 
