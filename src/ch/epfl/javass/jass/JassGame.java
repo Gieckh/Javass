@@ -15,7 +15,7 @@ public final class JassGame {
     private Random shuffleRng;
     private Random trumpRng;
     private TurnState turnstate = null ;
-    
+
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -31,8 +31,8 @@ public final class JassGame {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    
-    
+
+
     public boolean isGameOver() {
         if(turnstate != null) {
             return  (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
@@ -44,10 +44,11 @@ public final class JassGame {
     private List<Card> deckShuffled(Random shuffleRng){
         List<Card> deck = new ArrayList<>();
         for(int i = 0 ; i < 0b111111; ++i) {
-            
+
         }
+        return null;
     }
-    
+
     private List<Color> trumpShuffled(Random shuffleRng){
         List<Color> trump = new ArrayList<>();
         for(int i = 0 ; i < Color.ALL.size(); ++i) {
@@ -55,13 +56,13 @@ public final class JassGame {
         }
         Collections.shuffle(trump, shuffleRng);
         return trump;
-        
+
     }
-    
+
     public void advanceToEndOfNextTrick() {
         if(turnstate == null) {
-            
-            turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
+
+            //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
         }
 
     }
