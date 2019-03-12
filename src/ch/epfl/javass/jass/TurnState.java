@@ -121,7 +121,7 @@ public final class TurnState {
         int newTrick = PackedTrick.withAddedCard(pkCurrentTrick, pkCard);
 
         if (!PackedTrick.isFull(newTrick)) {
-            throw new IllegalStateException();
+            return new TurnState(pkScore, newUnplayedCards, newTrick);
         }
 
         return collectTrick(pkScore, newUnplayedCards, newTrick);
