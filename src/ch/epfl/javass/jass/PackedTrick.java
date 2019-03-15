@@ -337,7 +337,8 @@ public final class PackedTrick {
     public static long playableCards(int pkTrick, long pkHand) {
         assert(!isFull(pkTrick));
 
-        if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) { //If you are the first player to play.
+        //TODO: retest
+        if (isEmpty(pkTrick)) { //If you are the first player to play.
             return pkHand;
         }
 
