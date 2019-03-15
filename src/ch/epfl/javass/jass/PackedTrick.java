@@ -288,7 +288,8 @@ public final class PackedTrick {
      * @return a packedTrick with a card added
      */
     public static int withAddedCard(int pkTrick, int pkCard) {
-        assert (isValid(pkTrick));
+        assert (PackedCard.isValid(pkCard));
+        assert(PackedTrick.isValid(pkTrick));
         assert (!isFull(pkTrick));
 
         if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) {

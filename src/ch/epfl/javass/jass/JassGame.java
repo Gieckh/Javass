@@ -1,6 +1,10 @@
 package ch.epfl.javass.jass;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import ch.epfl.javass.jass.Card.Color;
 
@@ -68,6 +72,12 @@ public final class JassGame {
 
         //if(PackedScore.) { }
 
-        //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
+//        //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
+//        //cas ou on est au 1er tour
+//        if(turnstate == null) {
+//            PlayerId firstPlayer ;
+//            turnstate = TurnState.initial( trumpRandom(shuffleRng).get(0), Score.INITIAL, firstPlayer);
+//        }
+
     }
 }
