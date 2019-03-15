@@ -1,10 +1,6 @@
 package ch.epfl.javass.jass;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import ch.epfl.javass.jass.Card.Color;
 
@@ -15,6 +11,8 @@ public final class JassGame {
     private Random shuffleRng;
     private Random trumpRng;
     private TurnState turnstate = null ;
+    private Map<PlayerId, Player> players;
+    private Map<PlayerId, String> playerNames;
 
 
     /** ============================================== **/
@@ -24,6 +22,9 @@ public final class JassGame {
         Random rng = new Random(rngSeed);
         this.shuffleRng = new Random(rng.nextLong());
         this.trumpRng = new Random(rng.nextLong());
+
+        this.players = Collections.unmodifiableMap(new EnumMap<>(players));
+        this.playerNames = Collections.unmodifiableMap(new EnumMap<>(playerNames));
         //TODO
     }
 
@@ -60,8 +61,12 @@ public final class JassGame {
     }
 
     public void advanceToEndOfNextTrick() {
-        //if(PackedScore.) {
+        //We do nothing if the game is over.
+        if (isGameOver()) {
+            return;
         }
+
+        //if(PackedScore.) { }
 
         //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
     }
