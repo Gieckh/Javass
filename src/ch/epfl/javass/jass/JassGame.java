@@ -40,7 +40,7 @@ public final class JassGame {
             }
         return false;
     }
-
+// ne parche pas
     private List<Card> deckShuffled(Random shuffleRng){
         List<Card> deck = new ArrayList<>();
         for(int i = 0 ; i < 0b111111; ++i) {
@@ -48,8 +48,8 @@ public final class JassGame {
         }
         return null;
     }
-
-    private List<Color> trumpShuffled(Random shuffleRng){
+// ne marche pas
+    private List<Color> trumpRandom(Random shuffleRng){
         List<Color> trump = new ArrayList<>();
         for(int i = 0 ; i < Color.ALL.size(); ++i) {
             trump.add(Color.ALL.get(i));
@@ -60,9 +60,10 @@ public final class JassGame {
     }
 
     public void advanceToEndOfNextTrick() {
-        if(PackedScore.) {
-
-            //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
+        //cas ou on est au 1er tour
+        if(turnstate == null) {
+            PlayerId firstPlayer ;
+            turnstate = TurnState.initial( trumpRandom(shuffleRng).get(0), Score.INITIAL, firstPlayer);
         }
 
     }
