@@ -20,7 +20,6 @@ public final class PackedTrick {
     private static final int CARD_2_START = CARD_1_START + CARD_SIZE; //6
     private static final int CARD_3_START = CARD_2_START + CARD_SIZE; //12
     private static final int CARD_4_START = CARD_3_START + CARD_SIZE; //18
-    private static final int ALL_CARDS_SIZE = 4 * CARD_SIZE;
     private static final int CARD_COLOR_START = 4;
     
     private static final int CARD_MASK_1 = 0b111111;
@@ -44,7 +43,6 @@ public final class PackedTrick {
 
     private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE; //30
     private static final int TRUMP_SIZE = 2;
-    private static final int TRUMP_SHIFT = 1;
 
     private static final int EMPTY  = (PackedCard.INVALID << CARD_1_START) |
             (PackedCard.INVALID << CARD_2_START) |
