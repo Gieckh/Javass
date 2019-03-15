@@ -289,7 +289,7 @@ public final class PackedTrick {
      */
     public static int withAddedCard(int pkTrick, int pkCard) {
         assert (PackedCard.isValid(pkCard));
-        assert(PackedTrick.isValid(pkTrick));
+        assert (PackedTrick.isValid(pkTrick));
         assert (!isFull(pkTrick));
 
         if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) {

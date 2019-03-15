@@ -13,7 +13,7 @@ public final class JassGame {
     private TurnState turnstate = null ;
     private Map<PlayerId, Player> players;
     private Map<PlayerId, String> playerNames;
-
+    private Map<PlayerId, Long> playerHands;
 
 
     /** ============================================== **/
@@ -63,9 +63,15 @@ public final class JassGame {
 
 
 
+    private void distributeHands() {
+        List<Card> deck = new ArrayList<>();
+        fillAndShuffleDeck(deck);
+        distributeHands(deck);
+    }
+
     //The empty deck is passed as argument
     //It is then filled and shuffled
-    private void handleDeck(List<Card> deck) {
+    private void fillAndShuffleDeck(List<Card> deck) {
         assert (deck.isEmpty());
         for (Card.Color c : getAllColors()) {
             for (Card.Rank r : getAllRanks()) {
@@ -74,6 +80,30 @@ public final class JassGame {
         }
 
         Collections.shuffle(deck, shuffleRng);
+    }
+
+    private void setDistribution(PlayerId id, List<Card> deck,Map<PlayerId, Long> tmp) {
+        //TODO: check refs
+        CardSet hand = CardSet.EMPTY;
+        int start = id.ordinal() * Jass.HAND_SIZE;
+        //TODO: iterator ? //tho not necessary cuz it doesnt happen often
+        for (int i = start; i < start + Jass.HAND_SIZE; ++i) {
+            hand.add(deck.get(i));
+        }
+
+        tmp.put(id, hand.packed());
+    }
+    //TODO: Iterator
+    private void distributeHands(List<Card> deck) {
+        assert (deck.size() == 36);
+
+        Map<PlayerId, Long> tmp = new HashMap<>();
+        setDistribution(PlayerId.PLAYER_1, deck, tmp);
+        setDistribution(PlayerId.PLAYER_2, deck, tmp);
+        setDistribution(PlayerId.PLAYER_3, deck, tmp);
+        setDistribution(PlayerId.PLAYER_4, deck, tmp);
+
+        playerHands = tmp;
     }
 
     private static Card.Color[] getAllColors() {
