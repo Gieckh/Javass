@@ -40,6 +40,14 @@ public final class JassGame {
     /** ============================================== **/
 
 
+    /**
+     * @Brief returns true iff one team has 1000 points or more.
+     * 
+     * @return true iff one team has 1000 points or more 
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public boolean isGameOver() {
         return (turnstate != null) &&
                (
@@ -48,6 +56,12 @@ public final class JassGame {
                );
     }
 
+    /**
+     * @Brief advance the state of the game until the end of the next trick.
+     * 
+     * @author Antoine Scardigli - (299905)
+     * @author Marin Nguyen - (288260)
+    */
     public void advanceToEndOfNextTrick() {
         //We do nothing if the game is over.
         if (isGameOver()) {
