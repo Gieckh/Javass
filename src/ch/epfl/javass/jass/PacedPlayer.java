@@ -27,6 +27,7 @@ public final class PacedPlayer implements Player{
         long tIni = System.currentTimeMillis();
         Card cardToPlay = underLyingPlayer.cardToPlay(state, hand);
         long timeElapsed = (System.currentTimeMillis() - tIni);
+
         if (timeElapsed < minTime) {
             try {
                 Thread.sleep((long) minTime - timeElapsed);
@@ -35,6 +36,8 @@ public final class PacedPlayer implements Player{
         
         return cardToPlay;
     }
+
+
 
     @Override
     public void setPlayers(PlayerId ownId,
