@@ -8,6 +8,11 @@ import ch.epfl.javass.jass.Card.Color;
 import static ch.epfl.javass.Preconditions.checkArgument;
 import static ch.epfl.javass.Preconditions.checkIndex;
 
+/**
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ *
+ */
 public class Trick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
