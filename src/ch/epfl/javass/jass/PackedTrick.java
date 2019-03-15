@@ -104,12 +104,12 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns the first PackedTrick of a Trick,
+     * @brief returns the first PackedTrick of a turn,
      *        depending on the trumpColor and the starting player.
      *
      * @param trump the Color of the trump
      * @param firstPlayer the Id of the fist Player to play
-     * @return the first PackedTrick of a trick
+     * @return the first PackedTrick of a turn
      */
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         int player = (firstPlayer.type + PLAYER_SHIFT) << PLAYER_START;
@@ -121,7 +121,7 @@ public final class PackedTrick {
     //TODO
 
     /**
-     * @brief returns the n+1th PackedTrick of a trick
+     * @brief returns the n+1th PackedTrick of a turn
      * return invalid if the last trick was the 9th.
      *
      * @param pkTrick
@@ -164,10 +164,10 @@ public final class PackedTrick {
     //Assuming the card is valid
 
     /**
-     * @brief
+     * @brief returns true iff this trick is full : it has 4 cards
      *
      * @param pkTrick
-     * @return
+     * @return boolean that is true iff this trick has 4 card
      */
     public static boolean isFull(int pkTrick) {
         return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
@@ -437,13 +437,7 @@ public final class PackedTrick {
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
-    /**
-     * @brief
-     *
-     * @param pkTrick
-     * @param trump
-     * @return
-     */
+
     private static int winningCardIndex(int pkTrick, Card.Color trump) {
         assert (!isEmpty(pkTrick));
 
