@@ -158,6 +158,18 @@ class TurnStateTest {
         }
     }
 
+//    @Test return true
+//    void randomValidWOrks(){
+//        SplittableRandom rng = newRandom();
+//        for (int i = 0; i < RANDOM_ITERATIONS; i++) {
+//            long pkScore = randomValidPkScore(rng);
+//            long pkUnplayedCards = randomValidCardSet(rng);
+//            int pkTrick = randomValidPkTrick(rng);
+//            assertTrue(PackedScore.isValid(pkScore));
+//            assertTrue(PackedCardSet.isValid(pkUnplayedCards));
+//            assertTrue(PackedTrick.isValid(pkTrick));
+//        }
+//    }
     @Test
     void withTrickCollectedWorks() {
         SplittableRandom rng = newRandom();
@@ -173,6 +185,11 @@ class TurnStateTest {
                 });
             } else {
                 //TODO: on essaye d'empaqueter un truc invalide dans ce test
+                
+                // poutant RANDOM pkScore, pkUnplayedCard, et pkTrick sont tous respectivement valide.
+               
+                System.out.println(PackedTrick.isValid(PackedTrick.INVALID));
+                
                 TurnState turn2 = TurnState
                         .ofPackedComponents(
                                 PackedScore.withAdditionalTrick(
