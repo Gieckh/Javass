@@ -395,9 +395,10 @@ public final class PackedTrick {
             }
 
             //We only got inferior trumps
-            return pkHand;
+            return pkHand; //== inferiorTrumps
         }
 
+        //The best card is not (yet) a trump
         if (playableNotTrump != PackedCardSet.EMPTY) {
             return playableNotTrump | myTrumps;
         }
