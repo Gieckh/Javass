@@ -42,7 +42,9 @@ public class Trick {
     }
 
     public Trick nextEmpty() {
-        checkArgument(PackedTrick.isFull(pkTrick));
+        if (!PackedTrick.isFull(pkTrick)) {
+            throw new IllegalStateException();
+        }
 
         return new Trick(PackedTrick.nextEmpty(pkTrick));
     }
