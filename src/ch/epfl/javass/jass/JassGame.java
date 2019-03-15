@@ -60,7 +60,7 @@ public final class JassGame {
     }
 
     public void advanceToEndOfNextTrick() {
-        if(turnstate == null) {
+        if(PackedScore.) {
 
             //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
         }
