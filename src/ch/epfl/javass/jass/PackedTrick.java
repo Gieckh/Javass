@@ -104,8 +104,8 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns the first PackedTrick of a Trick, 
-     * depending of the trumpCOlor and the starting player.
+     * @brief returns the first PackedTrick of a Trick,
+     *        depending on the trumpColor and the starting player.
      *
      * @param trump the Color of the trump
      * @param firstPlayer the Id of the fist Player to play
@@ -320,27 +320,6 @@ public final class PackedTrick {
         return Color.ALL.get(firstCardColor);
     }
 
-    //Here we don't assume 4 cards have been played during this trick.
-    //But we assume at least one has been
-
-    private static int winningCard(int pkTrick, Card.Color trump) {
-        assert (!isEmpty(pkTrick));
-
-        int winningCard = pkTrick & CARD_MASK_1;
-        for (int i = 2 ; i <= 4 ; ++i) {
-            if (containsValidCard(pkTrick, i)) {
-                int pkCard = card(pkTrick, i-1);
-                if (PackedCard.isBetter(trump, pkCard, winningCard)) {
-                    winningCard = pkCard;
-                }
-            }
-            else {
-                return winningCard;
-            }
-        }
-
-        return winningCard;
-    }
 
     //TODO: the hardest.
     //assumed not full
@@ -418,7 +397,7 @@ public final class PackedTrick {
         assert (isValid(pkTrick));
         assert (isFull(pkTrick));
 
-        int total = (isLast(pkTrick)) ? 5 : 0;
+        int total = (isLast(pkTrick)) ? Jass.LAST_TRICK_ADDITIONAL_POINTS : 0;
         Card.Color trump = trump(pkTrick);
         total += PackedCard.points(trump, pkTrick & CARD_MASK_1);
         total += PackedCard.points(trump, (pkTrick & CARD_MASK_2) >>> CARD_2_START);
@@ -428,6 +407,30 @@ public final class PackedTrick {
         return total;
     }
 
+
+    // We built 2 different methods "winningCard" and "winningCardIndex" (instead of using "card(winningCardIndex)")
+    // cuz it will reduce chain errors and also enable our program to be a bit faster.
+
+    //Here we don't assume 4 cards have been played during this trick.
+    //But we assume at least one has been
+    private static int winningCard(int pkTrick, Card.Color trump) {
+        assert (!isEmpty(pkTrick));
+
+        int winningCard = pkTrick & CARD_MASK_1;
+        for (int i = 2 ; i <= 4 ; ++i) {
+            if (containsValidCard(pkTrick, i)) {
+                int pkCard = card(pkTrick, i-1);
+                if (PackedCard.isBetter(trump, pkCard, winningCard)) {
+                    winningCard = pkCard;
+                }
+            }
+            else {
+                return winningCard;
+            }
+        }
+
+        return winningCard;
+    }
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been

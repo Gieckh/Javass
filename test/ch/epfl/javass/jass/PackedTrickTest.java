@@ -1378,23 +1378,36 @@ public class PackedTrickTest {
             }
         }
 
-        @Test
-        void cardWorks() {
-            SplittableRandom rng = newRandom();
-            for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
-                int iterations = rng.nextInt();
-                if (PackedTrick.isValid(iterations)) {
-                    for (int j = 0; j < 4; ++j) {
-                        int shouldBeThatCard = Bits32.extract(iterations, 6 * j, 6);
-                        if (PackedCard.isValid(shouldBeThatCard)) {
-                            assertEquals(shouldBeThatCard,
-                                    PackedTrick.card(iterations, j));
-
-                        }
+    @Test
+    void cardWorks() {
+        SplittableRandom rng = newRandom();
+        for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
+            int pkCard = rng.nextInt();
+            if (PackedTrick.isValid(pkCard)) {
+                for (int j = 0; j < 4; ++j) {
+                    int shouldBeThatCard = Bits32.extract(pkCard, 6 * j, 6);
+                    if (PackedCard.isValid(shouldBeThatCard)) {
+                        assertEquals(shouldBeThatCard, PackedTrick.card(pkCard, j));
                     }
                 }
             }
         }
+    }
+
+
+    @Test
+    void cardWorks2() {
+        for (int i = 0; i != -1 ; ++i) {
+            if (PackedTrick.isValid(i)) {
+                for (int j = 0; j < 4; ++j) {
+                    int shouldBeThatCard = Bits32.extract(i, 6 * j, 6);
+                    if (PackedCard.isValid(shouldBeThatCard)) {
+                        assertEquals(shouldBeThatCard, PackedTrick.card(i, j));
+                    }
+                }
+            }
+        }
+    }
 
         @Test
         void withAddedCardWorks() {
