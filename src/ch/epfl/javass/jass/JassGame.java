@@ -34,11 +34,11 @@ public final class JassGame {
 
 
     public boolean isGameOver() {
-        if(turnstate != null) {
-            return  (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
-                    (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_2)>=Jass.WINNING_POINTS);
-            }
-        return false;
+        return (turnstate != null) &&
+               (
+                (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
+                (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_2)>=Jass.WINNING_POINTS)
+               );
     }
 
     private List<Card> deckShuffled(Random shuffleRng){
@@ -60,10 +60,9 @@ public final class JassGame {
     }
 
     public void advanceToEndOfNextTrick() {
-        if(PackedScore.) {
-
-            //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
+        //if(PackedScore.) {
         }
 
+        //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
     }
 }
