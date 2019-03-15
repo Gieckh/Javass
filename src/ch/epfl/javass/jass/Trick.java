@@ -18,6 +18,7 @@ public class Trick {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
+ 
     private Trick(int aTrick) {
         pkTrick = aTrick;
     }
@@ -27,7 +28,6 @@ public class Trick {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
-    //TODO faire des tests ou passer des tests, ou s'assurer que tout cela est correct vis a vis de l'énnoncé , car vite fait
     public static Trick firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         return new Trick(PackedTrick.firstEmpty(trump, firstPlayer));
     }

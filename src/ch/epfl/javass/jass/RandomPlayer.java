@@ -1,7 +1,7 @@
 package ch.epfl.javass.jass;
 
 import java.util.Random;
-
+// this is for a test, thus no need of javadoc
 public final class RandomPlayer implements Player {
     private final Random rng;
 
