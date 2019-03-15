@@ -289,7 +289,7 @@ public final class PackedTrick {
      */
     public static int withAddedCard(int pkTrick, int pkCard) {
         assert (PackedCard.isValid(pkCard));
-        assert(PackedTrick.isValid(pkTrick));
+        assert (PackedTrick.isValid(pkTrick));
         assert (!isFull(pkTrick));
 
         if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) {
@@ -322,7 +322,6 @@ public final class PackedTrick {
     }
 
 
-    //TODO: the hardest.
     //assumed not full
     //first implementation
     //easily simplifiable
@@ -336,7 +335,10 @@ public final class PackedTrick {
      * @return a PackedCardSet with only the cards you had ,and you can play in current case
      */
     public static long playableCards(int pkTrick, long pkHand) {
-        if ((pkTrick & CARD_MASK_1) == CARD_MASK_1) { //If you are the first player to play.
+        assert(!isFull(pkTrick));
+
+        //TODO: retest
+        if (isEmpty(pkTrick)) { //If you are the first player to play.
             return pkHand;
         }
 
