@@ -483,7 +483,7 @@ public final class PackedTrick {
         str += "{";
         for (int i = 0 ; i < 4 ; ++i) {
             int pkCard = card(pkTrick, i);
-            if (pkCard == 0b111111) {
+            if (pkCard == PackedCard.INVALID) {
                 str += "_ ,";
             }
             else {

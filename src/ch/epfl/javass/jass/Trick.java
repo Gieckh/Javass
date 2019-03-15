@@ -72,7 +72,8 @@ public class Trick {
     public int index() {
         return PackedTrick.index(pkTrick);
     }
-    
+
+    //TODO: test checkIndex
     public PlayerId player(int index) {
         checkIndex(index, PlayerId.COUNT);
         return PackedTrick.player(pkTrick, index);
