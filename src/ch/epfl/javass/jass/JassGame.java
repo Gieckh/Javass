@@ -19,6 +19,8 @@ public final class JassGame {
     private Map<PlayerId, Player> players;
     private Map<PlayerId, String> playerNames;
     private Map<PlayerId, Long> playerHands;
+    private Card.Color trump;
+    private PlayerId firstPlayerId;
 
 
     /** ============================================== **/
@@ -78,6 +80,15 @@ public final class JassGame {
 
 
 
+
+    //After the first turn, this method is used to update the first player of the turn
+    private void updatePlayer() {
+        firstPlayerId = PlayerId.ALL.get((firstPlayerId.ordinal() + 1) % PlayerId.COUNT);
+    }
+
+    private void setTrump() {
+        trump = Color.ALL.get(trumpRng.nextInt(Color.COUNT));
+    }
 
     private void distributeHands() {
         List<Card> deck = new ArrayList<>();

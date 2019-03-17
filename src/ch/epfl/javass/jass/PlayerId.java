@@ -15,7 +15,7 @@ public enum PlayerId {
     PLAYER_3  (3),
     PLAYER_4  (4);
 
-    public final int type;
+    public final int type; //TODO: private ?
     public final static int COUNT = 4;
     public final static List<PlayerId> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
