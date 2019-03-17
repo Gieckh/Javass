@@ -15,12 +15,12 @@ public final class JassGame {
     /** ============================================== **/
     private Random shuffleRng;
     private Random trumpRng;
-    private TurnState turnstate = null ;
+    private TurnState turnstate = null;
     private Map<PlayerId, Player> players;
     private Map<PlayerId, String> playerNames;
     private Map<PlayerId, Long> playerHands;
     private Card.Color trump;
-    private PlayerId firstPlayerId;
+    private PlayerId turnFirstPlayer;
 
 
     /** ============================================== **/
@@ -64,7 +64,8 @@ public final class JassGame {
     public void advanceToEndOfNextTrick() {
         //We do nothing if the game is over.
         if (isGameOver()) {
-            return;
+            //TODO: collect ?
+            return; //nothing
         }
 
         //if(PackedScore.) { }
@@ -78,12 +79,9 @@ public final class JassGame {
 
     }
 
-
-
-
     //After the first turn, this method is used to update the first player of the turn
     private void updatePlayer() {
-        firstPlayerId = PlayerId.ALL.get((firstPlayerId.ordinal() + 1) % PlayerId.COUNT);
+        turnFirstPlayer = PlayerId.ALL.get((turnFirstPlayer.ordinal() + 1) % PlayerId.COUNT);
     }
 
     private void setTrump() {

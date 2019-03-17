@@ -42,9 +42,6 @@ public final class TurnState {
      * @param score : the Score
      * @param firstPlayer
      * @return a new TurnState representing the stating of a turn with the specified parameters
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static TurnState initial(Card.Color trump, Score score, PlayerId firstPlayer) {
         return new TurnState(score.packed(), PackedCardSet.ALL_CARDS, PackedTrick.firstEmpty(trump, firstPlayer)); 
@@ -59,9 +56,6 @@ public final class TurnState {
      * @param pkUnplayedCards
      * @param pkCurrentTrick
      * @return a new TurnState with all informations needed given as packed parameters
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static TurnState ofPackedComponents(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
         checkArgument(PackedScore.isValid(pkScore) &&
@@ -78,9 +72,6 @@ public final class TurnState {
      * @Brief act as a getter for the PackedScore.
      * 
      * @return the packed Score of this turnState
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public long packedScore() {
         return pkScore;
@@ -90,9 +81,6 @@ public final class TurnState {
      * @Brief act as a getter for the PackedUnplayedCards set.
      * 
      * @return the packed UnplayedCardSet of this turnState
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public long packedUnplayedCards() {
         return pkUnplayedCards;
@@ -102,9 +90,6 @@ public final class TurnState {
      * @Brief act as a getter for the PackedTrick.
      * 
      * @return the packed Trick of this turnState
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public int packedTrick() {
         return pkCurrentTrick;
@@ -115,9 +100,6 @@ public final class TurnState {
      * @Brief act as a getter for the Score.
      * 
      * @return the  Score of this turnState
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public Score score() {
         return Score.ofPacked(pkScore);
@@ -127,9 +109,6 @@ public final class TurnState {
      * @Brief act as a getter for the unplayedCardSet.
      * 
      * @return the UnplayedCardSet of this turnState
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public CardSet unplayedCards() {
         return CardSet.ofPacked(pkUnplayedCards);
@@ -139,9 +118,6 @@ public final class TurnState {
      * @Brief act as a getter for the Trick.
      * 
      * @return the Trick of this turnState
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public Trick trick() {
         return Trick.ofPacked(pkCurrentTrick);
@@ -153,9 +129,6 @@ public final class TurnState {
      * @Brief returns true iff the last trick of this turn has been played.
      * 
      * @return true iff the last trick of this turn has been played
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public boolean isTerminal() {
         //assert (PackedTrick.isFull(pkCurrentTrick)); //TODO: pourquoi ce assert ?
@@ -166,9 +139,6 @@ public final class TurnState {
      * @Brief returns the PlayerId of the Player who has to play the next card.
      * 
      * @return the PlayerId of the Player who has to play the next card
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public PlayerId nextPlayer() {
         if(PackedTrick.isFull(pkCurrentTrick)) {
@@ -180,13 +150,10 @@ public final class TurnState {
 
     
     /**
-     * @Brief returns a new TurnState in which the next player has played the Card card.
+     * @brief returns a new TurnState in which the next player has played the Card card.
      * 
      * @param card
      * @return a new TurnState in which the next player has played the Card card
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public TurnState withNewCardPlayed(Card card) {
         if(PackedTrick.isFull(pkCurrentTrick)) {
@@ -209,8 +176,9 @@ public final class TurnState {
         return new TurnState(PackedScore.nextTurn(withAdditionalTrick), pkUnplayedCards,
                 PackedTrick.nextEmpty(pkCurrentTrick));
     }
+
     /**
-     * @Brief returns a new TurnState in which the current trick has been recolted.
+     * @brief returns a new TurnState in which the current trick has been recolted.
      * 
      * @param card
      * @return a new TurnState in which the current trick has been recolted
@@ -228,16 +196,13 @@ public final class TurnState {
 
     
     /**
-     * @Brief returns a new TurnState in which the Card card 
+     * @brief returns a new TurnState in which the Card card
      * has been added, and the trick collected if possible.
      * 
      * @param card
      * @returna new TurnState in which the Card card 
      * has been added, and the trick collected if it was full at this point
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public TurnState withNewCardPlayedAndTrickCollected(Card card) {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();

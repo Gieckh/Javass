@@ -39,7 +39,6 @@ public final class PackedTrick {
 
     private static final int PLAYER_START = INDEX_START + INDEX_SIZE; //28
     private static final int PLAYER_SIZE = 2;
-    private static final int PLAYER_SHIFT = -1;
 
     private static final int TRUMP_START = PLAYER_START + PLAYER_SIZE; //30
     private static final int TRUMP_SIZE = 2;
@@ -112,7 +111,7 @@ public final class PackedTrick {
      * @return the first PackedTrick of a turn
      */
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
-        int player = (firstPlayer.type + PLAYER_SHIFT) << PLAYER_START;
+        int player = (firstPlayer.ordinal()) << PLAYER_START;
         int color  = trump.ordinal() << TRUMP_START;
 
         return EMPTY | player | color;
@@ -135,7 +134,7 @@ public final class PackedTrick {
         //incrementing the index
         pkTrick += 1 << INDEX_START;
         //TODO better
-        int winningPlayer = winningPlayer(pkTrick).type + PLAYER_SHIFT;
+        int winningPlayer = winningPlayer(pkTrick).ordinal();
         pkTrick &= ~Bits32.mask(PLAYER_START, PLAYER_SIZE);
         pkTrick |= (winningPlayer << PLAYER_START);
         return pkTrick | EMPTY;
