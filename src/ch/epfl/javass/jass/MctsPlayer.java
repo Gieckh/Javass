@@ -75,12 +75,12 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
-        
-        private int bestSonIndex( int c) {
-            for(int i = 0 ; childrenOfNode.length ; ++i) {
-                
-            }
-        }
+//
+//        private int bestSonIndex( int c) {
+//            for(int i = 0 ; childrenOfNode.length ; ++i) {
+//
+//            }
+//        }
         
         private float getV(int numberP , int c) {
             return (float) (selfTotalPoints/finishedRandomTurn+ (float)c*Math.sqrt(2*Math.log(numberP)/ finishedRandomTurn));
