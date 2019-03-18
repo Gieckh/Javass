@@ -317,6 +317,7 @@ public final class PackedTrick {
         assert (isValid(pkTrick));
 
         //cuz i dont want to re-extract.
+        //TODO: when its empty, we get CLUB
         int firstCardColor = (pkTrick & 0b110000) >>> CARD_COLOR_START;
         return Color.ALL.get(firstCardColor);
     }

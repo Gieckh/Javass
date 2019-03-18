@@ -117,6 +117,7 @@ public final class JassGame {
 
             playerHands.put(tmpId, newHand);
             turnState = turnState.withNewCardPlayed(cardToPlay);
+            tmpPlayer.updateTrick(turnState.trick());
         }
     }
 
