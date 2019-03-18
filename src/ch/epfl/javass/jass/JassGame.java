@@ -67,42 +67,35 @@ public final class JassGame {
 
     //TODO: update players.
     public void advanceToEndOfNextTrick() {
-        //We do nothing if the game is over.
-        if (isGameOver()) {
-            //TODO: collect ?
-            return; //nothing
-        }
-
         if (isTrickFirstOfTheGame()) {
             setPlayers();
-
-            setTrump();
-            setPlayersTrumps(trump);
-
-            distributeHands();
-            for (PlayerId pId: PlayerId.ALL) {
-                players.get(pId).updateHand(playerHands.get(pId));
-            }
-
+            setTurn();
             setGameFirstPlayer();
-
-
             turnState = TurnState.initial(trump, Score.INITIAL, gameFirstPlayer);
         }
 
-        else if (isTrickFirstOfTheTurn()) {
-            setTrump();
-            distributeHands();
-            updatePlayer();
-            turnState = turnState.withTrickCollected();
+        else {
+            collect();
+            //We do nothing if the game is over.
+            if (isGameOver()) {
+                //TODO: ?
+                return; //nothing
+            }
+
+            if (isTrickFirstOfTheTurn()) {
+                turnNumber++;
+                setTurn(); //trump and player hands
+                updatePlayer();
+                turnState = TurnState.ofPackedComponents(turnState.packedScore(),
+                        turnState.packedUnplayedCards(), PackedTrick.firstEmpty(trump, turnFirstPlayer));
+            }
         }
 
-        turnNumber++;
         setTrickFirstPlayer(turnState.packedTrick());
 
         //The 4 players play until the end
-        for (int i = 0; i < 4 ; ++i) {
-            PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1 % 4));
+        for (int i = 0; i < PlayerId.COUNT ; ++i) {
+            PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1 % PlayerId.COUNT));
             Player tmpPlayer = players.get(tmpId);
             CardSet oldHand = playerHands.get(tmpId);
             Card cardToPlay = players.get(tmpId).cardToPlay(turnState, oldHand);
@@ -114,6 +107,10 @@ public final class JassGame {
         }
     }
 
+
+    private void collect() {
+        turnState = turnState.withTrickCollected();
+    }
 
     private void setPlayers() {
         for (Map.Entry<PlayerId, Player> entry : players.entrySet()) {
@@ -183,7 +180,6 @@ public final class JassGame {
         fillAndShuffleDeck(deck);
         distributeHands(deck);
     }
-
     //The empty deck is passed as argument
     //It is then filled and shuffled
     private void fillAndShuffleDeck(List<Card> deck) {
@@ -196,7 +192,6 @@ public final class JassGame {
 
         Collections.shuffle(deck, shuffleRng);
     }
-
     private void setDistribution(PlayerId id, List<Card> deck,Map<PlayerId, CardSet> tmp) {
         //TODO: check refs
         CardSet hand = CardSet.EMPTY;
@@ -221,6 +216,16 @@ public final class JassGame {
         playerHands = tmp;
     }
 
+    private void setTurn() {
+        setTrump();
+        setPlayersTrumps(trump);
+
+        distributeHands();
+        for (PlayerId pId: PlayerId.ALL) {
+            players.get(pId).updateHand(playerHands.get(pId));
+        }
+    }
+
     private static Card.Color[] getAllColors() {
         return new Card.Color[] {
                 Card.Color.SPADE,
@@ -229,7 +234,6 @@ public final class JassGame {
                 Card.Color.CLUB
         };
     }
-
     private static Card.Rank[] getAllRanks() {
         return new Card.Rank[] {
                 Card.Rank.SIX,
