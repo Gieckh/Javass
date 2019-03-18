@@ -23,44 +23,48 @@ public final class PrintingPlayer implements Player {
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         underlyingPlayer.setPlayers(ownId, playerNames);
-        System.out.println("Les joueurs sont :  ");
-        List<String> a  = (List<String>) (playerNames.values());
-        String ownV = playerNames.get(ownId);
-        for(int i = 0 ; i < a.size() ; ++i) {
-            System.out.println();
-            System.out.print(a.get(i));
-            if(a.get(i)==ownV) {
-                System.out.print("  (moi)");
-            }
-        }
-       
+//        System.out.println("Les joueurs sont :  ");
+//        List<String> a  = (List<String>) (playerNames.values());
+//        String ownV = playerNames.get(ownId);
+//        for(int i = 0 ; i < a.size() ; ++i) {
+//            System.out.println();
+//            System.out.print(a.get(i));
+//            if(a.get(i)==ownV) {
+//                System.out.print("  (moi)");
+//            }
+//        }
     }
     
     @Override
     public void updateHand(CardSet newHand) {
         underlyingPlayer.updateHand(newHand);
         System.out.println("Ma nouvelle main : " + newHand.toString());
+        System.out.println();
     }
     @Override
     public void setTrump(Card.Color trump) {
         underlyingPlayer.setTrump(trump);
         System.out.println("Atout :" + trump.toString() );
+        System.out.println();
     }
     @Override
     public void updateTrick(Trick newTrick) {
         underlyingPlayer.updateTrick(newTrick);
-        System.out.println(newTrick.toString());
+        System.out.println("new Trick : " + newTrick.toString());
+        System.out.println();
    }
     @Override
     public void updateScore(Score score) {
         underlyingPlayer.updateScore(score);
         System.out.println("Scores :" + score.toString());
+        System.out.println();
     }
 
     @Override
     public void setWinningTeam(TeamId winningTeam) {
         underlyingPlayer.setWinningTeam(winningTeam);
         System.out.println( "L'équipe gagnante est "+ winningTeam.toString());
+        System.out.println();
     }
   }
   
