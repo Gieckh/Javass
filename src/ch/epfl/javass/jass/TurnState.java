@@ -173,7 +173,7 @@ public final class TurnState {
                 PackedTrick.winningPlayer(pkCurrentTrick).team(),
                 PackedTrick.points(pkCurrentTrick));
 
-        return new TurnState(PackedScore.nextTurn(withAdditionalTrick), pkUnplayedCards,
+        return new TurnState(withAdditionalTrick, pkUnplayedCards,
                 PackedTrick.nextEmpty(pkCurrentTrick));
     }
 

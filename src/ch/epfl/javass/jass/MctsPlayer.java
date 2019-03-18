@@ -58,6 +58,7 @@ public final class MctsPlayer implements Player {
         private long setOfPossibleCards;
         private int selfTotalPoints;
         private int finishedRandomTurn;
+        private float twoLnOfNOfP;
         
         
         /** ============================================== **/
@@ -70,6 +71,7 @@ public final class MctsPlayer implements Player {
             this.setOfPossibleCards = setOfPossibleCards;
             this.selfTotalPoints = selfTotalPoints;
             this.finishedRandomTurn = finishRandomTurns;
+            this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
         }
         
         /** ============================================== **/
@@ -84,6 +86,7 @@ public final class MctsPlayer implements Player {
         }
         
         private float getV(int numberP , int c) {
+            
             return (float) (selfTotalPoints/finishedRandomTurn+ (float)c*Math.sqrt(2*Math.log(numberP)/ finishedRandomTurn));
         }
         
