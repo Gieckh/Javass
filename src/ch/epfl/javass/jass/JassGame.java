@@ -93,10 +93,37 @@ public final class JassGame {
         for (int i = 0; i < 4 ; ++i) {
             PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1 % 4));
             Player tmpPlayer = players.get(tmpId);
-            turnState = turnState.withNewCardPlayed(players.get(tmpId).cardToPlay(turnState, (playerHands.get(tmpId))));
+            CardSet oldHand = playerHands.get(tmpId);
+            Card cardToPlay = players.get(tmpId).cardToPlay(turnState, oldHand);
+            CardSet newHand = oldHand.remove(cardToPlay);
+            tmpPlayer.updateHand(newHand);
+            playerHands.put(tmpId, newHand);
+
+            turnState = turnState.withNewCardPlayed(cardToPlay);
         }
     }
 
+
+    private void setPlayersTrumps(Color trump) {
+        for (PlayerId p : PlayerId.ALL) {
+            players.get(p).setTrump(trump);
+        }
+    }
+    private void updatePlayersTricks(Trick newTrick) {
+        for (PlayerId p : PlayerId.ALL) {
+            players.get(p).updateTrick(newTrick);
+        }
+    }
+    private void updatePlayersScores(Score newScore) {
+        for (PlayerId p : PlayerId.ALL) {
+            players.get(p).updateScore(newScore);
+        }
+    }
+    private void setPlayersWinningTeam(TeamId winningTeam) {
+        for (PlayerId p : PlayerId.ALL) {
+            players.get(p).setWinningTeam(winningTeam);
+        }
+    }
 
     private void setTrickFirstPlayer(int pkTrick) {
         trickFirstPlayer = PackedTrick.player(pkTrick, 0);
