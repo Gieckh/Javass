@@ -15,12 +15,15 @@ public final class JassGame {
     /** ============================================== **/
     private Random shuffleRng;
     private Random trumpRng;
-    private TurnState turnstate = null;
+    private TurnState turnState = null;
     private Map<PlayerId, Player> players;
     private Map<PlayerId, String> playerNames;
-    private Map<PlayerId, Long> playerHands;
+    private Map<PlayerId, Long> playerHands; //TODO: change Long to CardSet ?
     private Card.Color trump;
+    private PlayerId gameFirstPlayer;
     private PlayerId turnFirstPlayer;
+    private PlayerId trickFirstPlayer;
+    private int turnNumber = 1; //starts at turn 1
 
 
     /** ============================================== **/
@@ -49,18 +52,19 @@ public final class JassGame {
      *
     */
     public boolean isGameOver() {
-        return (turnstate != null) &&
+        return (turnState != null) &&
                (
-                (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
-                (PackedScore.totalPoints(turnstate.packedScore(), TeamId.TEAM_2)>=Jass.WINNING_POINTS)
+                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
+                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2)>=Jass.WINNING_POINTS)
                );
     }
 
     /**
-     * @Brief advance the state of the game until the end of the next trick.
+     * @brief advance the state of the game until the end of the next trick.
      *
      *
     */
+
     public void advanceToEndOfNextTrick() {
         //We do nothing if the game is over.
         if (isGameOver()) {
@@ -68,15 +72,56 @@ public final class JassGame {
             return; //nothing
         }
 
-        //if(PackedScore.) { }
+        if (isTrickFirstOfTheGame()) {
+            setTrump();
+            distributeHands();
+            setGameFirstPlayer();
+            turnState = TurnState.initial(trump, Score.INITIAL, gameFirstPlayer);
+        }
 
-//        //turnstate = TurnState.initial( trumpShuffled(shuffleRng).get(0), score, firstPlayer);
-//        //cas ou on est au 1er tour
-//        if(turnstate == null) {
-//            PlayerId firstPlayer ;
-//            turnstate = TurnState.initial( trumpRandom(shuffleRng).get(0), Score.INITIAL, firstPlayer);
-//        }
+        else if (isTrickFirstOfTheTurn()) {
+            setTrump();
+            distributeHands();
+            updatePlayer();
+            turnState = turnState.withTrickCollected();
+        }
 
+        setTrickFirstPlayer(turnState.packedTrick());
+
+        for (int i = 0; i < 4 ; ++i) {
+            PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1 % 4));
+            Player tmpPlayer = players.get(tmpId);
+            turnState = turnState.withNewCardPlayed(players.get(tmpId).cardToPlay(turnState, CardSet.ofPacked(playerHands.get(tmpId))));
+        }
+    }
+
+
+    private void setTrickFirstPlayer(int pkTrick) {
+        trickFirstPlayer = PackedTrick.player(pkTrick, 0);
+    }
+
+    //The cards need to have been distributed
+    //This method also set the turnFirstPlayer
+    private void setGameFirstPlayer() {
+        int pkCard = PackedCard.pack(Color.DIAMOND, Card.Rank.SEVEN);
+        for (PlayerId player : PlayerId.values()) {
+            if (PackedCardSet.contains(playerHands.get(player), pkCard)) {
+                gameFirstPlayer = player;
+                turnFirstPlayer = gameFirstPlayer;
+                return;
+            }
+        }
+
+        //theoretically unreachable statement
+        assert(false);
+    }
+
+    private boolean isTrickFirstOfTheGame() {
+        return turnState == null;
+    }
+
+    private boolean isTrickFirstOfTheTurn() {
+        return turnState.isTerminal();
     }
 
     //After the first turn, this method is used to update the first player of the turn

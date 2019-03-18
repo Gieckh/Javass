@@ -149,7 +149,7 @@ public final class PackedCardSet {
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
      */
-    public static int get2(long pkCardSet, int index) { //TODO: more tests
+    private static int get2(long pkCardSet, int index) { //TODO: more tests
         assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
         //int i = Long.numberOfTrailingZeros(pkCardSet);
         int i = 0;
@@ -170,7 +170,7 @@ public final class PackedCardSet {
         return Long.numberOfTrailingZeros(pkCardSet);
     }
 
-    public static int get3(long pkCardSet, int index) {
+    private static int get3(long pkCardSet, int index) {
         assert (size(pkCardSet) >= index  &&  index >= 0);
 
         int i = (int) Long.numberOfTrailingZeros(pkCardSet);

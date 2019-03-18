@@ -182,9 +182,6 @@ public final class TurnState {
      * 
      * @param card
      * @return a new TurnState in which the current trick has been recolted
-     * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public TurnState withTrickCollected() {
         if(!PackedTrick.isFull(pkCurrentTrick)) {
@@ -200,7 +197,7 @@ public final class TurnState {
      * has been added, and the trick collected if possible.
      * 
      * @param card
-     * @returna new TurnState in which the Card card 
+     * @return a new TurnState in which the Card card
      * has been added, and the trick collected if it was full at this point
      */
     public TurnState withNewCardPlayedAndTrickCollected(Card card) {
