@@ -248,6 +248,6 @@ public final class CardSet {
      */
     @Override
     public String toString() {
-        return PackedScore.toString(pkCardSet);
+        return PackedCardSet.toString(pkCardSet);
     }
 }
