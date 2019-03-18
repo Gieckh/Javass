@@ -59,6 +59,8 @@ public final class MctsPlayer implements Player {
         private int selfTotalPoints;
         private int finishedRandomTurn;
         private float twoLnOfNOfP;
+        private Float[] valuesOfSons;
+        private int size = PackedCardSet.size(setOfPossibleCards);
         
         
         /** ============================================== **/
@@ -66,17 +68,22 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         
         private Node(TurnState turnstate , long setOfPossibleCards, int selfTotalPoints, int finishRandomTurns) {
-            this.childrenOfNode = null;
+            this.childrenOfNode = new Node[size];
             this.turnstate = turnstate;
             this.setOfPossibleCards = setOfPossibleCards;
             this.selfTotalPoints = selfTotalPoints;
             this.finishedRandomTurn = finishRandomTurns;
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
+            this.valuesOfSons = new Float[size];
         }
         
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
+        
+        protected int getSelfTotPoints() {
+            return selfTotalPoints;
+        }
         
         private int bestSonIndex( int c) {
             for(int i = 0 ; i< childrenOfNode.length ; ++i) {
@@ -85,9 +92,18 @@ public final class MctsPlayer implements Player {
             return 0;
         }
         
-        private float getV(int numberP , int c) {
-            
-            return (float) (selfTotalPoints/finishedRandomTurn+ (float)c*Math.sqrt(2*Math.log(numberP)/ finishedRandomTurn));
+        private void VForSons() {
+            for(int i = 0 ; i < size ; ++i) {
+                if(childrenOfNode[i] != null) {
+                    valuesOfSons[i] = getVForSon(childrenOfNode[i].selfTotalPoints, childrenOfNode[i].finishedRandomTurn , 40);
+                }
+            }
+        }
+        
+        
+        
+        private float getVForSon(int NofSon ,int SofSon, int c) {
+            return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP/ NofSon));
         }
         
     }
