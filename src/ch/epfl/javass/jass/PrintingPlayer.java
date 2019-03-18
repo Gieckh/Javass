@@ -23,17 +23,16 @@ public final class PrintingPlayer implements Player {
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         underlyingPlayer.setPlayers(ownId, playerNames);
-        System.out.println("Les joueurs sont :  ");
-        List<String> a  = (List<String>) (playerNames.values());
-        String ownV = playerNames.get(ownId);
-        for(int i = 0 ; i < a.size() ; ++i) {
-            System.out.println();
-            System.out.print(a.get(i));
-            if(a.get(i)==ownV) {
-                System.out.print("  (moi)");
-            }
-        }
-       
+//        System.out.println("Les joueurs sont :  ");
+//        List<String> a  = (List<String>) (playerNames.values());
+//        String ownV = playerNames.get(ownId);
+//        for(int i = 0 ; i < a.size() ; ++i) {
+//            System.out.println();
+//            System.out.print(a.get(i));
+//            if(a.get(i)==ownV) {
+//                System.out.print("  (moi)");
+//            }
+//        }
     }
     
     @Override

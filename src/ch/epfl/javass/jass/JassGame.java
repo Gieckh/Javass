@@ -18,7 +18,7 @@ public final class JassGame {
     private TurnState turnState = null;
     private Map<PlayerId, Player> players;
     private Map<PlayerId, String> playerNames;
-    private Map<PlayerId, CardSet> playerHands; //TODO: change Long to CardSet ?
+    private Map<PlayerId, CardSet> playerHands;
     private Card.Color trump;
     private PlayerId gameFirstPlayer;
     private PlayerId turnFirstPlayer;
@@ -52,19 +52,28 @@ public final class JassGame {
      *
     */
     public boolean isGameOver() {
-        return (turnState != null) &&
-               (
-                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) ||
-                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS)
-               );
+        if (turnState == null) {
+            return false;
+        }
+
+        if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
+            setPlayersWinningTeam(TeamId.TEAM_1);
+            return true;
+        }
+
+        if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
+            setPlayersWinningTeam(TeamId.TEAM_2);
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * @brief advance the state of the game until the end of the next trick.
      *
      *
-    */
-
+     */
     //TODO: update players.
     public void advanceToEndOfNextTrick() {
         if (isTrickFirstOfTheGame()) {
@@ -92,6 +101,7 @@ public final class JassGame {
         }
 
         setTrickFirstPlayer(turnState.packedTrick());
+        updatePlayersTricks(turnState.trick());
 
         //The 4 players play until the end
         for (int i = 0; i < PlayerId.COUNT ; ++i) {
@@ -110,6 +120,7 @@ public final class JassGame {
 
     private void collect() {
         turnState = turnState.withTrickCollected();
+        updatePlayersScores(turnState.score());
     }
 
     private void setPlayers() {
@@ -146,14 +157,16 @@ public final class JassGame {
     //This method also set the turnFirstPlayer
     private void setGameFirstPlayer() {
         Card card = Card.of(Color.DIAMOND, Card.Rank.SEVEN);
-        for (PlayerId player : PlayerId.values()) {
-            if (playerHands.get(player).contains(card)) {
-                gameFirstPlayer = player;
+        for (PlayerId pId : PlayerId.values()) {
+            if (playerHands.get(pId).contains(card)) {
+                gameFirstPlayer = pId;
                 turnFirstPlayer = gameFirstPlayer;
+                System.out.println("game first player set : " + gameFirstPlayer.toString());
                 return;
             }
         }
 
+        System.out.println("game first player not set");
         //theoretically unreachable statement
         assert(false);
     }
