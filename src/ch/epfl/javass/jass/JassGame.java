@@ -18,7 +18,7 @@ public final class JassGame {
     private TurnState turnState = null;
     private Map<PlayerId, Player> players;
     private Map<PlayerId, String> playerNames;
-    private Map<PlayerId, Long> playerHands; //TODO: change Long to CardSet ?
+    private Map<PlayerId, CardSet> playerHands; //TODO: change Long to CardSet ?
     private Card.Color trump;
     private PlayerId gameFirstPlayer;
     private PlayerId turnFirstPlayer;
@@ -54,8 +54,8 @@ public final class JassGame {
     public boolean isGameOver() {
         return (turnState != null) &&
                (
-                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1)>=Jass.WINNING_POINTS) ||
-                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2)>=Jass.WINNING_POINTS)
+                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) ||
+                (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS)
                );
     }
 
@@ -65,6 +65,7 @@ public final class JassGame {
      *
     */
 
+    //TODO: update players.
     public void advanceToEndOfNextTrick() {
         //We do nothing if the game is over.
         if (isGameOver()) {
@@ -88,10 +89,11 @@ public final class JassGame {
 
         setTrickFirstPlayer(turnState.packedTrick());
 
+        //The 4 players play until the end
         for (int i = 0; i < 4 ; ++i) {
             PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1 % 4));
             Player tmpPlayer = players.get(tmpId);
-            turnState = turnState.withNewCardPlayed(players.get(tmpId).cardToPlay(turnState, CardSet.ofPacked(playerHands.get(tmpId))));
+            turnState = turnState.withNewCardPlayed(players.get(tmpId).cardToPlay(turnState, (playerHands.get(tmpId))));
         }
     }
 
@@ -103,9 +105,9 @@ public final class JassGame {
     //The cards need to have been distributed
     //This method also set the turnFirstPlayer
     private void setGameFirstPlayer() {
-        int pkCard = PackedCard.pack(Color.DIAMOND, Card.Rank.SEVEN);
+        Card card = Card.of(Color.DIAMOND, Card.Rank.SEVEN);
         for (PlayerId player : PlayerId.values()) {
-            if (PackedCardSet.contains(playerHands.get(player), pkCard)) {
+            if (playerHands.get(player).contains(card)) {
                 gameFirstPlayer = player;
                 turnFirstPlayer = gameFirstPlayer;
                 return;
@@ -152,7 +154,7 @@ public final class JassGame {
         Collections.shuffle(deck, shuffleRng);
     }
 
-    private void setDistribution(PlayerId id, List<Card> deck,Map<PlayerId, Long> tmp) {
+    private void setDistribution(PlayerId id, List<Card> deck,Map<PlayerId, CardSet> tmp) {
         //TODO: check refs
         CardSet hand = CardSet.EMPTY;
         int start = id.ordinal() * Jass.HAND_SIZE;
@@ -161,13 +163,13 @@ public final class JassGame {
             hand.add(deck.get(i));
         }
 
-        tmp.put(id, hand.packed());
+        tmp.put(id, hand);
     }
     //TODO: Iterator
     private void distributeHands(List<Card> deck) {
         assert (deck.size() == 36);
 
-        Map<PlayerId, Long> tmp = new HashMap<>();
+        Map<PlayerId, CardSet> tmp = new HashMap<>();
         setDistribution(PlayerId.PLAYER_1, deck, tmp);
         setDistribution(PlayerId.PLAYER_2, deck, tmp);
         setDistribution(PlayerId.PLAYER_3, deck, tmp);
@@ -197,5 +199,11 @@ public final class JassGame {
                 Card.Rank.KING,
                 Card.Rank.ACE,
         };
+    }
+
+    private void setPlayers() {
+        for (Map.Entry<PlayerId, Player> entry : players.entrySet()) {
+            entry.getValue().setPlayers(entry.getKey(), playerNames);
+        }
     }
 }
