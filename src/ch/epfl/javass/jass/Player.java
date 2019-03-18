@@ -29,7 +29,7 @@ public interface Player {
 
 
     /**
-     * @Brief informs the player about updating his hand .
+     * @brief informs the player about updating his hand.
      *
      * @param newHand
      *
