@@ -1,291 +1,240 @@
-/*
- *  Author:      Joshua Bernimoulin
- *  Date:        5 Mar. 2019
- */
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.jass.Card.Color.CLUB;
+import static ch.epfl.javass.jass.Card.Color.DIAMOND;
+import static ch.epfl.javass.jass.Card.Color.HEART;
+import static ch.epfl.javass.jass.Card.Color.SPADE;
+import static ch.epfl.javass.jass.Card.Rank.EIGHT;
+import static ch.epfl.javass.jass.Card.Rank.NINE;
+import static ch.epfl.javass.jass.Card.Rank.SEVEN;
+import static ch.epfl.javass.jass.Card.Rank.SIX;
+import static ch.epfl.test.TestRandomizer.RANDOM_ITERATIONS;
 import static ch.epfl.test.TestRandomizer.newRandom;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.SplittableRandom;
 
 import org.junit.jupiter.api.Test;
 
-import ch.epfl.javass.bits.Bits32;
+import ch.epfl.javass.jass.Card.Color;
+import ch.epfl.javass.jass.Card.Rank;
 
 class TrickTest {
-    
-    public final static int INVALID=-1;
-
-    long mask = 0b0000000_111111111_0000000_111111111_0000000_111111111_0000000_111111111L;
-
-    private final static int NUMBER_DIFFERENT_CARDS=4;
-    private final static int CARD_SIZE=6;
-    private final static int ALL_CARD_SIZE=NUMBER_DIFFERENT_CARDS*CARD_SIZE;
-    private final static int CARD_START=0;
-    private final static int INDEX_SIZE=4;
-    private final static int INDEX_START=ALL_CARD_SIZE+CARD_START;
-    private final static int PLAYER_SIZE=2;
-    private final static int PLAYER_START=INDEX_START+INDEX_SIZE;
-    private final static int TRUMP_SIZE=2;
-    private final static int TRUMP_START=PLAYER_START+PLAYER_SIZE;
-
-    
-    @Test
-    void trickCreationWorks() throws Exception {
-        for(PlayerId p: PlayerId.ALL) {
-            for(Card.Color c:Card.Color.ALL) {
-                assertEquals(Trick.ofPacked(PackedTrick.firstEmpty(c, p)),Trick.firstEmpty(c, p));
-            }
-        }
+    private static Card c(Color color, Rank rank) {
+        return Card.of(color, rank);
     }
-    
-    @Test
-    void packedWorks() throws Exception {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            assertEquals(c,Trick.ofPacked(c).packed());
-        }
-    }
-    
-    @Test
-    void lotsOfTests() throws Exception {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            if(PackedTrick.isEmpty(c)) {
-                assertTrue(Trick.ofPacked(c).isEmpty());
-                assertFalse(Trick.ofPacked(c).isFull());
-            }else if(PackedTrick.isFull(c)){
-                assertFalse(Trick.ofPacked(c).isEmpty());
-                assertTrue(Trick.ofPacked(c).isFull());
-            }
-            
-            if(PackedTrick.isLast(c)) {
-                assertTrue(Trick.ofPacked(c).isLast());
-            }else {
-                assertFalse(Trick.ofPacked(c).isLast());
-            }
-            
-            assertEquals(PackedTrick.index(c),Trick.ofPacked(c).index());
-            assertEquals(PackedTrick.trump(c),Trick.ofPacked(c).trump());
-            assertEquals(PackedTrick.size(c),Trick.ofPacked(c).size());
-            System.out.println("coucou");
-            System.out.println(Integer.toBinaryString(c));
-            System.out.println(PackedTrick.points(c));
-            System.out.println(Trick.ofPacked(c).points());
-            
-            assertEquals(PackedTrick.points(c),Trick.ofPacked(c).points());
 
-
-        }
+    private static Card[] c(Color c1, Rank r1, Color c2, Rank r2, Color c3, Rank r3, Color c4, Rank r4) {
+        return new Card[] { c(c1, r1), c(c2, r2), c(c3, r3), c(c4, r4) };
     }
-    
+
     @Test
-    void equalsWorks() throws Exception {
-        SplittableRandom rng= newRandom();
-        for(PlayerId p: PlayerId.ALL) {
-            for(Card.Color c:Card.Color.ALL) {
-                assertTrue(Trick.ofPacked(PackedTrick.firstEmpty(c, p)).equals(Trick.firstEmpty(c, p)));
-                
-                int trick=generateRandomValidTrick(rng);
-                int trick2=generateRandomValidTrick(rng);
-                
-                assertTrue(Trick.ofPacked(trick).equals(Trick.ofPacked(trick)));
-                if(trick!=trick2) {
-                    assertFalse(Trick.ofPacked(trick).equals(Trick.ofPacked(trick2)));
-                    assertFalse(Trick.ofPacked(trick2).equals(Trick.ofPacked(trick)));
-                    assertFalse(Trick.ofPacked(trick).equals(null));
-                    assertFalse(Trick.ofPacked(trick).equals("Hello"));
-                }
-                
+    void firstEmptyWorks() {
+        for (Color trump: Color.ALL) {
+            for (PlayerId firstPlayer: PlayerId.ALL) {
+                Trick t = Trick.firstEmpty(trump, firstPlayer);
+                assertTrue(t.isEmpty());
+                assertEquals(0, t.index());
+                assertEquals(trump, t.trump());
+                assertEquals(firstPlayer, t.player(0));
             }
-        }
-    }
-    
-    //Throws Errors
-    
-    
-    @Test
-    void ofPackedThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<30;++i) {
-            assertThrows(IllegalArgumentException.class, () -> {Trick.ofPacked(generateRandomTrickHead(rng)+(generateRandomValidCard(rng)<<18)+Bits32.mask(0, 18));});
-            assertThrows(IllegalArgumentException.class, () -> {Trick.ofPacked(generateRandomTrickHead(rng)+(generateRandomValidCard(rng)<<18)+(generateRandomValidCard(rng)<<18)+Bits32.mask(0, 12));});
-            assertThrows(IllegalArgumentException.class, () -> {Trick.ofPacked(generateRandomTrickHead(rng)+(generateRandomValidCard(rng)<<18)+(generateRandomValidCard(rng)<<12)+(generateRandomValidCard(rng)<<6)+Bits32.mask(0, 6));});
-            assertThrows(IllegalArgumentException.class, () -> {Trick.ofPacked((rng.nextInt(4)<<30)+(rng.nextInt(4)<<28)+(10<<24)+Bits32.mask(0, 24));});
-            assertThrows(IllegalArgumentException.class, () -> {Trick.ofPacked(generateRandomTrickHead(rng)+(generateRandomValidCard(rng))+(generateRandomValidCard(rng)<<6)+(generateRandomValidCard(rng)<<12)+(generateRandomInvalidCard(rng)<<18));});
-
         }
     }
 
     @Test
-    void playerThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            int index=rng.nextInt(-2,5);
-            if(index>=4) {
-                assertThrows(IndexOutOfBoundsException.class, () -> {Trick.ofPacked(c).player(index);});
-            }else if(index<0){
-                assertThrows(IndexOutOfBoundsException.class, () -> {Trick.ofPacked(c).player(index);});
-            }else{
-                assertEquals(PackedTrick.player(c,index),Trick.ofPacked(c).player(index));            
-            }
-        }
-    } 
-    
-    @Test
-    void cardThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            int index=rng.nextInt(-2,5);
-            if(index>=PackedTrick.size(c)) {
-                assertThrows(IndexOutOfBoundsException.class, () -> {Trick.ofPacked(c).card(index);});
-            }else if(index<0){
-                assertThrows(IndexOutOfBoundsException.class, () -> {Trick.ofPacked(c).card(index);});
-            }else{
-                assertEquals(PackedTrick.card(c,index),Trick.ofPacked(c).card(index).packed());            
-            }
-        }
+    void ofPackedFailsWithInvalidTrick() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Trick.ofPacked(PackedTrick.INVALID);
+        });
     }
-    
-    @Test
-    void withAddedCardThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            int card=generateRandomValidCard(rng);
-            if(PackedTrick.isFull(c)) {
-                assertThrows(IllegalStateException.class, () -> {Trick.ofPacked(c).withAddedCard(Card.ofPacked(card));});
-            }else{
-                assertEquals(Trick.ofPacked(PackedTrick.withAddedCard(c,card)),Trick.ofPacked(c).withAddedCard(Card.ofPacked(card)));            
-            }
-        }
-    }
-    
 
     @Test
-    void baseColorThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            if(PackedTrick.isEmpty(c)) {
-                assertThrows(IllegalStateException.class, () -> {Trick.ofPacked(c).baseColor();});
-            }else{
-                assertEquals(PackedTrick.baseColor(c),Trick.ofPacked(c).baseColor());            
-            }
-        }
-    }
-    
-    @Test
-    void playableCardsThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            if(PackedTrick.isFull(c)) {
-                assertThrows(IllegalStateException.class, () -> {Trick.ofPacked(c).playableCards(CardSet.ofPacked(mask));});
-            }
-            long cardSet=rng.nextLong()&mask;
-            while(PackedCardSet.size(cardSet)>9) {
-                cardSet=rng.nextLong()&mask;
-            }
-            if(!PackedTrick.isFull(c)){
-                assertEquals(CardSet.ofPacked(PackedTrick.playableCards(c,cardSet)),Trick.ofPacked(c).playableCards(CardSet.ofPacked(cardSet)));
-            }
-        }
-    }
-    
-    @Test
-    void winningPlayerThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            if(PackedTrick.isEmpty(c)) {
-                assertThrows(IllegalStateException.class, () -> {Trick.ofPacked(c).winningPlayer();});
-            }else{
-                assertEquals(PackedTrick.winningPlayer(c), Trick.ofPacked(c).winningPlayer());            
-            }
-        }
-    }
-    
-    @Test
-    void nextEmptyThrowsException() {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<30;++i) {
-            int c=generateRandomValidTrick(rng);
-            if(!PackedTrick.isFull(c)) {
-                assertThrows(IllegalStateException.class, () -> {Trick.ofPacked(c).nextEmpty();});
-            }else if(PackedTrick.isLast(c)){
-                //Trick.ofPacked(PackedTrick.nextEmpty(c)) fait un IllegalArgument car PackedTrick.nextEmpty(c) me donne INVALID
-                assertEquals(PackedTrick.nextEmpty(c),Trick.ofPacked(c).nextEmpty().packed());
-            }else{
-                assertEquals(Trick.ofPacked(PackedTrick.nextEmpty(c)),Trick.ofPacked(c).nextEmpty());
-            }
-        }
-    } 
-    
-    @Test
-    void hashCodeWorks() throws Exception {
-        SplittableRandom rng= newRandom();
-        for(int i=0;i<3000;++i) {
-            int c=generateRandomValidTrick(rng);
-            assertEquals(c,Trick.ofPacked(c).hashCode());
-        }
-    }
-    
-    @Test
-    void toStringWorks() {
+    void ofPackedAndPackedAreInverses() {
         SplittableRandom rng = newRandom();
-        for (int i = 0; i < 2; i += 1) {
-        
-            int c = generateRandomValidTrick(rng);
-            //System.out.println(Trick.ofPacked(c).toString());
+        for (int i = 0; i < RANDOM_ITERATIONS; ++i) {
+            int pkTrick = rng.nextInt();
+            if (! PackedTrick.isValid(pkTrick))
+                continue;
+            assertEquals(pkTrick, Trick.ofPacked(pkTrick).packed());
         }
     }
-    
-    
-    private int generateRandomValidTrick(SplittableRandom rng) {
-        switch(rng.nextInt(5)) {
-        case 0:
-            return generateRandomTrickHead(rng)+(generateRandomValidCard(rng)<<18)+(generateRandomValidCard(rng)<<12)
-                    +(generateRandomValidCard(rng)<<6)+generateRandomValidCard(rng);
-        case 1:
-            return generateRandomTrickHead(rng)+(generateRandomValidCard(rng))+(generateRandomValidCard(rng)<<6)+(generateRandomValidCard(rng)<<12)+Bits32.mask(18, 6);
-        case 2:
-            return generateRandomTrickHead(rng)+(generateRandomValidCard(rng))+(generateRandomValidCard(rng)<<6)+Bits32.mask(12, 12);
-        case 3:
-            return generateRandomTrickHead(rng)+(generateRandomValidCard(rng))+Bits32.mask(6, 18);
-        case 4:
-            return generateRandomTrickHead(rng)+Bits32.mask(0, 24);
-        default: 
-            System.out.println("Error in generateRandomValidTrick");
-            return 0;
+
+    @Test
+    void nextEmptyFailsWithNonFullTrick() {
+        assertThrows(IllegalStateException.class, () -> {
+            Trick
+            .firstEmpty(SPADE, PlayerId.PLAYER_1)
+            .nextEmpty();
+        });
+    }
+
+    @Test
+    void isLastWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        CardSet cs = CardSet.ALL_CARDS;
+        for (int i = 0; i < 9; ++i) {
+            boolean last = (i == 8);
+            for (int j = 0; j < 4; ++j) {
+                t = t.withAddedCard(cs.get(0));
+                cs = cs.remove(cs.get(0));
+                assertEquals(last, t.isLast());
+            }
+            t = t.nextEmpty();
         }
-        
     }
-    
-    private int generateRandomValidFullTrick(SplittableRandom rng) {        
-        return generateRandomTrickHead(rng)+generateRandomTrickTail(rng);
+
+    @Test
+    void isEmptyWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        assertTrue(t.isEmpty());
+        for (Card cd: c(SPADE,SIX, SPADE,SEVEN, SPADE,EIGHT, SPADE,NINE)) {
+            t = t.withAddedCard(cd);
+            assertFalse(t.isEmpty());
+        }
     }
-    
-    private int generateRandomValidCard(SplittableRandom rng) {
-        
-        return (rng.nextInt(4)<<4)+rng.nextInt(9);
+
+    @Test
+    void isFullWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        for (Card cd: c(SPADE,SIX, SPADE,SEVEN, SPADE,EIGHT, SPADE,NINE)) {
+            assertFalse(t.isFull());
+            t = t.withAddedCard(cd);
+        }
+        assertTrue(t.isFull());
     }
-    private int generateRandomInvalidCard(SplittableRandom rng) {
-        return(rng.nextInt(4)<<4)+rng.nextInt(9,15);
-        
+
+    @Test
+    void sizeWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        int s = 0;
+        for (Card cd: c(SPADE,SIX, SPADE,SEVEN, SPADE,EIGHT, SPADE,NINE)) {
+            assertEquals(s, t.size());
+            t = t.withAddedCard(cd);
+            s += 1;
+        }
+        assertEquals(s, t.size());
     }
-    private int generateRandomTrickHead(SplittableRandom rng) {        
-        return (rng.nextInt(4)<<30)+(rng.nextInt(4)<<28)+(rng.nextInt(9)<<24);
+
+    @Test
+    void trumpWorks() {
+        for (Color c: Color.ALL) {
+            Trick t = Trick.firstEmpty(c, PlayerId.PLAYER_1);
+            assertEquals(c, t.trump());
+        }
     }
-    private int generateRandomTrickTail(SplittableRandom rng) {
-        
-        return (generateRandomValidCard(rng)<<18)+(generateRandomValidCard(rng)<<12)
-                +(generateRandomValidCard(rng)<<6)+generateRandomValidCard(rng);
+
+    @Test
+    void indexWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        CardSet cs = CardSet.ALL_CARDS;
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                t = t.withAddedCard(cs.get(0));
+                cs = cs.remove(cs.get(0));
+                assertEquals(i, t.index());
+            }
+            t = t.nextEmpty();
+        }
     }
-    
+
+    @Test
+    void playerWorks() {
+        for (PlayerId p: PlayerId.ALL) {
+            Trick t = Trick.firstEmpty(SPADE, p);
+            for (int i = 0; i < 4; ++i) {
+                PlayerId expPlayer = PlayerId.ALL.get((p.ordinal() + i) % PlayerId.COUNT);
+                assertEquals(expPlayer, t.player(i));
+            }
+        }
+    }
+
+    @Test
+    void cardWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        int i = 0;
+        for (Card cd: c(HEART,SIX, HEART,SEVEN, HEART,EIGHT, HEART,NINE)) {
+            t = t.withAddedCard(cd);
+            assertEquals(cd, t.card(i++));
+        }
+    }
+
+    @Test
+    void baseColorWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        for (Card cd: c(HEART,SIX, SPADE,SEVEN, DIAMOND,EIGHT, CLUB,NINE)) {
+            t = t.withAddedCard(cd);
+            assertEquals(HEART, t.baseColor());
+        }
+    }
+
+    @Test
+    void playableCardsWorks() {
+        for (Color c: Color.ALL) {
+            Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+            CardSet hand = CardSet.EMPTY;
+            for (Rank r: Rank.ALL)
+                hand = hand.add(c(c, r));
+            assertEquals(hand, t.playableCards(hand));
+        }
+    }
+
+    @Test
+    void pointsWork() {
+        int totalPoints = 0;
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        for (Rank r: Rank.ALL) {
+            for (Color c: Color.ALL) {
+                t = t.withAddedCard(c(c, r));
+            }
+            totalPoints += t.points();
+            t = t.nextEmpty();
+        }
+        assertEquals(157, totalPoints);
+    }
+
+    @Test
+    void winningPlayerWorks() {
+        Trick t = Trick.firstEmpty(SPADE, PlayerId.PLAYER_3);
+        for (Rank r: Rank.ALL) {
+            for (Color c: Color.ALL) {
+                t = t.withAddedCard(c(c, r));
+                assertEquals(PlayerId.PLAYER_3, t.winningPlayer());
+            }
+            t = t.nextEmpty();
+        }
+    }
+
+    @Test
+    void equalsWorksWithDifferentButEqualInstances() {
+        Trick t1 = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        Trick t2 = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        for (Rank r: Rank.ALL) {
+            for (Color c: Color.ALL) {
+                t1 = t1.withAddedCard(c(c, r));
+                t2 = t2.withAddedCard(c(c, r));
+                assertEquals(t1, t2);
+            }
+            t1 = t1.nextEmpty();
+            t2 = t2.nextEmpty();
+        }
+    }
+
+    @Test
+    void hashCodesOfDifferentButEqualInstancesAreEqual() {
+        Trick t1 = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        Trick t2 = Trick.firstEmpty(SPADE, PlayerId.PLAYER_1);
+        for (Rank r: Rank.ALL) {
+            for (Color c: Color.ALL) {
+                t1 = t1.withAddedCard(c(c, r));
+                t2 = t2.withAddedCard(c(c, r));
+                assertEquals(t1.hashCode(), t2.hashCode());
+            }
+            t1 = t1.nextEmpty();
+            t2 = t2.nextEmpty();
+        }
+    }
 }
+

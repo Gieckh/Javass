@@ -53,11 +53,12 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/
         /** ============================================== **/
-        TurnState turnstate;
-        Node[] childrenOfNode ;
-        long setOfPossibleCards;
-        int selfTotalPoints;
-        int finishedRandomTurn;
+        private TurnState turnstate;
+        private Node[] childrenOfNode ;
+        private long setOfPossibleCards;
+        private int selfTotalPoints;
+        private int finishedRandomTurn;
+        
         
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
@@ -76,7 +77,13 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         
         private int bestSonIndex( int c) {
-            
+            for(int i = 0 ; childrenOfNode.length ; ++i) {
+                
+            }
+        }
+        
+        private float getV(int numberP , int c) {
+            return (float) (selfTotalPoints/finishedRandomTurn+ (float)c*Math.sqrt(2*Math.log(numberP)/ finishedRandomTurn));
         }
         
     }
