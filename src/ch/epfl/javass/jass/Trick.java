@@ -257,7 +257,7 @@ public class Trick {
     */
     @Override
     public String toString() {
-        return PackedScore.toString(pkTrick);
+        return PackedTrick.toString(pkTrick);
     }
     
 }

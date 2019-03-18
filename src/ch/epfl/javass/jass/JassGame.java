@@ -95,8 +95,11 @@ public final class JassGame {
                 turnNumber++;
                 setTurn(); //trump and player hands
                 updatePlayer();
-                turnState = TurnState.ofPackedComponents(turnState.packedScore(),
-                        turnState.packedUnplayedCards(), PackedTrick.firstEmpty(trump, turnFirstPlayer));
+                turnState = TurnState.ofPackedComponents(
+                        turnState.packedScore(),
+                        turnState.packedUnplayedCards(),
+                        PackedTrick.firstEmpty(trump, turnFirstPlayer)
+                );
             }
         }
 
@@ -205,13 +208,13 @@ public final class JassGame {
 
         Collections.shuffle(deck, shuffleRng);
     }
-    private void setDistribution(PlayerId id, List<Card> deck,Map<PlayerId, CardSet> tmp) {
+    private void setDistribution(PlayerId id, List<Card> deck, Map<PlayerId, CardSet> tmp) {
         //TODO: check refs
         CardSet hand = CardSet.EMPTY;
         int start = id.ordinal() * Jass.HAND_SIZE;
         //TODO: iterator ? //tho not necessary cuz it doesnt happen often
         for (int i = start; i < start + Jass.HAND_SIZE; ++i) {
-            hand.add(deck.get(i));
+            hand = hand.add(deck.get(i));
         }
 
         tmp.put(id, hand);
