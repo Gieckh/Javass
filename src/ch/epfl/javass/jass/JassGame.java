@@ -108,7 +108,7 @@ public final class JassGame {
 
         //The 4 players play until the end
         for (int i = 0; i < PlayerId.COUNT ; ++i) {
-            PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1 % PlayerId.COUNT));
+            PlayerId tmpId = PlayerId.ALL.get(((trickFirstPlayer.ordinal() + 1 ) % PlayerId.COUNT));
             Player tmpPlayer = players.get(tmpId);
             CardSet oldHand = playerHands.get(tmpId);
             Card cardToPlay = players.get(tmpId).cardToPlay(turnState, oldHand);
