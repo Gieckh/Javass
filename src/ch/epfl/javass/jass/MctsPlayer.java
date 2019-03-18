@@ -77,9 +77,10 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         
         private int bestSonIndex( int c) {
-            for(int i = 0 ; childrenOfNode.length ; ++i) {
+            for(int i = 0 ; i< childrenOfNode.length ; ++i) {
                 
             }
+            return 0;
         }
         
         private float getV(int numberP , int c) {

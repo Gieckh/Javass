@@ -23,21 +23,28 @@ public final class PrintingPlayer implements Player {
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         underlyingPlayer.setPlayers(ownId, playerNames);
-//        System.out.println("Les joueurs sont :  ");
-//        List<String> a  = (List<String>) (playerNames.values());
-//        String ownV = playerNames.get(ownId);
-//        for(int i = 0 ; i < a.size() ; ++i) {
-//            System.out.println();
-//            System.out.print(a.get(i));
-//            if(a.get(i)==ownV) {
-//                System.out.print("  (moi)");
-//            }
-//        }
+        System.out.print("Les joueurs sont :  ");
+        Collection<String> b  = playerNames.values();
+        ArrayList<String> a = new ArrayList<>();
+        for (String coll : b) {
+            a.add(coll);
+        }
+        String ownV = playerNames.get(ownId);
+        for(int i = 0 ; i < a.size() ; ++i) {
+            System.out.println();
+            System.out.print(a.get(i));
+            if(a.get(i)==ownV) {
+                System.out.print("  (moi)");
+            }
+        }
+        System.out.println();
+        System.out.println();
     }
     
     @Override
     public void updateHand(CardSet newHand) {
         underlyingPlayer.updateHand(newHand);
+        System.out.println();
         System.out.println("Ma nouvelle main : " + newHand.toString());
         System.out.println();
     }
@@ -50,6 +57,7 @@ public final class PrintingPlayer implements Player {
     @Override
     public void updateTrick(Trick newTrick) {
         underlyingPlayer.updateTrick(newTrick);
+        System.out.println();
         System.out.println("new Trick : " + newTrick.toString());
         System.out.println();
    }
