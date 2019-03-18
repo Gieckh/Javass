@@ -3,6 +3,8 @@ package ch.epfl.javass.jass;
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
 
+import java.util.StringJoiner;
+
 //TODO: Actually do the J-doc
 /**
  * @brief
@@ -477,19 +479,21 @@ public final class PackedTrick {
      * @return String : a string with all informations about this trick
      */
     public static String toString(int pkTrick) {//TODO: Test again
-        String str = "trump : " + Card.Color.ALL.get(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE)) + "\n";
-        str += "base color : " + baseColor(pkTrick) + "\n"; //TODO: StringJoiner
-        str += "{";
+        String str1 = "trump : " + Card.Color.ALL.get(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE)) + "\n";
+        str1 += "base color : " + baseColor(pkTrick) + "\n"; //TODO: StringJoiner
+
+        StringJoiner j = new StringJoiner(",", "{", "}");
+
         for (int i = 0 ; i < 4 ; ++i) {
             int pkCard = card(pkTrick, i);
             if (pkCard == PackedCard.INVALID) {
-                str += "_ ,";
+                j.add("_");
             }
             else {
-                str += PackedCard.toString(pkCard) + ", ";
+                j.add(PackedCard.toString(pkCard));
             }
         }
-        str += "}";
-        return str;
+
+        return str1 + j.toString();
     }
 }

@@ -17,7 +17,6 @@ public final class PrintingPlayer implements Player {
     public Card cardToPlay(TurnState state, CardSet hand) {
       System.out.print("C'est à moi de jouer... Je joue : ");
       Card c = underlyingPlayer.cardToPlay(state, hand);
-      System.out.println(c);
       return c;
     }
     @Override
@@ -46,33 +45,28 @@ public final class PrintingPlayer implements Player {
         underlyingPlayer.updateHand(newHand);
         System.out.println();
         System.out.println("Ma nouvelle main : " + newHand.toString());
-        System.out.println();
     }
     @Override
     public void setTrump(Card.Color trump) {
         underlyingPlayer.setTrump(trump);
-        System.out.println("Atout :" + trump.toString() );
-        System.out.println();
+        System.out.println("Atout :" + trump.toString());
     }
     @Override
     public void updateTrick(Trick newTrick) {
         underlyingPlayer.updateTrick(newTrick);
         System.out.println();
         System.out.println("new Trick : " + newTrick.toString());
-        System.out.println();
    }
     @Override
     public void updateScore(Score score) {
         underlyingPlayer.updateScore(score);
         System.out.println("Scores :" + score.toString());
-        System.out.println();
     }
 
     @Override
     public void setWinningTeam(TeamId winningTeam) {
         underlyingPlayer.setWinningTeam(winningTeam);
         System.out.println( "L'équipe gagnante est "+ winningTeam.toString());
-        System.out.println();
     }
   }
   

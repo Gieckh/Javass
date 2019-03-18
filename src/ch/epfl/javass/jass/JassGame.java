@@ -46,7 +46,7 @@ public final class JassGame {
 
 
     /**
-     * @Brief returns true iff one team has 1000 points or more.
+     * @brief returns true iff one team has 1000 points or more.
      * 
      * @return true iff one team has 1000 points or more
      *
@@ -81,6 +81,7 @@ public final class JassGame {
             setTurn();
             setGameFirstPlayer();
             turnState = TurnState.initial(trump, Score.INITIAL, gameFirstPlayer);
+            updatePlayersScores(Score.INITIAL);
         }
 
         else {
@@ -92,11 +93,12 @@ public final class JassGame {
             }
 
             if (isTrickFirstOfTheTurn()) {
+
                 turnNumber++;
                 setTurn(); //trump and player hands
                 updatePlayer();
                 turnState = TurnState.ofPackedComponents(
-                        turnState.packedScore(),
+                        PackedScore.nextTurn(turnState.packedScore()),
                         turnState.packedUnplayedCards(),
                         PackedTrick.firstEmpty(trump, turnFirstPlayer)
                 );
@@ -108,7 +110,7 @@ public final class JassGame {
 
         //The 4 players play until the end
         for (int i = 0; i < PlayerId.COUNT ; ++i) {
-            PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1) % PlayerId.COUNT);
+            PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + i) % PlayerId.COUNT);
             Player tmpPlayer = players.get(tmpId);
             CardSet oldHand = playerHands.get(tmpId);
             Card cardToPlay = players.get(tmpId).cardToPlay(turnState, oldHand);
