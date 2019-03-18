@@ -50,7 +50,7 @@ public final class JassGame {
      * 
      * @return true iff one team has 1000 points or more
      *
-    */
+     */
     public boolean isGameOver() {
         if (turnState == null) {
             return false;
@@ -108,7 +108,7 @@ public final class JassGame {
 
         //The 4 players play until the end
         for (int i = 0; i < PlayerId.COUNT ; ++i) {
-            PlayerId tmpId = PlayerId.ALL.get(((trickFirstPlayer.ordinal() + 1 ) % PlayerId.COUNT));
+            PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + 1) % PlayerId.COUNT);
             Player tmpPlayer = players.get(tmpId);
             CardSet oldHand = playerHands.get(tmpId);
             Card cardToPlay = players.get(tmpId).cardToPlay(turnState, oldHand);
@@ -165,12 +165,10 @@ public final class JassGame {
             if (playerHands.get(pId).contains(card)) {
                 gameFirstPlayer = pId;
                 turnFirstPlayer = gameFirstPlayer;
-                System.out.println("game first player set : " + gameFirstPlayer.toString());
                 return;
             }
         }
 
-        System.out.println("game first player not set");
         //theoretically unreachable statement
         assert(false);
     }
