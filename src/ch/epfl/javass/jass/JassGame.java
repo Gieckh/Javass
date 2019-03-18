@@ -74,9 +74,19 @@ public final class JassGame {
         }
 
         if (isTrickFirstOfTheGame()) {
+            setPlayers();
+
             setTrump();
+            setPlayersTrumps(trump);
+
             distributeHands();
+            for (PlayerId pId: PlayerId.ALL) {
+                players.get(pId).updateHand(playerHands.get(pId));
+            }
+
             setGameFirstPlayer();
+
+
             turnState = TurnState.initial(trump, Score.INITIAL, gameFirstPlayer);
         }
 
@@ -87,6 +97,7 @@ public final class JassGame {
             turnState = turnState.withTrickCollected();
         }
 
+        turnNumber++;
         setTrickFirstPlayer(turnState.packedTrick());
 
         //The 4 players play until the end
@@ -97,13 +108,18 @@ public final class JassGame {
             Card cardToPlay = players.get(tmpId).cardToPlay(turnState, oldHand);
             CardSet newHand = oldHand.remove(cardToPlay);
             tmpPlayer.updateHand(newHand);
-            playerHands.put(tmpId, newHand);
 
+            playerHands.put(tmpId, newHand);
             turnState = turnState.withNewCardPlayed(cardToPlay);
         }
     }
 
 
+    private void setPlayers() {
+        for (Map.Entry<PlayerId, Player> entry : players.entrySet()) {
+            entry.getValue().setPlayers(entry.getKey(), playerNames);
+        }
+    }
     private void setPlayersTrumps(Color trump) {
         for (PlayerId p : PlayerId.ALL) {
             players.get(p).setTrump(trump);
@@ -226,11 +242,5 @@ public final class JassGame {
                 Card.Rank.KING,
                 Card.Rank.ACE,
         };
-    }
-
-    private void setPlayers() {
-        for (Map.Entry<PlayerId, Player> entry : players.entrySet()) {
-            entry.getValue().setPlayers(entry.getKey(), playerNames);
-        }
     }
 }
