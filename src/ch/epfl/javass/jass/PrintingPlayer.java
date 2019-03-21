@@ -17,6 +17,7 @@ public final class PrintingPlayer implements Player {
     public Card cardToPlay(TurnState state, CardSet hand) {
       System.out.print("C'est à moi de jouer... Je joue : ");
       Card c = underlyingPlayer.cardToPlay(state, hand);
+      System.out.println(c.toString());
       return c;
     }
     @Override
@@ -55,7 +56,7 @@ public final class PrintingPlayer implements Player {
     public void updateTrick(Trick newTrick) {
         underlyingPlayer.updateTrick(newTrick);
         System.out.println();
-        System.out.println("new Trick : " + newTrick.toString());
+        System.out.println("Trick : " + newTrick.toString());
    }
     @Override
     public void updateScore(Score score) {

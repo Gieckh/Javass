@@ -7,7 +7,7 @@ public final class RandomJassGame {
     public static void main(String[] args) {
       Map<PlayerId, Player> players = new HashMap<>();
       Map<PlayerId, String> playerNames = new HashMap<>();
-
+      //marche pour n'importe quelle seed
       for (PlayerId pId: PlayerId.ALL) {
         Player player = new RandomPlayer(2019);
         if (pId == PlayerId.PLAYER_1) {
