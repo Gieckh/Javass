@@ -51,6 +51,7 @@ public final class JassGame {
      * @return true iff one team has 1000 points or more
      *
      */
+    //TODO: le double affichage vient du fait que la méthode est appelée dans "randomJassGame"
     public boolean isGameOver() {
         if (turnState == null) {
             return false;
@@ -88,6 +89,7 @@ public final class JassGame {
             collect();
             //We do nothing if the game is over.
             if (isGameOver()) {
+                updatePlayersScores(turnState.score());
                 //TODO: ?
                 return; //nothing
             }
@@ -119,7 +121,7 @@ public final class JassGame {
 
             playerHands.put(tmpId, newHand);
             turnState = turnState.withNewCardPlayed(cardToPlay);
-            tmpPlayer.updateTrick(turnState.trick());
+            updatePlayersTricks(turnState.trick());
         }
     }
 
