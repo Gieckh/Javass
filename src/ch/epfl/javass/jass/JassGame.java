@@ -89,7 +89,7 @@ public final class JassGame {
             collect();
             //We do nothing if the game is over.
             if (isGameOver()) {
-                updatePlayersScores(turnState.score());
+                updatePlayersScores(turnState.score().nextTurn()); //TODO: should we call "nextTurn"
                 //TODO: ?
                 return; //nothing
             }
