@@ -13,11 +13,11 @@ public final class JassGame {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    private Random shuffleRng;
-    private Random trumpRng;
+    private final Random shuffleRng;
+    private final Random trumpRng;
     private TurnState turnState = null;
-    private Map<PlayerId, Player> players;
-    private Map<PlayerId, String> playerNames;
+    private final Map<PlayerId, Player> players;
+    private final Map<PlayerId, String> playerNames;
     private Map<PlayerId, CardSet> playerHands;
     private Card.Color trump;
     private PlayerId gameFirstPlayer;
