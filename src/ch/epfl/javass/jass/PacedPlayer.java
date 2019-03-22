@@ -22,7 +22,11 @@ public final class PacedPlayer implements Player{
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    /* 
+
+    /**
+     * @brief The same method as its parent's, except it wait a minimum time before
+     *        returning the Card that should be played
+     *
      * @see ch.epfl.javass.jass.Player#cardToPlay(ch.epfl.javass.jass.TurnState, ch.epfl.javass.jass.CardSet)
      */
     @Override
