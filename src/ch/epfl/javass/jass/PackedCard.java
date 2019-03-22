@@ -43,10 +43,11 @@ public final class PackedCard {
     /** ============================================== **/
 
     /**
-     * @brief returns true if the pkCard is correctly packed.
+     * @brief Indicates whether the pkCard is correctly packed.
      *
-     * @param pkCard
+     * @param pkCard (int)
      * @return true if the pkCard is correctly packed
+     *
      * @author Antoine Scardigli - (299905)
      * @author Marin Nguyen - (288260)
     */
