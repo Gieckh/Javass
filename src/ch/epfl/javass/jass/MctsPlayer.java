@@ -7,14 +7,14 @@ import java.util.SplittableRandom;
 import ch.epfl.javass.Preconditions;
 
 public final class MctsPlayer implements Player {
-    
+
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     int iterations;
     SplittableRandom rng ;
      PlayerId ownId;
-    
+
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
@@ -31,8 +31,8 @@ public final class MctsPlayer implements Player {
     public Card cardToPlay(TurnState state, CardSet hand) {
         return Card.ofPacked(isIteratingNodes(state, hand.packed(), iterations));
     }
-    
-    
+
+
     private int isIteratingNodes(TurnState state , long setOfPossibleCards, int iterations){
         Node bigBrother = new Node(state, setOfPossibleCards);
         for ( int i = 0 ; i< iterations ; ++i) {
@@ -40,13 +40,13 @@ public final class MctsPlayer implements Player {
         }
         return BestChoice(bigBrother);
     }
-    
-    
+
+
     private int BestChoice(Node node) {
         Node child =  node.selectChild();
-        return PackedCardSet.get(PackedCardSet.difference(node.turnstate.packedUnplayedCards(), child.turnstate.packedUnplayedCards()),0);  
+        return PackedCardSet.get(PackedCardSet.difference(node.turnstate.packedUnplayedCards(), child.turnstate.packedUnplayedCards()),0);
     }
-    
+
   //does as written in 3.4
     private void selectBest(Node bigBrotherNode) {
         //selection
@@ -68,23 +68,23 @@ public final class MctsPlayer implements Player {
             node.updateAttributes(value);
         }
     }
-    
-    
+
+
     private int SimulateScoreForNode(Node node) {
         while (!node.turnstate.isTerminal() ) {
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){
                 long card=0l;
                 if(node.turnstate.nextPlayer().equals(ownId)&&
                         (PackedCardSet.intersection(node.cardWeWannaPlay, node.turnstate.packedUnplayedCards())==node.cardWeWannaPlay)) {
-                   card = node.cardWeWannaPlay;  
+                   card = node.cardWeWannaPlay;
                 }
                 else {
-                    
+
                     card = node.setOfPossibleCards;
                     card = PackedCardSet.get(card, rng.nextInt(PackedCardSet.size(card)));
                     node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
                 }
-               
+
                 node.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(card, 0)));
             }
             node.turnstate.withTrickCollected();
@@ -102,8 +102,8 @@ public final class MctsPlayer implements Player {
         private int finishedRandomTurn = 0;
         private float twoLnOfNOfP;
         //private long cardWeWannaPlay;
-        
-        
+
+
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
@@ -115,14 +115,14 @@ public final class MctsPlayer implements Player {
             this.finishedRandomTurn = 0;
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
             //this.valuesOfSons = new Float[size];
-          
+
         }
-        
+
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
-        
-        
+
+
 
 
         private void expand() {
@@ -177,32 +177,31 @@ public final class MctsPlayer implements Player {
         }
     }
 
-    
-    
+
+
         private float getSelfTotPoints() {
             return selfTotalPoints;
         }
-        
+
         private int bestSonIndex( int c) {
             for(int i = 0 ; i< childrenOfNode.length ; ++i) {
-                
+
             }
             return 0;
         }
-        
+
         private float VForSon(Node childrenOfNode) {
               return getVForSon(childrenOfNode.selfTotalPoints, childrenOfNode.finishedRandomTurn , 40);
         }
 
-        
+
         private float getVForSon(float SofSon , int NofSon, int c ) {
             return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP/ NofSon));
         }
-        
-        
-        
+
+
+
     }
-    
+
 }
 
-   
