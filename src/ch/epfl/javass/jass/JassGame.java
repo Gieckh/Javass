@@ -110,10 +110,13 @@ public final class JassGame {
         setTrickFirstPlayer(turnState.packedTrick());
         updatePlayersTricks(turnState.trick());
 
+        //TODO: suppr sysout ?
+        System.out.println();
         //The 4 players play until the end
         for (int i = 0; i < PlayerId.COUNT ; ++i) {
             PlayerId tmpId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + i) % PlayerId.COUNT);
             Player tmpPlayer = players.get(tmpId);
+            System.out.println(playerNames.get(tmpId) + " is playing ...");
             CardSet oldHand = playerHands.get(tmpId);
             Card cardToPlay = players.get(tmpId).cardToPlay(turnState, oldHand);
             CardSet newHand = oldHand.remove(cardToPlay);
