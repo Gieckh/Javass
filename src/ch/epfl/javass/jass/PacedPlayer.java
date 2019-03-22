@@ -13,6 +13,14 @@ public final class PacedPlayer implements Player{
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
+    /**
+     * @brief the PacedPlayer acts the same as its underlying player, except he
+     *        takes at least "minTime" milliseconds before deciding which card to play
+     * @param underlyingPlayer (Player) - the underlying player, determines the behaviour
+     *                         of the PacedPlayer.
+     * @param minTime (double) the minimum time (in milliseconds) this PacedPlayer needs
+     *                to wait before deciding which card to play.
+     */
     public PacedPlayer(Player underlyingPlayer, double minTime) {
         this.underLyingPlayer = underlyingPlayer;
         this.minTime = minTime;
@@ -24,7 +32,7 @@ public final class PacedPlayer implements Player{
     /** ============================================== **/
 
     /**
-     * @brief The same method as its parent's, except it wait a minimum time before
+     * @brief The same method as its parent's, except it takes at least a minimum time before
      *        returning the Card that should be played
      *
      * @see ch.epfl.javass.jass.Player#cardToPlay(ch.epfl.javass.jass.TurnState, ch.epfl.javass.jass.CardSet)
