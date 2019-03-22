@@ -131,7 +131,6 @@ public final class TurnState {
      * @return true iff the last trick of this turn has been played
      */
     public boolean isTerminal() {
-        //assert (PackedTrick.isFull(pkCurrentTrick)); //TODO: pourquoi ce assert ?
         return (pkCurrentTrick == PackedTrick.INVALID);
     }
 
