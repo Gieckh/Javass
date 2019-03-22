@@ -11,9 +11,11 @@ public final class MctsPlayer implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
+    
+    //nombre de fois qu'on execute l'algorithme
     int iterations;
     SplittableRandom rng ;
-     PlayerId ownId;
+    PlayerId ownId;
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -29,6 +31,7 @@ public final class MctsPlayer implements Player {
     /** ============================================== **/
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
+        System.out.println(Integer.toBinaryString(isIteratingNodes(state, hand.packed(), iterations)));
         return Card.ofPacked(isIteratingNodes(state, hand.packed(), iterations));
     }
     
@@ -36,34 +39,39 @@ public final class MctsPlayer implements Player {
     private int isIteratingNodes(TurnState state , long setOfPossibleCards, int iterations){
         Node bigBrother = new Node(state, setOfPossibleCards);
         for ( int i = 0 ; i< iterations ; ++i) {
-            selectBest(bigBrother);
+            MonteCarloAlgorithm(bigBrother);
         }
         return BestChoice(bigBrother);
     }
     
     
     private int BestChoice(Node node) {
-        Node child =  node.selectChild();
-        return PackedCardSet.get(PackedCardSet.difference(node.turnstate.packedUnplayedCards(), child.turnstate.packedUnplayedCards()),0);  
+        return node.cardWeWannaPlay();
     }
     
   //does as written in 3.4
-    private void selectBest(Node bigBrotherNode) {
-        //selection
+    private void MonteCarloAlgorithm(Node bigBrotherNode) {
+        //SELECTION
+        //tableau du chemin parcouru par l'alg : donc les references des nodes de haut en bas.
         List<Node> visited = new LinkedList<Node>();
+        //le node tout en haut
         Node current = bigBrotherNode;
         visited.add(bigBrotherNode);
-        while (!current.isLeaf()) {
-            current = current.selectChild();
-            visited.add(current);
+        //tant que le node a des enfant, on choisit le meilleur et on l'ajoute au tableau
+        while (!Node.isLeaf(current)) {
+                current = current.selectChild();
+                visited.add(current);
         }
-        //expansion
+        //EXPENSION
+        // le node le plus prometteur a des enfants
         current.expand();
         Node newChildren = current.selectChild();
         visited.add(newChildren);
-        //Simulation
+        //SIMULATION
+        // ON calcule la valeur d'un des enfants ( tour aleatoire)
         int value = SimulateScoreForNode(newChildren);
-        //updating
+        //UPDATING
+        //On parcourt tout le tableau et update les scores respectifs
         for (Node node : visited) {
             node.updateAttributes(value);
         }
@@ -72,34 +80,29 @@ public final class MctsPlayer implements Player {
     
     private int SimulateScoreForNode(Node node) {
         while (!node.turnstate.isTerminal() ) {
+
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){
                 long card=0l;
-                if(node.turnstate.nextPlayer().equals(ownId)&&
-                        (PackedCardSet.intersection(node.cardWeWannaPlay, node.turnstate.packedUnplayedCards())==node.cardWeWannaPlay)) {
-                   card = node.cardWeWannaPlay;  
-                }
-                else {
-                    
-                    card = node.setOfPossibleCards;
-                    card = PackedCardSet.get(card, rng.nextInt(PackedCardSet.size(card)));
-                    node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
-                }
-               
-                node.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(card, 0)));
+                card = node.setOfPossibleCards;
+                card = PackedCardSet.get(card, rng.nextInt(PackedCardSet.size(card)));
+                node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
+                node.turnstate = node.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(card, 0)));
             }
-            node.turnstate.withTrickCollected();
+            node.turnstate = node.turnstate.withTrickCollected();
         }
         return PackedScore.turnPoints(node.turnstate.packedScore(),ownId.team());
     }
+    
     private static class Node{
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/
         /** ============================================== **/
+        private int CONSTANT = 40;
         private TurnState turnstate;
-        private Node[] childrenOfNode = null ;
+        private Node[] childrenOfNode  ;
         private long setOfPossibleCards;
-        private float selfTotalPoints = 0;
-        private int finishedRandomTurn = 0;
+        private float selfTotalPoints ;
+        private int finishedRandomTurn ;
         private float twoLnOfNOfP;
         //private long cardWeWannaPlay;
         
@@ -108,13 +111,13 @@ public final class MctsPlayer implements Player {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
         private Node(TurnState turnstate , long setOfPossibleCards) {
-            this.childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
+            childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
             this.turnstate = turnstate;
             this.setOfPossibleCards = setOfPossibleCards;
             this.selfTotalPoints = 0;
-            this.finishedRandomTurn = 0;
+            // 1 car sinon on a une division par 0 :/ peut mieux faire
+            this.finishedRandomTurn = 1;
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
-            //this.valuesOfSons = new Float[size];
           
         }
         
@@ -122,27 +125,37 @@ public final class MctsPlayer implements Player {
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
         
+        // la difference du set de cartes pas jouées du pere vs celle du fils.
+        private int cardWeWannaPlay() {
+            return PackedCardSet.get(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()),1);  
+        }
         
-
-
+        
         private void expand() {
-            if(size >=1) {
-                childrenOfNode = new Node[this.size-1];
-                for (int i=0; i<setOfPossibleCards; i++) {
+            if(PackedCardSet.size(setOfPossibleCards) >=1) {
+                //childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
+                for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
                     long playedCard = PackedCardSet.get(setOfPossibleCards,i);
                     long newSetOfPossibleCards = PackedCardSet.difference(this.setOfPossibleCards, playedCard);
-                    childrenOfNode[i] = new Node(this.turnstate, newSetOfPossibleCards);
+                    System.out.println(Integer.toBinaryString(PackedCardSet.get(playedCard, 1)));
+
+                    TurnState turnstate = this.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(playedCard, 1)));
+                    //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
+                    this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards);
                 }
             }
         }
+        
         //select the best children
         private Node selectChild() {
             Node selected = null;
             float bestValue = 0;
-            if(childrenOfNode !=null) {
+            if(!Node.isLeaf(this)) {
                 for (Node children : childrenOfNode) {
-                    float Value = VForSon(children);
-                    if (Value > bestValue) {
+                    float Value = getVForSon(children.selfTotalPoints, 
+                            children.finishedRandomTurn, CONSTANT, 
+                            this.twoLnOfNOfP);
+                    if (Value >= bestValue) {
                         selected = children;
                         bestValue = Value;
                     }
@@ -151,13 +164,15 @@ public final class MctsPlayer implements Player {
             return selected;
         }
 
-        private boolean isLeaf() {
-            if(childrenOfNode == null) {
-                return true;
-            }
-            else {
-                return false;
-            }
+        // petite douille , c'est pour s'assurer que le cas suivant n'arrive pas : les enfants existent dans le tableau , mais ne sont pas initialisé 
+        private static boolean isLeaf(Node node) {
+            return node.childrenOfNode.length ==0 || node.childrenOfNode[0] == null;
+//            if(childrenOfNode == null) {
+//                return true;
+//            }
+//            else {
+//                return false;
+//            }
         }
 
 
@@ -168,35 +183,10 @@ public final class MctsPlayer implements Player {
             ;
         }
 
-        private int numberOfChildrens() {
-            if(childrenOfNode == null) {
-                return 0;
-            }
-            else {
-            return childrenOfNode.length;
-        }
-    }
-
-    
-    
-        private float getSelfTotPoints() {
-            return selfTotalPoints;
-        }
-        
-        private int bestSonIndex( int c) {
-            for(int i = 0 ; i< childrenOfNode.length ; ++i) {
-                
-            }
-            return 0;
-        }
-        
-        private float VForSon(Node childrenOfNode) {
-              return getVForSon(childrenOfNode.selfTotalPoints, childrenOfNode.finishedRandomTurn , 40);
-        }
 
         
-        private float getVForSon(float SofSon , int NofSon, int c ) {
-            return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP/ NofSon));
+        private float getVForSon(float SofSon , int NofSon, int c , float ln) {
+            return (float) (SofSon/NofSon + (float)c*Math.sqrt(this.twoLnOfNOfP/ NofSon));
         }
         
         
