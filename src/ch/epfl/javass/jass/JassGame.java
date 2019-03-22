@@ -119,6 +119,7 @@ public final class JassGame {
             //TODO: suppr sysout ?
             System.out.println();
             System.out.println(playerNames.get(playerId) + " is playing ...");
+
             CardSet oldHand = playerHands.get(playerId);
             Card cardToPlay = players.get(playerId).cardToPlay(turnState, oldHand);
             CardSet newHand = oldHand.remove(cardToPlay);
