@@ -7,7 +7,7 @@ import java.util.SplittableRandom;
 import ch.epfl.javass.Preconditions;
 
 public final class MctsPlayer implements Player {
-    
+
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
@@ -34,8 +34,8 @@ public final class MctsPlayer implements Player {
         System.out.println(Integer.toBinaryString(isIteratingNodes(state, hand.packed(), iterations)));
         return Card.ofPacked(isIteratingNodes(state, hand.packed(), iterations));
     }
-    
-    
+
+
     private int isIteratingNodes(TurnState state , long setOfPossibleCards, int iterations){
         Node bigBrother = new Node(state, setOfPossibleCards);
         for ( int i = 0 ; i< iterations ; ++i) {
@@ -43,12 +43,12 @@ public final class MctsPlayer implements Player {
         }
         return BestChoice(bigBrother);
     }
-    
-    
+
+
     private int BestChoice(Node node) {
         return node.cardWeWannaPlay();
     }
-    
+
   //does as written in 3.4
     private void MonteCarloAlgorithm(Node bigBrotherNode) {
         //SELECTION
@@ -76,8 +76,8 @@ public final class MctsPlayer implements Player {
             node.updateAttributes(value);
         }
     }
-    
-    
+
+
     private int SimulateScoreForNode(Node node) {
         while (!node.turnstate.isTerminal() ) {
 
@@ -105,8 +105,8 @@ public final class MctsPlayer implements Player {
         private int finishedRandomTurn ;
         private float twoLnOfNOfP;
         //private long cardWeWannaPlay;
-        
-        
+
+
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
@@ -120,7 +120,7 @@ public final class MctsPlayer implements Player {
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
           
         }
-        
+
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
@@ -192,7 +192,6 @@ public final class MctsPlayer implements Player {
         
         
     }
-    
+
 }
 
-   

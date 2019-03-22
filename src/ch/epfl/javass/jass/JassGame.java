@@ -110,7 +110,6 @@ public final class JassGame {
 
         //The 4 players play until the end
         for (int i = 0; i < PlayerId.COUNT ; ++i) {
-//            PlayerId playerId = PlayerId.ALL.get((trickFirstPlayer.ordinal() + i) % PlayerId.COUNT);
             PlayerId playerId = turnState.nextPlayer();
             Player player = players.get(playerId);
             //TODO: suppr sysout ?
