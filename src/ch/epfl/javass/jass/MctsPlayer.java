@@ -13,7 +13,7 @@ public final class MctsPlayer implements Player {
     /** ============================================== **/
     int iterations;
     SplittableRandom rng ;
-    PlayerId ownId;
+     PlayerId ownId;
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -32,9 +32,9 @@ public final class MctsPlayer implements Player {
         return null;
     }
     
-//    private long finalScoreRandomTurn(TurnState turnstate) {
-//        return 0;  
-//    }
+    
+    
+    
     
     private long playablesCards(TurnState turnstate, long hand) {
        return PackedCardSet.intersection(turnstate.packedUnplayedCards(), PackedCardSet.complement(hand) );
@@ -52,11 +52,14 @@ public final class MctsPlayer implements Player {
         private float twoLnOfNOfP;
         //private Float[] valuesOfSons;
         private int size ;
+        private long cardWeWannaPlay;
+        private PlayerId ownId;
+        private SplittableRandom rng ;
         
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
-        private Node(TurnState turnstate , long setOfPossibleCards, int selfTotalPoints, int finishRandomTurns) {
+        private Node(TurnState turnstate , long setOfPossibleCards, int selfTotalPoints, int finishRandomTurns, long singleCardSet, PlayerId ownId , SplittableRandom rng ) {
             this.childrenOfNode = new Node[size];
             this.turnstate = turnstate;
             this.setOfPossibleCards = setOfPossibleCards;
@@ -65,41 +68,21 @@ public final class MctsPlayer implements Player {
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
             //this.valuesOfSons = new Float[size];
             this.size =  PackedCardSet.size(setOfPossibleCards);
+            this.cardWeWannaPlay = singleCardSet;
+            this.ownId = ownId;
+            this.rng = rng;
         }
         
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
-        
-        private void selectBest() {
-            //selection
-            List<Node> visited = new LinkedList<Node>();
-            Node current = this;
-            visited.add(this);
-            while (!current.isLeaf()) {
-                current = current.selectChild();
-                visited.add(current);
-            }
-            //expansion
-            current.expand();
-            Node newChildren = current.selectChild();
-            visited.add(newChildren);
-            //Simulation
-            int value = SimulateScoreForNode(newChildren);
-            //updating
-            for (Node node : visited) {
-                node.updateAttributes(value);
-            }
-        }
-
-
         private void expand() {
             if(size >=1) {
                 childrenOfNode = new Node[this.size-1];
                 for (int i=0; i<setOfPossibleCards; i++) {
                     long playedCard = PackedCardSet.get(setOfPossibleCards,i);
                     long newSetOfPossibleCards = PackedCardSet.difference(this.setOfPossibleCards, playedCard);
-                    childrenOfNode[i] = new Node(this.turnstate, newSetOfPossibleCards, 0, 0);
+                    childrenOfNode[i] = new Node(this.turnstate, newSetOfPossibleCards, 0, 0, playedCard, this.ownId, this.rng);
                 }
             }
         }
@@ -122,8 +105,25 @@ public final class MctsPlayer implements Player {
         }
 
         private int SimulateScoreForNode(Node node) {
-            //JassGame.
-            return 0;
+            while (!node.turnstate.isTerminal() ) {
+                while(!PackedTrick.isFull(node.turnstate.packedTrick())){
+                    long card=0l;
+                    if(node.turnstate.nextPlayer().equals(ownId)&&
+                            (PackedCardSet.intersection(node.cardWeWannaPlay, node.turnstate.packedUnplayedCards())==node.cardWeWannaPlay)) {
+                       card = node.cardWeWannaPlay;  
+                    }
+                    else {
+                        
+                        card = node.setOfPossibleCards;
+                        card = PackedCardSet.get(card, rng.nextInt(PackedCardSet.size(card)));
+                        node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
+                    }
+                   
+                    node.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(card, 0)));
+                }
+                node.turnstate.withTrickCollected();
+            }
+            return PackedScore.turnPoints(turnstate.packedScore(),ownId.team());
         }
 
         private void updateAttributes(int newScore) {
