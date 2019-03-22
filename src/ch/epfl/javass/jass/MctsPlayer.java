@@ -32,9 +32,9 @@ public final class MctsPlayer implements Player {
         return null;
     }
     
-    
-    
-    
+//    private long finalScoreRandomTurn(TurnState turnstate) {
+//        return 0;  
+//    }
     
     private long playablesCards(TurnState turnstate, long hand) {
        return PackedCardSet.intersection(turnstate.packedUnplayedCards(), PackedCardSet.complement(hand) );
@@ -76,6 +76,30 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
+        
+        //does as written in 3.4
+        private void selectBest() {
+            //selection
+            List<Node> visited = new LinkedList<Node>();
+            Node current = this;
+            visited.add(this);
+            while (!current.isLeaf()) {
+                current = current.selectChild();
+                visited.add(current);
+            }
+            //expansion
+            current.expand();
+            Node newChildren = current.selectChild();
+            visited.add(newChildren);
+            //Simulation
+            int value = SimulateScoreForNode(newChildren);
+            //updating
+            for (Node node : visited) {
+                node.updateAttributes(value);
+            }
+        }
+
+
         private void expand() {
             if(size >=1) {
                 childrenOfNode = new Node[this.size-1];
