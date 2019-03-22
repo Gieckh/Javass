@@ -22,7 +22,6 @@ public final class JassGame {
     private Card.Color trump;
     private PlayerId gameFirstPlayer;
     private PlayerId turnFirstPlayer;
-    private PlayerId trickFirstPlayer;
     private int turnNumber = 1; //starts at turn 1
 
 
@@ -106,8 +105,6 @@ public final class JassGame {
                 );
             }
         }
-
-        setTrickFirstPlayer(turnState.packedTrick());
         updatePlayersTricks(turnState.trick());
 
 
@@ -161,10 +158,6 @@ public final class JassGame {
         for (PlayerId p : PlayerId.ALL) {
             players.get(p).setWinningTeam(winningTeam);
         }
-    }
-
-    private void setTrickFirstPlayer(int pkTrick) {
-        trickFirstPlayer = PackedTrick.player(pkTrick, 0);
     }
 
     //The cards need to have been distributed
