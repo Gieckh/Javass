@@ -35,13 +35,14 @@ public final class TurnState {
 
     //fake constructors
     /**
-     * @brief returns a new TurnState representing the stating of a turn with
-     * the specified parameters.
+     * @brief Creates the initial TurnState, corresponding to turn where the trump color,
+     *        the initial score and the first player are given.
      * 
-     * @param trump : the trump color
-     * @param score : the Score
-     * @param firstPlayer
-     * @return a new TurnState representing the stating of a turn with the specified parameters
+     * @param trump (Color), the trump color
+     * @param score (Score), the initial score
+     * @param firstPlayer (PlayerId), the first player of the turn
+     *
+     * @return a new TurnState, given the trump, initial score and first player.
      */
     public static TurnState initial(Card.Color trump, Score score, PlayerId firstPlayer) {
         return new TurnState(score.packed(), PackedCardSet.ALL_CARDS, PackedTrick.firstEmpty(trump, firstPlayer)); 
@@ -50,7 +51,7 @@ public final class TurnState {
     
     /**
      * @brief returns a new TurnState with all
-     *  informations needed given as packed parameters.
+     *        informations needed given as packed parameters.
      * 
      * @param pkScore
      * @param pkUnplayedCards

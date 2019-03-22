@@ -24,6 +24,7 @@ public final class MctsPlayer implements Player {
         Preconditions.checkArgument(iterations>=9);
         this.iterations = iterations;
     }
+
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
@@ -32,12 +33,12 @@ public final class MctsPlayer implements Player {
         return null;
     }
     
-//    private long finalScoreRandomTurn(TurnState turnstate) {
-//        return 0;  
-//    }
+    private long finalScoreRandomTurn(TurnState turnstate) {
+        return 0L;
+    }
     
     private long playablesCards(TurnState turnstate, long hand) {
-       return PackedCardSet.intersection(turnstate.packedUnplayedCards(), PackedCardSet.complement(hand) );
+        return PackedCardSet.intersection(turnstate.packedUnplayedCards(), PackedCardSet.complement(hand));
     }
     
     private static class Node{
@@ -50,7 +51,7 @@ public final class MctsPlayer implements Player {
         private int selfTotalPoints;
         private int finishedRandomTurn;
         private float twoLnOfNOfP;
-        //private Float[] valuesOfSons;
+        //private float[] valuesOfSons;
         private int size = PackedCardSet.size(setOfPossibleCards);
         
         /** ============================================== **/
@@ -63,7 +64,7 @@ public final class MctsPlayer implements Player {
             this.selfTotalPoints = selfTotalPoints;
             this.finishedRandomTurn = finishRandomTurns;
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
-            //this.valuesOfSons = new Float[size];
+            //this.valuesOfSons = new float[size];
         }
         
         /** ============================================== **/
@@ -118,7 +119,7 @@ public final class MctsPlayer implements Player {
             return (childrenOfNode == null);
         }
 
-        private Float SimulateScoreForNode(Node node) {
+        private float SimulateScoreForNode(Node node) {
             return 0f;
         }
 
@@ -132,8 +133,8 @@ public final class MctsPlayer implements Player {
                 return 0;
             }
             else {
-            return childrenOfNode.length;
-        }
+                return childrenOfNode.length;
+            }
     }
 
     
@@ -150,18 +151,14 @@ public final class MctsPlayer implements Player {
         }
         
         private float VForSon(Node childrenOfNode) {
-              return getVForSon(childrenOfNode.selfTotalPoints, childrenOfNode.finishedRandomTurn , 40);
+            return getVForSon(childrenOfNode.selfTotalPoints, childrenOfNode.finishedRandomTurn , 40);
         }
 
         
-        private float getVForSon(int SofSon , int NofSon, int c ) {
-            return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP/ NofSon));
+        private float getVForSon(int sofSon, int nofSon, int c) {
+            return (float) (sofSon/nofSon + (float)c*Math.sqrt(twoLnOfNOfP/ nofSon));
         }
-        
-        
-        
     }
-    
 }
 
    
