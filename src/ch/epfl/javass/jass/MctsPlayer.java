@@ -137,9 +137,9 @@ public final class MctsPlayer implements Player {
                 for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
                     long playedCard = PackedCardSet.get(setOfPossibleCards,i);
                     long newSetOfPossibleCards = PackedCardSet.difference(this.setOfPossibleCards, playedCard);
-                    System.out.println(Integer.toBinaryString(PackedCardSet.get(playedCard, 1)));
+                    //System.out.println(Integer.toBinaryString(PackedCardSet.get(playedCard, 1)));
 
-                    TurnState turnstate = this.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(playedCard, 1)));
+                    TurnState turnstate = this.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(playedCard, 0)));
                     //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
                     this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards);
                 }
