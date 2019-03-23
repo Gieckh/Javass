@@ -13,10 +13,9 @@ public final class PrintingPlayer implements Player {
 
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
-      System.out.print("C'est à moi de jouer... Je joue : ");
-      Card c = underlyingPlayer.cardToPlay(state, hand);
-      System.out.println(c.toString());
-      return c;
+        Card c = underlyingPlayer.cardToPlay(state, hand);
+        System.out.println("C'est à moi de jouer... Je joue : " + c.toString());
+        return c;
     }
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {

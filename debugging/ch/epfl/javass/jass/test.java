@@ -6,6 +6,7 @@ import java.util.Random;
 //this is  a test, thus no need of javadoc
 public class test {
     public static void main(String[] args) {
-        System.out.println(new int[0].length);
+        Integer[] t = new Integer[0];
+        System.out.println(t[0] == null);
     }
 }
