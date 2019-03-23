@@ -80,15 +80,22 @@ public final class MctsPlayer2 implements Player {
         }
 
         Card cardToPlay = father.playableCards.get(index);
+        CardSet ownHand = father.ownHand.remove(cardToPlay);
+        CardSet playableCards;
+        TurnState turnState;
+        PlayerId playerId;
         if (father.turnState.trick().isFull()) {
-            TurnState turnState = father.turnState.withTrickCollected().withNewCardPlayed(cardToPlay);
-            CardSet ownHand = father.ownHand.remove(cardToPlay);
-            CardSet playableCards = playableCards(turnState, ownId, ownHand);
-            PlayerId playerId = turnState.trick().player(0);
+            turnState = father.turnState.withTrickCollected().withNewCardPlayed(cardToPlay);
+            playableCards = playableCards(turnState, ownId, ownHand);
+            playerId = turnState.trick().player(0);
         }
         else {
-            TurnState turnState = father.turnState.withNewCardPlayed(cardToPlay);
-            CardSet playableCards = playableCards(father.turnState, ownId, father.ownHand);
+            turnState = father.turnState.withNewCardPlayed(cardToPlay);
+            playerId = father.turnState.nextPlayer();
+            playableCards = (turnState.trick().isFull()) ?
+                    playableCards(turnState.withTrickCollected(), ownId, ownHand):
+                    playableCards(turnState, ownId, ownHand);
+
         }
 
 
