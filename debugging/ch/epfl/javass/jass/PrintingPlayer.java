@@ -42,7 +42,6 @@ public final class PrintingPlayer implements Player {
     @Override
     public void updateHand(CardSet newHand) {
         underlyingPlayer.updateHand(newHand);
-        System.out.println();
         System.out.println("Ma nouvelle main : " + newHand.toString());
     }
     @Override
@@ -53,7 +52,6 @@ public final class PrintingPlayer implements Player {
     @Override
     public void updateTrick(Trick newTrick) {
         underlyingPlayer.updateTrick(newTrick);
-        System.out.println();
         System.out.println("Trick : " + newTrick.toString());
    }
     @Override

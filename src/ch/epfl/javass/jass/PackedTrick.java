@@ -479,7 +479,11 @@ public final class PackedTrick {
      * @return String : a string with all informations about this trick
      */
     public static String toString(int pkTrick) {//TODO: Test again
-        String str1 = "trump " + Card.Color.ALL.get(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE)) + "\n";
+        String str1 = "";
+        if (isValid(pkTrick)) {
+            str1 = "started by " + player(pkTrick, 0) + "\n";
+        }
+        str1 += "trump " + Card.Color.ALL.get(Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE)) + "\n";
         if (!isEmpty(pkTrick)) {
             str1 += "base color : " + baseColor(pkTrick) + "\n";
         }
