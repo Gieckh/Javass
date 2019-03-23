@@ -10,12 +10,12 @@ public final class RandomJassGame {
       //marche pour n'importe quelle seed
       for (PlayerId pId: PlayerId.ALL) {
 //        Player player = new RandomPlayer(2039);
-        Player player = new PacedPlayer(new RandomPlayer(2019), 1000);
+        Player player = new RandomPlayer(2019);
        if (pId == PlayerId.PLAYER_1) {
-          player = new PacedPlayer(new PrintingPlayer(player), 1000);
+          player = new PacedPlayer(new PrintingPlayer(player), 100);
         }
        if (pId == PlayerId.PLAYER_2) {
-           player = new MctsPlayer(PlayerId.PLAYER_2, 2019, 100);
+           player = new MctsPlayer2(PlayerId.PLAYER_2, 2019, 100);
          }
         players.put(pId, player);
         playerNames.put(pId, pId.name());
