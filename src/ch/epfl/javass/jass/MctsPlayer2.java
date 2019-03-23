@@ -58,7 +58,7 @@ public final class MctsPlayer2 implements Player {
     }
 
     //Assuming trick not full
-    private CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
+    private static CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
         if (turnState.nextPlayer() == playerId) {
             return turnState.trick().playableCards(hand);
         }
@@ -66,30 +66,62 @@ public final class MctsPlayer2 implements Player {
         return turnState.unplayedCards().difference(hand);
     }
 
+    //Given the root of the tree, returns a
+    private Node expand(Node root) {
+        Node father = root;
+        int index = father.selectNode();
+        while (father.directChildrenOfNode[index] != null) {
+            father = father.directChildrenOfNode[index];
+            index = father.selectNode();
+        }
+
+        if (father.turnState.isTerminal()) {
+            return null;
+        }
+
+        Card cardToPlay = father.playableCards.get(index);
+        if (father.turnState.trick().isFull()) {
+            TurnState turnState = father.turnState.withTrickCollected().withNewCardPlayed(cardToPlay);
+            CardSet ownHand = father.ownHand.remove(cardToPlay);
+            CardSet playableCards = playableCards(turnState, ownId, ownHand);
+            PlayerId playerId = turnState.trick().player(0);
+        }
+        else {
+            TurnState turnState = father.turnState.withNewCardPlayed(cardToPlay);
+            CardSet playableCards = playableCards(father.turnState, ownId, father.ownHand);
+        }
+
+
+        Node newNode = new Node(turnState, playableCards, ownHand, father, playerId);
+        father.directChildrenOfNode[index] = newNode;
+        return newNode;
+    }
+
     private static class Node {
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/
         /** ============================================== **/
-        private TurnState turnState;
-        private Node[] directChildrenOfNode;
-        //private CardSet unplayedDirectChildrenCards;
-        private CardSet hand;
-        private CardSet playableCards;
-        private int totalPointsFromNode;
-        private int randomTurnsPlayed;
-        private Node parent;
+        private TurnState turnState; //The turnState corresponding to the node
+        private Node[] directChildrenOfNode; //the node's children
+        private CardSet playableCards; //cards playable from this node
+        private CardSet ownHand; //the hand of the mctsPlayer
+        private int totalPointsFromNode; //nb of points earned from this node
+        private int randomTurnsPlayed; //number of turns played from this node
+        private Node parent; //the father of this node, null if it is the root
+        private PlayerId playerId; //the id of the player who played to get to this node, i.e. the last player to have played.
 
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
-        private Node(TurnState turnState, CardSet playableCards, CardSet hand, Node parent) {
+        private Node(TurnState turnState, CardSet playableCards, CardSet ownHand, Node parent, PlayerId playerId) {
             this.turnState = turnState;
-            this.hand = hand;
-            this.playableCards = turnState.trick().playableCards(hand);
+            this.ownHand = ownHand;
+            this.playableCards = playableCards;
             this.directChildrenOfNode = new Node[playableCards.size()];
             this.totalPointsFromNode = 0;
             this.randomTurnsPlayed = 0;
             this.parent = parent;
+            this.playerId = playerId;
         }
 
         /** ============================================== **/

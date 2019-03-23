@@ -114,7 +114,7 @@ public final class MctsPlayer implements Player {
             childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
             this.turnstate = turnstate;
             this.setOfPossibleCards = setOfPossibleCards;
-            this.selfTotalPoints = 0;
+            this.selfTotalPoints = 0f;
             // 1 car sinon on a une division par 0 :/ peut mieux faire
             this.finishedRandomTurn = 1;
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
