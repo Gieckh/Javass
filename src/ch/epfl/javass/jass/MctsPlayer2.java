@@ -27,18 +27,34 @@ public final class MctsPlayer2 implements Player {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
+    //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
-        //TODO
-        return null;
+        Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
+        iterate(root);
+        int i = root.selectNode(0);
+        return root.playableCards.get(i);
+    }
+
+    private void iterate(Node root) {
+        for (int i = 0; i < iterations; ++i) {
+            Node toSimulate = expand(root);
+            Score simulatedScore = simulateToEndOfTurn(toSimulate.turnState, toSimulate.ownHand);
+            int pointsTeam1 = simulatedScore.turnPoints(TeamId.TEAM_1);
+            int pointsTeam2 = simulatedScore.turnPoints(TeamId.TEAM_2);
+            while (toSimulate.father != null) {
+                toSimulate.randomTurnsPlayed++;
+                toSimulate.totalPointsFromNode += (toSimulate.playerId.team() == TeamId.TEAM_1) ? pointsTeam1 : pointsTeam2;
+                toSimulate = toSimulate.father;
+            }
+            root.randomTurnsPlayed++;
+            root.totalPointsFromNode += (root.playerId.team() == TeamId.TEAM_1) ? pointsTeam1 : pointsTeam2;
+        }
     }
 
     private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
-        if (turnState.isTerminal()) { //TODO: check if that's necessary
-            return turnState.score();
-        }
-
+        //We simulate with a starting score of ZER000000000000000000000000000000000
         TurnState copyOfTurnState = TurnState.ofPackedComponents
-                (turnState.packedScore(), turnState.packedUnplayedCards(), turnState.packedTrick());
+                (PackedScore.INITIAL, turnState.packedUnplayedCards(), turnState.packedTrick());
 
         if (turnState.trick().isFull()) {
             copyOfTurnState = copyOfTurnState.withTrickCollected();
@@ -114,20 +130,20 @@ public final class MctsPlayer2 implements Player {
         private CardSet ownHand; //the hand of the mctsPlayer
         private int totalPointsFromNode; //nb of points earned from this node
         private int randomTurnsPlayed; //number of turns played from this node
-        private Node parent; //the father of this node, null if it is the root
+        private Node father; //the father of this node, null if it is the root
         private PlayerId playerId; //the id of the player who played to get to this node, i.e. the last player to have played.
 
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
-        private Node(TurnState turnState, CardSet playableCards, CardSet ownHand, Node parent, PlayerId playerId) {
+        private Node(TurnState turnState, CardSet playableCards, CardSet ownHand, Node father, PlayerId playerId) {
             this.turnState = turnState;
             this.ownHand = ownHand;
             this.playableCards = playableCards;
             this.directChildrenOfNode = new Node[playableCards.size()];
             this.totalPointsFromNode = 0;
             this.randomTurnsPlayed = 0;
-            this.parent = parent;
+            this.father = father;
             this.playerId = playerId;
         }
 
