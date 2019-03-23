@@ -84,6 +84,7 @@ public final class MctsPlayer2 implements Player {
 
     //Given the root of the tree, returns a
     private Node expand(Node root) {
+        System.out.println("expansion...");
         Node father = root;
         int index = father.selectNode();
         while (father.directChildrenOfNode[index] != null) {
