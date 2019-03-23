@@ -87,11 +87,18 @@ public final class MctsPlayer2 implements Player {
         Node father = root;
         int index = father.selectNode();
         while (father.directChildrenOfNode[index] != null) {
+            System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
             index = father.selectNode();
+            if (father.directChildrenOfNode.length == 0) {
+                System.out.println(father.tooString());
+                System.out.println("childrenless father : " + father);
+                break;
+            }
         }
 
         if (father.turnState.isTerminal()) {
+            System.out.println("terminal father : " + father);
             return null;
         }
 
@@ -174,6 +181,11 @@ public final class MctsPlayer2 implements Player {
             }
 
             return index;
+        }
+
+        private String tooString() {
+            String str = "playableCards : " + playableCards.toString();
+            return str;
         }
     }
 }
