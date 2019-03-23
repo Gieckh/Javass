@@ -69,7 +69,7 @@ public final class MctsPlayer implements Player {
         visited.add(newChildren);
         //SIMULATION
         // ON calcule la valeur d'un des enfants ( tour aleatoire)
-        int value = SimulateScoreForNode(newChildren);
+        int value = simulateScoreForNode(newChildren);
         //UPDATING
         //On parcourt tout le tableau et update les scores respectifs
         for (Node node : visited) {
@@ -78,7 +78,7 @@ public final class MctsPlayer implements Player {
     }
 
 
-    private int SimulateScoreForNode(Node node) {
+    private int simulateScoreForNode(Node node) {
         while (!node.turnstate.isTerminal() ) {
 
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){

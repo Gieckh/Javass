@@ -9,9 +9,6 @@ import java.util.Map;
  *
  */
 public interface Player {
-
-
-
     abstract public Card cardToPlay(TurnState state, CardSet hand);
 
     
