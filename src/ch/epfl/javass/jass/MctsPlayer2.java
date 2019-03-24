@@ -186,8 +186,9 @@ public final class MctsPlayer2 implements Player {
 
         private String tooString() {
             String str = "playableCards : " + playableCards.toString() + "\n";
-            str += "                                            random turns played : " + randomTurnsPlayed;
-            str += "                                         total points from node : " + totalPointsFromNode;
+            str += "                                            random turns played : " + randomTurnsPlayed + "\n";
+            str += "                                         total points from node : " + totalPointsFromNode + "\n";
+            str += "                                                      node team : " + playerId.team();
             return str;
         }
     }
