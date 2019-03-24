@@ -88,6 +88,8 @@ public final class MctsPlayer implements Player {
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){
                 long card;
                 card = node.setOfPossibleCards;
+                //TODO ne pas utiliser math.random
+                //System.out.println((int) (Math.random()*(PackedCardSet.size(card))));
                 card = PackedCardSet.get(card, (int) Math.random()*(PackedCardSet.size(card)));
                 node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
                 node.turnstate = node.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(card, 0)));
