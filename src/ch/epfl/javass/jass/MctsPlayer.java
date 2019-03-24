@@ -89,13 +89,16 @@ public final class MctsPlayer implements Player {
             //TODO: or il faut normalement prendre en compte la main de celui qui joue
             //TODO: cf ma méthode "playableCards" de MctsPlayer2
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){
-                long card;
-                card = node.setOfPossibleCards;
+                long cardset;
+                int card;
+                System.out.println(Long.toBinaryString(node.setOfPossibleCards));
+                cardset = node.setOfPossibleCards;
                 //TODO ne pas utiliser math.random
-                //System.out.println((int) (Math.random()*(PackedCardSet.size(card))));
-                card = PackedCardSet.get(card, (int) Math.random()*(PackedCardSet.size(card)));
-                node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
-                node.turnstate = node.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(card, 0)));
+                card = PackedCardSet.get(cardset, (int) Math.random()*(PackedCardSet.size(cardset)+1));
+                cardset = PackedCardSet.remove(cardset, card);
+                System.out.println(Long.toBinaryString(card));
+                node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, cardset);
+                node.turnstate = node.turnstate.withNewCardPlayed(Card.ofPacked(card));
             }
             node.turnstate = node.turnstate.withTrickCollected();
         }
