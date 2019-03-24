@@ -263,7 +263,7 @@ public final class Card {
      * @author Marin Nguyen - (288260)
     */
     public static Card ofPacked(int packed) throws IllegalArgumentException {
-        checkArgument(isValid(packed));
+        checkArgument(PackedCard.isValid(packed));
         return new Card(packed);
     }
 
