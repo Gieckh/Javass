@@ -173,10 +173,10 @@ public final class MctsPlayer2 implements Player {
             float priority = 0f;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node tmpNode = directChildrenOfNode[i];
-                float V =(float)tmpNode.totalPointsFromNode / tmpNode.randomTurnsPlayed +
+                float nodeValue =(float)tmpNode.totalPointsFromNode / tmpNode.randomTurnsPlayed +
                          explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / tmpNode.randomTurnsPlayed);
-                if (V > priority) {
-                    priority = V;
+                if (nodeValue > priority) {
+                    priority = nodeValue;
                     index = i;
                 }
             }
@@ -187,6 +187,7 @@ public final class MctsPlayer2 implements Player {
         private String tooString() {
             String str = "playableCards : " + playableCards.toString() + "\n";
             str += "                                            random turns played : " + randomTurnsPlayed;
+            str += "                                         total points from node : " + totalPointsFromNode;
             return str;
         }
     }
