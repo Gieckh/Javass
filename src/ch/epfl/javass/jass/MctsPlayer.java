@@ -31,6 +31,9 @@ public final class MctsPlayer implements Player {
     /** ============================================== **/
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
+        if(hand.size() == 1) {
+            return hand.get(0);
+        }
         int packedCard = isIteratingNodes(state, hand.packed(), iterations);
         System.out.println(Integer.toBinaryString(packedCard));
         return Card.ofPacked(packedCard);
