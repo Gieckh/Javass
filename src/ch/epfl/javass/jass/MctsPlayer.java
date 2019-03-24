@@ -35,7 +35,7 @@ public final class MctsPlayer implements Player {
             return hand.get(0);
         }
         int packedCard = isIteratingNodes(state, hand.packed(), iterations);
-        System.out.println(Integer.toBinaryString(packedCard));
+        //System.out.println(Integer.toBinaryString(packedCard));
         return Card.ofPacked(packedCard);
     }
 
@@ -91,12 +91,12 @@ public final class MctsPlayer implements Player {
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){
                 long cardset;
                 int card;
-                System.out.println(Long.toBinaryString(node.setOfPossibleCards));
+                //System.out.println(Long.toBinaryString(node.setOfPossibleCards));
                 cardset = node.setOfPossibleCards;
                 //TODO ne pas utiliser math.random
                 card = PackedCardSet.get(cardset, (int) Math.random()*(PackedCardSet.size(cardset)+1));
                 cardset = PackedCardSet.remove(cardset, card);
-                System.out.println(Long.toBinaryString(card));
+                //System.out.println(Long.toBinaryString(card));
                 node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, cardset);
                 node.turnstate = node.turnstate.withNewCardPlayed(Card.ofPacked(card));
             }
