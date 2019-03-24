@@ -42,15 +42,12 @@ public final class MctsPlayer2 implements Player {
                 Score simulatedScore = simulateToEndOfTurn(toSimulate.turnState,
                         toSimulate.ownHand);
 
-                int pointsTeam1 = simulatedScore.turnPoints(TeamId.TEAM_1);
-                int pointsTeam2 = simulatedScore.turnPoints(TeamId.TEAM_2);
+                int pointsMyTeam = simulatedScore.turnPoints(ownId.team());
                 while (toSimulate.father != null) {
-                    toSimulate.totalPointsFromNode += (toSimulate.playerId.team() == TeamId.TEAM_1) ?
-                            pointsTeam1 :
-                            pointsTeam2;
+                    toSimulate.totalPointsFromNode += pointsMyTeam;
                     toSimulate = toSimulate.father;
                 }
-                root.totalPointsFromNode += (root.playerId.team() == TeamId.TEAM_1) ? pointsTeam1 : pointsTeam2;
+                root.totalPointsFromNode += pointsMyTeam;
             }
         }
     }
