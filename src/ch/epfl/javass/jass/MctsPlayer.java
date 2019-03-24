@@ -81,8 +81,11 @@ public final class MctsPlayer implements Player {
     private int simulateScoreForNode(Node node) {
         while (!node.turnstate.isTerminal() ) {
 
+            //TODO: j'ai l'impression que ça se passe de la même manière, quel que soit le joueur qui joue là
+            //TODO: or il faut normalement prendre en compte la main de celui qui joue
+            //TODO: cf ma méthode "playableCards" de MctsPlayer2
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){
-                long card=0l;
+                long card;
                 card = node.setOfPossibleCards;
                 card = PackedCardSet.get(card, rng.nextInt(PackedCardSet.size(card)));
                 node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
@@ -97,13 +100,14 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/
         /** ============================================== **/
+        //TODO: on pourrait simplement stocker les attributs comme des entiers, pas de raison d'avoir des log
         private int CONSTANT = 40;
         private TurnState turnstate;
-        private Node[] childrenOfNode  ;
+        private Node[] childrenOfNode;
         private long setOfPossibleCards;
-        private float selfTotalPoints ;
-        private int finishedRandomTurn ;
-        private float twoLnOfNOfP;
+        private float selfTotalPoints;
+        private int finishedRandomTurn;
+        private float twoLnOfNOfP; //TODO: et en plus, tu l'update ou ça, à part à la création ?
         //private long cardWeWannaPlay;
 
 
@@ -118,7 +122,6 @@ public final class MctsPlayer implements Player {
             // 1 car sinon on a une division par 0 :/ peut mieux faire
             this.finishedRandomTurn = 1;
             this.twoLnOfNOfP = (float) (2 * Math.log(finishedRandomTurn));
-          
         }
 
         /** ============================================== **/
@@ -152,12 +155,12 @@ public final class MctsPlayer implements Player {
             float bestValue = 0;
             if(!Node.isLeaf(this)) {
                 for (Node children : childrenOfNode) {
-                    float Value = getVForSon(children.selfTotalPoints, 
+                    float value = getVForSon(children.selfTotalPoints,
                             children.finishedRandomTurn, CONSTANT, 
                             this.twoLnOfNOfP);
-                    if (Value >= bestValue) {
+                    if (value >= bestValue) {
                         selected = children;
-                        bestValue = Value;
+                        bestValue = value;
                     }
                 }
             }
@@ -175,15 +178,12 @@ public final class MctsPlayer implements Player {
 //            }
         }
 
-
         private void updateAttributes(int newScore) {
             selfTotalPoints = selfTotalPoints*finishedRandomTurn +  newScore;
             finishedRandomTurn++;
             selfTotalPoints =  selfTotalPoints / finishedRandomTurn;
             ;
         }
-
-
         
         private float getVForSon(float SofSon , int NofSon, int c , float ln) {
             return (float) (SofSon/NofSon + (float)c*Math.sqrt(this.twoLnOfNOfP/ NofSon));
