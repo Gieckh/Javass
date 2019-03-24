@@ -82,7 +82,7 @@ public final class MctsPlayer2 implements Player {
         return turnState.unplayedCards().difference(hand);
     }
 
-    //Given the root of the tree, returns a
+    //Given the root of the tree, adds a new Node and returns it
     private Node expand(Node root) {
         System.out.println("expansion...");
         Node father = root;
@@ -134,7 +134,7 @@ public final class MctsPlayer2 implements Player {
         /** ============================================== **/
         private TurnState turnState; //The turnState corresponding to the node
         private Node[] directChildrenOfNode; //the node's children
-        private CardSet playableCards; //cards playable from this node
+        private CardSet playableCards; //cards playable from this node, i.e. from the player with Id playerId of a child of this Node.
         private CardSet ownHand; //the hand of the mctsPlayer
         private int totalPointsFromNode; //nb of points earned from this node
         private int randomTurnsPlayed; //number of turns played from this node
@@ -185,7 +185,8 @@ public final class MctsPlayer2 implements Player {
         }
 
         private String tooString() {
-            String str = "playableCards : " + playableCards.toString();
+            String str = "playableCards : " + playableCards.toString() + "\n";
+            str += "                                            random turns played : " + randomTurnsPlayed;
             return str;
         }
     }
