@@ -31,8 +31,9 @@ public final class MctsPlayer implements Player {
     /** ============================================== **/
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
-        System.out.println(Integer.toBinaryString(isIteratingNodes(state, hand.packed(), iterations)));
-        return Card.ofPacked(isIteratingNodes(state, hand.packed(), iterations));
+        int packedCard = isIteratingNodes(state, hand.packed(), iterations);
+        System.out.println(Integer.toBinaryString(packedCard));
+        return Card.ofPacked(packedCard);
     }
 
 
@@ -87,7 +88,7 @@ public final class MctsPlayer implements Player {
             while(!PackedTrick.isFull(node.turnstate.packedTrick())){
                 long card;
                 card = node.setOfPossibleCards;
-                card = PackedCardSet.get(card, rng.nextInt(PackedCardSet.size(card)));
+                card = PackedCardSet.get(card, (int) Math.random()*(PackedCardSet.size(card)));
                 node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, card);
                 node.turnstate = node.turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(card, 0)));
             }
@@ -108,6 +109,7 @@ public final class MctsPlayer implements Player {
         private float selfTotalPoints = 1;
         private int finishedRandomTurn = 1;
         private boolean hasChild ;
+        private int card;
         //private long cardWeWannaPlay;
 
 
@@ -135,7 +137,9 @@ public final class MctsPlayer implements Player {
 
         // la difference du set de cartes pas jouées du pere vs celle du fils.
         private int cardWeWannaPlay() {
-            return PackedCardSet.get(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()),0);  
+            return this.selectChild().card;
+//            System.out.println(Long.toBinaryString(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()))); 
+//            return PackedCardSet.get(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()),0);  
         }
         
         
@@ -156,6 +160,7 @@ public final class MctsPlayer implements Player {
                     turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
                     //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
                     this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards);
+                    this.childrenOfNode[i].card = playedCard;
                 }
             }
         }
@@ -178,7 +183,6 @@ public final class MctsPlayer implements Player {
             return selected;
         }
 
-        // petite douille , c'est pour s'assurer que le cas suivant n'arrive pas : les enfants existent dans le tableau , mais ne sont pas initialisé 
         private  boolean isLeaf() {
             return !this.hasChild;
 
