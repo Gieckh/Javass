@@ -38,16 +38,20 @@ public final class MctsPlayer2 implements Player {
     private void iterate(Node root) {
         for (int i = 0; i < iterations; ++i) {
             Node toSimulate = expand(root);
-            Score simulatedScore = simulateToEndOfTurn(toSimulate.turnState, toSimulate.ownHand);
-            int pointsTeam1 = simulatedScore.turnPoints(TeamId.TEAM_1);
-            int pointsTeam2 = simulatedScore.turnPoints(TeamId.TEAM_2);
-            while (toSimulate.father != null) {
-                toSimulate.randomTurnsPlayed++;
-                toSimulate.totalPointsFromNode += (toSimulate.playerId.team() == TeamId.TEAM_1) ? pointsTeam1 : pointsTeam2;
-                toSimulate = toSimulate.father;
+            if (toSimulate != null) {
+                Score simulatedScore = simulateToEndOfTurn(toSimulate.turnState,
+                        toSimulate.ownHand);
+
+                int pointsTeam1 = simulatedScore.turnPoints(TeamId.TEAM_1);
+                int pointsTeam2 = simulatedScore.turnPoints(TeamId.TEAM_2);
+                while (toSimulate.father != null) {
+                    toSimulate.totalPointsFromNode += (toSimulate.playerId.team() == TeamId.TEAM_1) ?
+                            pointsTeam1 :
+                            pointsTeam2;
+                    toSimulate = toSimulate.father;
+                }
+                root.totalPointsFromNode += (root.playerId.team() == TeamId.TEAM_1) ? pointsTeam1 : pointsTeam2;
             }
-            root.randomTurnsPlayed++;
-            root.totalPointsFromNode += (root.playerId.team() == TeamId.TEAM_1) ? pointsTeam1 : pointsTeam2;
         }
     }
 
@@ -87,9 +91,11 @@ public final class MctsPlayer2 implements Player {
         System.out.println("expansion...");
         Node father = root;
         int index = father.selectNode();
+        father.randomTurnsPlayed++;
         while (father.directChildrenOfNode[index] != null) {
             System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
+            father.randomTurnsPlayed++;
             index = father.selectNode();
             if (father.directChildrenOfNode.length == 0) {
                 System.out.println(father.tooString());
@@ -124,6 +130,7 @@ public final class MctsPlayer2 implements Player {
 
 
         Node newNode = new Node(turnState, playableCards, ownHand, father, playerId);
+        newNode.randomTurnsPlayed++;
         father.directChildrenOfNode[index] = newNode;
         return newNode;
     }
@@ -185,7 +192,7 @@ public final class MctsPlayer2 implements Player {
         }
 
         private String tooString() {
-            String str = "playableCards : " + playableCards.toString() + "\n";
+            String str = "   playableCards : " + playableCards.toString() + "\n";
             str += "                                            random turns played : " + randomTurnsPlayed + "\n";
             str += "                                         total points from node : " + totalPointsFromNode + "\n";
             str += "                                                      node team : " + playerId.team();
