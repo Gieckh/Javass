@@ -15,7 +15,7 @@ public final class PacedPlayer implements Player{
     /** ============================================== **/
     /**
      * @brief the PacedPlayer acts the same as its underlying player, except he
-     *        takes at least "minTime" milliseconds before deciding which card to play
+     *        takes at least "minTime" seconds before deciding which card to play
      * @param underlyingPlayer (Player) - the underlying player, determines the behaviour
      *                         of the PacedPlayer.
      * @param minTime (double) the minimum time (in milliseconds) this PacedPlayer needs
@@ -23,7 +23,7 @@ public final class PacedPlayer implements Player{
      */
     public PacedPlayer(Player underlyingPlayer, double minTime) {
         this.underLyingPlayer = underlyingPlayer;
-        this.minTime = minTime;
+        this.minTime = minTime * 1000;
     }
 
 
