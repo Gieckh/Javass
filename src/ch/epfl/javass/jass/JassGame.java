@@ -76,6 +76,9 @@ public final class JassGame {
      */
     //TODO: update players.
     public void advanceToEndOfNextTrick() {
+        if (isGameOver()) {
+            return;
+        }
         if (isTrickFirstOfTheGame()) {
             setPlayers();
             setTurn();
