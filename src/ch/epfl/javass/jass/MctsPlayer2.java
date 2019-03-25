@@ -129,6 +129,7 @@ public final class MctsPlayer2 implements Player {
         else {
             turnState = father.turnState.withNewCardPlayed(cardToPlay);
             playerId = father.turnState.nextPlayer();
+            //TODO: we have an invalid turnState.
             playableCards = (turnState.trick().isFull()) ?
                     playableCards(turnState.withTrickCollected(), ownId, ownHand):
                     playableCards(turnState, ownId, ownHand);

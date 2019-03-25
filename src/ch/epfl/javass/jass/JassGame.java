@@ -77,7 +77,7 @@ public final class JassGame {
     //TODO: update players.
     public void advanceToEndOfNextTrick() {
         System.out.println("turnNumber : " + turnNumber);
-        if (isGameOver()) {
+        if (isGameOver()) { //Because the tests decided to call this method, even though the game is already over...
             return;
         }
         if (isTrickFirstOfTheGame()) {
