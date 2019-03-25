@@ -29,6 +29,7 @@ public final class MctsPlayer2 implements Player {
 
     //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
+        System.out.println("Unplayed cards " + state.unplayedCards());
         if(state.trick().playableCards(hand).size() ==1) {
             return state.trick().playableCards(hand).get(0);
         }
@@ -68,10 +69,12 @@ public final class MctsPlayer2 implements Player {
         SplittableRandom rng = new SplittableRandom(rngSeed);
         while (! copyOfTurnState.isTerminal()) {
             CardSet playableCards = playableCards(copyOfTurnState, ownId, copyOfHand);
+//            System.out.println(copyOfHand);
+//            System.out.println(playableCards);
             Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
             copyOfHand = copyOfHand.remove(randomCardToPlay);
-
             copyOfTurnState = copyOfTurnState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
+        
         }
 
         return copyOfTurnState.score();
@@ -80,10 +83,13 @@ public final class MctsPlayer2 implements Player {
     //Assuming trick not full
     private static CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
         if (turnState.nextPlayer() == playerId) {
+            System.out.println("this");
             return turnState.trick().playableCards(hand);
         }
-
-        return turnState.unplayedCards().difference(hand);
+//        System.out.println("that");
+//        System.out.println(hand.toString());
+//        System.out.println(turnState.unplayedCards());
+        return turnState.unplayedCards().difference(hand); //TODO rajouter .playable ?
     }
 
     //Given the root of the tree, adds a new Node and returns it
@@ -93,7 +99,6 @@ public final class MctsPlayer2 implements Player {
        
         int index = father.selectNode();
         father.randomTurnsPlayed++;
-        System.out.println(index);
         while (father.directChildrenOfNode[index] != null) {
             System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
@@ -113,7 +118,6 @@ public final class MctsPlayer2 implements Player {
             System.out.println("terminal father : " + father);
             return null;
         }
-        System.out.println(Long.toBinaryString(father.playableCards.packed()));
         Card cardToPlay = father.playableCards.get(index);
         CardSet ownHand = father.ownHand.remove(cardToPlay);
         CardSet playableCards;
