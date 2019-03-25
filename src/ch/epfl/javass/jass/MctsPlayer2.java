@@ -29,13 +29,14 @@ public final class MctsPlayer2 implements Player {
 
     //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
+        assert (! hand.equals(CardSet.EMPTY));
         //TODO: c'est bien mais on ne devrait pas en avoir besoin
 //        if(state.trick().playableCards(hand).size() ==1) {
 //            return state.trick().playableCards(hand).get(0);
 //        }
-        if (hand.size() == 1) {
-            return hand.get(0);
-        }
+//        if (hand.size() == 1) {
+//            return hand.get(0);
+//        }
         Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
         iterate(root);
         int i = root.selectNode(0);
@@ -129,7 +130,7 @@ public final class MctsPlayer2 implements Player {
         else {
             turnState = father.turnState.withNewCardPlayed(cardToPlay);
             playerId = father.turnState.nextPlayer();
-            //TODO: we have an invalid turnState.
+            //TODO: we have an invalid turnState. That's problematic
             playableCards = (turnState.trick().isFull()) ?
                     playableCards(turnState.withTrickCollected(), ownId, ownHand):
                     playableCards(turnState, ownId, ownHand);
@@ -184,6 +185,7 @@ public final class MctsPlayer2 implements Player {
                 ++index;
             }
 
+            assert(! (directChildrenOfNode.length == 0));
             float priority = 0f;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node tmpNode = directChildrenOfNode[i];
