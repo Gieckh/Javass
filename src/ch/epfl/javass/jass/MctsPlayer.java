@@ -41,7 +41,7 @@ public final class MctsPlayer implements Player {
 
 
     private int isIteratingNodes(TurnState state , long setOfPossibleCards, int iterations){
-        Node bigBrother = new Node(state, setOfPossibleCards);
+        Node bigBrother = new Node(state, setOfPossibleCards, ownId);
         for ( int i = 0 ; i< iterations ; ++i) {
             MonteCarloAlgorithm(bigBrother);
         }
@@ -73,11 +73,14 @@ public final class MctsPlayer implements Player {
         visited.add(newChildren);
         //SIMULATION
         // ON calcule la valeur d'un des enfants ( tour aleatoire)
-        long score = simulateToEndOfTurn(newChildren);
+        long score = (simulateToEndOfTurn(newChildren.turnstate, CardSet.ofPacked(newChildren.setOfPossibleCards))).packed();
         //UPDATING
         //On parcourt tout le tableau et update les scores respectifs
         for (Node node : visited) {
-            node.updateAttributes(value);
+            node.updateAttributes(
+                    PackedScore.turnTricks(
+                            score,
+                            node.playerId.team()));
         }
     }
 
@@ -101,8 +104,15 @@ public final class MctsPlayer implements Player {
         CardSet copyOfHand = CardSet.ofPacked(hand.packed());
         while (! copyOfTurnState.isTerminal()) {
             CardSet playableCards = playableCards(copyOfTurnState, ownId, copyOfHand);
-            Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
+            Card randomCardToPlay;
+            if(playableCards.size()>0) {
+            randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
             copyOfHand = copyOfHand.remove(randomCardToPlay);
+            }
+            else {
+                System.out.println("here");
+                return copyOfTurnState.score();
+            }
 
             copyOfTurnState = copyOfTurnState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
         }
@@ -130,13 +140,14 @@ public final class MctsPlayer implements Player {
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
-        private Node(TurnState turnstate , long setOfPossibleCards) {
+        private Node(TurnState turnstate , long setOfPossibleCards, PlayerId ownID) {
             this.turnstate = turnstate;
             this.setOfPossibleCards = setOfPossibleCards;
             this.selfTotalPoints = 0f;
             // 1 car sinon on a une division par 0 :/ peut mieux faire
             this.finishedRandomTurn = 1;
             this.hasChild = false;
+            this.playerId = ownID;
         }
 
 
@@ -158,8 +169,11 @@ public final class MctsPlayer implements Player {
 
 
         private void expand(PlayerId p) {
+            if(this.turnstate.trick().isFull()) {
+                this.turnstate = this.turnstate.withTrickCollected();
+            }
             if(PackedCardSet.size(setOfPossibleCards) >=1) {
-                if(this.playerId == p ) {
+                if(this.turnstate.nextPlayer() == p ) {
                     childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
                     hasChild = true;
                     for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
@@ -174,15 +188,17 @@ public final class MctsPlayer implements Player {
                         }
                         turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
                         //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
-                        this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards);
+                        this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards,this.turnstate.nextPlayer());
                         this.childrenOfNode[i].card = playedCard;
+
+                        
                         }
                     }
                     else {
                         long cs = PackedCardSet.difference(turnstate.packedUnplayedCards(),setOfPossibleCards);
                         childrenOfNode = new Node[PackedCardSet.size(cs)];
                         hasChild = true;
-                        for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
+                        for (int i=0; i<PackedCardSet.size(cs); i++) {
                             int playedCard = PackedCardSet.get(cs,i);
                             TurnState turnstate = this.turnstate;
 
@@ -192,12 +208,14 @@ public final class MctsPlayer implements Player {
                             }
                             turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
                             //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
-                            this.childrenOfNode[i] = new Node(turnstate, setOfPossibleCards);
+                            this.childrenOfNode[i] = new Node(turnstate, setOfPossibleCards, this.turnstate.nextPlayer());
                             this.childrenOfNode[i].card = playedCard;
                             }
                     }
             }
         }
+
+        
 
         //select the best children
         private Node selectChild() {
@@ -219,7 +237,8 @@ public final class MctsPlayer implements Player {
         }
 
         private  boolean isLeaf() {
-            return !this.hasChild;
+            return (this.childrenOfNode==null )
+                    ||(!this.hasChild);
 
 //            if(childrenOfNode == null) {
 //                return true;
