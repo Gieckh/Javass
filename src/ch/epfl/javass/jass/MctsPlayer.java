@@ -68,12 +68,12 @@ public final class MctsPlayer implements Player {
         }
         //EXPENSION
         // le node le plus prometteur a des enfants
-        current.expand();
+        current.expand(ownId);
         Node newChildren = current.selectChild();
         visited.add(newChildren);
         //SIMULATION
         // ON calcule la valeur d'un des enfants ( tour aleatoire)
-        int value = simulateScoreForNode(newChildren);
+        long score = simulateToEndOfTurn(newChildren);
         //UPDATING
         //On parcourt tout le tableau et update les scores respectifs
         for (Node node : visited) {
@@ -81,28 +81,33 @@ public final class MctsPlayer implements Player {
         }
     }
 
-
-    private int simulateScoreForNode(Node node) {
-        while (!node.turnstate.isTerminal() ) {
-
-            //TODO: j'ai l'impression que ça se passe de la même manière, quel que soit le joueur qui joue là
-            //TODO: or il faut normalement prendre en compte la main de celui qui joue
-            //TODO: cf ma méthode "playableCards" de MctsPlayer2
-            while(!PackedTrick.isFull(node.turnstate.packedTrick())){
-                long cardset;
-                int card;
-                //System.out.println(Long.toBinaryString(node.setOfPossibleCards));
-                cardset = node.setOfPossibleCards;
-                //TODO ne pas utiliser math.random
-                card = PackedCardSet.get(cardset, (int) Math.random()*(PackedCardSet.size(cardset)+1));
-                cardset = PackedCardSet.remove(cardset, card);
-                //System.out.println(Long.toBinaryString(card));
-                node.setOfPossibleCards = PackedCardSet.difference(node.setOfPossibleCards, cardset);
-                node.turnstate = node.turnstate.withNewCardPlayed(Card.ofPacked(card));
-            }
-            node.turnstate = node.turnstate.withTrickCollected();
+    private static CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
+        if (turnState.nextPlayer() == playerId) {
+            return turnState.trick().playableCards(hand);
         }
-        return PackedScore.turnPoints(node.turnstate.packedScore(),ownId.team());
+
+        return turnState.unplayedCards().difference(hand);
+    }
+
+    private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
+        //We simulate with a starting score of ZER000000000000000000000000000000000
+        TurnState copyOfTurnState = TurnState.ofPackedComponents
+                (PackedScore.INITIAL, turnState.packedUnplayedCards(), turnState.packedTrick());
+
+        if (turnState.trick().isFull()) {
+            copyOfTurnState = copyOfTurnState.withTrickCollected();
+        }
+
+        CardSet copyOfHand = CardSet.ofPacked(hand.packed());
+        while (! copyOfTurnState.isTerminal()) {
+            CardSet playableCards = playableCards(copyOfTurnState, ownId, copyOfHand);
+            Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
+            copyOfHand = copyOfHand.remove(randomCardToPlay);
+
+            copyOfTurnState = copyOfTurnState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
+        }
+
+        return copyOfTurnState.score();
     }
     
     private static class Node{
@@ -118,6 +123,7 @@ public final class MctsPlayer implements Player {
         private int finishedRandomTurn = 1;
         private boolean hasChild ;
         private int card;
+        private PlayerId playerId;
         //private long cardWeWannaPlay;
 
 
@@ -151,25 +157,45 @@ public final class MctsPlayer implements Player {
         }
         
         
-        private void expand() {
+        private void expand(PlayerId p) {
             if(PackedCardSet.size(setOfPossibleCards) >=1) {
-                childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
-                hasChild = true;
-                for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
-                    int playedCard = PackedCardSet.get(setOfPossibleCards,i);
-                    long newSetOfPossibleCards = PackedCardSet.difference(this.setOfPossibleCards, playedCard);
-                    //System.out.println(Integer.toBinaryString(PackedCardSet.get(playedCard, 1)));
-                    TurnState turnstate = this.turnstate;
-                   
+                if(this.playerId == p ) {
+                    childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
+                    hasChild = true;
+                    for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
+                        int playedCard = PackedCardSet.get(setOfPossibleCards,i);
+                        long newSetOfPossibleCards = PackedCardSet.difference(this.setOfPossibleCards, PackedCardSet.singleton(playedCard));
+                        //System.out.println(Integer.toBinaryString(PackedCardSet.get(playedCard, 1)));
+                        TurnState turnstate = this.turnstate;
+                       
                         if(PackedTrick.isFull(this.turnstate.packedTrick())) {
                             turnstate = turnstate.withTrickCollected();
-                        
+                            
+                        }
+                        turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
+                        //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
+                        this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards);
+                        this.childrenOfNode[i].card = playedCard;
+                        }
                     }
-                    turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
-                    //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
-                    this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards);
-                    this.childrenOfNode[i].card = playedCard;
-                }
+                    else {
+                        long cs = PackedCardSet.difference(turnstate.packedUnplayedCards(),setOfPossibleCards);
+                        childrenOfNode = new Node[PackedCardSet.size(cs)];
+                        hasChild = true;
+                        for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
+                            int playedCard = PackedCardSet.get(cs,i);
+                            TurnState turnstate = this.turnstate;
+                            
+                            if(PackedTrick.isFull(turnstate.packedTrick())) {
+                                turnstate = turnstate.withTrickCollected();
+                                
+                            }
+                            turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
+                            //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
+                            this.childrenOfNode[i] = new Node(turnstate, setOfPossibleCards);
+                            this.childrenOfNode[i].card = playedCard;
+                            }
+                    }
             }
         }
         
@@ -182,6 +208,7 @@ public final class MctsPlayer implements Player {
                     float value = getVForSon(children.selfTotalPoints,
                             children.finishedRandomTurn, CONSTANT, 
                             twoLnOfNOfP());
+                    //float value = children.finishedRandomTurn;
                     if (value >= bestValue) {
                         selected = children;
                         bestValue = value;
@@ -203,10 +230,12 @@ public final class MctsPlayer implements Player {
         }
 
         private void updateAttributes(int newScore) {
-            selfTotalPoints = selfTotalPoints*finishedRandomTurn +  newScore;
-            finishedRandomTurn++;
-            selfTotalPoints =  selfTotalPoints / finishedRandomTurn;
-            
+            selfTotalPoints = selfTotalPoints +  newScore;
+          finishedRandomTurn++;
+//            selfTotalPoints = selfTotalPoints*finishedRandomTurn +  newScore;
+//            finishedRandomTurn++;
+//            selfTotalPoints =  selfTotalPoints / finishedRandomTurn;
+//            
         }
         
         private float getVForSon(float SofSon , int NofSon, int c , float ln) {

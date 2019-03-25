@@ -24,10 +24,10 @@ public final class RandomJassGame2 {
         for (PlayerId pId: PlayerId.ALL) {
           Player player = new PacedPlayer(new RandomPlayer(2019), 1);
          if (pId == PlayerId.PLAYER_4) {
-             player = new MctsPlayer(PlayerId.PLAYER_4, 2019, 1000);
+             player = new MctsPlayer2(PlayerId.PLAYER_4, 2019, 100);
           }
          if (pId == PlayerId.PLAYER_2) {
-             player = new MctsPlayer(PlayerId.PLAYER_2, 2019, 1000);
+             player = new MctsPlayer2(PlayerId.PLAYER_2, 2019, 100);
            }
        if (pId == PlayerId.PLAYER_1) {
        player = new PrintingPlayer(player);

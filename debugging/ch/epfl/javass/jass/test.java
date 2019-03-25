@@ -2,6 +2,8 @@ package ch.epfl.javass.jass;
 
 import ch.epfl.javass.jass.Card.Color;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
 
