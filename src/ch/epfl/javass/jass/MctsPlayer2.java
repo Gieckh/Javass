@@ -71,8 +71,6 @@ public final class MctsPlayer2 implements Player {
         CardSet copyOfHand = CardSet.ofPacked(hand.packed());
         SplittableRandom rng = new SplittableRandom(rngSeed);
         while (! copyOfTurnState.isTerminal()) {
-            System.out.println("unplayed cards : " + copyOfTurnState.unplayedCards());
-            System.out.println("hand : " + copyOfHand.toString());
             CardSet playableCards = playableCards(copyOfTurnState, ownId, copyOfHand);
             Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
             copyOfHand = copyOfHand.remove(randomCardToPlay);
