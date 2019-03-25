@@ -10,9 +10,7 @@ public final class RandomJassGame2 {
         //marche pour n'importe quelle seed
         for (PlayerId pId: PlayerId.ALL) {
             Player player = new MctsPlayer2(pId, 2019, 100);
-//            if (pId == PlayerId.PLAYER_1) {
-                player = new PrintingPlayer(player);
-//            }
+            player = new PrintingPlayer(player);
 
             players.put(pId, player);
             playerNames.put(pId, pId.name());
