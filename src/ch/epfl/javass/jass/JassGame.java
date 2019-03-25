@@ -103,7 +103,7 @@ public final class JassGame {
                 updatePlayer();
                 turnState = TurnState.ofPackedComponents(
                         PackedScore.nextTurn(turnState.packedScore()),
-                        turnState.packedUnplayedCards(),
+                        PackedCardSet.ALL_CARDS,
                         PackedTrick.firstEmpty(trump, turnFirstPlayer)
                 );
             }
