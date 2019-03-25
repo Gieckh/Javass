@@ -76,6 +76,7 @@ public final class JassGame {
      */
     //TODO: update players.
     public void advanceToEndOfNextTrick() {
+        System.out.println("turnNumber : " + turnNumber);
         if (isGameOver()) {
             return;
         }
@@ -103,7 +104,7 @@ public final class JassGame {
                 updatePlayer();
                 turnState = TurnState.ofPackedComponents(
                         PackedScore.nextTurn(turnState.packedScore()),
-                        turnState.packedUnplayedCards(),
+                        PackedCardSet.ALL_CARDS,
                         PackedTrick.firstEmpty(trump, turnFirstPlayer)
                 );
             }

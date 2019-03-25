@@ -29,9 +29,12 @@ public final class MctsPlayer2 implements Player {
 
     //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
-        System.out.println("Unplayed cards " + state.unplayedCards());
-        if(state.trick().playableCards(hand).size() ==1) {
-            return state.trick().playableCards(hand).get(0);
+        //TODO: c'est bien mais on ne devrait pas en avoir besoin
+//        if(state.trick().playableCards(hand).size() ==1) {
+//            return state.trick().playableCards(hand).get(0);
+//        }
+        if (hand.size() == 1) {
+            return hand.get(0);
         }
         Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
         iterate(root);
@@ -46,12 +49,11 @@ public final class MctsPlayer2 implements Player {
                 Score simulatedScore = simulateToEndOfTurn(toSimulate.turnState,
                         toSimulate.ownHand);
 
-                int pointsMyTeam = simulatedScore.turnPoints(ownId.team());
                 while (toSimulate.father != null) {
-                    toSimulate.totalPointsFromNode += pointsMyTeam;
+                    toSimulate.totalPointsFromNode += simulatedScore.turnPoints(toSimulate.playerId.team());
                     toSimulate = toSimulate.father;
                 }
-                root.totalPointsFromNode += pointsMyTeam;
+                root.totalPointsFromNode += simulatedScore.turnPoints(toSimulate.playerId.team());
             }
         }
     }
@@ -69,12 +71,10 @@ public final class MctsPlayer2 implements Player {
         SplittableRandom rng = new SplittableRandom(rngSeed);
         while (! copyOfTurnState.isTerminal()) {
             CardSet playableCards = playableCards(copyOfTurnState, ownId, copyOfHand);
-//            System.out.println(copyOfHand);
-//            System.out.println(playableCards);
             Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
             copyOfHand = copyOfHand.remove(randomCardToPlay);
+
             copyOfTurnState = copyOfTurnState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
-        
         }
 
         return copyOfTurnState.score();
@@ -83,13 +83,10 @@ public final class MctsPlayer2 implements Player {
     //Assuming trick not full
     private static CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
         if (turnState.nextPlayer() == playerId) {
-            System.out.println("this");
             return turnState.trick().playableCards(hand);
         }
-//        System.out.println("that");
-//        System.out.println(hand.toString());
-//        System.out.println(turnState.unplayedCards());
-        return turnState.unplayedCards().difference(hand); //TODO rajouter .playable ?
+
+        return turnState.unplayedCards().difference(hand);
     }
 
     //Given the root of the tree, adds a new Node and returns it
@@ -100,17 +97,18 @@ public final class MctsPlayer2 implements Player {
         int index = father.selectNode();
         father.randomTurnsPlayed++;
         while (father.directChildrenOfNode[index] != null) {
-            System.out.println(father + ", " + father.tooString());
+            //System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
-            if(father.playableCards.isEmpty()) {
-                return null;
-            }
             father.randomTurnsPlayed++;
             index = father.selectNode();
-            if (father.directChildrenOfNode.length == 0) {
+//            if (father.directChildrenOfNode.length == 0) { equivalent, first one maybe faster ?
+            if (father.playableCards.isEmpty()) {
                 System.out.println(father.tooString());
                 System.out.println("childrenless father : " + father);
-                break;
+                //We resimulate from here
+                System.out.println("actual leaf reached");
+                father.randomTurnsPlayed--;
+                return father;
             }
         }
 

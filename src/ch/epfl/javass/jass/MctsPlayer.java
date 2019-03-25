@@ -243,27 +243,54 @@ public final class MctsPlayer implements Player {
 //            if(childrenOfNode == null) {
 //                return true;
 //            }
-//            else {
-//                return false;
-//            }
-        }
-
-        private void updateAttributes(int newScore) {
-            selfTotalPoints = selfTotalPoints +  newScore;
-          finishedRandomTurn++;
-//            selfTotalPoints = selfTotalPoints*finishedRandomTurn +  newScore;
-//            finishedRandomTurn++;
-//            selfTotalPoints =  selfTotalPoints / finishedRandomTurn;
+//        }
 //
-        }
-
-        private float getVForSon(float SofSon , int NofSon, int c , float ln) {
-            return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP()/ NofSon));
-        }
-
-
-
-    }
-
-}
-
+//        //select the best children
+//        private Node selectChild() {
+//            Node selected = null;
+//            float bestValue = 0;
+//            if(!this.isLeaf()) {
+//                for (Node children : childrenOfNode) {
+//                    float value = getVForSon(children.selfTotalPoints,
+//                            children.finishedRandomTurn, CONSTANT,
+//                            twoLnOfNOfP());
+//                    //float value = children.finishedRandomTurn;
+//                    if (value >= bestValue) {
+//                        selected = children;
+//                        bestValue = value;
+//                    }
+//                }
+//            }
+//            return selected;
+//        }
+//
+//        private  boolean isLeaf() {
+//            return !this.hasChild;
+//
+////            if(childrenOfNode == null) {
+////                return true;
+////            }
+////            else {
+////                return false;
+////            }
+//        }
+//
+//        private void updateAttributes(int newScore) {
+//            selfTotalPoints = selfTotalPoints +  newScore;
+//          finishedRandomTurn++;
+////            selfTotalPoints = selfTotalPoints*finishedRandomTurn +  newScore;
+////            finishedRandomTurn++;
+////            selfTotalPoints =  selfTotalPoints / finishedRandomTurn;
+////
+//        }
+//
+//        private float getVForSon(float SofSon , int NofSon, int c , float ln) {
+//            return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP()/ NofSon));
+//        }
+//
+//
+//
+//    }
+//
+//}
+//
