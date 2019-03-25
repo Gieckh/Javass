@@ -11,12 +11,12 @@ public final class MctsPlayer implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    
+
     //nombre de fois qu'on execute l'algorithme
     int iterations;
     SplittableRandom rng ;
     PlayerId ownId;
-    
+
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
@@ -109,7 +109,7 @@ public final class MctsPlayer implements Player {
 
         return copyOfTurnState.score();
     }
-    
+
     private static class Node{
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/
@@ -137,14 +137,14 @@ public final class MctsPlayer implements Player {
             // 1 car sinon on a une division par 0 :/ peut mieux faire
             this.finishedRandomTurn = 1;
             this.hasChild = false;
-        } 
-        
+        }
+
 
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
-        
-        
+
+
         private float twoLnOfNOfP(){
             return (float) (2 * Math.log(finishedRandomTurn));
         }
@@ -152,11 +152,11 @@ public final class MctsPlayer implements Player {
         // la difference du set de cartes pas jouées du pere vs celle du fils.
         private int cardWeWannaPlay() {
             return this.selectChild().card;
-//            System.out.println(Long.toBinaryString(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()))); 
-//            return PackedCardSet.get(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()),0);  
+//            System.out.println(Long.toBinaryString(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards())));
+//            return PackedCardSet.get(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()),0);
         }
-        
-        
+
+
         private void expand(PlayerId p) {
             if(PackedCardSet.size(setOfPossibleCards) >=1) {
                 if(this.playerId == p ) {
@@ -167,10 +167,10 @@ public final class MctsPlayer implements Player {
                         long newSetOfPossibleCards = PackedCardSet.difference(this.setOfPossibleCards, PackedCardSet.singleton(playedCard));
                         //System.out.println(Integer.toBinaryString(PackedCardSet.get(playedCard, 1)));
                         TurnState turnstate = this.turnstate;
-                       
+
                         if(PackedTrick.isFull(this.turnstate.packedTrick())) {
                             turnstate = turnstate.withTrickCollected();
-                            
+
                         }
                         turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
                         //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
@@ -185,10 +185,10 @@ public final class MctsPlayer implements Player {
                         for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
                             int playedCard = PackedCardSet.get(cs,i);
                             TurnState turnstate = this.turnstate;
-                            
+
                             if(PackedTrick.isFull(turnstate.packedTrick())) {
                                 turnstate = turnstate.withTrickCollected();
-                                
+
                             }
                             turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
                             //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
@@ -198,7 +198,7 @@ public final class MctsPlayer implements Player {
                     }
             }
         }
-        
+
         //select the best children
         private Node selectChild() {
             Node selected = null;
@@ -206,7 +206,7 @@ public final class MctsPlayer implements Player {
             if(!this.isLeaf()) {
                 for (Node children : childrenOfNode) {
                     float value = getVForSon(children.selfTotalPoints,
-                            children.finishedRandomTurn, CONSTANT, 
+                            children.finishedRandomTurn, CONSTANT,
                             twoLnOfNOfP());
                     //float value = children.finishedRandomTurn;
                     if (value >= bestValue) {
@@ -235,15 +235,15 @@ public final class MctsPlayer implements Player {
 //            selfTotalPoints = selfTotalPoints*finishedRandomTurn +  newScore;
 //            finishedRandomTurn++;
 //            selfTotalPoints =  selfTotalPoints / finishedRandomTurn;
-//            
+//
         }
-        
+
         private float getVForSon(float SofSon , int NofSon, int c , float ln) {
             return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP()/ NofSon));
         }
-        
-        
-        
+
+
+
     }
 
 }
