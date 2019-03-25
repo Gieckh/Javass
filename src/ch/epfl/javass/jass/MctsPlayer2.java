@@ -133,7 +133,6 @@ public final class MctsPlayer2 implements Player {
             playableCards = (turnState.trick().isFull()) ?
                     playableCards(turnState.withTrickCollected(), ownId, ownHand):
                     playableCards(turnState, ownId, ownHand);
-
         }
 
 
