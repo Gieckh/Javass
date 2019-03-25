@@ -2,11 +2,16 @@ package ch.epfl.javass.jass;
 
 import ch.epfl.javass.jass.Card.Color;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
+import java.util.SplittableRandom;
+
+import javax.swing.plaf.synth.SynthSplitPaneUI;
 //this is  a test, thus no need of javadoc
 public class test {
     public static void main(String[] args) {
-        Integer[] t = new Integer[0];
-        System.out.println(t[0] == null);
+        SplittableRandom rng =new SplittableRandom(2);
+        System.out.println(rng.nextInt(63));
     }
 }

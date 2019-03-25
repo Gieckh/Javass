@@ -102,7 +102,7 @@ public final class CardSet {
      *        of the set of cards is returned
      *
      * @param index (int) //TODO
-     * @return (int) the index-th <em> card</em> from this set of cards.
+     * @return (Card) the index-th <em> card</em> from this set of cards.
      *
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
