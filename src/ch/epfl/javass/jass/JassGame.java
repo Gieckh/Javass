@@ -76,6 +76,7 @@ public final class JassGame {
      */
     //TODO: update players.
     public void advanceToEndOfNextTrick() {
+        System.out.println("turnNumber : " + turnNumber);
         if (isGameOver()) {
             return;
         }
