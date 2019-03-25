@@ -29,8 +29,12 @@ public final class MctsPlayer2 implements Player {
 
     //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
-        if(state.trick().playableCards(hand).size() ==1) {
-            return state.trick().playableCards(hand).get(0);
+        //TODO: c'est bien mais on ne devrait pas en avoir besoin
+//        if(state.trick().playableCards(hand).size() ==1) {
+//            return state.trick().playableCards(hand).get(0);
+//        }
+        if (hand.size() == 1) {
+            return hand.get(0);
         }
         Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
         iterate(root);
@@ -93,19 +97,19 @@ public final class MctsPlayer2 implements Player {
        
         int index = father.selectNode();
         father.randomTurnsPlayed++;
-        System.out.println(index);
         while (father.directChildrenOfNode[index] != null) {
-            System.out.println(father + ", " + father.tooString());
+            //System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
-            if(father.playableCards.isEmpty()) {
-                return null;
-            }
             father.randomTurnsPlayed++;
             index = father.selectNode();
-            if (father.directChildrenOfNode.length == 0) {
+//            if (father.directChildrenOfNode.length == 0) { equivalent, first one maybe faster ?
+            if (father.playableCards.isEmpty()) {
                 System.out.println(father.tooString());
                 System.out.println("childrenless father : " + father);
-                break;
+                //We resimulate from here
+                System.out.println("actual leaf reached");
+                father.randomTurnsPlayed--;
+                return father;
             }
         }
 
@@ -113,7 +117,6 @@ public final class MctsPlayer2 implements Player {
             System.out.println("terminal father : " + father);
             return null;
         }
-        System.out.println(Long.toBinaryString(father.playableCards.packed()));
         Card cardToPlay = father.playableCards.get(index);
         CardSet ownHand = father.ownHand.remove(cardToPlay);
         CardSet playableCards;
