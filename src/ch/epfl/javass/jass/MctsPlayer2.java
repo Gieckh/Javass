@@ -94,7 +94,8 @@ public final class MctsPlayer2 implements Player {
     private Node expand(Node root) {
         System.out.println("expansion...");
         Node father = root;
-       
+
+        assert (father.directChildrenOfNode.length >= 1);
         int index = father.selectNode();
         father.randomTurnsPlayed++;
         while (father.directChildrenOfNode[index] != null) {
@@ -102,13 +103,13 @@ public final class MctsPlayer2 implements Player {
             father = father.directChildrenOfNode[index];
             father.randomTurnsPlayed++;
             index = father.selectNode();
+            //TODO: what happens when the the father has no children ? -> seems like we return 0
 //            if (father.directChildrenOfNode.length == 0) { equivalent, first one maybe faster ?
             if (father.playableCards.isEmpty()) {
                 System.out.println(father.tooString());
                 System.out.println("childrenless father : " + father);
-                //We resimulate from here
                 System.out.println("actual leaf reached");
-                father.randomTurnsPlayed--;
+                //We simulate from a leaf ??
                 return father;
             }
         }
