@@ -56,6 +56,7 @@ public final class JassGame {
             return false;
         }
 
+        //TODO: suppr println
         if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
             setPlayersWinningTeam(TeamId.TEAM_1);
             return true;
@@ -63,6 +64,7 @@ public final class JassGame {
 
         if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
             setPlayersWinningTeam(TeamId.TEAM_2);
+            System.out.println("TEAM_2");
             return true;
         }
 
@@ -76,7 +78,6 @@ public final class JassGame {
      */
     //TODO: update players.
     public void advanceToEndOfNextTrick() {
-        System.out.println("turnNumber : " + turnNumber);
         if (isGameOver()) { //Because the tests decided to call this method, even though the game is already over...
             return;
         }

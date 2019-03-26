@@ -97,23 +97,23 @@ public final class MctsPlayer2 implements Player {
 
     //Given the root of the tree, adds a new Node and returns it
     private Node expand(Node root) {
-        System.out.println("expansion...");
+//        System.out.println("expansion...");
         Node father = root;
-        System.out.println("                                                           root : " + root.tooString());
+//        System.out.println("                                                           root : " + root.tooString());
 
         assert (father.directChildrenOfNode.length >= 1);
         int index = father.selectNode();
         father.randomTurnsPlayed++;
         while (father.directChildrenOfNode[index] != null) {
-            System.out.println(father + ", " + father.tooString());
+//            System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
             father.randomTurnsPlayed++;
             index = father.selectNode(); //-1 if the father has no child
 //            if (father.directChildrenOfNode.length == 0) { equivalent, first one maybe faster ?
             if (father.playableCards.isEmpty()) {
-                System.out.println(father.tooString());
-                System.out.println("childrenless father : " + father);
-                System.out.println("actual leaf reached");
+//                System.out.println(father.tooString());
+//                System.out.println("childrenless father : " + father);
+//                System.out.println("actual leaf reached");
                 //We simulate from a leaf ?
                 return father;
             }
@@ -143,7 +143,7 @@ public final class MctsPlayer2 implements Player {
         }
 
 
-        System.out.println("we got a new node");
+//        System.out.println("we got a new node");
         Node newNode = new Node(turnState, playableCards, ownHand, father, playerId);
         newNode.randomTurnsPlayed++;
         father.directChildrenOfNode[index] = newNode;
@@ -193,9 +193,7 @@ public final class MctsPlayer2 implements Player {
                 }
             }
 
-            //TODO: suppr
-            // SEEMS LIKE THERE IS A NODE WHERE randomTurnsPlayed > 0 BUT totalPointsFromNode = 0
-            // what's strange is that it doesn't (only) happen when the root is composed of one card
+            //TODO: mtn ça marche, but nobody knows why xd
 
             assert(! (directChildrenOfNode.length == 0));
             float priority = 0f;

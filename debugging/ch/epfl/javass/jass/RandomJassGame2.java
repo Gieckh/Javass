@@ -9,17 +9,23 @@ public final class RandomJassGame2 {
         Map<PlayerId, String> playerNames = new HashMap<>();
         //marche pour n'importe quelle seed
         for (PlayerId pId: PlayerId.ALL) {
-            Player player = new MctsPlayer2(pId, 2019, 100);
-            player = new PrintingPlayer(player);
+            Player player = new MctsPlayer2(pId, 2019, 1000);
+            if (pId.team() == TeamId.TEAM_2) {
+                player = new RandomPlayer(2019);
+            }
+
 
             players.put(pId, player);
             playerNames.put(pId, pId.name());
         }
 
-        JassGame g = new JassGame(2019, players, playerNames);
-        while (!g.isGameOver()) {
-            g.advanceToEndOfNextTrick();
-            System.out.println("-------------------------------------------------------------");
+        for (int k = 1000 ; k < 3000 ; ++k){
+            JassGame g = new JassGame(k, players, playerNames);
+            while (!g.isGameOver()) {
+                g.advanceToEndOfNextTrick();
+//                System.out.println(
+//                        "-------------------------------------------------------------");
+            }
         }
     }
 }
