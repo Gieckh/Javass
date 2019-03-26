@@ -83,6 +83,10 @@ public final class MctsPlayer2 implements Player {
 
     //Assuming trick not full
     private static CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
+        //TODO: suppr cuz its a TRICK HAHAHAHAHA
+        if (turnState.unplayedCards().equals(CardSet.EMPTY)) {
+            return CardSet.EMPTY;
+        }
         if (turnState.nextPlayer() == playerId) {
             return turnState.trick().playableCards(hand);
         }
@@ -185,6 +189,9 @@ public final class MctsPlayer2 implements Player {
                 }
                 ++index;
             }
+
+            //TODO: suppr
+            index = -1;
 
             assert(! (directChildrenOfNode.length == 0));
             float priority = 0f;
