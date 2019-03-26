@@ -29,13 +29,14 @@ public final class MctsPlayer2 implements Player {
 
     //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
+        assert (! hand.equals(CardSet.EMPTY));
         //TODO: c'est bien mais on ne devrait pas en avoir besoin
 //        if(state.trick().playableCards(hand).size() ==1) {
 //            return state.trick().playableCards(hand).get(0);
 //        }
-        if (hand.size() == 1) {
-            return hand.get(0);
-        }
+//        if (hand.size() == 1) {
+//            return hand.get(0);
+//        }
         Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
         iterate(root);
         int i = root.selectNode(0);
@@ -82,6 +83,10 @@ public final class MctsPlayer2 implements Player {
 
     //Assuming trick not full
     private static CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
+        //TODO: suppr cuz its a TRICK HAHAHAHAHA
+        if (turnState.unplayedCards().equals(CardSet.EMPTY)) {
+            return CardSet.EMPTY;
+        }
         if (turnState.nextPlayer() == playerId) {
             return turnState.trick().playableCards(hand);
         }
@@ -93,7 +98,8 @@ public final class MctsPlayer2 implements Player {
     private Node expand(Node root) {
         System.out.println("expansion...");
         Node father = root;
-       
+
+        assert (father.directChildrenOfNode.length >= 1);
         int index = father.selectNode();
         father.randomTurnsPlayed++;
         while (father.directChildrenOfNode[index] != null) {
@@ -101,13 +107,13 @@ public final class MctsPlayer2 implements Player {
             father = father.directChildrenOfNode[index];
             father.randomTurnsPlayed++;
             index = father.selectNode();
+            //TODO: what happens when the the father has no children ? -> seems like we return 0
 //            if (father.directChildrenOfNode.length == 0) { equivalent, first one maybe faster ?
             if (father.playableCards.isEmpty()) {
                 System.out.println(father.tooString());
                 System.out.println("childrenless father : " + father);
-                //We resimulate from here
                 System.out.println("actual leaf reached");
-                father.randomTurnsPlayed--;
+                //We simulate from a leaf ??
                 return father;
             }
         }
@@ -129,10 +135,10 @@ public final class MctsPlayer2 implements Player {
         else {
             turnState = father.turnState.withNewCardPlayed(cardToPlay);
             playerId = father.turnState.nextPlayer();
+            //TODO: we have an invalid turnState. That's problematic
             playableCards = (turnState.trick().isFull()) ?
                     playableCards(turnState.withTrickCollected(), ownId, ownHand):
                     playableCards(turnState, ownId, ownHand);
-
         }
 
 
@@ -184,6 +190,10 @@ public final class MctsPlayer2 implements Player {
                 ++index;
             }
 
+            //TODO: suppr
+            index = -1;
+
+            assert(! (directChildrenOfNode.length == 0));
             float priority = 0f;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node tmpNode = directChildrenOfNode[i];
