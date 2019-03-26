@@ -54,7 +54,8 @@ public final class MctsPlayer2 implements Player {
                     toSimulate.totalPointsFromNode += simulatedScore.turnPoints(toSimulate.playerId.team());
                     toSimulate = toSimulate.father;
                 }
-                root.totalPointsFromNode += simulatedScore.turnPoints(toSimulate.playerId.team());
+                assert (toSimulate == root);
+                root.totalPointsFromNode += simulatedScore.turnPoints(root.playerId.team());
             }
         }
     }
@@ -62,7 +63,7 @@ public final class MctsPlayer2 implements Player {
     private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
         //We simulate with a starting score of ZER000000000000000000000000000000000
         TurnState copyOfTurnState = TurnState.ofPackedComponents
-                (PackedScore.INITIAL, turnState.packedUnplayedCards(), turnState.packedTrick());
+                (turnState.packedScore(), turnState.packedUnplayedCards(), turnState.packedTrick());
 
         if (turnState.trick().isFull()) {
             copyOfTurnState = copyOfTurnState.withTrickCollected();
@@ -96,24 +97,24 @@ public final class MctsPlayer2 implements Player {
 
     //Given the root of the tree, adds a new Node and returns it
     private Node expand(Node root) {
-        System.out.println("expansion...");
+//        System.out.println("expansion...");
         Node father = root;
+//        System.out.println("                                                           root : " + root.tooString());
 
         assert (father.directChildrenOfNode.length >= 1);
         int index = father.selectNode();
         father.randomTurnsPlayed++;
         while (father.directChildrenOfNode[index] != null) {
-            //System.out.println(father + ", " + father.tooString());
+//            System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
             father.randomTurnsPlayed++;
-            index = father.selectNode();
-            //TODO: what happens when the the father has no children ? -> seems like we return 0
+            index = father.selectNode(); //-1 if the father has no child
 //            if (father.directChildrenOfNode.length == 0) { equivalent, first one maybe faster ?
             if (father.playableCards.isEmpty()) {
-                System.out.println(father.tooString());
-                System.out.println("childrenless father : " + father);
-                System.out.println("actual leaf reached");
-                //We simulate from a leaf ??
+//                System.out.println(father.tooString());
+//                System.out.println("childrenless father : " + father);
+//                System.out.println("actual leaf reached");
+                //We simulate from a leaf ?
                 return father;
             }
         }
@@ -142,6 +143,7 @@ public final class MctsPlayer2 implements Player {
         }
 
 
+//        System.out.println("we got a new node");
         Node newNode = new Node(turnState, playableCards, ownHand, father, playerId);
         newNode.randomTurnsPlayed++;
         father.directChildrenOfNode[index] = newNode;
@@ -178,20 +180,20 @@ public final class MctsPlayer2 implements Player {
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
+        //returns -1 if the father has no child
         private int selectNode() {
             return selectNode(DEFAULT_EXPLORATION_PARAMETER);
         }
         private int selectNode(int explorationParameter) {
-            int index = 0;
+            int index = -1;
             for (Node node : directChildrenOfNode) {
+                ++index;
                 if (node == null) {
                     return index;
                 }
-                ++index;
             }
 
-            //TODO: suppr
-            index = -1;
+            //TODO: mtn ça marche, but nobody knows why xd
 
             assert(! (directChildrenOfNode.length == 0));
             float priority = 0f;
