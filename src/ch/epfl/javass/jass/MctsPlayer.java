@@ -95,6 +95,9 @@ public final class MctsPlayer implements Player {
     private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
         //We simulate with a starting score of ZER000000000000000000000000000000000
         System.out.println(Integer.toBinaryString(turnState.packedTrick()));
+        if(!PackedTrick.isValid(turnState.packedTrick())) {
+            return turnState.score();
+        }
         TurnState copyOfTurnState = TurnState.ofPackedComponents(PackedScore.INITIAL,
                 turnState.packedUnplayedCards(),
                 turnState.packedTrick());
@@ -131,7 +134,7 @@ public final class MctsPlayer implements Player {
         private TurnState turnstate;
         private Node[] childrenOfNode;
         private long setOfPossibleCards;
-        private float selfTotalPoints = 1;
+       private float selfTotalPoints = 1;
         private int finishedRandomTurn = 1;
         private boolean hasChild ;
         private int card;
@@ -176,6 +179,7 @@ public final class MctsPlayer implements Player {
             }
             if(PackedCardSet.size(setOfPossibleCards) >1) {
                 if(this.turnstate.nextPlayer() == p ) {
+                    System.out.println("holi");
                     childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
                     hasChild = true;
                     for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
@@ -197,6 +201,7 @@ public final class MctsPlayer implements Player {
                         }
                     }
                     else {
+                        System.out.println("thuglife");
                         long cs = PackedCardSet.difference(turnstate.packedUnplayedCards(),setOfPossibleCards);
                         childrenOfNode = new Node[PackedCardSet.size(cs)];
                         hasChild = true;
@@ -216,14 +221,17 @@ public final class MctsPlayer implements Player {
                     }
             }
             else {
-                hasChild = true;
-                childrenOfNode = new Node[PackedCardSet.size(1)];
-                TurnState turnstate =this.turnstate;
-                if(PackedTrick.isFull(this.turnstate.packedTrick())) {
-                    turnstate = this.turnstate.withTrickCollected();
+                if(PackedCardSet.size(setOfPossibleCards) == 1) {
+                    System.out.println("ca arte");
+                    hasChild = true;
+                    childrenOfNode = new Node[PackedCardSet.size(1)];
+                    TurnState turnstate =this.turnstate;
+                    if(PackedTrick.isFull(this.turnstate.packedTrick())) {
+                        turnstate = this.turnstate.withTrickCollected();
+                    }
+                    turnstate = turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(setOfPossibleCards,0)));
+                    this.childrenOfNode[0] =  new Node(turnstate, PackedCardSet.EMPTY, this.turnstate.nextPlayer());
                 }
-                turnstate = turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(setOfPossibleCards,0)));
-                this.childrenOfNode[0] =  new Node(turnstate, setOfPossibleCards, this.turnstate.nextPlayer());
             }
             
         }
@@ -236,6 +244,7 @@ public final class MctsPlayer implements Player {
             float bestValue = 0;
             if(!this.isLeaf()) {
                 for (Node children : childrenOfNode) {
+                //    if(!children.turnstate.isTerminal())
                     float value = getVForSon(children.selfTotalPoints,
                             children.finishedRandomTurn, CONSTANT,
                             twoLnOfNOfP());
