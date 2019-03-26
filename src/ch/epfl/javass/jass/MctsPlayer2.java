@@ -62,7 +62,7 @@ public final class MctsPlayer2 implements Player {
     private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
         //We simulate with a starting score of ZER000000000000000000000000000000000
         TurnState copyOfTurnState = TurnState.ofPackedComponents
-                (PackedScore.INITIAL, turnState.packedUnplayedCards(), turnState.packedTrick());
+                (turnState.packedScore(), turnState.packedUnplayedCards(), turnState.packedTrick());
 
         if (turnState.trick().isFull()) {
             copyOfTurnState = copyOfTurnState.withTrickCollected();
@@ -103,7 +103,7 @@ public final class MctsPlayer2 implements Player {
         int index = father.selectNode();
         father.randomTurnsPlayed++;
         while (father.directChildrenOfNode[index] != null) {
-            //System.out.println(father + ", " + father.tooString());
+            System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
             father.randomTurnsPlayed++;
             index = father.selectNode();
@@ -191,6 +191,7 @@ public final class MctsPlayer2 implements Player {
             }
 
             //TODO: suppr
+            // SEEMS LIKE THERE IS A NODE WHERE randomTurnsPlayed > 0 BUT totalPointsFromNode = 0
             index = -1;
 
             assert(! (directChildrenOfNode.length == 0));
