@@ -94,7 +94,10 @@ public final class MctsPlayer implements Player {
 
     private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
         //We simulate with a starting score of ZER000000000000000000000000000000000
-        TurnState copyOfTurnState = TurnState.ofPackedComponents(PackedScore.INITIAL, turnState.packedUnplayedCards(), turnState.packedTrick());
+        System.out.println(Integer.toBinaryString(turnState.packedTrick()));
+        TurnState copyOfTurnState = TurnState.ofPackedComponents(PackedScore.INITIAL,
+                turnState.packedUnplayedCards(),
+                turnState.packedTrick());
 
         if (turnState.trick().isFull()) {
             copyOfTurnState = copyOfTurnState.withTrickCollected();
