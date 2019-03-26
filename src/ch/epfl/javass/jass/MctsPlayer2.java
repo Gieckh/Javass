@@ -113,7 +113,7 @@ public final class MctsPlayer2 implements Player {
                 System.out.println(father.tooString());
                 System.out.println("childrenless father : " + father);
                 System.out.println("actual leaf reached");
-                //We simulate from a leaf ??
+                //We simulate from a leaf ?
                 return father;
             }
         }
@@ -192,6 +192,7 @@ public final class MctsPlayer2 implements Player {
 
             //TODO: suppr
             // SEEMS LIKE THERE IS A NODE WHERE randomTurnsPlayed > 0 BUT totalPointsFromNode = 0
+            // what's strange is that it doesn't (only) happen when the root is composed of one card
             index = -1;
 
             assert(! (directChildrenOfNode.length == 0));
