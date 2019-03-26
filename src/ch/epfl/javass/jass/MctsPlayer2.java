@@ -185,16 +185,14 @@ public final class MctsPlayer2 implements Player {
             return selectNode(DEFAULT_EXPLORATION_PARAMETER);
         }
         private int selectNode(int explorationParameter) {
-            int index = 0;
+            int index = -1;
             for (Node node : directChildrenOfNode) {
+                ++index;
                 if (node == null) {
                     return index;
                 }
-
-                ++index;
             }
 
-            index = -1;
             //TODO: suppr
             // SEEMS LIKE THERE IS A NODE WHERE randomTurnsPlayed > 0 BUT totalPointsFromNode = 0
             // what's strange is that it doesn't (only) happen when the root is composed of one card
