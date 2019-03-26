@@ -39,6 +39,12 @@ public final class MctsPlayer2 implements Player {
 //        }
         Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
         iterate(root);
+        //TODO: suppr
+        System.out.println(root.tooString());
+        System.out.println(root.directChildrenOfNode[0].tooString());
+        System.out.println(root.directChildrenOfNode[1].tooString());
+        System.out.println(root.directChildrenOfNode[2].tooString());
+        System.out.println(root.directChildrenOfNode[0].directChildrenOfNode[0].tooString());
         int i = root.selectNode(0);
         return root.playableCards.get(i);
     }
@@ -201,8 +207,7 @@ public final class MctsPlayer2 implements Player {
             float priority = 0f;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node tmpNode = directChildrenOfNode[i];
-                float nodeValue =(float)tmpNode.totalPointsFromNode / tmpNode.randomTurnsPlayed +
-                         explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / tmpNode.randomTurnsPlayed);
+                float nodeValue = evaluate(tmpNode, explorationParameter);
                 if (nodeValue > priority) {
                     priority = nodeValue;
                     index = i;
@@ -212,6 +217,10 @@ public final class MctsPlayer2 implements Player {
             return index;
         }
 
+        private float evaluate(Node node, int explorationParameter) {
+            return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
+                    explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / node.randomTurnsPlayed);
+        }
         private String tooString() {
             String str = "   playableCards : " + playableCards.toString() + "\n";
             str += "                                            random turns played : " + randomTurnsPlayed + "\n";
