@@ -54,7 +54,8 @@ public final class MctsPlayer2 implements Player {
                     toSimulate.totalPointsFromNode += simulatedScore.turnPoints(toSimulate.playerId.team());
                     toSimulate = toSimulate.father;
                 }
-                root.totalPointsFromNode += simulatedScore.turnPoints(toSimulate.playerId.team());
+                assert (toSimulate == root);
+                root.totalPointsFromNode += simulatedScore.turnPoints(root.playerId.team());
             }
         }
     }
@@ -98,6 +99,7 @@ public final class MctsPlayer2 implements Player {
     private Node expand(Node root) {
         System.out.println("expansion...");
         Node father = root;
+        System.out.println("                                                           root : " + root.tooString());
 
         assert (father.directChildrenOfNode.length >= 1);
         int index = father.selectNode();
@@ -106,8 +108,7 @@ public final class MctsPlayer2 implements Player {
             System.out.println(father + ", " + father.tooString());
             father = father.directChildrenOfNode[index];
             father.randomTurnsPlayed++;
-            index = father.selectNode();
-            //TODO: what happens when the the father has no children ? -> seems like we return 0
+            index = father.selectNode(); //-1 if the father has no child
 //            if (father.directChildrenOfNode.length == 0) { equivalent, first one maybe faster ?
             if (father.playableCards.isEmpty()) {
                 System.out.println(father.tooString());
@@ -142,6 +143,7 @@ public final class MctsPlayer2 implements Player {
         }
 
 
+        System.out.println("we got a new node");
         Node newNode = new Node(turnState, playableCards, ownHand, father, playerId);
         newNode.randomTurnsPlayed++;
         father.directChildrenOfNode[index] = newNode;
@@ -178,6 +180,7 @@ public final class MctsPlayer2 implements Player {
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
+        //returns -1 if the father has no child
         private int selectNode() {
             return selectNode(DEFAULT_EXPLORATION_PARAMETER);
         }
@@ -187,13 +190,14 @@ public final class MctsPlayer2 implements Player {
                 if (node == null) {
                     return index;
                 }
+
                 ++index;
             }
 
+            index = -1;
             //TODO: suppr
             // SEEMS LIKE THERE IS A NODE WHERE randomTurnsPlayed > 0 BUT totalPointsFromNode = 0
             // what's strange is that it doesn't (only) happen when the root is composed of one card
-            index = -1;
 
             assert(! (directChildrenOfNode.length == 0));
             float priority = 0f;
