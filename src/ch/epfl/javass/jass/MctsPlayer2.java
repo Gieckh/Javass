@@ -61,9 +61,11 @@ public final class MctsPlayer2 implements Player {
     }
 
     private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
-        //We simulate with a starting score of ZER000000000000000000000000000000000
-        TurnState copyOfTurnState = TurnState.ofPackedComponents
-                (turnState.packedScore(), turnState.packedUnplayedCards(), turnState.packedTrick());
+        //Copy not to have pbl
+//        TurnState copyOfTurnState = TurnState.ofPackedComponents
+//                (turnState.packedScore(), turnState.packedUnplayedCards(), turnState.packedTrick());
+
+        TurnState copyOfTurnState = turnState;
 
         if (turnState.trick().isFull()) {
             copyOfTurnState = copyOfTurnState.withTrickCollected();
