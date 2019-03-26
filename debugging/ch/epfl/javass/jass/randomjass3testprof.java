@@ -21,6 +21,7 @@ public class randomjass3testprof {
               playerNames.put(pId, pId.name());
             }
             JassGame g = new JassGame(2019, players, playerNames);
+            TurnState t = TurnState.
             while (!g.isGameOver()) {
                 g.advanceToEndOfNextTrick();
                 System.out.println("-------------------------------------------------------------");
