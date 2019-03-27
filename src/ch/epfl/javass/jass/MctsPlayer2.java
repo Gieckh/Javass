@@ -30,17 +30,14 @@ public final class MctsPlayer2 implements Player {
     //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
         assert (! hand.equals(CardSet.EMPTY));
-//        if (hand.size() == 1) {
-//            return hand.get(0);
-//        }
         Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
         iterate(root);
         //TODO: suppr
         System.out.println("root = 0 : " + root.tooString());
-        System.out.println("    0[0] : " + root.directChildrenOfNode[0].randomTurnsPlayed);
-        System.out.println("    0[1] : " + root.directChildrenOfNode[1].randomTurnsPlayed);
-        System.out.println("    0[2] : " + root.directChildrenOfNode[2].randomTurnsPlayed);
-        System.out.println(" 0[0][0] : " + root.directChildrenOfNode[0].directChildrenOfNode[0].randomTurnsPlayed);
+        System.out.println("    0[0] : " + root.directChildrenOfNode[0].randomTurnsPlayed + ", " + (double)root.directChildrenOfNode[0].totalPointsFromNode/root.directChildrenOfNode[0].randomTurnsPlayed);
+        System.out.println("    0[1] : " + root.directChildrenOfNode[1].randomTurnsPlayed + ", " + (double)root.directChildrenOfNode[1].totalPointsFromNode/root.directChildrenOfNode[1].randomTurnsPlayed);
+        System.out.println("    0[2] : " + root.directChildrenOfNode[2].randomTurnsPlayed + ", " + (double)root.directChildrenOfNode[2].totalPointsFromNode/root.directChildrenOfNode[2].randomTurnsPlayed);
+        System.out.println(" 0[0][0] : " + root.directChildrenOfNode[0].directChildrenOfNode[0].randomTurnsPlayed + ", " + (double)root.directChildrenOfNode[0].directChildrenOfNode[0].totalPointsFromNode/root.directChildrenOfNode[0].directChildrenOfNode[0].randomTurnsPlayed);
         int i = root.selectNode(0);
         return root.playableCards.get(i);
     }
@@ -98,6 +95,7 @@ public final class MctsPlayer2 implements Player {
 
         //TODO: invert
         return turnState.unplayedCards().difference(hand);
+//        return turnState.trick().playableCards(turnState.unplayedCards());
     }
 
     //Given the root of the tree, adds a new Node and returns it

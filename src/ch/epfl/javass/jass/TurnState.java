@@ -191,8 +191,7 @@ public final class TurnState {
 
     /**
      * @brief returns a new TurnState in which the current trick has been collected.
-     * 
-     * @param card
+     *
      * @return a new TurnState in which the current trick has been collected
     */
     public TurnState withTrickCollected() {
@@ -212,6 +211,7 @@ public final class TurnState {
      * @return a new TurnState in which the Card card
      * has been added, and the trick collected if it was full at this point
      */
+
     public TurnState withNewCardPlayedAndTrickCollected(Card card) {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
