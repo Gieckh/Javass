@@ -1,5 +1,7 @@
 package ch.epfl.javass.jass;
 
+import java.util.SplittableRandom;
+
 import static ch.epfl.javass.Preconditions.checkArgument;
 
 public class MctsPlayer3 extends Player {
@@ -35,13 +37,20 @@ public class MctsPlayer3 extends Player {
         }
     }
 
-    private Node expand(Node root) {
-        Node father = root;
-        while (!(father.state == null || father.directChildrenOfNode.length == 0)) {
-            father = father.selectSon();
+    private void expand(Node root) {
+        Node node = root;
+        while (!(node.state == null || node.directChildrenOfNode.length == 0)) {
+            node = node.selectSon();
         }
 
+        if (node.directChildrenOfNode.length == 0) {
+            addScores(node, node.state.score());
+            return;
+        }
 
+        //a node was created, right ?
+        assert(node.state == null);
+        updateNode(node.father, node);
     }
 
     private void updateNode(Node father, Node son) {
@@ -61,11 +70,27 @@ public class MctsPlayer3 extends Player {
     }
 
     private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
+        assert (state.unplayedCards() != null);
+        assert (!state.trick().isFull());
 
+        TurnState copyState = state;
+        CardSet copyHand = hand;
+        SplittableRandom rng = new SplittableRandom(rngSeed);
+        while(! copyState.isTerminal()) {
+            CardSet playableCards = playableCards(copyState, hand);
+            Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
+        }
     }
 
-    private CardSet playableCards(TurnState state, CardSet hand, PlayerId id) {
+    private CardSet playableCards(TurnState state, CardSet hand) {
+        assert (! state.unplayedCards().equals(CardSet.EMPTY));
 
+        if (state.nextPlayer() == ownId) {
+            assert (! hand.equals(CardSet.EMPTY));
+            return state.trick().playableCards(hand);
+        }
+
+        return state.unplayedCards().difference(hand);
     }
 
 
@@ -89,11 +114,11 @@ public class MctsPlayer3 extends Player {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
-        private Node() {
+        private Node(Node father) {
             this.state = null;
             this.directChildrenOfNode = null;
             this.playableCardsFromTurnState = null;
-            this.father = null;
+            this.father = father;
             this.teamId = null;
         }
 
@@ -114,8 +139,8 @@ public class MctsPlayer3 extends Player {
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
         //fake constructor
-        private Node of(TurnState state, CardSet playableCards) {
-            return new Node(state, playableCards, this);
+        private Node of(TurnState state, CardSet playableCards, TeamId teamId) {
+            return new Node(state, playableCards, this, teamId);
         }
 
 
@@ -136,7 +161,7 @@ public class MctsPlayer3 extends Player {
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node node = directChildrenOfNode[i];
                 if (node == null) {
-                    return new Node();
+                    return new Node(this);
                 }
                 double tmpValue = evaluate(node, explorationParameter);
                 if (tmpValue > value) {
