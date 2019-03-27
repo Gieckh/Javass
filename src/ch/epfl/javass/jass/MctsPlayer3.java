@@ -4,7 +4,7 @@ import java.util.SplittableRandom;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
-public class MctsPlayer3 extends Player {
+public class MctsPlayer3 implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
@@ -39,8 +39,11 @@ public class MctsPlayer3 extends Player {
 
     private void expand(Node root) {
         Node node = root;
-        while (!(node.state == null || node.directChildrenOfNode.length == 0)) {
-            node = node.selectSon();
+        int index = root.selectSon();
+        while (!(node.directChildrenOfNode == null || )) {
+            //The 2nd condition is there cuz we dont wanna call selectSon() with a "true leaf"
+            node = node.directChildrenOfNode[index];
+            index = node.selectSon();
         }
 
         if (node.directChildrenOfNode.length == 0) {
@@ -54,7 +57,20 @@ public class MctsPlayer3 extends Player {
     }
 
     private void updateNode(Node father, Node son) {
+        Card card = father.playableCardsFromTurnState.get(father.nextChildIllPlayIn);
+        father.nextChildIllPlayIn++;
+        CardSet hand = father.hand.remove(card);
 
+        if (father.state.trick().isFull()) {
+            son.state = father.state.withTrickCollected().withNewCardPlayed(card);
+            son.playableCardsFromTurnState = playableCards(son.state, hand);
+            son.teamId = son.state.trick().player(0).team();
+            son.directChildrenOfNode = new Node[son.playableCardsFromTurnState.size()];
+        }
+
+        else {
+
+        }
     }
 
     private void addScores(Node node, Score score) {
@@ -70,8 +86,8 @@ public class MctsPlayer3 extends Player {
     }
 
     private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
-        assert (state.unplayedCards() != null);
-        assert (!state.trick().isFull());
+        assert (! state.unplayedCards().equals(CardSet.EMPTY));
+        assert (! state.trick().isFull());
 
         TurnState copyState = state;
         CardSet copyHand = hand;
@@ -79,7 +95,12 @@ public class MctsPlayer3 extends Player {
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, hand);
             Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
+
+            copyHand = copyHand.remove(randomCardToPlay);
+            copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
         }
+
+        return copyState.score();
     }
 
     private CardSet playableCards(TurnState state, CardSet hand) {
@@ -100,31 +121,25 @@ public class MctsPlayer3 extends Player {
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/
         /** ============================================== **/
-        private TurnState state;
-        private Node[] directChildrenOfNode;
-        private CardSet playableCardsFromTurnState;
+        private final TurnState state;
+        private final Node[] directChildrenOfNode;
+        private final CardSet playableCardsFromTurnState;
+        private final CardSet hand;
         private int totalPointsFromNode;
         private int randomTurnsPlayed;
         private int nextChildIllPlayIn;
-        private Node father;
-        private TeamId teamId;
+        private final Node father;
+        private final TeamId teamId;
 
 
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
-        private Node(Node father) {
-            this.state = null;
-            this.directChildrenOfNode = null;
-            this.playableCardsFromTurnState = null;
-            this.father = father;
-            this.teamId = null;
-        }
-
-        private Node(TurnState state, CardSet playableCards, Node father, TeamId teamId) {
+        private Node(TurnState state, CardSet playableCards, CardSet hand, Node father, TeamId teamId) {
             this.state = state;
             this.playableCardsFromTurnState = playableCards;
+            this.hand = hand;
             this.teamId = teamId;
 
             this.directChildrenOfNode = new Node[playableCards.size()];
@@ -134,13 +149,22 @@ public class MctsPlayer3 extends Player {
             this.father = father;
         }
 
+        private Node(Node father) {
+            this.state = null;
+            this.directChildrenOfNode = null;
+            this.playableCardsFromTurnState = null;
+            this.hand = null;
+            this.father = father;
+            this.teamId = null;
+        }
+
 
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
         //fake constructor
-        private Node of(TurnState state, CardSet playableCards, TeamId teamId) {
-            return new Node(state, playableCards, this, teamId);
+        private Node of(TurnState state, CardSet playableCards, CardSet hand, TeamId teamId) {
+            return new Node(state, playableCards, hand, this, teamId);
         }
 
 
@@ -149,28 +173,37 @@ public class MctsPlayer3 extends Player {
                     explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / node.randomTurnsPlayed);
         }
 
-        private Node selectSon() {
+        //Never called with a "true leaf"
+        private int selectSon() {
             return selectSon(DEFAULT_EXPLORATION_PARAMETER);
         }
-        private Node selectSon(int explorationParameter) {
+        private int selectSon(int explorationParameter) {
             assert (directChildrenOfNode.length != 0);
 
             // There are cards left to play
             Node nodeToReturn = directChildrenOfNode[0];
             double value = 0f;
+            int index = 0;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node node = directChildrenOfNode[i];
                 if (node == null) {
-                    return new Node(this);
+                    return (i | (1 << 5));
                 }
                 double tmpValue = evaluate(node, explorationParameter);
                 if (tmpValue > value) {
                     nodeToReturn = node;
                     value = tmpValue;
+                    index = i;
                 }
             }
 
-            return nodeToReturn;
+            return index;
+        }
+
+        //We encode selectSon with a boolean.
+        private static boolean mustCreate(int index) {
+            int mask = 1 << 5;
+            return (index & mask) == mask;
         }
     }
 }
