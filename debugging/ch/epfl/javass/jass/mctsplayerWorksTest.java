@@ -11,7 +11,8 @@ import ch.epfl.javass.jass.Card.Rank;
 
 public class mctsplayerWorksTest {
     public static void main(String[] args) {
-        CardSet hand = CardSet.EMPTY.add(Card.of(Color.SPADE, Rank.EIGHT))
+        CardSet hand = CardSet.EMPTY
+                .add(Card.of(Color.SPADE, Rank.EIGHT))
                 .add(Card.of(Color.SPADE, Rank.NINE))
                 .add(Card.of(Color.SPADE, Rank.TEN))
                 .add(Card.of(Color.HEART, Rank.SIX))
@@ -24,7 +25,7 @@ public class mctsplayerWorksTest {
         TurnState t = TurnState.initial(Color.SPADE, Score.INITIAL,
                 PlayerId.PLAYER_4);
         t = t.withNewCardPlayed(Card.of(Color.SPADE, Rank.JACK));
-        System.out.println(t.trick().playableCards(hand));
+//        System.out.println(t.trick().playableCards(hand));
         System.out.println(p.cardToPlay(t, hand));
 
     }

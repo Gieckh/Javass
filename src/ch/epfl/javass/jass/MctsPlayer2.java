@@ -30,21 +30,17 @@ public final class MctsPlayer2 implements Player {
     //Assuming the trick of this state is not full.
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
         assert (! hand.equals(CardSet.EMPTY));
-        //TODO: c'est bien mais on ne devrait pas en avoir besoin
-//        if(state.trick().playableCards(hand).size() ==1) {
-//            return state.trick().playableCards(hand).get(0);
-//        }
 //        if (hand.size() == 1) {
 //            return hand.get(0);
 //        }
         Node root = new Node(state, state.trick().playableCards(hand), hand, null, ownId);
         iterate(root);
         //TODO: suppr
-        System.out.println(root.tooString());
-        System.out.println(root.directChildrenOfNode[0].tooString());
-        System.out.println(root.directChildrenOfNode[1].tooString());
-        System.out.println(root.directChildrenOfNode[2].tooString());
-        System.out.println(root.directChildrenOfNode[0].directChildrenOfNode[0].tooString());
+        System.out.println("root = 0 : " + root.tooString());
+        System.out.println("    0[0] : " + root.directChildrenOfNode[0].randomTurnsPlayed);
+        System.out.println("    0[1] : " + root.directChildrenOfNode[1].randomTurnsPlayed);
+        System.out.println("    0[2] : " + root.directChildrenOfNode[2].randomTurnsPlayed);
+        System.out.println(" 0[0][0] : " + root.directChildrenOfNode[0].directChildrenOfNode[0].randomTurnsPlayed);
         int i = root.selectNode(0);
         return root.playableCards.get(i);
     }
@@ -100,6 +96,7 @@ public final class MctsPlayer2 implements Player {
             return turnState.trick().playableCards(hand);
         }
 
+        //TODO: invert
         return turnState.unplayedCards().difference(hand);
     }
 
