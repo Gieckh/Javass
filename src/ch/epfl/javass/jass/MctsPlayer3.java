@@ -40,7 +40,7 @@ public class MctsPlayer3 implements Player {
     private void expand(Node root) {
         Node node = root;
         int index = root.selectSon();
-        while (!(node.directChildrenOfNode == null || )) {
+        while (!(node.directChildrenOfNode.length == 0 || node.directChildrenOfNode[index] == null)) {
             //The 2nd condition is there cuz we dont wanna call selectSon() with a "true leaf"
             node = node.directChildrenOfNode[index];
             index = node.selectSon();
