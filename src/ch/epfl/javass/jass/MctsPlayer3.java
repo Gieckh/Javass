@@ -32,7 +32,7 @@ public class MctsPlayer3 implements Player {
         //default, the root teamId is this player's and its father is null.
         Node root;
         if (state.trick().isFull()) {
-            assert (! state.trick().isLast()); //We never call cardToPlay when the last Trick of the turn is full
+            assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
             root = new Node(state.withTrickCollected(), playableCards(state, hand), hand,  null, ownId.team());
         }
         else {
