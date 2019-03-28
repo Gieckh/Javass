@@ -3,6 +3,7 @@ package ch.epfl.javass.jass;
 import java.util.HashMap;
 import java.util.Map;
 //this is for a test, thus no need of javadoc
+@SuppressWarnings("Duplicates")
 public final class RandomJassGame2 {
     public static void main(String[] args) {
         Map<PlayerId, Player> players = new HashMap<>();
