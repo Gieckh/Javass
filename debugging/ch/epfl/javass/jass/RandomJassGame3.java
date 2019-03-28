@@ -10,7 +10,7 @@ public final class RandomJassGame3 {
         Map<PlayerId, String> playerNames = new HashMap<>();
         //marche pour n'importe quelle seed
         for (PlayerId pId: PlayerId.ALL) {
-            Player player = new MctsPlayer3(pId, 2019, 10);
+            Player player = new MctsPlayer3(pId, 2019, 1000);
             if (pId.team() == TeamId.TEAM_2) {
                 player = new RandomPlayer(2019);
             }

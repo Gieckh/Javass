@@ -26,6 +26,7 @@ public class MctsPlayer3 implements Player {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    @SuppressWarnings("Duplicates")
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
         //default, the root teamId is this player's and its father is null.
@@ -38,7 +39,9 @@ public class MctsPlayer3 implements Player {
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
         }
 
+
         iterate(root);
+
         return root.playableCardsFromTurnState.get(root.selectSon(0));
     }
 
@@ -83,22 +86,14 @@ public class MctsPlayer3 implements Player {
         assert (! father.state.trick().isFull());
         sonTeamId = father.state.nextPlayer().team();
 
-        //TODO: we never wanna have a full trick in our turnState, unless it is the last trick of the turn
-//        if (father.state.trick().isFull()) {
-//            sonState = father.state.withTrickCollected().withNewCardPlayed(card);
-//            sonPlayableCards = playableCards(sonState, sonHand);
-//            sonTeamId = sonState.trick().player(0).team();
-//        }
-//
-//        else {
+        //we never wanna have a full trick in our turnState, unless it is the last trick of the turn
         if (father.state.trick().isLast()) {
             sonState = father.state.withNewCardPlayed(card);
         }
         else {
             sonState = father.state.withNewCardPlayedAndTrickCollected(card);
         }
-            sonPlayableCards = playableCards(sonState, sonHand);
-//        }
+        sonPlayableCards = playableCards(sonState, sonHand);
 
         return father.of(sonState, sonPlayableCards, sonHand, sonTeamId);
     }
@@ -232,12 +227,6 @@ public class MctsPlayer3 implements Player {
             }
 
             return index;
-        }
-
-        //We encode selectSon with a boolean.
-        private static boolean mustCreate(int index) {
-            int mask = 1 << 5;
-            return (index & mask) == mask;
         }
     }
 }
