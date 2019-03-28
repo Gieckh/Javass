@@ -28,16 +28,32 @@ public class MctsPlayer3 implements Player {
     /** ============================================== **/
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
-        return null;
+        //default, the root teamId is this player's and its father is null.
+        Node root;
+        if (state.trick().isFull()) {
+            assert (! state.trick().isLast()); //We never call cardToPlay when the last Trick of the turn is full
+            root = new Node(state.withTrickCollected(), playableCards(state, hand), hand,  null, ownId.team());
+        }
+        else {
+            root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
+        }
+
+        iterate(root);
+        return root.playableCardsFromTurnState.get(root.selectSon(0));
     }
 
     private void iterate(Node root) {
         for (int i = 0; i < iterations; ++i) {
-            expand(root);
+            Node newNode = expand(root);
+            Score toAdd = (newNode.directChildrenOfNode.length == 0) ?
+                    newNode.state.score(): simulateToEndOfTurn(newNode.state, newNode.hand);
+            addScores(newNode, toAdd);
+            root.totalPointsFromNode += toAdd.turnPoints(root.teamId);
+            root.randomTurnsPlayed++;
         }
     }
 
-    private void expand(Node root) {
+    private Node expand(Node root) {
         Node node = root;
         int index = root.selectSon();
         while (!(node.directChildrenOfNode.length == 0 || node.directChildrenOfNode[index] == null)) {
@@ -47,30 +63,44 @@ public class MctsPlayer3 implements Player {
         }
 
         if (node.directChildrenOfNode.length == 0) {
-            addScores(node, node.state.score());
-            return;
+            return node;
         }
 
         //a node was created, right ?
-        assert(node.state == null);
-        updateNode(node.father, node);
+        Node son = createNode(node);
+        node.directChildrenOfNode[index] = son;
+        return son;
     }
 
-    private void updateNode(Node father, Node son) {
+    private Node createNode(Node father) {
         Card card = father.playableCardsFromTurnState.get(father.nextChildIllPlayIn);
         father.nextChildIllPlayIn++;
-        CardSet hand = father.hand.remove(card);
+        CardSet sonHand = father.hand.remove(card);
+        TurnState sonState;
+        CardSet sonPlayableCards;
+        TeamId sonTeamId;
 
-        if (father.state.trick().isFull()) {
-            son.state = father.state.withTrickCollected().withNewCardPlayed(card);
-            son.playableCardsFromTurnState = playableCards(son.state, hand);
-            son.teamId = son.state.trick().player(0).team();
-            son.directChildrenOfNode = new Node[son.playableCardsFromTurnState.size()];
+        assert (! father.state.trick().isFull());
+        sonTeamId = father.state.nextPlayer().team();
+
+        //TODO: we never wanna have a full trick in our turnState, unless it is the last trick of the turn
+//        if (father.state.trick().isFull()) {
+//            sonState = father.state.withTrickCollected().withNewCardPlayed(card);
+//            sonPlayableCards = playableCards(sonState, sonHand);
+//            sonTeamId = sonState.trick().player(0).team();
+//        }
+//
+//        else {
+        if (father.state.trick().isLast()) {
+            sonState = father.state.withNewCardPlayed(card);
         }
-
         else {
-
+            sonState = father.state.withNewCardPlayedAndTrickCollected(card);
         }
+            sonPlayableCards = playableCards(sonState, sonHand);
+//        }
+
+        return father.of(sonState, sonPlayableCards, sonHand, sonTeamId);
     }
 
     private void addScores(Node node, Score score) {
@@ -93,7 +123,7 @@ public class MctsPlayer3 implements Player {
         CardSet copyHand = hand;
         SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
-            CardSet playableCards = playableCards(copyState, hand);
+            CardSet playableCards = playableCards(copyState, copyHand);
             Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
 
             copyHand = copyHand.remove(randomCardToPlay);
@@ -104,7 +134,12 @@ public class MctsPlayer3 implements Player {
     }
 
     private CardSet playableCards(TurnState state, CardSet hand) {
+        if (state.trick().isFull() && state.trick().isLast()) {
+            return CardSet.EMPTY;
+        }
+
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
+        assert(! state.trick().isFull());
 
         if (state.nextPlayer() == ownId) {
             assert (! hand.equals(CardSet.EMPTY));
@@ -181,17 +216,16 @@ public class MctsPlayer3 implements Player {
             assert (directChildrenOfNode.length != 0);
 
             // There are cards left to play
-            Node nodeToReturn = directChildrenOfNode[0];
             double value = 0f;
             int index = 0;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node node = directChildrenOfNode[i];
                 if (node == null) {
-                    return (i | (1 << 5));
+//                    return (i | (1 << 5));
+                    return i;
                 }
                 double tmpValue = evaluate(node, explorationParameter);
                 if (tmpValue > value) {
-                    nodeToReturn = node;
                     value = tmpValue;
                     index = i;
                 }
