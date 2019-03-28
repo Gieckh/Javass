@@ -154,7 +154,8 @@ public class MctsPlayer3 implements Player {
             return state.trick().playableCards(hand);
         }
 
-        return state.unplayedCards().difference(hand);
+//        return state.unplayedCards().difference(hand);
+        return state.trick().playableCards(state.unplayedCards().difference(hand));
     }
 
 
