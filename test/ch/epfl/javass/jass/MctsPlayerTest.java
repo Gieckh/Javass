@@ -32,6 +32,7 @@ public class MctsPlayerTest {
         assertEquals(Card.of(Card.Color.SPADE, Card.Rank.EIGHT), p.cardToPlay(t, hand));
     }
 
+    //Not Work Yet
     @Test
     void testObvious1() {
         Player p = new MctsPlayer3(PlayerId.PLAYER_4, 0, 100_000);
