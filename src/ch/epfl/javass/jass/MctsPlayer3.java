@@ -11,7 +11,10 @@ public class MctsPlayer3 implements Player {
     private static final int DEFAULT_EXPLORATION_PARAMETER = 40;
     private final int iterations;
     private final PlayerId ownId;
+    private final TeamId myTeamId;
+    private final TeamId otherTeamId;
     private final long rngSeed;
+
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -21,6 +24,9 @@ public class MctsPlayer3 implements Player {
         this.iterations = iterations;
         this.ownId = ownId;
         this.rngSeed = rngSeed;
+
+        this.myTeamId = ownId.team();
+        this.otherTeamId = TeamId.ALL.get((myTeamId.ordinal() + 1) % 2);
     }
 
     /** ============================================== **/
@@ -84,6 +90,15 @@ public class MctsPlayer3 implements Player {
         return son;
     }
 
+    /**
+     * @brief Given a (Node) "father" whose trick is not full --"father" is therefore not a leaf,
+     *        creates his next son (indicated by the parameter "nextChildIllPlayIn".
+     *        This son won't be full, unless it is a leaf [i.e. it corresponds to
+     *        the last card of the turn.
+     *
+     * @param father (Node) [not full] the (Node) whose son we wish to create.
+     * @return (Node) a son of the (Node) father.
+     */
     private Node createNode(Node father) {
         Card card = father.playableCardsFromTurnState.get(father.nextChildIllPlayIn);
         father.nextChildIllPlayIn++;
@@ -111,6 +126,13 @@ public class MctsPlayer3 implements Player {
         return father.of(sonState, sonPlayableCards, sonHand, sonTeamId);
     }
 
+    /**
+     * @brief Given a (Node) "node" and the (Score) "score" obtained after simulating
+     *        a random turn starting from this Node's TurnState, updates
+     *
+     * @param node
+     * @param score
+     */
     private void addScores(Node node, Score score) {
         assert (node != null);
         assert(node.state != null);
@@ -123,6 +145,12 @@ public class MctsPlayer3 implements Player {
         }
     }
 
+    /**
+     *
+     * @param state
+     * @param hand
+     * @return
+     */
     private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
         assert (! state.trick().isFull());
@@ -141,6 +169,12 @@ public class MctsPlayer3 implements Player {
         return copyState.score();
     }
 
+    /**
+     *
+     * @param state
+     * @param hand
+     * @return
+     */
     private CardSet playableCards(TurnState state, CardSet hand) {
 //        if (state.trick().isFull() && state.trick().isLast()) {
 //            return CardSet.EMPTY;
@@ -180,6 +214,14 @@ public class MctsPlayer3 implements Player {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
+        /**
+         *
+         * @param state
+         * @param playableCards
+         * @param hand
+         * @param father
+         * @param teamId
+         */
         private Node(TurnState state, CardSet playableCards, CardSet hand, Node father, TeamId teamId) {
             this.state = state;
             this.playableCardsFromTurnState = playableCards;
@@ -198,20 +240,44 @@ public class MctsPlayer3 implements Player {
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
         //fake constructor
+        /**
+         *
+         * @param state
+         * @param playableCards
+         * @param hand
+         * @param teamId
+         * @return
+         */
         private Node of(TurnState state, CardSet playableCards, CardSet hand, TeamId teamId) {
             return new Node(state, playableCards, hand, this, teamId);
         }
 
-
+        /**
+         *
+         * @param node
+         * @param explorationParameter
+         * @return
+         */
         private double evaluate(Node node, int explorationParameter) {
             return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
                     explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / node.randomTurnsPlayed);
         }
 
         //Never called with a "true leaf"
+
+        /**
+         *
+         * @return
+         */
         private int selectSon() {
             return selectSon(DEFAULT_EXPLORATION_PARAMETER);
         }
+
+        /**
+         *
+         * @param explorationParameter
+         * @return
+         */
         private int selectSon(int explorationParameter) {
             assert (directChildrenOfNode.length != 0);
 
