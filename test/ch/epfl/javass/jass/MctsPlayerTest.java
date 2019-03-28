@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MctsPlayerTest {
     @Test
     void professorCaseChoosesTheRightCard() {
-        Player p = new MctsPlayer3(PlayerId.PLAYER_1, 0, 100_000);
+        Player p = new MctsPlayer(PlayerId.PLAYER_1, 0, 100_000);
 
         //{♠8,♠9,♠10,♡6,♡7,♡8,♡9,♡10,♡J}
         CardSet hand = CardSet.EMPTY
@@ -35,7 +35,7 @@ public class MctsPlayerTest {
     //Not Work Yet
     @Test
     void testObvious1() {
-        Player p = new MctsPlayer3(PlayerId.PLAYER_4, 0, 100_000);
+        Player p = new MctsPlayer(PlayerId.PLAYER_4, 0, 100_000);
 
         //{♢Q,♣8}
         CardSet hand = CardSet.EMPTY

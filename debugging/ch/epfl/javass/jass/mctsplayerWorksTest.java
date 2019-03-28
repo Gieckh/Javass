@@ -21,7 +21,7 @@ public class mctsplayerWorksTest {
                 .add(Card.of(Color.HEART, Rank.NINE))
                 .add(Card.of(Color.HEART, Rank.TEN))
                 .add(Card.of(Color.HEART, Rank.JACK));
-        Player p = new MctsPlayer3(PlayerId.PLAYER_1, 0, 100_000);
+        Player p = new MctsPlayer(PlayerId.PLAYER_1, 0, 100_000);
         TurnState t = TurnState.initial(Color.SPADE, Score.INITIAL,
                 PlayerId.PLAYER_4);
         t = t.withNewCardPlayed(Card.of(Color.SPADE, Rank.JACK));

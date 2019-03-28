@@ -15,7 +15,7 @@
 //            }
 //
 //            else {
-//                Player player = new MctsPlayer3(pId, 3, iterations);
+//                Player player = new MctsPlayer(pId, 3, iterations);
 //            }
 //
 //          players.put(pId, player);

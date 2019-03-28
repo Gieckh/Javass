@@ -1,315 +1,302 @@
 package ch.epfl.javass.jass;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.SplittableRandom;
 
-import ch.epfl.javass.Preconditions;
+import static ch.epfl.javass.Preconditions.checkArgument;
 
-public final class MctsPlayer implements Player {
-
+public class MctsPlayer implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
+    private static final int DEFAULT_EXPLORATION_PARAMETER = 40;
+    private final int iterations;
+    private final PlayerId ownId;
+    private final long rngSeed;
 
-    //nombre de fois qu'on execute l'algorithme
-    int iterations;
-    SplittableRandom rng ;
-    PlayerId ownId;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    public MctsPlayer(PlayerId ownId, long rngSeed, int iterations){
-        this.rng = new SplittableRandom(rngSeed);
-        this.ownId = ownId;
-        Preconditions.checkArgument(iterations>=9);
+    public MctsPlayer(PlayerId ownId, long rngSeed, int iterations) {
+        checkArgument(iterations >= 9);
         this.iterations = iterations;
+        this.ownId = ownId;
+        this.rngSeed = rngSeed;
     }
+
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    @SuppressWarnings("Duplicates")
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
-        if(hand.size() <= 1) {
-            return hand.get(0);
+        //default, the root teamId is this player's and its father is null.
+        Node root;
+
+        //TODO: ternary operator
+        if (state.trick().isFull()) {
+            assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
+            root = new Node(state.withTrickCollected(), playableCards(state, hand), hand,  null, ownId.team());
         }
-        //System.out.println(hand.size());
-        //System.out.println(state);
-        int packedCard = isIteratingNodes(state, hand.packed(), iterations);
-        //System.out.println(Integer.toBinaryString(packedCard));
-        return Card.ofPacked(packedCard);
+        else {
+            root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
+        }
+
+        iterate(root);
+
+        return root.playableCardsFromTurnState.get(root.selectSon(0));
     }
 
-
-    private int isIteratingNodes(TurnState state , long setOfPossibleCards, int iterations){
-        //System.out.println(state);
-        Node bigBrother = new Node(state, setOfPossibleCards, ownId);
-        for ( int i = 0 ; i< iterations ; ++i) {
-            MonteCarloAlgorithm(bigBrother);
-        }
-        return BestChoice(bigBrother);
-    }
-
-
-    private int BestChoice(Node node) {
-        return node.cardWeWannaPlay();
-    }
-
-  //does as written in 3.4
-    private void MonteCarloAlgorithm(Node bigBrotherNode) {
-        //SELECTION
-        //tableau du chemin parcouru par l'alg : donc les references des nodes de haut en bas.
-        List<Node> visited = new LinkedList<Node>();
-        //le node tout en haut
-        Node current = bigBrotherNode;
-        visited.add(bigBrotherNode);
-        //tant que le node a des enfant, on choisit le meilleur et on l'ajoute au tableau
-        while (!current.isLeaf()) {
-                current = current.selectChild();
-                visited.add(current);
-        }
-        //EXPENSION
-        // le node le plus prometteur a des enfants
-        current.expand(ownId);
-        Node newChildren = current.selectChild();
-        visited.add(newChildren);
-        //SIMULATION
-        // ON calcule la valeur d'un des enfants ( tour aleatoire)
-        long score = (simulateToEndOfTurn(newChildren.turnstate, CardSet.ofPacked(newChildren.setOfPossibleCards))).packed();
-        //UPDATING
-        //On parcourt tout le tableau et update les scores respectifs
-        for (Node node : visited) {
-            node.updateAttributes(PackedScore.turnTricks(score,node.playerId.team()));
+    /**
+     *
+     * @param root
+     */
+    private void iterate(Node root) {
+        for (int i = 0; i < iterations; ++i) {
+            Node newNode = expand(root);
+            Score toAdd = (newNode.directChildrenOfNode.length == 0) ?
+                    newNode.state.score(): simulateToEndOfTurn(newNode.state, newNode.hand);
+            addScores(newNode, toAdd);
+            root.totalPointsFromNode += toAdd.turnPoints(root.teamId);
+            root.randomTurnsPlayed++;
         }
     }
 
-    private static CardSet playableCards(TurnState turnState, PlayerId playerId, CardSet hand) {
-        if (turnState.nextPlayer() == playerId) {
-            return turnState.trick().playableCards(hand);
+    /**
+     * @brief Given the root of the tree, this method <em>expands</em> it by a node if it can,
+     *        and returns it. If a leaf was reached, this method simply returns it.
+     *
+     * @param root (Node) the root of the tree
+     *
+     * @return
+     */
+    private Node expand(Node root) {
+        Node node = root;
+        int index = root.selectSon();
+        while (!(node.directChildrenOfNode.length == 0 || node.directChildrenOfNode[index] == null)) {
+            //The 1st condition is there cuz we dont wanna call selectSon() with a "true leaf" (last trick of the game)
+            node = node.directChildrenOfNode[index];
+            index = node.selectSon();
         }
 
-        return turnState.unplayedCards().difference(hand);
+        if (node.directChildrenOfNode.length == 0) {
+            return node;
+        }
+
+        //a node was created, right ?
+        Node son = createNode(node);
+        node.directChildrenOfNode[index] = son;
+        return son;
     }
 
-    private Score simulateToEndOfTurn(TurnState turnState, CardSet hand) {
-        //We simulate with a starting score of ZER000000000000000000000000000000000
-        System.out.println(Integer.toBinaryString(turnState.packedTrick()));
-        if(!PackedTrick.isValid(turnState.packedTrick())) {
-            return turnState.score();
+    /**
+     * @brief Given a (Node) "father" whose trick is not full --"father" is therefore not a leaf,
+     *        creates his next son (indicated by the parameter "nextChildIllPlayIn".
+     *        This son won't be full, unless it is a leaf [i.e. it corresponds to
+     *        the last card of the turn.
+     *
+     * @param father (Node) [not full] the (Node) whose son we wish to create.
+     * @return (Node) a son of the (Node) father.
+     */
+    private Node createNode(Node father) {
+        Card card = father.playableCardsFromTurnState.get(father.nextChildIllPlayIn);
+        father.nextChildIllPlayIn++;
+        CardSet sonHand = father.hand.remove(card);
+        TurnState sonState;
+        CardSet sonPlayableCards;
+        TeamId sonTeamId;
+
+        assert (! father.state.trick().isFull());
+        sonTeamId = father.state.nextPlayer().team();
+
+        //We never wanna have a full trick in our turnState, unless it is the last trick of the turn
+        if (father.state.trick().isLast()) {
+            sonState = father.state.withNewCardPlayed(card);
+            //PlayableCards should never be called at the last turn of the game
+            sonPlayableCards = (sonState.trick().isFull()) ?
+                    CardSet.EMPTY: playableCards(sonState, sonHand);
         }
-        TurnState copyOfTurnState = TurnState.ofPackedComponents(PackedScore.INITIAL,
-                turnState.packedUnplayedCards(),
-                turnState.packedTrick());
+        else {
+            sonState = father.state.withNewCardPlayedAndTrickCollected(card);
 
-        if (turnState.trick().isFull()) {
-            copyOfTurnState = copyOfTurnState.withTrickCollected();
+            sonPlayableCards = playableCards(sonState, sonHand);
         }
 
-        CardSet copyOfHand = CardSet.ofPacked(hand.packed());
-        while (! copyOfTurnState.isTerminal()) {
-            CardSet playableCards = playableCards(copyOfTurnState, ownId, copyOfHand);
-            Card randomCardToPlay;
-            if(playableCards.size()>0) {
-            randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
-            copyOfHand = copyOfHand.remove(randomCardToPlay);
-            }
-            else {
-                //System.out.println("here");
-                return copyOfTurnState.score();
-            }
-
-            copyOfTurnState = copyOfTurnState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
-        }
-
-        return copyOfTurnState.score();
+        return father.of(sonState, sonPlayableCards, sonHand, sonTeamId);
     }
 
-    private static class Node{
+    /**
+     * @brief Given a (Node) "node" and the (Score) "score" obtained after simulating
+     *        a random turn starting from this Node's TurnState, updates
+     *
+     * @param node
+     * @param score
+     */
+    private void addScores(Node node, Score score) {
+        assert (node != null);
+        assert(node.state != null);
+
+        Node copy = node;
+        while (copy.father != null) {
+            copy.randomTurnsPlayed++;
+            copy.totalPointsFromNode += score.turnPoints(copy.teamId);
+            copy = copy.father;
+        }
+    }
+
+    /**
+     *
+     * @param state
+     * @param hand
+     * @return
+     */
+    private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
+        assert (! state.unplayedCards().equals(CardSet.EMPTY));
+        assert (! state.trick().isFull());
+
+        TurnState copyState = state;
+        CardSet copyHand = hand;
+        SplittableRandom rng = new SplittableRandom(rngSeed);
+        while(! copyState.isTerminal()) {
+            CardSet playableCards = playableCards(copyState, copyHand);
+            Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
+
+            copyHand = copyHand.remove(randomCardToPlay);
+            copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
+        }
+
+        return copyState.score();
+    }
+
+    /**
+     *
+     * @param state
+     * @param hand
+     * @return
+     */
+    private CardSet playableCards(TurnState state, CardSet hand) {
+//        if (state.trick().isFull() && state.trick().isLast()) {
+//            return CardSet.EMPTY;
+//        }
+
+        assert (! state.unplayedCards().equals(CardSet.EMPTY));
+        assert(! state.trick().isFull());
+
+        if (state.nextPlayer() == ownId) {
+            assert (! hand.equals(CardSet.EMPTY));
+            return state.trick().playableCards(hand);
+        }
+
+//        return state.unplayedCards().difference(hand);
+        return state.trick().playableCards(state.unplayedCards().difference(hand));
+    }
+
+
+
+
+    private static final class Node {
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/
         /** ============================================== **/
-        //TODO: on pourrait simplement stocker les attributs comme des entiers, pas de raison d'avoir des log
-        private int CONSTANT = 40;
-        private TurnState turnstate;
-        private Node[] childrenOfNode;
-        private long setOfPossibleCards;
-       private float selfTotalPoints = 1;
-        private int finishedRandomTurn = 1;
-        private boolean hasChild ;
-        private int card;
-        private PlayerId playerId;
-        //private long cardWeWannaPlay;
+        private final TurnState state;
+        private final Node[] directChildrenOfNode;
+        private final CardSet playableCardsFromTurnState;
+        private final CardSet hand;
+        private int totalPointsFromNode;
+        private int randomTurnsPlayed;
+        private int nextChildIllPlayIn;
+        private final Node father;
+        private final TeamId teamId;
 
 
         /** ============================================== **/
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
-        private Node(TurnState turnstate , long setOfPossibleCards, PlayerId ownID) {
-            this.turnstate = turnstate;
-            this.setOfPossibleCards = setOfPossibleCards;
-            this.selfTotalPoints = 0f;
-            // 1 car sinon on a une division par 0 :/ peut mieux faire
-            this.finishedRandomTurn = 1;
-            this.hasChild = false;
-            this.playerId = ownID;
+
+        /**
+         *
+         * @param state
+         * @param playableCards
+         * @param hand
+         * @param father
+         * @param teamId
+         */
+        private Node(TurnState state, CardSet playableCards, CardSet hand, Node father, TeamId teamId) {
+            this.state = state;
+            this.playableCardsFromTurnState = playableCards;
+            this.hand = hand;
+            this.teamId = teamId;
+            this.father = father;
+
+            this.directChildrenOfNode = new Node[playableCards.size()];
+            this.totalPointsFromNode = 0;
+            this.randomTurnsPlayed = 0;
+            this.nextChildIllPlayIn = 0;
         }
 
 
         /** ============================================== **/
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
-
-
-        private float twoLnOfNOfP(){
-            return (float) (2 * Math.log(finishedRandomTurn));
+        //fake constructor
+        /**
+         *
+         * @param state
+         * @param playableCards
+         * @param hand
+         * @param teamId
+         * @return
+         */
+        private Node of(TurnState state, CardSet playableCards, CardSet hand, TeamId teamId) {
+            return new Node(state, playableCards, hand, this, teamId);
         }
 
-        // la difference du set de cartes pas jouées du pere vs celle du fils.
-        private int cardWeWannaPlay() {
-            return this.selectChild().card;
-//            System.out.println(Long.toBinaryString(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards())));
-//            return PackedCardSet.get(PackedCardSet.difference(this.turnstate.packedUnplayedCards(), this.selectChild().turnstate.packedUnplayedCards()),0);
+        /**
+         *
+         * @param node
+         * @param explorationParameter
+         * @return
+         */
+        private double evaluate(Node node, int explorationParameter) {
+            return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
+                    explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / node.randomTurnsPlayed);
         }
 
+        //Never called with a "true leaf"
 
-        private void expand(PlayerId p) {
-            if(this.turnstate.trick().isFull()) {
-                this.turnstate = this.turnstate.withTrickCollected();
-            }
-            if(PackedCardSet.size(setOfPossibleCards) >1) {
-                if(this.turnstate.nextPlayer() == p ) {
-                    System.out.println("holi");
-                    childrenOfNode = new Node[PackedCardSet.size(setOfPossibleCards)];
-                    hasChild = true;
-                    for (int i=0; i<PackedCardSet.size(setOfPossibleCards); i++) {
-                        int playedCard = PackedCardSet.get(setOfPossibleCards,i);
-                        long newSetOfPossibleCards = PackedCardSet.difference(this.setOfPossibleCards, PackedCardSet.singleton(playedCard));
-                        //System.out.println(Integer.toBinaryString(PackedCardSet.get(playedCard, 1)));
-                        TurnState turnstate = this.turnstate;
+        /**
+         *
+         * @return
+         */
+        private int selectSon() {
+            return selectSon(DEFAULT_EXPLORATION_PARAMETER);
+        }
 
-                        if(PackedTrick.isFull(this.turnstate.packedTrick())) {
-                            turnstate = turnstate.withTrickCollected();
+        /**
+         *
+         * @param explorationParameter
+         * @return
+         */
+        private int selectSon(int explorationParameter) {
+            assert (directChildrenOfNode.length != 0);
 
-                        }
-                        turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
-                        //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
-                        this.childrenOfNode[i] = new Node(turnstate, newSetOfPossibleCards,this.turnstate.nextPlayer());
-                        this.childrenOfNode[i].card = playedCard;
-
-                        
-                        }
-                    }
-                    else {
-                        System.out.println("thuglife");
-                        long cs = PackedCardSet.difference(turnstate.packedUnplayedCards(),setOfPossibleCards);
-                        childrenOfNode = new Node[PackedCardSet.size(cs)];
-                        hasChild = true;
-                        for (int i=0; i<PackedCardSet.size(cs); i++) {
-                            int playedCard = PackedCardSet.get(cs,i);
-                            TurnState turnstate = this.turnstate;
-
-                            if(PackedTrick.isFull(turnstate.packedTrick())) {
-                                turnstate = turnstate.withTrickCollected();
-
-                            }
-                            turnstate = turnstate.withNewCardPlayed(Card.ofPacked(playedCard));
-                            //nouveau turnstate et setofpossiblecard different pour chaque enfant en theorie
-                            this.childrenOfNode[i] = new Node(turnstate, setOfPossibleCards, this.turnstate.nextPlayer());
-                            this.childrenOfNode[i].card = playedCard;
-                            }
-                    }
-            }
-            else {
-                if(PackedCardSet.size(setOfPossibleCards) == 1) {
-                    System.out.println("ca arte");
-                    hasChild = true;
-                    childrenOfNode = new Node[PackedCardSet.size(1)];
-                    TurnState turnstate =this.turnstate;
-                    if(PackedTrick.isFull(this.turnstate.packedTrick())) {
-                        turnstate = this.turnstate.withTrickCollected();
-                    }
-                    turnstate = turnstate.withNewCardPlayed(Card.ofPacked(PackedCardSet.get(setOfPossibleCards,0)));
-                    this.childrenOfNode[0] =  new Node(turnstate, PackedCardSet.EMPTY, this.turnstate.nextPlayer());
+            // There are cards left to play
+            double value = 0f;
+            int index = 0;
+            for (int i = 0; i < directChildrenOfNode.length; ++i) {
+                Node node = directChildrenOfNode[i];
+                if (node == null) {
+//                    return (i | (1 << 5));
+                    return i;
+                }
+                double tmpValue = evaluate(node, explorationParameter);
+                if (tmpValue > value) {
+                    value = tmpValue;
+                    index = i;
                 }
             }
-            
+
+            return index;
         }
-
-        
-
-        //select the best children
-        private Node selectChild() {
-            Node selected = null;
-            float bestValue = 0;
-            if(!this.isLeaf()) {
-                for (Node children : childrenOfNode) {
-                //    if(!children.turnstate.isTerminal())
-                    float value = getVForSon(children.selfTotalPoints,
-                            children.finishedRandomTurn, CONSTANT,
-                            twoLnOfNOfP());
-                    //float value = children.finishedRandomTurn;
-                    if (value >= bestValue) {
-                        selected = children;
-                        bestValue = value;
-                    }
-                }
-            }
-            return selected;
-        }
-
-        private  boolean isLeaf() {
-            return (this.childrenOfNode==null )
-                    ||(!this.hasChild);
-
-        }
-
-//        //select the best children
-//        private Node selectChild() {
-//            Node selected = null;
-//            float bestValue = 0;
-//            if(!this.isLeaf()) {
-//                for (Node children : childrenOfNode) {
-//                    float value = getVForSon(children.selfTotalPoints,
-//                            children.finishedRandomTurn, CONSTANT,
-//                            twoLnOfNOfP());
-//                    //float value = children.finishedRandomTurn;
-//                    if (value >= bestValue) {
-//                        selected = children;
-//                        bestValue = value;
-//                    }
-//                }
-//            }
-//            return selected;
-//        }
-
-//        private  boolean isLeaf() {
-//            return !this.hasChild;
-
-//            if(childrenOfNode == null) {
-//                return true;
-//            }
-//            else {
-//                return false;
-//            }
-        
-
-        private void updateAttributes(int newScore) {
-            selfTotalPoints = selfTotalPoints +  newScore;
-          finishedRandomTurn++;
-//            selfTotalPoints = selfTotalPoints*finishedRandomTurn +  newScore;
-//            finishedRandomTurn++;
-//            selfTotalPoints =  selfTotalPoints / finishedRandomTurn;
-//
-        }
-
-        private float getVForSon(float SofSon , int NofSon, int c , float ln) {
-            return (float) (SofSon/NofSon + (float)c*Math.sqrt(twoLnOfNOfP()/ NofSon));
-        }
-
-
-
     }
-
 }
-
