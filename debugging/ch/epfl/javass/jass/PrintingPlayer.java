@@ -13,6 +13,7 @@ public final class PrintingPlayer implements Player {
 
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
+        System.out.println("I can play  : " + state.trick().playableCards(hand).toString());
         Card c = underlyingPlayer.cardToPlay(state, hand);
         System.out.println("C'est à moi de jouer... Je joue : " + c.toString());
         return c;
