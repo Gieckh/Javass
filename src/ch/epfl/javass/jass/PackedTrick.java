@@ -491,6 +491,9 @@ public final class PackedTrick {
             str1 += "base color : none\n";
         }
 
+        if (isEmpty(pkTrick)) {
+            return str1 + "{_,_,_,_}";
+        }
         StringJoiner j = new StringJoiner(",", "{", "}");
 
         for (int i = 0 ; i < 4 ; ++i) {

@@ -32,7 +32,7 @@ public class MctsPlayer3 implements Player {
         //default, the root teamId is this player's and its father is null.
         Node root;
         if (state.trick().isFull()) {
-            assert (! state.trick().isLast()); //We never call cardToPlay when the last Trick of the turn is full
+            assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
             root = new Node(state.withTrickCollected(), playableCards(state, hand), hand,  null, ownId.team());
         }
         else {
@@ -60,7 +60,7 @@ public class MctsPlayer3 implements Player {
         Node node = root;
         int index = root.selectSon();
         while (!(node.directChildrenOfNode.length == 0 || node.directChildrenOfNode[index] == null)) {
-            //The 2nd condition is there cuz we dont wanna call selectSon() with a "true leaf"
+            //The 1st condition is there cuz we dont wanna call selectSon() with a "true leaf" (last trick of the game)
             node = node.directChildrenOfNode[index];
             index = node.selectSon();
         }
