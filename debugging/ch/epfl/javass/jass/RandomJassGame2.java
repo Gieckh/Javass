@@ -8,12 +8,13 @@ public final class RandomJassGame2 {
     public static void main(String[] args) {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
-        int iterations = 10_000;
+        int iterations = 1_000;
         //marche pour n'importe quelle seed
         for (PlayerId pId: PlayerId.ALL) {
-            Player player = new MctsPlayer2(pId, 2019, iterations);
+            Player player = new MctsPlayerThomabenmato(pId, 2019, iterations);
             if (pId.team() == TeamId.TEAM_2) {
-                player = new MctsPlayerThomabenmato(pId, 2019, iterations);
+                 player = new MctsPlayer3(pId, 2019, iterations);
+
             }
 
 
@@ -21,7 +22,7 @@ public final class RandomJassGame2 {
             playerNames.put(pId, pId.name());
         }
 
-        for (int k = 4000 ; k < 4500 ; ++k){
+        for (int k = 4000 ; k < 4250 ; ++k){
             System.out.println("itération : " + k);
             JassGame g = new JassGame(k, players, playerNames);
             while (!g.isGameOver()) {

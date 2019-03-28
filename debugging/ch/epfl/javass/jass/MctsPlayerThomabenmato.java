@@ -208,7 +208,7 @@ public final class MctsPlayerThomabenmato implements Player {
 
             ++numberOfTurnsFinished;
 
-            totalPointsWon += team == TeamId.TEAM_1 ? pointsTeam1 : pointsTeam2;
+            totalPointsWon += team == TeamId.TEAM_2 ? pointsTeam1 : pointsTeam2;
             if (parent == null) {
                 return;
             }
