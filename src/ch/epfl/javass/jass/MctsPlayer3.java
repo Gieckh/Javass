@@ -31,6 +31,8 @@ public class MctsPlayer3 implements Player {
     public Card cardToPlay(TurnState state, CardSet hand) {
         //default, the root teamId is this player's and its father is null.
         Node root;
+
+        //TODO: ternary operator
         if (state.trick().isFull()) {
             assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
             root = new Node(state.withTrickCollected(), playableCards(state, hand), hand,  null, ownId.team());
@@ -38,7 +40,6 @@ public class MctsPlayer3 implements Player {
         else {
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
         }
-
 
         iterate(root);
 
@@ -56,6 +57,14 @@ public class MctsPlayer3 implements Player {
         }
     }
 
+    /**
+     * @brief Given the root of the tree, this method <em>expands</em> it by a node if it can,
+     *        and returns it. If a leaf was reached, this method simply returns it.
+     *
+     * @param root (Node) the root of the tree
+     *
+     * @return
+     */
     private Node expand(Node root) {
         Node node = root;
         int index = root.selectSon();
@@ -86,14 +95,18 @@ public class MctsPlayer3 implements Player {
         assert (! father.state.trick().isFull());
         sonTeamId = father.state.nextPlayer().team();
 
-        //we never wanna have a full trick in our turnState, unless it is the last trick of the turn
+        //We never wanna have a full trick in our turnState, unless it is the last trick of the turn
         if (father.state.trick().isLast()) {
             sonState = father.state.withNewCardPlayed(card);
+            //PlayableCards should never be called at the last turn of the game
+            sonPlayableCards = (sonState.trick().isFull()) ?
+                    CardSet.EMPTY: playableCards(sonState, sonHand);
         }
         else {
             sonState = father.state.withNewCardPlayedAndTrickCollected(card);
+
+            sonPlayableCards = playableCards(sonState, sonHand);
         }
-        sonPlayableCards = playableCards(sonState, sonHand);
 
         return father.of(sonState, sonPlayableCards, sonHand, sonTeamId);
     }
@@ -129,9 +142,9 @@ public class MctsPlayer3 implements Player {
     }
 
     private CardSet playableCards(TurnState state, CardSet hand) {
-        if (state.trick().isFull() && state.trick().isLast()) {
-            return CardSet.EMPTY;
-        }
+//        if (state.trick().isFull() && state.trick().isLast()) {
+//            return CardSet.EMPTY;
+//        }
 
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
         assert(! state.trick().isFull());
@@ -171,21 +184,12 @@ public class MctsPlayer3 implements Player {
             this.playableCardsFromTurnState = playableCards;
             this.hand = hand;
             this.teamId = teamId;
+            this.father = father;
 
             this.directChildrenOfNode = new Node[playableCards.size()];
             this.totalPointsFromNode = 0;
             this.randomTurnsPlayed = 0;
             this.nextChildIllPlayIn = 0;
-            this.father = father;
-        }
-
-        private Node(Node father) {
-            this.state = null;
-            this.directChildrenOfNode = null;
-            this.playableCardsFromTurnState = null;
-            this.hand = null;
-            this.father = father;
-            this.teamId = null;
         }
 
 
