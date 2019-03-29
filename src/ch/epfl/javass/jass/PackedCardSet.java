@@ -65,7 +65,7 @@ public final class PackedCardSet {
      *        It is iff the bits b_i of "pkCardSet" such that
      *        <em>9 <= b_i % 16 <= 15</em>cc are zeros [0].
      *
-     * @param pkCardSet (long) the set of packed cards we are interested in.
+     * @param pkCardSet (long) - the set of packed cards we are interested in.
      * @return (boolean) true if "pkCardSet" encodes a valid set of PackedCards.
      */
     public static boolean isValid(long pkCardSet) {
@@ -81,7 +81,7 @@ public final class PackedCardSet {
      * @brief The [packed] set corresponding to all the cards better than
      *        the trump card "pkCard"
      *
-     * @param pkCard (int) a [packed] trump card.
+     * @param pkCard (int) - a [packed] trump card.
      * @return (long) the [packed] set of all the cards better than "pkCard"
      */
     public static long trumpAbove (int pkCard) {
@@ -91,7 +91,7 @@ public final class PackedCardSet {
     /**
      * @brief the set of cards composed of only the card "pkCard"
      *
-     * @param pkCard (int) the [packed] card to turn into a [packed] set of cards.
+     * @param pkCard (int) - the [packed] card to turn into a [packed] set of cards.
      * @return (long) the set of cards composed of only the card "pkCard"
      */
     public static long singleton (int pkCard) {
@@ -101,7 +101,7 @@ public final class PackedCardSet {
     /**
      * @brief Returns true iff the (long) "pkCardSet" is empty.
      *
-     * @param pkCardSet (long) the given [packed] set of cards.
+     * @param pkCardSet (long) - the given [packed] set of cards.
      * @return (boolean) true iff the [packed] set of cards is empty [i.e. pkCardSet == 00...000]
      */
     public static boolean isEmpty (long pkCardSet) {
@@ -111,7 +111,7 @@ public final class PackedCardSet {
     /**
      * @brief Indicates how many cards are in the set "pkCardSet"
      *
-     * @param pkCardSet (long) the pkCardSet whose size we want to determine
+     * @param pkCardSet (long) - the pkCardSet whose size we want to determine
      * @return (int) the number of cards in the set
      */
     public static int size(long pkCardSet) {
@@ -123,8 +123,8 @@ public final class PackedCardSet {
      *        if [index == 0], then returns the card given by the least significant 1-bit
      *        of the set of cards.
      *
-     * @param pkCardSet (long) a packed set of card
-     * @param index (int) an int between 0 [included] and size(pkCardSet) [excluded]
+     * @param pkCardSet (long) - a packed set of card
+     * @param index (int) - an int between 0 [included] and size(pkCardSet) [excluded]
      *              which determines which card of the set we want to return
      * @return (int) the index-th <em>packed card</em> from the given set of packed cards.
      */
@@ -141,8 +141,8 @@ public final class PackedCardSet {
      *        this method puts it in [the corresponding bit was 0 and takes the value 1].
      *        Otherwise, does nothing.
      *
-     * @param pkCardSet (long) the set we want to put the packed card in
-     * @param pkCard (int) the packed card we want to put in the set
+     * @param pkCardSet (long) - the set we want to put the packed card in
+     * @param pkCard (int) - the packed card we want to put in the set
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 1.
      */
@@ -155,8 +155,8 @@ public final class PackedCardSet {
      *        this method remove it[the corresponding bit was 1 and takes the value 0].
      *        Otherwise, does nothing.
      *
-     * @param pkCardSet (long) the set we want to remove the packed card from
-     * @param pkCard (int) the packed card we want to remove from the set
+     * @param pkCardSet (long) - the set we want to remove the packed card from
+     * @param pkCard (int) - the packed card we want to remove from the set
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 0. [i.e. where we have removed "pkCard"]
      */
@@ -168,8 +168,8 @@ public final class PackedCardSet {
      * @brief Indicates whether the given set of card "pkCardSet" contains the
      *        given card "pkCard".
      *
-     * @param pkCardSet (long) a [packed] set of cards
-     * @param pkCard (int) a [packed] card
+     * @param pkCardSet (long) - a [packed] set of cards
+     * @param pkCard (int) - a [packed] card
      * @return (boolean) true if "pkCardSet" contains "pkCard".
      */
     public static boolean contains(long pkCardSet, int pkCard) {
@@ -182,7 +182,7 @@ public final class PackedCardSet {
      * @brief Given a packed card, return its index in the (long) encoding any
      *        set of cards
      *
-     * @param pkCard (int) the packed card whose index we're looking for
+     * @param pkCard (int) - the packed card whose index we're looking for
      * @return (int) the index of this packed card in the (long) encoding any
      *         set of cards.
      */
@@ -194,7 +194,7 @@ public final class PackedCardSet {
      * @brief The [packed] set of cards made of all the cards not in the given [packed]
      *        set of cards : "pkCardSet"
      *
-     * @param pkCardSet (long) a set of packed cards.
+     * @param pkCardSet (long) - a set of packed cards.
      * @return (long) the <em>valid</em> complement of "pkCardSet".
      */
     
@@ -206,8 +206,8 @@ public final class PackedCardSet {
      * @brief The [packed] set of cards made of all the cards either in
      *        "pkCardSet1" or in "pkCardSet2" [or both].
      *
-     * @param pkCardSet1 (long) the first set of packed cards
-     * @param pkCardSet2 (long) the second set of packed cards.
+     * @param pkCardSet1 (long) - the first set of packed cards
+     * @param pkCardSet2 (long) - the second set of packed cards.
      * @return the union of the two given sets of packed cards.
      */
     public static long union(long pkCardSet1, long pkCardSet2) {
@@ -218,8 +218,8 @@ public final class PackedCardSet {
      * @brief The [packed] set mad of all the cards which are both in
      *        "pkCardSet1" and "pkCardSet2".
      *
-     * @param pkCardSet1 (long) the first set of packed cards
-     * @param pkCardSet2 (long) the second set of packed cards.
+     * @param pkCardSet1 (long) - the first set of packed cards
+     * @param pkCardSet2 (long) - the second set of packed cards.
      * @return the intersection of the two given sets of packed cards.
      */
     public static long intersection(long pkCardSet1, long pkCardSet2) {
@@ -228,12 +228,12 @@ public final class PackedCardSet {
 
     /**
      * @brief If we interpret a set of packed cards "pkCS" the following way :
-     *        pkCS = <em>{</em>b_63 * (2**63), ..., b_0 * (2 ** 0)<em>]</em>, where b_i represents
+     *        pkCS = <em>{</em>b_63 * (2**63), ..., b_0 * (2 ** 0)<em>}</em>, where b_i represents
      *        the i-th bit of pkCS.
      *        Then this method simply return <em>pkCardSet1 \ pkCardSet2</em>
      *
-     * @param pkCardSet1 (long) the first set of packed cards
-     * @param pkCardSet2 (long) the second set of packed cards.
+     * @param pkCardSet1 (long) - the first set of packed cards
+     * @param pkCardSet2 (long) - the second set of packed cards.
      * @return (long) the set of packed cards formed by all the cards in the first
      *         set, but not in the second.
      */
@@ -243,14 +243,13 @@ public final class PackedCardSet {
 
     //TODO
     /**
-     * @brief returns the set with only the remaining cards of the chosen color from a certain set pkCardSet.
+     * @brief Given the [packed] set of cards "pkCardSet" and the Color "color",
+     *        returns the [packed] set of cards made only of the cards of "pkCardSet"
+     *        of Color "color".
      *
-     * @param pkCardSet (long)
-     * @param color (Color)
+     * @param pkCardSet (long) - a [packed] set of cards
+     * @param color (Color) - /
      * @return (long) the set with only the cards from a chosen color and that were already in pkCardSet
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long subsetOfColor(long pkCardSet, Card.Color color) {
         switch (color) {
@@ -268,13 +267,10 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief returns the string with the cards included in the set pkCardSet.
+     * @brief the textual representation of "pkCardSet"
      * 
-     * @param pkCardSet (long)
-     * @return a string with the cards in pkCardSet
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
+     * @param pkCardSet (long) - a set of [packed] cards
+     * @return (String) represents the given set of [packed] cards.
      */
     public static String toString(long pkCardSet) { //TODO: technique tout ça
         StringJoiner j = new StringJoiner(",", "{", "}");
