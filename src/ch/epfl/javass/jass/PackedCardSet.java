@@ -49,8 +49,10 @@ public final class PackedCardSet {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    
-    //so the class is not instantiable
+
+    /**
+     * @brief This way the class is <em>not instantiable</em>
+     */
     private PackedCardSet() {};
 
     
@@ -64,9 +66,7 @@ public final class PackedCardSet {
      *        <em>9 <= b_i % 16 <= 15</em>cc are zeros [0].
      *
      * @param pkCardSet (long) the set of packed cards we are interested in.
-     * @return (boolean) true if "pkCardSet" encodes a valid set of packedCards.
-     *
-     * @author - Antoine Scardigli (299905)
+     * @return (boolean) true if "pkCardSet" encodes a valid set of PackedCards.
      */
     public static boolean isValid(long pkCardSet) {
         long mask = Bits64.mask(SPADE_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
@@ -75,51 +75,34 @@ public final class PackedCardSet {
                     Bits64.mask(CLUB_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE);
 
         return (mask & pkCardSet) == 0L;
-
-//       return( todo suppr
-//              extract(pkCardSet, SPADE_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-//              extract(pkCardSet, HEART_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-//              extract(pkCardSet, DIAMOND_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0 &&
-//              extract(pkCardSet, CLUB_COLOR_START +UNUSED_BITS_START, UNUSED_BITS_SIZE) == 0
-//       );
     }
 
     /**
-     * @brief returns the set of cards better than the trump card represented by pkCard. 
+     * @brief The [packed] set corresponding to all the cards better than
+     *        the trump card "pkCard"
      *
-     * @param pkCard (int)
-     * @return (long) the set of cards better than the trump card in the parameters
-     *
-     * @author - Antoine Scardigli (299905)
+     * @param pkCard (int) a [packed] trump card.
+     * @return (long) the [packed] set of all the cards better than "pkCard"
      */
-    public static long trumpAbove (int pkCard) { //TODO: test
-        assert isValid(pkCard);
+    public static long trumpAbove (int pkCard) {
         return pkCardsForTrump.get(pkCard);
     }
 
     /**
-     * @brief returns the set with the only card represented by pkCard.
+     * @brief the set of cards composed of only the card "pkCard"
      *
-     * @param pkCard (int)
+     * @param pkCard (int) the [packed] card
      * @return (long) returns the set with the only card in the parameters
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long singleton (int pkCard) {
-        assert isValid(pkCard);
-
         return 1L << index(pkCard);
     }
 
     /**
-     * @brief returns true if and only if the set pkCardSet is empty
+     * @brief Returns true iff the (long) "pkCardSet" is empty.
      *
-     * @param pkCardSet (long)
-     * @return (boolean) true if the set of packed cards is empty [i.e. pkCardSet == 00...000]
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
+     * @param pkCardSet (long) the given [packed] set of cards.
+     * @return (boolean) true iff the [packed] set of cards is empty [i.e. pkCardSet == 00...000]
      */
     public static boolean isEmpty (long pkCardSet) {
         return pkCardSet == EMPTY;
@@ -139,8 +122,8 @@ public final class PackedCardSet {
 
     /**
      * @brief returns the index-th packed card from the given set of packed cards.
-     *        if [index == 0], then the card given by the least significant 1-bit
-     *        of the set of cards is returned
+     *        if [index == 0], then returns the card given by the least significant 1-bit
+     *        of the set of cards.
      *
      * @param pkCardSet (long) a packed set of card
      * @param index (int) //TODO
@@ -149,41 +132,12 @@ public final class PackedCardSet {
      * @author - Marin Nguyen (288260)
      * @author - Antoine Scardigli (299905)
      */
-    private static int get2(long pkCardSet, int index) { //TODO: more tests
-        assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
-        //int i = Long.numberOfTrailingZeros(pkCardSet);
-        int i = 0;
-        for (int ind = 0 ; ind <= index ; ++ind) {
-            int nbOfTrailingZerosBis = Long.numberOfTrailingZeros(pkCardSet) + 1;
-            i += nbOfTrailingZerosBis;
-            pkCardSet >>= nbOfTrailingZerosBis;
-        }
-        return indexToPkCard[i - 1];
-    }
-
-    //TODO : benchmark which one is the best.
     public static int get(long pkCardSet, int index) {
         assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
         for (int i = 0 ; i < index ; ++i)
             pkCardSet ^= Long.lowestOneBit(pkCardSet);
 
         return Long.numberOfTrailingZeros(pkCardSet);
-    }
-
-    private static int get3(long pkCardSet, int index) {
-        assert (size(pkCardSet) >= index  &&  index >= 0);
-
-        int i = (int) Long.numberOfTrailingZeros(pkCardSet);
-        long mask = 1L << i;
-        int nbOfValuesPassed = 0;
-        while (nbOfValuesPassed != index) {
-            mask <<= 1;
-            ++i;
-            if ((mask & pkCardSet) == mask) {
-                ++nbOfValuesPassed;
-            }
-        }
-        return indexToPkCard[i];
     }
 
     /**
@@ -222,8 +176,8 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief Indicates whether the given set of card [pkCardSet] contains the
-     *        given card [pkCard].
+     * @brief Indicates whether the given set of card "pkCardSet" contains the
+     *        given card "pkCard".
      *
      * @param pkCardSet (long)
      * @param pkCard (int)
@@ -310,6 +264,7 @@ public final class PackedCardSet {
         return pkCardSet1 & ~pkCardSet2;
     }
 
+    //TODO
     /**
      * @brief returns the set with only the remaining cards of the chosen color from a certain set pkCardSet.
      *
