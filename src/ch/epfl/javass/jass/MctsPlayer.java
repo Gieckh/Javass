@@ -1,8 +1,8 @@
 package ch.epfl.javass.jass;
 
-import java.util.SplittableRandom;
-
 import static ch.epfl.javass.Preconditions.checkArgument;
+
+import java.util.SplittableRandom;
 
 public class MctsPlayer implements Player {
     /** ============================================== **/

@@ -1,9 +1,9 @@
 package ch.epfl.javass.jass;
 
+import java.util.StringJoiner;
+
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
-
-import java.util.StringJoiner;
 
 //TODO: Actually do the J-doc
 /**

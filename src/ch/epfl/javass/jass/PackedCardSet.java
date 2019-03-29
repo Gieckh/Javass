@@ -1,9 +1,10 @@
 package ch.epfl.javass.jass;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
+
 import ch.epfl.javass.bits.Bits64;
-
-import static ch.epfl.javass.bits.Bits64.extract;
-
-import java.util.*;
 
 //TODO: access rights
 

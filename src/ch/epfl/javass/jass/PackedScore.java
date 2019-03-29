@@ -1,9 +1,9 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.bits.Bits64.extract;
+
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.bits.Bits64;
-
-import static ch.epfl.javass.bits.Bits64.extract;
 
 /**
  * manipulates scores of a jass game

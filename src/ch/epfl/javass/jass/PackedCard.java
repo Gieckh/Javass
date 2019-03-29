@@ -1,7 +1,8 @@
 package ch.epfl.javass.jass;
 
-import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 import static ch.epfl.javass.bits.Bits32.extract;
+
+import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 
 //TODO: handle access rights
 //TODO: check where we assert (tests must not be done here)

@@ -1,7 +1,6 @@
 package ch.epfl.javass.jass;
-import static ch.epfl.javass.jass.PackedScore.*;
-
-import static ch.epfl.javass.Preconditions.*;
+import static ch.epfl.javass.Preconditions.checkArgument;
+import static ch.epfl.javass.jass.PackedScore.isValid;
 
 public final class Score {
     /** =============================================== **/
