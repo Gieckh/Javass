@@ -82,7 +82,7 @@ public final class TurnState {
      * @brief Acts as a getter for the packed version of the Score.
      * 
      * @return (long) the packed Score of this TurnState.
-    */
+     */
     public long packedScore() {
         return pkScore;
     }
