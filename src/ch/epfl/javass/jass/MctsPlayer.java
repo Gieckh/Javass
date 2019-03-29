@@ -58,7 +58,7 @@ public class MctsPlayer implements Player {
         for (int i = 0; i < iterations; ++i) {
             Node newNode = expand(root);
             Score toAdd = (newNode.directChildrenOfNode.length == 0) ?
-                    newNode.state.score(): simulateToEndOfTurn(newNode.state, newNode.hand);
+                    newNode.state.withTrickCollected().score(): simulateToEndOfTurn(newNode.state, newNode.hand);
             addScores(newNode, toAdd);
             root.totalPointsFromNode += toAdd.turnPoints(root.teamId);
             root.randomTurnsPlayed++;

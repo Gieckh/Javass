@@ -12,7 +12,7 @@ public final class RandomJassGame3 {
         Player player;
         for (PlayerId pId: PlayerId.ALL) {
             if (pId.team() == TeamId.TEAM_1)
-                player = new MctsPlayer(pId, 2019, 10);
+                player = new MctsPlayer(pId, 2019, 1000);
             else
                 player = new RandomPlayer(2019);
 
