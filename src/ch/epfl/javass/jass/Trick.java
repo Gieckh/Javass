@@ -1,12 +1,9 @@
 package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
-import static ch.epfl.javass.jass.PackedScore.isValid;
+import static ch.epfl.javass.Preconditions.checkIndex;
 
 import ch.epfl.javass.jass.Card.Color;
-
-import static ch.epfl.javass.Preconditions.checkArgument;
-import static ch.epfl.javass.Preconditions.checkIndex;
 
 /**
  * @author Antoine Scardigli - (299905)

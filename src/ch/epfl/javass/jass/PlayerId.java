@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
- * manages the players.
+ * PlayerId
+ *
  *
  * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
  */
 public enum PlayerId {
     PLAYER_1  (1),
@@ -15,13 +18,13 @@ public enum PlayerId {
     PLAYER_3  (3),
     PLAYER_4  (4);
 
-    public final int type; //TODO: private ?
+    private final int type; //TODO: private ?
     public final static int COUNT = 4;
     public final static List<PlayerId> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
 
 
-    PlayerId(int type) {
+    private PlayerId(int type) {
         this.type = type;
     }
 
@@ -30,7 +33,6 @@ public enum PlayerId {
      *
      * @return A player's team
      *
-     * @author Antoine Scardigli - (299905)
      */
     public TeamId team() {
         switch (this) {

@@ -1,5 +1,13 @@
 package ch.epfl.javass;
 
+
+/**
+ * Preconditions
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class Preconditions {
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
@@ -9,6 +17,9 @@ public final class Preconditions {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     
+    /**
+     *  to make it impossible for precondition to be instantiated
+     */
     private Preconditions() {}
 
     /** ============================================== **/
@@ -22,7 +33,6 @@ public final class Preconditions {
      * @param b (boolean)
      * @throws IllegalArgumentException if b is false
      *
-     * @author - Marin Nguyen (288260)
      */
     public static void
     checkArgument(boolean b) throws IllegalArgumentException {
@@ -40,7 +50,6 @@ public final class Preconditions {
      * @throws IndexOutOfBoundsException if the index is negative, or
      *         if the index is greater than (or equal to) the size
      *
-     * @author - Marin Nguyen (288260)
      */
     public static int
     checkIndex(int index, int size) throws IndexOutOfBoundsException {

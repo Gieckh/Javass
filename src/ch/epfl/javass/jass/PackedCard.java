@@ -1,7 +1,8 @@
 package ch.epfl.javass.jass;
 
-import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 import static ch.epfl.javass.bits.Bits32.extract;
+
+import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 
 //TODO: handle access rights
 //TODO: check where we assert (tests must not be done here)
@@ -48,8 +49,6 @@ public final class PackedCard {
      * @param pkCard (int)
      * @return true if the pkCard is correctly packed
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static boolean isValid(int pkCard) {
         return (extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) <= MAX_RANK &&  //The rank is valid (we don't check color since it can only be valid)
@@ -70,8 +69,6 @@ public final class PackedCard {
     /** returns the color of the card packed, we assert the int is valid
      * @param pkCard
      * @return the color of this card
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static Card.Color color(int pkCard) {
         assert (isValid(pkCard));
@@ -99,8 +96,6 @@ public final class PackedCard {
      * @param pkCardR (int) the int encoding the second card
      * @return (boolean) true when pkCardL is better than pkCardR.
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
         assert (isValid(pkCardL)  &&  isValid(pkCardR));
@@ -135,8 +130,6 @@ public final class PackedCard {
      *
      * @return the value of the (encoded) card "pkCard"
      *
-     * @author - Antoine Scardigli (299905)
-     * @author - Marin Nguyen (288260)
      */
     public static int points(Card.Color trump, int pkCard) {
         Card.Color color = color(pkCard); 
@@ -171,8 +164,6 @@ public final class PackedCard {
      * @param pkCard (int) the int encoding a card
      * @return the (String) representation of the card.
      *
-     * @author - Antoine Scardigli (299905)
-     * @author - Marin Nguyen (288260)
      */
     public static String toString(int pkCard) {
         return color(pkCard).toString() + rank(pkCard).toString();

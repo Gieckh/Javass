@@ -1,11 +1,11 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.Preconditions.checkArgument;
+import static ch.epfl.javass.jass.PackedCard.pack;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static ch.epfl.javass.jass.PackedCard.*;
-import static ch.epfl.javass.Preconditions.*;
 
 //TODO: check access rights
 //TODO: use class preconditions
@@ -32,8 +32,6 @@ public final class Card {
      *
      * @param packed (int) an encoded card
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     private Card(int packed) {
         packedCard = packed; //int so no need to copy ? //TODO: suppr
@@ -41,7 +39,12 @@ public final class Card {
 
 
 
-    //TODO : J-DOC
+    
+
+    /**
+     *  @Brief manages the colors of the cards.
+     *
+     */
     public enum Color {
         SPADE  (1), //pique
         HEART  (2), //coeur
@@ -57,32 +60,9 @@ public final class Card {
             this.type = type;
         }
 
-//        /**
-//         * returns the color.
-//         *
-//         * @param number
-//         * @return color
-//         * @author Antoine Scardigli - (299905)
-//         * @author Marin Nguyen - (288260)
-//         */
-//        public static Color toType(int number) {
-//            // for all the switches which returns something for any value, it is not necessary to use break
-//            switch (number) {
-//            case 1:
-//                return SPADE;
-//            case 2:
-//                return HEART;
-//            case 3:
-//                return DIAMOND;
-//            case 4:
-//                return CLUB;
-//            default:
-//                throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a color");
-//            }
-//        }
 
         /**
-         * returns the character corresponding to the rank of the card
+         * @Brief returns the character corresponding to the rank of the card
          *
          * @throws IllegalArgumentException
          */
@@ -91,16 +71,15 @@ public final class Card {
             case SPADE:
                 return "\u2660";
             case HEART:
-                //2661
-                //2665
+                //2661 or 2665 if you want the heart to be full or not
                 return "\u2661";
             case DIAMOND:
-                //2662
-                //2666
+                //2662 or 2666 if you want the diamond to be full or not
                 return "\u2662";
             case CLUB:
                 return "\u2663";
             default:
+                //should never happen
                 throw new IllegalArgumentException(
                         "this thing does not correspond to a color");
             }
@@ -109,10 +88,8 @@ public final class Card {
     }
 
     /**
-     * manages the ranks of the cards.
+     * @Brief manages the ranks of the cards.
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
      */
     public enum Rank {
         /** =============================================== **/
@@ -140,8 +117,8 @@ public final class Card {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
-        /** todo
-         * @brief Creates a new variable of type Rank
+        /** 
+         * @brief PRIVATE constructor : Creates a new variable of type Rank.
          *
          * @param type (int) associates the card rank to an int
          * @param trumpOrdinal (int) associates to the card rank its strength, assuming
@@ -159,13 +136,11 @@ public final class Card {
         /** ===============    METHODS    ================ **/
         /** ============================================== **/
 
-        /** todo
-         * @brief gives the rank corresponding to the number
+        /** 
+         * @brief gives the rank corresponding to the int : number.
          *
-         * @param number
+         * @param number an Int
          * @return Rank
-         * @author Antoine Scardigli - (299905)
-         * @author Marin Nguyen - (288260)
          */
         static Rank toType(int number) {
             switch (number) {
@@ -188,7 +163,7 @@ public final class Card {
             case 14:
                 return ACE;
             default:
-                //TODO: what to put there?
+                //should never happen
                 throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a rank");
             }
         }
@@ -197,8 +172,6 @@ public final class Card {
          * @return (int) the position of the trump card which has the rank "this"
          *         in the list of trump cards, based on their strength //TODO: better
          *
-         * @author Antoine Scardigli - (299905)
-         * @author Marin Nguyen - (288260)
          */
         public int trumpOrdinal() {
             return trumpOrdinal;
@@ -245,8 +218,6 @@ public final class Card {
      * @param "r" a rank
      * 
      * @return a new Card with the chosen color and rank 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static Card of(Color c, Rank r) {
         return new Card(pack(c, r));
@@ -259,8 +230,6 @@ public final class Card {
      * @return a new Card with the chosen int "packed"
      * @throws IllegalArgumentException
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static Card ofPacked(int packed) throws IllegalArgumentException {
         checkArgument(PackedCard.isValid(packed));
@@ -273,8 +242,6 @@ public final class Card {
      * 
      * @return (int) the packedCard of this card
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public int packed() {
         return packedCard;
@@ -284,9 +251,7 @@ public final class Card {
      * 
      * @return the color of this card
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public Color color() {
         return PackedCard.color(packedCard);
     }
@@ -307,8 +272,6 @@ public final class Card {
      * @param that (Card) the Card we use to compare
      * @return (boolean) true when this card is better than "that".
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public boolean isBetter(Color trump, Card that) {
         return PackedCard.isBetter(trump, packedCard, that.packed());
@@ -321,15 +284,15 @@ public final class Card {
      *
      * @return the value of this card 
      *
-     * @author - Antoine Scardigli (299905)
-     * @author - Marin Nguyen (288260)
      */
     public int points(Color trump) {
         return PackedCard.points(trump, packedCard);
     }
 
 
-    //TODO
+    /* 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object thatO) {
         if (thatO == null  ||  !(thatO instanceof Card)) { //todo: test
@@ -340,6 +303,9 @@ public final class Card {
         return (thatOCard.color() == this.color()  &&  thatOCard.rank() == this.rank());
     }
 
+    /* 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return packedCard;
@@ -351,8 +317,6 @@ public final class Card {
      *
      * @return the (String) representation of the card.
      *
-     * @author - Antoine Scardigli (299905)
-     * @author - Marin Nguyen (288260)
      */
     @Override
     public String toString() {

@@ -1,15 +1,22 @@
 package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
-import static ch.epfl.javass.jass.PackedScore.isValid;
 
 import java.util.List;
 
+/**
+ * CardSet
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class CardSet {
 
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
+    
     private long pkCardSet;
     public final static CardSet EMPTY = new CardSet(PackedCardSet.EMPTY);
     public final static CardSet ALL_CARDS = new CardSet(PackedCardSet.ALL_CARDS);
@@ -17,7 +24,7 @@ public final class CardSet {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-            
+    
     private CardSet(long packed) {
         pkCardSet = packed;
     }
@@ -33,8 +40,6 @@ public final class CardSet {
      * @param cards ( a list)
      * @return a CardSet which contains all cards of the list
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static CardSet of(List<Card> cards) {
         long packed = 0L;
@@ -52,8 +57,6 @@ public final class CardSet {
      * @param packed ( long ) a packedCardSet
      * @return a CardSet from the packedCardSet "packed"
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public static CardSet ofPacked(long packed) {
         checkArgument(PackedCardSet.isValid(packed));
@@ -66,8 +69,6 @@ public final class CardSet {
      * 
      * @return (long) the packedCardSet of this cardSet
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
     */
     public long packed() {
         return pkCardSet;
@@ -78,8 +79,6 @@ public final class CardSet {
      *
      * @return (boolean) true if the set of packed cards is empty [i.e. pkCardSet == 00...000]
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public boolean isEmpty () {
         return PackedCardSet.isEmpty(pkCardSet);
@@ -90,7 +89,6 @@ public final class CardSet {
      *
      * @return (int) the number of cards in the set
      *
-     * @author - Antoine Scardigli (299905)
      */
     public int size() {
         return PackedCardSet.size(pkCardSet);
@@ -104,8 +102,6 @@ public final class CardSet {
      * @param index (int) //TODO
      * @return (Card) the index-th <em> card</em> from this set of cards.
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public Card get(int index) {
         return Card.ofPacked(PackedCardSet.get(pkCardSet, index));
@@ -119,8 +115,6 @@ public final class CardSet {
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 1.
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public CardSet add(Card card) {
         return new CardSet( PackedCardSet.add(pkCardSet, card.packed()) );
@@ -134,8 +128,6 @@ public final class CardSet {
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 0. [i.e. where we have "removed" "pkCard"]
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public CardSet remove(Card card) {
         return new CardSet( PackedCardSet.remove(pkCardSet, card.packed()) );
@@ -148,8 +140,6 @@ public final class CardSet {
      * @param card (Card)
      * @return (boolean) true if this set contains "card".
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public boolean contains(Card card) {
         return PackedCardSet.contains(pkCardSet, card.packed());
@@ -159,7 +149,6 @@ public final class CardSet {
      *
      * @return (long) the complement of this pack of cards
      * 
-     * @author - Antoine Scardigli (299905)
      */
     public CardSet complement() {
         return new CardSet (PackedCardSet.complement(pkCardSet));
@@ -171,7 +160,6 @@ public final class CardSet {
     * @param pkCardSet2 (long) the second set of packed cards.
     * @return the union of this set of cards with the second one
     *
-    * @author - Antoine Scardigli (299905)
     */
     public CardSet union(CardSet that) {
         return new CardSet (PackedCardSet.union(pkCardSet, that.pkCardSet));
@@ -183,7 +171,6 @@ public final class CardSet {
      * @param pkCardSet2 (long) the second set of packed cards.
      * @return the intersection of the this set of cards with the second one ( the parameter's one).
      *
-     * @author - Antoine Scardigli (299905)
      */
     public CardSet intersection(CardSet that) {
         return new CardSet (PackedCardSet.intersection(pkCardSet, that.pkCardSet));
@@ -199,8 +186,6 @@ public final class CardSet {
      * @return (long) the set of packed cards formed by all the cards in this
      *         set, but not in the second.
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public CardSet difference(CardSet that) {
         return new CardSet (PackedCardSet.difference(pkCardSet, that.pkCardSet));
@@ -213,13 +198,14 @@ public final class CardSet {
      * @param color (Color)
      * @return (long) the set with only the cards of this cardSet from a chosen color
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public CardSet subsetOfColor(Card.Color color) {
         return new CardSet (PackedCardSet.subsetOfColor(pkCardSet, color));
     }
     
+    /* 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object thatO) {
         //using "instanceof", since final class
@@ -231,8 +217,10 @@ public final class CardSet {
         return (thatOSet.pkCardSet == this.pkCardSet);
     }
 
-    //todo what
-    //hashcode n'est pas vérifié par signcheck
+
+    /* 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return Long.hashCode(pkCardSet);

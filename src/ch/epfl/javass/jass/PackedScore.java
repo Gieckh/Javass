@@ -1,9 +1,9 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.bits.Bits64.extract;
+
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.bits.Bits64;
-
-import static ch.epfl.javass.bits.Bits64.extract;
 
 /**
  * manipulates scores of a jass game
@@ -44,7 +44,7 @@ public final class PackedScore {
 
     //TODO do same for some other classes
     private PackedScore() {
-        // cuz' we don't want this class instantiated.
+        // because we don't want this class instantiated.
     }
 
 
@@ -60,9 +60,7 @@ public final class PackedScore {
      * @param  pkScore (long) the long encoding the points and tricks of the game
      * @return (boolean) true if "pkScore" corresponds to a valid score
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static boolean isValid(long pkScore) {
 
        return(
@@ -90,9 +88,7 @@ public final class PackedScore {
      * @param gamePoints2 (int) the total number of points team2 earned during the previous turns.
      * @return (long) the packed information
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static long //TODO: tester
     pack (int turnTricks1, int turnPoints1, int gamePoints1,
           int turnTricks2, int turnPoints2, int gamePoints2)
@@ -112,9 +108,7 @@ public final class PackedScore {
      * @param t (TeamId) The team we're interested in.
      * @return (int) How many tricks this team won during this turn
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static int turnTricks(long pkScore, TeamId t) {
         assert isValid(pkScore);
 
@@ -130,9 +124,7 @@ public final class PackedScore {
      * @param t (TeamId) the team we're interested in.
      * @return (int) the number of points won in the current turn
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static int turnPoints(long pkScore, TeamId t)  {
         assert isValid(pkScore);
 
@@ -148,9 +140,7 @@ public final class PackedScore {
      * @param t, the TeamId
      * @return int : the total number of points won depending on the team
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static int gamePoints(long pkScore, TeamId t) {
         assert isValid(pkScore);
 
@@ -165,9 +155,7 @@ public final class PackedScore {
      * @param t, the TeamId
      * @return (int): the total number of points won depending on the team
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static int totalPoints(long pkScore, TeamId t) {
         assert isValid(pkScore);
 
@@ -188,9 +176,7 @@ public final class PackedScore {
      * @param trickPoints (int) the value of the won trick
      * @return (long) the updated pkScore.
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static long
     withAdditionalTrick(long pkScore, TeamId winningTeam, int trickPoints) {
         assert(isValid(pkScore));
@@ -215,8 +201,7 @@ public final class PackedScore {
      * @param  pkScore (long) the long encoding the scores
      * @return a new long with the data updated as it becomes next turn
      *
-     * @author Antoine Scardigli - (299905)
-    */
+     */
     public static long nextTurn(long pkScore) { //TODO: (lata) masking instead of packing?
         assert isValid(pkScore);
 
@@ -239,9 +224,7 @@ public final class PackedScore {
      * @param pkScore (long) the long encoding the scores
      * @return (String) the String with all information about points and tricks of both teams
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static String toString(long pkScore) {
         assert isValid(pkScore);
         int tricksOf1 = turnTricks(pkScore, TeamId.TEAM_1);

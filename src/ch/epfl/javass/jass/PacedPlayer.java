@@ -2,7 +2,13 @@ package ch.epfl.javass.jass;
 
 import java.util.Map;
 
-//TODO: see of the implementation is right
+/**
+ * PacedPlayer
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class PacedPlayer implements Player{
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/

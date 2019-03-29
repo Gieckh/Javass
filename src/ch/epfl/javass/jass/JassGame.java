@@ -1,6 +1,12 @@
 package ch.epfl.javass.jass;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import ch.epfl.javass.jass.Card.Color;
 
@@ -28,6 +34,13 @@ public final class JassGame {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
+    
+    /**
+     * 
+     * @param rngSeed
+     * @param players
+     * @param playerNames
+     */
     public JassGame(long rngSeed, Map<PlayerId, Player> players, Map<PlayerId, String> playerNames) {
         Random rng = new Random(rngSeed);
         this.shuffleRng = new Random(rng.nextLong());
@@ -50,13 +63,11 @@ public final class JassGame {
      * @return true iff one team has 1000 points or more
      *
      */
-    //TODO: le double affichage vient du fait que la méthode est appelée dans "randomJassGame"
     public boolean isGameOver() {
         if (turnState == null) {
             return false;
         }
 
-        //TODO: suppr println
         if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
             setPlayersWinningTeam(TeamId.TEAM_1);
             return true;
@@ -64,7 +75,6 @@ public final class JassGame {
 
         if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
             setPlayersWinningTeam(TeamId.TEAM_2);
-            System.out.println("TEAM_2");
             return true;
         }
 
