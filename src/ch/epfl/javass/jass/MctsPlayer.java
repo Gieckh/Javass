@@ -48,6 +48,9 @@ public class MctsPlayer implements Player {
     }
 
     /**
+     * @brief Quite straightforward: will call the method "expand" on the root
+     *        the number of iterations specified in this class's constructor and
+     *        update the scores of each node of the tree
      *
      * @param root
      */
@@ -214,12 +217,14 @@ public class MctsPlayer implements Player {
         /** ============================================== **/
 
         /**
+         * @brief Creates a new Node, given all its necessary parameters
          *
-         * @param state
-         * @param playableCards
-         * @param hand
-         * @param father
-         * @param teamId
+         * @param state (TurnState) the state of the game at this Node
+         * @param playableCards (CardSet) the Cards which can be played from this Node
+         * @param hand (CardSet) the player's hand at this state of the game
+         * @param father (Node) the father of this Node. null iff this Node is the root of the tree
+         * @param teamId (TeamId) the team which played the last Card leading to this Node.
+         *               Not rly defined for the root.
          */
         private Node(TurnState state, CardSet playableCards, CardSet hand, Node father, TeamId teamId) {
             this.state = state;
