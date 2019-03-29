@@ -168,8 +168,8 @@ public final class PackedCardSet {
      * @brief Indicates whether the given set of card "pkCardSet" contains the
      *        given card "pkCard".
      *
-     * @param pkCardSet (long)
-     * @param pkCard (int)
+     * @param pkCardSet (long) a [packed] set of cards
+     * @param pkCard (int) a [packed] card
      * @return (boolean) true if "pkCardSet" contains "pkCard".
      */
     public static boolean contains(long pkCardSet, int pkCard) {
@@ -191,12 +191,11 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief The complement of the given set of packed cards.
+     * @brief The [packed] set of cards made of all the cards not in the given [packed]
+     *        set of cards : "pkCardSet"
      *
      * @param pkCardSet (long) a set of packed cards.
-     * @return (long) the complement of "pkCardSet".
-     * 
-     * @author - Antoine Scardigli (299905)
+     * @return (long) the <em>valid</em> complement of "pkCardSet".
      */
     
     public static long complement(long pkCardSet) {
@@ -204,26 +203,24 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief the union of the two given sets of packed cards.
+     * @brief The [packed] set of cards made of all the cards either in
+     *        "pkCardSet1" or in "pkCardSet2" [or both].
      *
      * @param pkCardSet1 (long) the first set of packed cards
      * @param pkCardSet2 (long) the second set of packed cards.
      * @return the union of the two given sets of packed cards.
-     *
-     * @author - Antoine Scardigli (299905)
      */
     public static long union(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 | pkCardSet2;
     }
 
     /**
-     * @brief the intersection of the two given sets of packed cards.
+     * @brief The [packed] set mad of all the cards which are both in
+     *        "pkCardSet1" and "pkCardSet2".
      *
      * @param pkCardSet1 (long) the first set of packed cards
      * @param pkCardSet2 (long) the second set of packed cards.
      * @return the intersection of the two given sets of packed cards.
-     *
-     * @author - Antoine Scardigli (299905)
      */
     public static long intersection(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 & pkCardSet2;
@@ -239,9 +236,6 @@ public final class PackedCardSet {
      * @param pkCardSet2 (long) the second set of packed cards.
      * @return (long) the set of packed cards formed by all the cards in the first
      *         set, but not in the second.
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long difference(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 & ~pkCardSet2;
