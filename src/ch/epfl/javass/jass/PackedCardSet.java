@@ -91,8 +91,8 @@ public final class PackedCardSet {
     /**
      * @brief the set of cards composed of only the card "pkCard"
      *
-     * @param pkCard (int) the [packed] card
-     * @return (long) returns the set with the only card in the parameters
+     * @param pkCard (int) the [packed] card to turn into a [packed] set of cards.
+     * @return (long) the set of cards composed of only the card "pkCard"
      */
     public static long singleton (int pkCard) {
         return 1L << index(pkCard);
@@ -113,8 +113,6 @@ public final class PackedCardSet {
      *
      * @param pkCardSet (long) the pkCardSet whose size we want to determine
      * @return (int) the number of cards in the set
-     *
-     * @author - Antoine Scardigli (299905)
      */
     public static int size(long pkCardSet) {
         return Long.bitCount(pkCardSet);
@@ -126,14 +124,11 @@ public final class PackedCardSet {
      *        of the set of cards.
      *
      * @param pkCardSet (long) a packed set of card
-     * @param index (int) //TODO
+     * @param index (int) an int between 0 [included] and size(pkCardSet) [excluded]
+     *              which determines which card of the set we want to return
      * @return (int) the index-th <em>packed card</em> from the given set of packed cards.
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static int get(long pkCardSet, int index) {
-        assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
         for (int i = 0 ; i < index ; ++i)
             pkCardSet ^= Long.lowestOneBit(pkCardSet);
 
