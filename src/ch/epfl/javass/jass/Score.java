@@ -2,6 +2,13 @@ package ch.epfl.javass.jass;
 import static ch.epfl.javass.Preconditions.checkArgument;
 import static ch.epfl.javass.jass.PackedScore.isValid;
 
+/**
+ * Score
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class Score {
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
@@ -13,10 +20,7 @@ public final class Score {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    // TODO ain't delete
-    // cuz' we don't want this class instantiated.
-    // kerker michmich <3
-    //@author antoine Scardigli ( put me 6)
+    // because we don't want this class instantiated.
     private Score(long packed) {
      packedScore = packed;   
     }
@@ -33,9 +37,7 @@ public final class Score {
      * @return a new Card with the chosen int "packed"
      * @throws IllegalArgumentException
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static Score ofPacked(long packed) {
         checkArgument(isValid(packed));
         return new Score(packed);
@@ -46,9 +48,7 @@ public final class Score {
      * 
      * @return (long) the packedScore of this card
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public long packed() {
         return packedScore;
     }
@@ -59,9 +59,7 @@ public final class Score {
      * @param t (TeamId) The team we're interested in.
      * @return (int) How many tricks this team won during this turn
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public int turnTricks(TeamId t) {
         return PackedScore.turnTricks(packedScore, t);
     }
@@ -72,9 +70,7 @@ public final class Score {
      * @param t (TeamId) the team we're interested in.
      * @return (int) the number of points won in the current turn
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     
     public int turnPoints(TeamId t) {
         return PackedScore.turnPoints(packedScore, t);
@@ -86,9 +82,7 @@ public final class Score {
      * @param t, the TeamId
      * @return int : the total number of points won depending on the team
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public int gamePoints(TeamId t) {
         return PackedScore.gamePoints(packedScore, t);
     }
@@ -99,9 +93,7 @@ public final class Score {
      * @param t, the TeamId
      * @return (int): the total number of points won depending on the team
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public int totalPoints(TeamId t) {
         return PackedScore.totalPoints(packedScore, t);
     }
@@ -115,9 +107,7 @@ public final class Score {
      * @param trickPoints (int) the value of the won trick
      * @return (long) this updated pkScore.
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public Score withAdditionalTrick(TeamId winningTeam, int trickPoints) {
         checkArgument(trickPoints >= 0);
         return ofPacked(PackedScore.withAdditionalTrick(packedScore, winningTeam, trickPoints));
@@ -129,13 +119,15 @@ public final class Score {
      *
      * @return a new long with the data updated as it becomes next turn
      *
-     * @author Antoine Scardigli - (299905)
     */
     public Score nextTurn() {
         return ofPacked(PackedScore.nextTurn(packedScore));
     }
 
     
+    /* 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object thatO) {
         if (thatO == null  ||  !(thatO instanceof Score)) { //todo: test
@@ -146,6 +138,9 @@ public final class Score {
             return (thatOScore.packedScore == this.packedScore);
     }
     
+    /* 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return Long.hashCode(packedScore);

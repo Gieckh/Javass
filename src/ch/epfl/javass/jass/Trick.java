@@ -48,9 +48,7 @@ public class Trick {
      * @param packed
      * @return a Trick
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public static Trick ofPacked(int packed) {
         checkArgument(PackedTrick.isValid(packed));
         return new Trick(packed);
@@ -60,9 +58,7 @@ public class Trick {
      * 
      * @return the PackedTrick of this Trick
      * 
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     */
     public int packed() {
         return pkTrick;
     }
@@ -251,6 +247,8 @@ public class Trick {
     * @brief returns a String representation of this trick.
     *
     * @return String : a string with all informations about this trick
+    * 
+    * @see java.lang.Object#toString()
     */
     @Override
     public String toString() {
