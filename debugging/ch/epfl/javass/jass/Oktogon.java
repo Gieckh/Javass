@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 //this is for a test, thus no need of javadoc
 @SuppressWarnings("Duplicates")
-public final class RandomJassGame2 {
+public final class Oktogon {
     public static void main(String[] args) {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
