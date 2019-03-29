@@ -1,9 +1,5 @@
 package ch.epfl.javass.jass;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -18,4 +14,4 @@ public interface Jass {
     public final static int MATCH_ADDITIONAL_POINTS = 100;
     public final static int LAST_TRICK_ADDITIONAL_POINTS = 5;
 
-}
+}   

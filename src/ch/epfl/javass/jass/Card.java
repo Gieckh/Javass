@@ -1,11 +1,11 @@
 package ch.epfl.javass.jass;
 
+import static ch.epfl.javass.Preconditions.checkArgument;
+import static ch.epfl.javass.jass.PackedCard.pack;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static ch.epfl.javass.jass.PackedCard.*;
-import static ch.epfl.javass.Preconditions.*;
 
 //TODO: check access rights
 //TODO: use class preconditions
