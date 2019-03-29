@@ -9,7 +9,7 @@ import ch.epfl.javass.bits.Bits64;
 //TODO: access rights
 
 /**
- *  //TODO : this com. sucks
+ *  //TODO : this com. sucks -  c'est celui qui dit qui est
  * manipulates sets of cards of a jass game.
  * 
  * @author Antoine Scardigli - (299905)
@@ -67,7 +67,6 @@ public final class PackedCardSet {
      * @param pkCardSet (long) the set of packed cards we are interested in.
      * @return (boolean) true if "pkCardSet" encodes a valid set of packedCards.
      *
-     * @author - Antoine Scardigli (299905)
      */
     public static boolean isValid(long pkCardSet) {
         long mask = Bits64.mask(SPADE_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
@@ -91,7 +90,6 @@ public final class PackedCardSet {
      * @param pkCard (int)
      * @return (long) the set of cards better than the trump card in the parameters
      *
-     * @author - Antoine Scardigli (299905)
      */
     public static long trumpAbove (int pkCard) { //TODO: test
         assert isValid(pkCard);
@@ -104,8 +102,6 @@ public final class PackedCardSet {
      * @param pkCard (int)
      * @return (long) returns the set with the only card in the parameters
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long singleton (int pkCard) {
         assert isValid(pkCard);
@@ -119,8 +115,6 @@ public final class PackedCardSet {
      * @param pkCardSet (long)
      * @return (boolean) true if the set of packed cards is empty [i.e. pkCardSet == 00...000]
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static boolean isEmpty (long pkCardSet) {
         return pkCardSet == EMPTY;
@@ -132,7 +126,6 @@ public final class PackedCardSet {
      * @param pkCardSet (long) the pkCardSet whose size we want to determine
      * @return (int) the number of cards in the set
      *
-     * @author - Antoine Scardigli (299905)
      */
     public static int size(long pkCardSet) {
         return Long.bitCount(pkCardSet);
@@ -147,8 +140,6 @@ public final class PackedCardSet {
      * @param index (int) //TODO
      * @return (int) the index-th <em>packed card</em> from the given set of packed cards.
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     private static int get2(long pkCardSet, int index) { //TODO: more tests
         assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
@@ -197,8 +188,6 @@ public final class PackedCardSet {
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 1.
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long add(long pkCardSet, int pkCard) {
         return pkCardSet | (1L << index(pkCard));
@@ -214,8 +203,6 @@ public final class PackedCardSet {
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 0. [i.e. where we have "removed" "pkCard"]
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long remove(long pkCardSet, int pkCard) {
         return pkCardSet & ~(1L << index(pkCard));
@@ -230,8 +217,6 @@ public final class PackedCardSet {
      * @param pkCard (int)
      * @return (boolean) true if "pkCardSet" contains "pkCard".
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static boolean contains(long pkCardSet, int pkCard) {
         long mask = 1L << index(pkCard);
@@ -259,7 +244,6 @@ public final class PackedCardSet {
      * @param pkCardSet (long) a set of packed cards.
      * @return (long) the complement of "pkCardSet".
      * 
-     * @author - Antoine Scardigli (299905)
      */
     
     public static long complement(long pkCardSet) {
@@ -274,7 +258,6 @@ public final class PackedCardSet {
      * @param pkCardSet2 (long) the second set of packed cards.
      * @return the union of the two given sets of packed cards.
      *
-     * @author - Antoine Scardigli (299905)
      */
     public static long union(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 | pkCardSet2;
@@ -287,7 +270,6 @@ public final class PackedCardSet {
      * @param pkCardSet2 (long) the second set of packed cards.
      * @return the intersection of the two given sets of packed cards.
      *
-     * @author - Antoine Scardigli (299905)
      */
     public static long intersection(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 & pkCardSet2;
@@ -304,8 +286,6 @@ public final class PackedCardSet {
      * @return (long) the set of packed cards formed by all the cards in the first
      *         set, but not in the second.
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long difference(long pkCardSet1, long pkCardSet2) {
         return pkCardSet1 & ~pkCardSet2;
@@ -318,8 +298,6 @@ public final class PackedCardSet {
      * @param color (Color)
      * @return (long) the set with only the cards from a chosen color and that were already in pkCardSet
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long subsetOfColor(long pkCardSet, Card.Color color) {
         switch (color) {
@@ -342,8 +320,6 @@ public final class PackedCardSet {
      * @param pkCardSet (long)
      * @return a string with the cards in pkCardSet
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static String toString(long pkCardSet) { //TODO: technique tout ça
         StringJoiner j = new StringJoiner(",", "{", "}");
@@ -449,8 +425,7 @@ public final class PackedCardSet {
      *
      * @return
      *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
+
      */
     private static Map<Integer, Long> pkCardsToTrumpAbove() {
         HashMap<Integer, Long> hash = new HashMap<>(ranks.length * COLOR_SIZE);
