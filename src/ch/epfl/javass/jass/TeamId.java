@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * manages the teams.
+ * manages the teamsId's of the teams.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -14,13 +14,13 @@ public enum TeamId {
     TEAM_1  (1),
     TEAM_2  (2);
 
-    public final int type;
+    private final int type;
     public final static int COUNT = 2;
     public final static List<TeamId> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
 
     // TODO : inutile pour le moment ( et pas demandé) (?? @Marin)
-    TeamId(int type) {
+    private TeamId(int type) {
         this.type = type;
     }
 
@@ -29,8 +29,6 @@ public enum TeamId {
      *
      * @return the other team than the one we apply the function on
      *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
      */
     public  TeamId other() {
         switch (this) {

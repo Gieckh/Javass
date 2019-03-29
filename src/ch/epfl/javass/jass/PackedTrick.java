@@ -7,7 +7,7 @@ import ch.epfl.javass.jass.Card.Color;
 
 //TODO: Actually do the J-doc
 /**
- * @brief
+ * @brief manipulates the packed representations of the tricks of a game.
  *
  * @author - Marin Nguyen (288260)
  * @author - Antoine Scardigli (299905)
