@@ -18,7 +18,7 @@ public final class Preconditions {
     /** ============================================== **/
     
     /**
-     *  to make Preconditions not instantiable
+     *  to make it impossible for precondition to be instantiated
      */
     private Preconditions() {}
 

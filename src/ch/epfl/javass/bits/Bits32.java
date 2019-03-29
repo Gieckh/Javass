@@ -2,10 +2,19 @@ package ch.epfl.javass.bits;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
+/**
+ * Bits32
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class Bits32 {
+    
     /** ============================================== **/
     /** ==============   CONSTRUCTEURS   ============= **/
     /** ============================================== **/
+    
     private Bits32() {
         // Not to be instantiated
     }
@@ -23,7 +32,6 @@ public final class Bits32 {
      * @return (int) the mask
      * @throws IllegalArgumentException
      *
-     * @author - Marin Nguyen (288260)
      */
     public static int mask(int start, int size)  {
         checkArgument(start >= 0  &&  size >=0);
@@ -34,7 +42,7 @@ public final class Bits32 {
             return 0;
         }
 
-        if (size == Integer.SIZE) { // Because 1 << 32 == 1, it goes back from the right hmmmm
+        if (size == Integer.SIZE) { // Because 1 << 32 == 1, it goes back from the right 
             return -1;
         }
 
@@ -52,10 +60,8 @@ public final class Bits32 {
      * @return (int) the int formed from the bits [start] to [start + size - 1] of "bits"
      * @throws IllegalArgumentException
      *
-     * @author - Marin Nguyen (288260)
      */
-    public static int
-    extract(int bits, int start, int size) {
+    public static int extract(int bits, int start, int size) {
         // The call to mask checks the exceptions
         int mask = mask(start, size);
         return (mask & bits) >>> start;
@@ -70,7 +76,6 @@ public final class Bits32 {
  * @param value the bit whose MSB position we want to know, NOT 0.
  * @return (int) the MSB position (an int between 0 and 31)
  *
- * @author - Marin Nguyen (288260)
  */
 // finds the msb position of an int, assuming there is one (i.e. value != 0)
 //TODO: can i do better ?
@@ -97,7 +102,6 @@ private static int msbPosition(int value) { //Or use method highestOneBit / numb
      *         - 1 <= size <= 31
      *         - and "value" doesn't use more bits than specified by "size"
      *
-     * @author - Marin Nguyen (288260)
      */
     private static boolean checkPack(int value, int size) {
         if (size < 1 || size >= Integer.SIZE) { //Firstly, the size must be legal
@@ -125,7 +129,6 @@ private static int msbPosition(int value) { //Or use method highestOneBit / numb
      * @return (int) the number formed by the concatenation of v1 and v2 (in binary)
      * @throws IllegalArgumentException
      *
-     * @author - Marin Nguyen (288260)
      */
     public static int
     pack(int v1, int s1, int v2, int s2) {
@@ -148,7 +151,6 @@ private static int msbPosition(int value) { //Or use method highestOneBit / numb
      * @return the number formed by the concatenation (in binary form) of v1, v2 and v3
      * @throws IllegalArgumentException
      *
-     * @author - Marin Nguyen (288260)
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3) {
@@ -167,7 +169,6 @@ private static int msbPosition(int value) { //Or use method highestOneBit / numb
      * @return the number formed by the concatenation (in binary form) of all the "v_i", (where 1 <= i <= 7)
      * @throws IllegalArgumentException
      *
-     * @author - Marin Nguyen (288260)
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3, int v4, int s4,
