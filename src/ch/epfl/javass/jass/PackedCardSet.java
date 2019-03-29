@@ -129,6 +129,7 @@ public final class PackedCardSet {
      * @return (int) the index-th <em>packed card</em> from the given set of packed cards.
      */
     public static int get(long pkCardSet, int index) {
+        assert (index >= 0  &&  index < Long.bitCount(pkCardSet));
         for (int i = 0 ; i < index ; ++i)
             pkCardSet ^= Long.lowestOneBit(pkCardSet);
 
@@ -137,16 +138,13 @@ public final class PackedCardSet {
 
     /**
      * @brief If the packed card "pkCard" is not already in the set "pkCardSet",
-     *        this method puts it in [the corresponding bit is shifted from 0 to 1]. //TODO: "shifted" ?
+     *        this method puts it in [the corresponding bit was 0 and takes the value 1].
      *        Otherwise, does nothing.
      *
      * @param pkCardSet (long) the set we want to put the packed card in
      * @param pkCard (int) the packed card we want to put in the set
      * @return (long) The previous set, where the bit corresponding to the packed card
      *         'pkCard" is at 1.
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static long add(long pkCardSet, int pkCard) {
         return pkCardSet | (1L << index(pkCard));
@@ -154,20 +152,16 @@ public final class PackedCardSet {
 
     /**
      * @brief If the packed card "pkCard" is already in the set "pkCardSet",
-     *        this method remove it[the corresponding bit is shifted from 1 to 0]. //TODO: "shifted" ?
+     *        this method remove it[the corresponding bit was 1 and takes the value 0].
      *        Otherwise, does nothing.
      *
      * @param pkCardSet (long) the set we want to remove the packed card from
      * @param pkCard (int) the packed card we want to remove from the set
      * @return (long) The previous set, where the bit corresponding to the packed card
-     *         'pkCard" is at 0. [i.e. where we have "removed" "pkCard"]
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
+     *         'pkCard" is at 0. [i.e. where we have removed "pkCard"]
      */
     public static long remove(long pkCardSet, int pkCard) {
         return pkCardSet & ~(1L << index(pkCard));
-        //We could use the method "difference", but let's not call it unnecessarily
     }
 
     /**
@@ -177,16 +171,11 @@ public final class PackedCardSet {
      * @param pkCardSet (long)
      * @param pkCard (int)
      * @return (boolean) true if "pkCardSet" contains "pkCard".
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
      */
     public static boolean contains(long pkCardSet, int pkCard) {
         long mask = 1L << index(pkCard);
         return (mask & pkCardSet) == mask;
     }
-
-    //WORKS
 
     //TODO : return change so that newIndex = 1L << oldIndex.
     /**
@@ -212,7 +201,6 @@ public final class PackedCardSet {
     
     public static long complement(long pkCardSet) {
         return (~pkCardSet) & ALL_CARDS;
-        // return pkCardSet ^ ALL_CARDS;
     }
 
     /**
