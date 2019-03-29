@@ -26,9 +26,6 @@ public final class PackedCardSet {
     private final static Map<Integer, Integer> pkCardToIndex = pkCardToIndex();
     private final static Map<Integer, Long> pkCardsForTrump = pkCardsToTrumpAbove();
 
-    //TODO: modify. indexToPkCard
-    private final static int[] indexToPkCard = indexToPkCard();
-
     public static final long EMPTY = 0;
     public static final long ALL_CARDS = 0b00000001_11111111_00000001_11111111_00000001_11111111_00000001_11111111L;
     private static final long SPADE_CARDS   = 0b00000000_00000000_00000000_00000000_00000000_00000000_00000001_11111111L;
@@ -290,9 +287,6 @@ public final class PackedCardSet {
     // themselves used to reduce the number of some other methods.
 
     /**
-     *
-     * @return
-     *
      * @author Michel Schinz
      */
     private static Card.Color[] getAllColors() {
@@ -331,32 +325,13 @@ public final class PackedCardSet {
         };
     }
 
-    /** TODO TESTESTESTESTEST
-     * @brief
+    /**
+     * @brief Creates a map, where the keys are all the possible [packed] cards
+     *        and the value associated to a key "pkCard" is its index in a [packed]
+     *        set of cards.
      *
-     * @return
-     *
-     * @author - Marin Nguyen (288260)
-     */
-    private static int[] indexToPkCard() {
-        int[] tmp = new int[ranks.length * COLOR_SIZE];
-
-        for (int j = 0 ; j < colors.length ; ++j) {
-            for (int i = 0 ; i < ranks.length ; ++i) {
-                int pkCard = PackedCard.pack(colors[j], ranks[i]);
-                tmp[COLOR_SIZE * j + i] = pkCard;
-            }
-        }
-
-        return tmp;
-    }
-
-    /** TODO
-     * @brief
-     *
-     * @return
-     *
-     * @author - Marin Nguyen (288260)
+     * @return (Map) key : pkCard,
+     *               value : its index in a [packed] set of cards
      */
     private static Map<Integer, Integer> pkCardToIndex() {
         HashMap<Integer, Integer> hash = new HashMap<>(ranks.length * COLOR_SIZE);
@@ -371,13 +346,13 @@ public final class PackedCardSet {
     }
 
 
-    /** TODO
-     * @brief
+    /**
+     * @brief Creates a Map, where the keys are all the possible [packed] cards
+     *        and the value associated to a key "pkCard" is the [packed] set of all the cards better
+     *        than "pkCard" <em>when the trump is the color of pkCard</em>
      *
-     * @return
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
+     * @return (Map) key : pkCard
+     *               value : the [packed] set of cards of the better trumps
      */
     private static Map<Integer, Long> pkCardsToTrumpAbove() {
         HashMap<Integer, Long> hash = new HashMap<>(ranks.length * COLOR_SIZE);
