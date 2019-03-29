@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * manages the teamsId's of the teams.
+ * manages the the teams' Id.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
