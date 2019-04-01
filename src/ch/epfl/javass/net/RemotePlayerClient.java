@@ -29,10 +29,11 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
-    /** ============================================== **/
+    /** ============================================== 
+     * @throws IOException **/
 
-    public RemotePlayerClient(String nameOfHost, int port) {
-        try (Socket s = new Socket("localhost", 5108);
+    public RemotePlayerClient(String nameOfHost, int port) throws IOException {
+        Socket s = new Socket("localhost", 5108);
                 BufferedReader r =
                   new BufferedReader(
                     new InputStreamReader(s.getInputStream(),
@@ -40,12 +41,10 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
                 BufferedWriter w =
                   new BufferedWriter(
                     new OutputStreamWriter(s.getOutputStream(),
-                               US_ASCII))) {
-               } catch (IOException e) {
-                 throw new UncheckedIOException(e);
-               }
+                               US_ASCII));
+        this.s = s;
         this.r = r;
-        
+        this.w = w;
         this.nameOfHost = nameOfHost;
         this.port = port;
     }
