@@ -283,7 +283,7 @@ public class MctsPlayer implements Player {
          * @return
          */
         private int selectSon(int explorationParameter) {
-            assert (directChildrenOfNode.length != 0);
+          //  assert (directChildrenOfNode.length != 0);
 
             // There are cards left to play
             double value = 0f;
