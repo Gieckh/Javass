@@ -75,6 +75,7 @@ public final class JassGame {
 
         if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
             setPlayersWinningTeam(TeamId.TEAM_2);
+            System.out.println(TeamId.TEAM_2);
             return true;
         }
 

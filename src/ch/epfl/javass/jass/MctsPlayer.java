@@ -57,7 +57,7 @@ public class MctsPlayer implements Player {
     private void iterate(Node root) {
         for (int i = 0; i < iterations; ++i) {
             Node newNode = expand(root);
-            Score toAdd = (newNode.directChildrenOfNode.length == 0) ?
+            Score toAdd = (newNode.isReallyLeaf()) ?
                     newNode.state.withTrickCollected().score(): simulateToEndOfTurn(newNode.state, newNode.hand);
             addScores(newNode, toAdd);
             root.totalPointsFromNode += toAdd.turnPoints(root.teamId);
@@ -76,13 +76,13 @@ public class MctsPlayer implements Player {
     private Node expand(Node root) {
         Node node = root;
         int index = root.selectSon();
-        while (!(node.directChildrenOfNode.length == 0 || node.directChildrenOfNode[index] == null)) {
+        while (!(node.isReallyLeaf() || node.directChildrenOfNode[index] == null)) {
             //The 1st condition is there cuz we dont wanna call selectSon() with a "true leaf" (last trick of the game)
             node = node.directChildrenOfNode[index];
             index = node.selectSon();
         }
 
-        if (node.directChildrenOfNode.length == 0) {
+        if (node.isReallyLeaf()) {
             return node;
         }
 
@@ -283,7 +283,9 @@ public class MctsPlayer implements Player {
          * @return
          */
         private int selectSon(int explorationParameter) {
-          //  assert (directChildrenOfNode.length != 0);
+            if (directChildrenOfNode.length == 0) {
+                return -1;
+            }
 
             // There are cards left to play
             double value = 0f;
@@ -302,6 +304,10 @@ public class MctsPlayer implements Player {
             }
 
             return index;
+        }
+
+        private boolean isReallyLeaf() {
+            return directChildrenOfNode.length == 0;
         }
     }
 }

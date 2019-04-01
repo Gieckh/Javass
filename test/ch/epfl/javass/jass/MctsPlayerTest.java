@@ -204,6 +204,10 @@ public class MctsPlayerTest {
                 .add(Card.of(Color.HEART, Rank.TEN))
                 .add(Card.of(Color.HEART, Rank.ACE))
                 .add(Card.of(Color.HEART, Rank.KING));
+
+        System.out.println(state.trick());
+        System.out.println(hand);
+
         assertTimeoutPreemptively(TIMEOUT, () -> {
             Card c = p.cardToPlay(state, hand);
             assertEquals(Card.of(Color.SPADE, Rank.SIX), c);
