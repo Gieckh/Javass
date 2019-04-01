@@ -1,6 +1,6 @@
 package ch.epfl.javass.net;
 
-public  JassCommand {
+public final class JassCommand {
 
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
