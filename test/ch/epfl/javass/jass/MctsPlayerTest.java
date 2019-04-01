@@ -114,6 +114,8 @@ public class MctsPlayerTest {
                 .add(Card.of(Color.HEART, Rank.NINE))
                 .add(Card.of(Color.HEART, Rank.JACK))
                 .add(Card.of(Color.HEART, Rank.QUEEN));
+        System.out.println(state.trick());
+        System.out.println(hand);
         assertTimeoutPreemptively(TIMEOUT, () -> {
             Card c = p.cardToPlay(state, hand);
             assertEquals(Card.of(Color.CLUB, Rank.SEVEN), c);
@@ -395,6 +397,7 @@ public class MctsPlayerTest {
             assertEquals(Card.of(Color.HEART, Rank.TEN), c);
         });
     }
+
 
     private static TurnState stateAfterPlayingAllCardsIn(CardSet cards, Color trump, PlayerId firstPlayer) {
         TurnState s = TurnState.initial(trump, Score.INITIAL, firstPlayer);

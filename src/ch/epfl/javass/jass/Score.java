@@ -39,7 +39,7 @@ public final class Score {
      * 
      */
     public static Score ofPacked(long packed) {
-        checkArgument(isValid(packed));
+        checkArgument(PackedScore.isValid(packed));
         return new Score(packed);
     }
     

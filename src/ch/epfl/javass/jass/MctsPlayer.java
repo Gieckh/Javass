@@ -12,6 +12,7 @@ public class MctsPlayer implements Player {
     private final int iterations;
     private final PlayerId ownId;
     private final long rngSeed;
+    private SplittableRandom rng;
 
 
     /** ============================================== **/
@@ -22,6 +23,7 @@ public class MctsPlayer implements Player {
         this.iterations = iterations;
         this.ownId = ownId;
         this.rngSeed = rngSeed;
+        this.rng = new SplittableRandom(rngSeed);
     }
 
     /** ============================================== **/
@@ -38,9 +40,8 @@ public class MctsPlayer implements Player {
             assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
             root = new Node(state.withTrickCollected(), playableCards(state, hand), hand,  null, ownId.team());
         }
-        else {
+        else
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
-        }
 
         iterate(root);
 
@@ -159,7 +160,7 @@ public class MctsPlayer implements Player {
 
         TurnState copyState = state;
         CardSet copyHand = hand;
-        SplittableRandom rng = new SplittableRandom(rngSeed);
+//        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
             Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
