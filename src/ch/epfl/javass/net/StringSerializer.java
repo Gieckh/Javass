@@ -1,10 +1,9 @@
 package ch.epfl.javass.net;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.StringJoiner;
 
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public final class StringSerializer {
 
@@ -12,11 +11,15 @@ public final class StringSerializer {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     
+    
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/   
     
     // cannot be instantiated
+    /**
+     * 
+     */
     private StringSerializer() {};
     
     /** ============================================== **/
@@ -40,11 +43,11 @@ public final class StringSerializer {
     }
     
     public static String serializeString(String s) {
-        return Base64.encode(s.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString((s.getBytes(StandardCharsets.UTF_8)));
     }
     
-    public static String deserializeString(String s) throws Base64DecodingException {
-        return new String(Base64.decode(s), StandardCharsets.UTF_8);
+    public static String deserializeString(String s) {
+        return new String(Base64.getDecoder().decode(s), StandardCharsets.UTF_8);
     }
     
     public static String combine(char  c, String ... s ) {

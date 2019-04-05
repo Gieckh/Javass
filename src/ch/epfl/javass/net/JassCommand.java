@@ -7,18 +7,17 @@ import java.util.List;
 import ch.epfl.javass.jass.TeamId;
 
 public enum JassCommand {
-    PLRS    (0),
-    TRMP    (1),
-    HAND    (2),
-    TRCK    (3),
-    CARD    (4),
-    SCOR    (5),
-    WINR    (6);
+    PLRS,
+    TRMP,
+    HAND, 
+    TRCK,
+    CARD,
+    SCOR,
+    WINR;
 
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    private final int type;
     public final static int COUNT = 7;
     public final static List<JassCommand> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
@@ -26,9 +25,6 @@ public enum JassCommand {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    private JassCommand(int type) {
-        this.type = type;
-    }
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
