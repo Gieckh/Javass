@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * CardSet
  *
- *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
@@ -75,9 +74,9 @@ public final class CardSet {
     }
     
     /**
-     * @brief returns true if and only if this set is empty
+     * @brief returns true iff this set is empty
      *
-     * @return (boolean) true if the set of packed cards is empty [i.e. pkCardSet == 00...000]
+     * @return (boolean) true iff the set of packed cards is empty [i.e. pkCardSet == 00...000]
      *
      */
     public boolean isEmpty () {
@@ -101,7 +100,6 @@ public final class CardSet {
      *
      * @param index (int) //TODO
      * @return (Card) the index-th <em> card</em> from this set of cards.
-     *
      */
     public Card get(int index) {
         return Card.ofPacked(PackedCardSet.get(pkCardSet, index));
@@ -121,7 +119,7 @@ public final class CardSet {
     }
     /**
      * @brief If the card "card" is already in this set,
-     *        this method remove it[the corresponding bit is shifted from 1 to 0]. //TODO: "shifted" ?
+     *        this method remove it[the corresponding bit is shifted from 1 to 0].
      *        Otherwise, does nothing.
      *
      * @param card (Card) the card we want to remove from the set
@@ -209,12 +207,11 @@ public final class CardSet {
     @Override
     public boolean equals(Object thatO) {
         //using "instanceof", since final class
-        if (thatO == null  ||  !(thatO instanceof CardSet)) {//todo: test //TODO: remove "== null" ?
+        if (!(thatO instanceof CardSet)) { //the call to instanceof handles the case (thatO == null)
             return false;
         }
 
-        CardSet thatOSet = (CardSet) thatO;
-        return (thatOSet.pkCardSet == this.pkCardSet);
+        return this.pkCardSet == ((CardSet) thatO).pkCardSet;
     }
 
 
