@@ -38,7 +38,6 @@ public final class JassGame {
     /** ============================================== **/
     
     /**
-     * 
      * @param rngSeed
      * @param players
      * @param playerNames

@@ -1,4 +1,4 @@
-package ch.epfl.javass.jass;
+package ch.epfl.javass.net;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.BufferedReader;
@@ -11,15 +11,11 @@ import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
 
 public class serverNetGame {
-
-      public static void main(String[] args) {
-          try {
-            RemotePlayerClient gali  = new RemotePlayerClient("localhost");
-        
-          } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public static void main(String[] args) {
+        try {
+            RemotePlayerClient gali =  new RemotePlayerClient("localhost", RemotePlayerClient.PORT_NUMBER);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
-
     }
 }

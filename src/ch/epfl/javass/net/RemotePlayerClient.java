@@ -1,4 +1,5 @@
 package ch.epfl.javass.net;
+
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.BufferedReader;
@@ -38,8 +39,8 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     /** ============================================== 
      * @throws IOException **/
 
-    public RemotePlayerClient(String nameOfHost) throws IOException {
-        Socket s = new Socket(nameOfHost , PORT_NUMBER);
+    public RemotePlayerClient(String nameOfHost, int port) throws IOException {
+        Socket s = new Socket(nameOfHost, PORT_NUMBER);
                 BufferedReader r =
                   new BufferedReader(
                     new InputStreamReader(s.getInputStream(),
