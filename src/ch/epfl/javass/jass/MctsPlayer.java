@@ -35,7 +35,7 @@ public class MctsPlayer implements Player {
         //default, the root teamId is this player's and its father is null.
         Node root;
 
-        //TODO: ternary operator
+        //The trick corresponding to the TurnState of a Node should NEVER be full -using our implementation
         if (state.trick().isFull()) {
             assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
             root = new Node(state.withTrickCollected(), playableCards(state, hand), hand,  null, ownId.team());
@@ -196,8 +196,19 @@ public class MctsPlayer implements Player {
     }
 
 
-
-
+    /**
+     * @brief The Nodes will be used to construct the tree used by the Monte-Carlo
+     *        algorithm.
+     *
+     *        - Each Node has knowledge of its father <em>"father"</em> and its children <em>"directChildrenOfNode"</em>.
+     *        - Each Node contains an attribute <em>"totalPointsFromNode"</em> which represents
+     *          the sum of the points its team -given by <em>"teamId"</em>- obtained after
+     *          simulating games from either this node or one of his children.
+     *        - It also has an attribute <em>"randomTurnsPlayed"</em> indicating
+     *          how many turns were played starting from this Node or one of its children.
+     *        - The last remarkable attribute is <em>"playableCardsFromTurnState"</em>
+     *          which correspond to the cards the method "playableCards" s
+     */
     private static final class Node {
         /** ============================================== **/
         /** ==============    ATTRIBUTES    ============== **/

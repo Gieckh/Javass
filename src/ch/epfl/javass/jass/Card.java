@@ -295,16 +295,16 @@ public final class Card {
     }
 
 
-    /* 
+    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     public boolean equals(Object thatO) {
-        if (!(thatO instanceof Card)) { //the call to instanceof take care of the case (thatO == null)
+        if (!(thatO instanceof Card)) { //the call to instanceof handles the case (thatO == null)
             return false;
         }
 
-        Card thatOCard = (Card) thatO; // Or do 2 "conversions, idk"
+        Card thatOCard = (Card) thatO;
         return (thatOCard.color() == this.color()  &&  thatOCard.rank() == this.rank());
     }
 
