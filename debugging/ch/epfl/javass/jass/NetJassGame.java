@@ -21,14 +21,9 @@ public class NetJassGame {
             else {
                 player = new RandomPlayer(2019);
                 if(pId ==PlayerId.PLAYER_2) {
-                    try {
-                        RemotePlayerServer gali =  new RemotePlayerServer(player);
-                        player = new RemotePlayerClient("127.0.0.1");
-                     
-                                          
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
+                    RemotePlayerServer gali =  new RemotePlayerServer(player);
+                    gali.run();
+                    System.out.println("42");
                 }
             }
                 players.put(pId, player);

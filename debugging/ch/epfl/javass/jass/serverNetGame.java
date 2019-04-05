@@ -13,10 +13,13 @@ import ch.epfl.javass.net.RemotePlayerServer;
 public class serverNetGame {
 
       public static void main(String[] args) {
-       try {
-         RemotePlayerClient gali =  new RemotePlayerClient("localhost");
-    } catch (IOException e) {
-        throw new UncheckedIOException(e);
-    } 
+          try {
+            RemotePlayerClient gali  = new RemotePlayerClient("localhost");
+        
+          } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 }
