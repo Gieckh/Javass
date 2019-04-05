@@ -49,8 +49,8 @@ public final class StringSerializer {
     
     public static String combine(char  c, String ... s ) {
         StringJoiner j = new StringJoiner(",", "", "");
-        for( String ss : s) {
-             j.add(ss);
+        for( String str : s) {
+             j.add(str);
         }
         return j.toString();        
     }
