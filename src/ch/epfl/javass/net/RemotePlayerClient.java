@@ -1,4 +1,5 @@
 package ch.epfl.javass.net;
+import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,8 +10,6 @@ import java.io.UncheckedIOException;
 import java.net.Socket;
 import java.util.Map;
 
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import ch.epfl.javass.jass.Player;
@@ -19,7 +18,7 @@ import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
-import static java.nio.charset.StandardCharsets.US_ASCII;
+
 
 
 public final class RemotePlayerClient implements Player , AutoCloseable {
