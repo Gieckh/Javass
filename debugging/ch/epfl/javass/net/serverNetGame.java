@@ -12,6 +12,15 @@ import ch.epfl.javass.jass.RandomPlayer;
 import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
 
+/**
+ * test thus non Jdoc 
+ * 
+ * IMPORTANT : LANCER D'ABORD servernetgame PUIS netjassgame
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class serverNetGame {
     public static void main(String[] args) throws IOException {
         Player player = new RandomPlayer(2019);

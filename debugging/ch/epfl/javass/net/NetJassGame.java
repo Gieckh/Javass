@@ -9,6 +9,13 @@ import ch.epfl.javass.jass.*;
 import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
 
+/**
+ * test thus non Jdoc
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class NetJassGame {
     public static void main(String[] args)  {
         Map<PlayerId, Player> players = new HashMap<>();
@@ -39,6 +46,7 @@ public class NetJassGame {
         while (!g.isGameOver()) {
             System.out.println("on arrive a commencer la game");
             g.advanceToEndOfNextTrick();
+            //hint  : pour le moment on arrive jamais ici
             System.out.println("on arrive ici ?");
             System.out.println("-------------------------------------------------------------");
         }

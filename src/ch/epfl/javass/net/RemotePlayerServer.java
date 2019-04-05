@@ -59,14 +59,16 @@ public final class RemotePlayerServer {
      *
     */
     public void run() {
+        System.out.println("run");
         try (ServerSocket s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
                 Socket s = s0.accept();
                 BufferedReader r = new BufferedReader(
                         new InputStreamReader(s.getInputStream(), US_ASCII));
                 BufferedWriter w =
                         new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), US_ASCII))) {
+            System.out.println("On passe le try");
             while(!r.readLine().isEmpty()) {
-                System.out.println("41");
+                System.out.println("on passe pas beaucoup par ici");
                 
                 // I decided to combine the whole line only with ',' (even the jassCommand) 
                 String words[] = (r.readLine()).split(",");
