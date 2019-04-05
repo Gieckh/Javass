@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.javass.jass.TeamId;
-
 public enum JassCommand {
     PLRS,
     TRMP,

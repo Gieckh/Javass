@@ -8,10 +8,6 @@ import ch.epfl.javass.net.StringSerializer;
 //this is  a test, thus no need of javadoc
 public class test {
     public static void main(String[] args) throws Base64DecodingException {
-        String s = "42";
-        String u = StringSerializer.serializeString(s);
-        String v = StringSerializer.deserializeString(u);
-        System.out.println(u);
-        System.out.println(v);
+        System.out.println(Card.of(Card.Color.SPADE, Card.Rank.SIX).equals(null));
     }
 }

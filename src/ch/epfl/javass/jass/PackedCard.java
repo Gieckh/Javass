@@ -23,14 +23,20 @@ public final class PackedCard {
     private final static int MAX_RANK = 8;
     private final static int CODED_RANK_START = 0;
     private final static int CODED_RANK_SIZE = 4;
-    private final static int RANK_SHIFT = 6;
 
     private final static int CODED_COLOR_SIZE = 2;
     private final static int CODED_COLOR_START = CODED_RANK_SIZE;
-    private final static int COLOR_SHIFT = 1;
 
     private final static int EMPTY_BITS_START = 6;
     private final static int EMPTY_BITS_SIZE = 26;
+
+    //Used by the method "points".
+    private final static int[][] pointsArray = {
+        //In case trump:
+        {0, 0, 0, 14, 10, 20, 3, 4, 11},
+        //In case not trump:
+        {0, 0, 0,  0, 10,  2, 3, 4, 11}
+    };
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -62,7 +68,7 @@ public final class PackedCard {
      * @return (int) the corresponding packed card.
      */
     public static int pack(Card.Color c, Card.Rank r) {
-        return Bits32.pack(r.type - RANK_SHIFT, CODED_RANK_SIZE, c.ordinal(), CODED_COLOR_SIZE); //TODO: test
+        return Bits32.pack(r.ordinal(), CODED_RANK_SIZE, c.ordinal(), CODED_COLOR_SIZE); //TODO: test
     }
 
     
@@ -84,7 +90,7 @@ public final class PackedCard {
     public static Card.Rank rank(int pkCard) { //TODO: erase unnecessary comments
         assert isValid(pkCard);
 
-        return Card.Rank.toType(extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) + RANK_SHIFT);
+        return Card.Rank.ALL.get(extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE));
     }
 
     /**
@@ -132,28 +138,11 @@ public final class PackedCard {
      *
      */
     public static int points(Card.Color trump, int pkCard) {
-        Card.Color color = color(pkCard); 
+        boolean isTrump = color(pkCard) == trump;
         Card.Rank rank = rank(pkCard);
 
-        switch(rank) {
-            case SIX:
-            case SEVEN:
-            case EIGHT:
-                return 0;
-            case NINE:
-                return color.equals(trump) ? 14 : 0;
-            case TEN:
-                return 10;
-            case JACK:
-                return color.equals(trump) ? 20 : 2;
-            case QUEEN:
-                return 3;
-            case KING:
-                return 4;
-            case ACE:
-                return 11;
-            default: throw new IllegalArgumentException();
-        }
+        //TODO: == or .equals ?
+        return (isTrump) ? pointsArray[0][rank.ordinal()]: pointsArray[1][rank.ordinal()];
     }
 
 

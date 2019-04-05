@@ -26,10 +26,10 @@ public final class StringSerializer {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
      
-    public static String serializeInt(int i) {
+    public  static String serializeInt(int i) {
         return Integer.toUnsignedString(i, 16);
     }
-    
+
     public static int deserializeInt(String s) {
         return Integer.parseUnsignedInt(s, 16);
     }
@@ -37,7 +37,7 @@ public final class StringSerializer {
     public static String serializeLong(long l ) {
         return Long.toUnsignedString(l, 16);
     }
-    
+
     public static long deserializeLong(String s) {
         return Long.parseUnsignedLong(s, 16);
     }
@@ -51,11 +51,13 @@ public final class StringSerializer {
     }
     
     public static String combine(char  c, String ... s ) {
-        StringJoiner j = new StringJoiner(",", "", "");
-        for( String ss : s) {
-             j.add(ss);
-        }
-        return j.toString();        
+        //TODO: suppr
+//        StringJoiner j = new StringJoiner(",", "", "");
+//        for( String str : s) {
+//             j.add(str);
+//        }
+//        return j.toString();
+        return String.join(",", s);
     }
     
     public static String[] split(String s, char c) {

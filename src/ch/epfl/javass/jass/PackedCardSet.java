@@ -362,7 +362,7 @@ public final class PackedCardSet {
             for (Card.Rank r : ranks) {
                 int pkCard = PackedCard.pack(c, r);
                 long pkCardSet = 0L;
-                for (int k = r.trumpOrdinal + 1 ; k < trumpRanks.length ; ++k) {
+                for (int k = r.trumpOrdinal() + 1 ; k < trumpRanks.length ; ++k) {
                     pkCardSet = add(pkCardSet, PackedCard.pack(c, trumpRanks[k]));
                 }
 
