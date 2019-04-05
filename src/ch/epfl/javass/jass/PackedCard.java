@@ -33,9 +33,9 @@ public final class PackedCard {
     //Used by the method "points".
     private final static int[][] pointsArray = {
         //In case trump:
-        {0, 0, 0, 14, 10, 20, 3, 4, 11},
+        {0, 0, 0, 14, 10, 20, 3, 4, 11}, //{6, 7, 8, 9, 10, J, Q, K, A}
         //In case not trump:
-        {0, 0, 0,  0, 10,  2, 3, 4, 11}
+        {0, 0, 0,  0, 10,  2, 3, 4, 11}  //{6, 7, 8, 9, 10, J, Q, K, A}
     };
 
     /** ============================================== **/
@@ -138,11 +138,11 @@ public final class PackedCard {
      *
      */
     public static int points(Card.Color trump, int pkCard) {
-        boolean isTrump = color(pkCard) == trump;
+        //TODO: == or .equals ?
+        int lineToExplore = (color(pkCard) == trump)? 0: 1;
         Card.Rank rank = rank(pkCard);
 
-        //TODO: == or .equals ?
-        return (isTrump) ? pointsArray[0][rank.ordinal()]: pointsArray[1][rank.ordinal()];
+        return pointsArray[lineToExplore][rank.ordinal()];
     }
 
 
