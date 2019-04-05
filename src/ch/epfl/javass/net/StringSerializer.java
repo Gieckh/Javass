@@ -48,11 +48,13 @@ public final class StringSerializer {
     }
     
     public static String combine(char  c, String ... s ) {
-        StringJoiner j = new StringJoiner(",", "", "");
-        for( String str : s) {
-             j.add(str);
-        }
-        return j.toString();        
+        //TODO: suppr
+//        StringJoiner j = new StringJoiner(",", "", "");
+//        for( String str : s) {
+//             j.add(str);
+//        }
+//        return j.toString();
+        return String.join(",", s);
     }
     
     public static String[] split(String s, char c) {
