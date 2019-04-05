@@ -7,15 +7,15 @@ import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import ch.epfl.javass.jass.Player;
+import ch.epfl.javass.jass.RandomPlayer;
 import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
 
 public class serverNetGame {
-    public static void main(String[] args) {
-        try {
-            RemotePlayerClient gali =  new RemotePlayerClient("localhost", RemotePlayerClient.PORT_NUMBER);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+    public static void main(String[] args) throws IOException {
+        Player player = new RandomPlayer(2019);
+        RemotePlayerServer gali =  new RemotePlayerServer(player);
+        gali.run();
     }
 }
