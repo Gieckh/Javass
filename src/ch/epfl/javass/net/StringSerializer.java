@@ -28,7 +28,7 @@ public final class StringSerializer {
     }
     
     public static int deserializeInt(String s) {
-        return Integer.parseUnsignedInt(s, 2);
+        return Integer.parseUnsignedInt(s, 16);
     }
     
     public static String serializeLong(long l ) {
@@ -36,7 +36,7 @@ public final class StringSerializer {
     }
     
     public static long deserializeLong(String s) {
-        return Long.parseUnsignedLong(s, 2);
+        return Long.parseUnsignedLong(s, 16);
     }
     
     public static String serializeString(String s) {
