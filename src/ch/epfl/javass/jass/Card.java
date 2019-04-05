@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+//TODO: Java-Doc
 //TODO: check access rights
 //TODO: use class preconditions
 /**
@@ -27,14 +28,13 @@ public final class Card {
     /** ============================================== **/
 
     /**
-     * @brief PRIVATE constructor of the class card. Invoked by method //TODO: "invoked" ?
+     * @brief PRIVATE constructor of the class card. Called by method
      *        "of(Color c, Rank r)" and "ofPacked(int packed)".
      *
      * @param packed (int) an encoded card
-     *
      */
     private Card(int packed) {
-        packedCard = packed; //int so no need to copy ? //TODO: suppr
+        packedCard = packed;
     }
 
 
@@ -42,7 +42,7 @@ public final class Card {
     
 
     /**
-     *  @Brief manages the colors of the cards.
+     *  @brief manages the colors of the cards.
      *
      */
     public enum Color {
@@ -62,33 +62,32 @@ public final class Card {
 
 
         /**
-         * @Brief returns the character corresponding to the rank of the card
-         *
-         * @throws IllegalArgumentException
+         * @brief returns the character corresponding to the rank of the card
          */
-        @Override public String toString() throws IllegalArgumentException {
+        @Override public String toString() {
+            //We decided to use a switch instead of a second attribute because
+            //this method should not be called too often
             switch (this) {
             case SPADE:
                 return "\u2660";
             case HEART:
-                //2661 or 2665 if you want the heart to be full or not
+                //\u2665 if you want the heart to be full
                 return "\u2661";
             case DIAMOND:
-                //2662 or 2666 if you want the diamond to be full or not
+                //\u2666 if you want the diamond to be full
                 return "\u2662";
             case CLUB:
                 return "\u2663";
             default:
-                //should never happen
-                throw new IllegalArgumentException(
-                        "this thing does not correspond to a color");
+                //unreachable statement
+                throw new Error("not a color");
             }
         }
 
     }
 
     /**
-     * @Brief manages the ranks of the cards.
+     * @brief manages the ranks of the cards.
      *
      */
     public enum Rank {
@@ -106,8 +105,8 @@ public final class Card {
         KING  (13, 5),
         ACE   (14, 6);
 
-        public final int type;
-        public final int trumpOrdinal;
+        private final int type;
+        private final int trumpOrdinal;
         public final static int COUNT = 9;
         public final static List<Rank> ALL =
           Collections.unmodifiableList(Arrays.asList(values()));
@@ -142,7 +141,7 @@ public final class Card {
          * @param number an Int
          * @return Rank
          */
-        static Rank toType(int number) {
+         private static Rank toType(int number) {
             switch (number) {
             case 6:
                 return SIX;
@@ -163,24 +162,30 @@ public final class Card {
             case 14:
                 return ACE;
             default:
-                //should never happen
-                throw new IllegalArgumentException("this input (" + number + ") doesn't correspond to a rank");
+                //unreachable statement
+                throw new Error("Not a rank");
             }
         }
 
         /**
-         * @return (int) the position of the trump card which has the rank "this"
-         *         in the list of trump cards, based on their strength //TODO: better
+         * @brief Indicates the strength of a trump card. The higher the better. (ranges from 0 to 8)
          *
+         * @return (int) the position of the trump card which has the rank "this"
+         *         in the ordered list of trump cards, based on their strength
          */
         public int trumpOrdinal() {
             return trumpOrdinal;
         }
 
         /**
-         * returns the character corresponding to the rank of the card
+         * @brief the character corresponding to the rank of the card
+         *
+         * @return (String) the character corresponding to the rank of the card
          */
-        @Override public String toString() {
+        @Override
+        public String toString() {
+            //We decided to use a switch instead of a third attribute because
+            //this method should not be called too often
             switch (this) {
             case SIX:
                 return "6";
@@ -295,7 +300,7 @@ public final class Card {
      */
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  !(thatO instanceof Card)) { //todo: test
+        if (!(thatO instanceof Card)) { //the call to instanceof take care of the case (thatO == null)
             return false;
         }
 

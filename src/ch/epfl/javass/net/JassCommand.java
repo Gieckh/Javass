@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.javass.jass.TeamId;
-
 public enum JassCommand {
     PLRS    (0),
     TRMP    (1),
@@ -18,7 +16,7 @@ public enum JassCommand {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    private final int type;
+    public final int type;
     public final static int COUNT = 7;
     public final static List<JassCommand> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
