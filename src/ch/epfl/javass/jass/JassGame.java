@@ -10,6 +10,8 @@ import java.util.Random;
 
 import ch.epfl.javass.jass.Card.Color;
 
+//TODO: boolean for gameOver, and update the boolean in our method advanceToEndOfNextTrick, and handle setWinningPLayer
+
 /**
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -250,7 +252,6 @@ public final class JassGame {
 
         tmp.put(id, hand);
     }
-
 
 
     private static Card.Color[] getAllColors() {
