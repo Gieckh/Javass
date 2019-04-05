@@ -22,6 +22,15 @@ import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
 
+/**
+ * @Brief RemotePlayerServer instance is a remote server which particularity is that 
+ * it acts depending on what a RemotePlayerClient ; which is local; tells him 
+ * thus the only method is about receiving informations ,or sending to the local instance 
+ * an information about what card to play.
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class RemotePlayerServer {
 
     /** ============================================== **/
@@ -33,6 +42,9 @@ public final class RemotePlayerServer {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     
+    /**
+     * @param underLyingPlayer
+     */
     public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;
     }
@@ -42,6 +54,10 @@ public final class RemotePlayerServer {
     /** ============================================== **/
     
     
+    /**
+     * @Brief receive some informations from the local player (client) and tells him what card to play.
+     *
+    */
     public void run() {
         try (ServerSocket s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
                 Socket s = s0.accept();

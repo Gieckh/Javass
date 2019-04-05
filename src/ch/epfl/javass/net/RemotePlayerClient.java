@@ -22,6 +22,12 @@ import ch.epfl.javass.jass.TurnState;
 
 
 
+/**
+ * RemotePlayerClient instance is a local "teleguided" player which exchanges informations with a RemotePlayerServer instance (which plays in remote).
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class RemotePlayerClient implements Player , AutoCloseable {
     
     /** ============================================== **/
@@ -37,8 +43,13 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== 
-     * @throws IOException **/
+    
 
+    /**
+     * @param nameOfHost
+     * @param port
+     * @throws IOException
+     */
     public RemotePlayerClient(String nameOfHost, int port) throws IOException {
         Socket s = new Socket(nameOfHost, PORT_NUMBER);
                 BufferedReader r =
@@ -61,6 +72,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     /** ============================================== **/
 
     
+    /* 
+     * @see java.lang.AutoCloseable#close()
+     */
     @Override
     public void close() throws Exception {
         s.close();
@@ -68,6 +82,12 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
         w.close();
     }
     
+    
+    /**
+     * @Brief writes and flushes the string in the BufferedReader.
+     *
+     * @param s a String
+    */
     private void forceWritting(String s) {
         try {
             w.write(s);
@@ -78,6 +98,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
         
     }
     
+    /* 
+     * @see ch.epfl.javass.jass.Player#cardToPlay(ch.epfl.javass.jass.TurnState, ch.epfl.javass.jass.CardSet)
+     */
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
         try {
@@ -93,6 +116,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
         }
     }
 
+    /* 
+     * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
+     */
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         String s =  Integer.toString(ownId.ordinal());
@@ -104,6 +130,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     }
         
 
+    /* 
+     * @see ch.epfl.javass.jass.Player#setTrump(ch.epfl.javass.jass.Card.Color)
+     */
     @Override
     public void setTrump(Card.Color trump) {
         forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
@@ -111,6 +140,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
                 StringSerializer.serializeInt(trump.ordinal()))));     
    }
     
+    /* 
+     * @see ch.epfl.javass.jass.Player#updateHand(ch.epfl.javass.jass.CardSet)
+     */
     @Override
      public void updateHand(CardSet newHand) {
         forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
@@ -120,6 +152,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
 
   
 
+    /* 
+     * @see ch.epfl.javass.jass.Player#updateTrick(ch.epfl.javass.jass.Trick)
+     */
     @Override
      public void updateTrick(Trick newTrick) {
          forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
@@ -127,6 +162,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
                  StringSerializer.serializeInt(newTrick.packed()))));
 }
 
+    /* 
+     * @see ch.epfl.javass.jass.Player#updateScore(ch.epfl.javass.jass.Score)
+     */
     @Override
      public void updateScore(Score score) {
          forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
@@ -134,6 +172,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
                  StringSerializer.serializeLong(score.packed()))));
   }
 
+    /* 
+     * @see ch.epfl.javass.jass.Player#setWinningTeam(ch.epfl.javass.jass.TeamId)
+     */
     @Override
      public void setWinningTeam(TeamId winningTeam) {
          forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',

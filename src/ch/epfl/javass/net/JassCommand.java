@@ -4,6 +4,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * JassCommand, an enumeration of the possibles commands that can be thrown between a remotePlayerClient and a remotePlayerServer
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public enum JassCommand {
     PLRS,
     TRMP,
