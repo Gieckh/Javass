@@ -37,7 +37,9 @@ public class NetJassGame {
 
         JassGame g = new JassGame(2019, players, playerNames);
         while (!g.isGameOver()) {
+            System.out.println("on arrive a commencer la game");
             g.advanceToEndOfNextTrick();
+            System.out.println("on arrive ici ?");
             System.out.println("-------------------------------------------------------------");
         }
     }
