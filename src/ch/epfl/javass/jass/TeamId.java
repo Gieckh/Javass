@@ -14,15 +14,29 @@ public enum TeamId {
     TEAM_1  (1),
     TEAM_2  (2);
 
+    /** ============================================== **/
+    /** ==============    ATTRIBUTES    ============== **/
+    /** ============================================== **/
+    
     private final int type;
     public final static int COUNT = 2;
     public final static List<TeamId> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
 
+    
+    /** ============================================== **/
+    /** ==============   CONSTRUCTORS   ============== **/
+    /** ============================================== **/
+
     // TODO : inutile pour le moment ( et pas demandé) (?? @Marin)
     private TeamId(int type) {
         this.type = type;
     }
+    
+    
+    /** ============================================== **/
+    /** ===============    METHODS    ================ **/
+    /** ============================================== **/
 
     /**
      * returns the other team than the one we apply the function on.
