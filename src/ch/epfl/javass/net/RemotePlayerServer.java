@@ -43,7 +43,7 @@ public final class RemotePlayerServer {
     
     
     public void run() {
-        try (ServerSocket s0 = new ServerSocket(5108);
+        try (ServerSocket s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
          Socket s = s0.accept();
          BufferedReader r =
            new BufferedReader(
