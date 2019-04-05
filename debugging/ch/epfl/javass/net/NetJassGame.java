@@ -1,15 +1,15 @@
-package ch.epfl.javass.jass;
+package ch.epfl.javass.net;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.javass.jass.*;
 import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
 
 public class NetJassGame {
-   
     public static void main(String[] args)  {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
@@ -23,7 +23,7 @@ public class NetJassGame {
                 if(pId ==PlayerId.PLAYER_2) {
                     try {
                         RemotePlayerServer gali =  new RemotePlayerServer(player);
-                        player = new RemotePlayerClient("127.0.0.1");
+                        player = new RemotePlayerClient("128.179.140.241", RemotePlayerClient.PORT_NUMBER);
                      
                                           
                     } catch (IOException e) {
@@ -31,17 +31,16 @@ public class NetJassGame {
                     }
                 }
             }
-                players.put(pId, player);
-                playerNames.put(pId, pId.name());
+            players.put(pId, player);
+            playerNames.put(pId, pId.name());
         }
 
-            JassGame g = new JassGame(2019, players, playerNames);
-            while (!g.isGameOver()) {
-                g.advanceToEndOfNextTrick();
-    System.out.println(
-            "-------------------------------------------------------------");
-            }
+        JassGame g = new JassGame(2019, players, playerNames);
+        while (!g.isGameOver()) {
+            g.advanceToEndOfNextTrick();
+            System.out.println("-------------------------------------------------------------");
         }
     }
+}
 
 
