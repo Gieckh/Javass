@@ -67,9 +67,10 @@ public final class RemotePlayerServer {
                 BufferedWriter w =
                         new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), US_ASCII))) {
             System.out.println("On passe le try");
-            while(r.readLine().isEmpty()) {
+            while(!r.readLine().isEmpty()) {
+                //hint : on arrive jamais ici
                 System.out.println("on passe pas beaucoup par ici");
-                
+
                 // I decided to combine the whole line only with ',' (even the jassCommand) 
                 String words[] = (r.readLine()).split(",");
                 JassCommand Command = JassCommand.valueOf(words[0]);
