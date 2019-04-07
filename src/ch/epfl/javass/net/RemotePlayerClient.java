@@ -90,7 +90,7 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
      * @param s a String
     */
     private void forceWritting(String s) {
-        System.out.println("writed somthg");
+        System.out.println("writed :" + s);
         try {
             w.write(s);
             w.flush();
@@ -106,15 +106,16 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     @Override
     public Card cardToPlay(TurnState state, CardSet hand) {
         try {
-            forceWritting(StringSerializer.serializeString(StringSerializer.combine(',', 
+            forceWritting(StringSerializer.combine(',', 
                     JassCommand.ALL.get(4).toString(),
                     StringSerializer.serializeLong(state.packedScore()),
                     StringSerializer.serializeLong(state.packedUnplayedCards()),
                     StringSerializer.serializeInt(state.packedTrick()), 
-                    StringSerializer.serializeLong(hand.packed()))));
+                    StringSerializer.serializeLong(hand.packed())));
             System.out.println("just informed about cardToplay");
-            return Card.ofPacked(StringSerializer.deserializeInt(StringSerializer.deserializeString(r.readLine())));
+            return Card.ofPacked(StringSerializer.deserializeInt(r.readLine()));
         } catch (IOException e) {
+            System.out.println("exception ?");
             throw new UncheckedIOException(e);
         }
     }
@@ -125,11 +126,14 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         String s =  Integer.toString(ownId.ordinal());
-        String str = null;
+        String str = "";
         for(PlayerId p : PlayerId.ALL) {
+            if(p!=PlayerId.PLAYER_1) {
+                str+=",";
+            }
             str+= StringSerializer.serializeString(playerNames.get(p));
         }
-        forceWritting(StringSerializer.combine(',',JassCommand.ALL.get(1).toString(),s ,str)); 
+        forceWritting(StringSerializer.combine(',',JassCommand.ALL.get(0).toString(),s ,str)); 
         System.out.println("justinformedaboutsetplayers");
     }
         
@@ -139,9 +143,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
      */
     @Override
     public void setTrump(Card.Color trump) {
-        forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
+        forceWritting(StringSerializer.combine(',',
                 JassCommand.ALL.get(1).toString(),
-                StringSerializer.serializeInt(trump.ordinal()))));     
+                StringSerializer.serializeInt(trump.ordinal())));     
         System.out.println("justinformedaboutsettrump");
    }
     
@@ -150,9 +154,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
      */
     @Override
      public void updateHand(CardSet newHand) {
-        forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
+        forceWritting(StringSerializer.combine(',',
                 JassCommand.ALL.get(2).toString(),
-                StringSerializer.serializeLong(newHand.packed()))));
+                StringSerializer.serializeLong(newHand.packed())));
         System.out.println("justinformedaboutupdatehand");
     }
 
@@ -163,9 +167,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
      */
     @Override
      public void updateTrick(Trick newTrick) {
-         forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
+         forceWritting(StringSerializer.combine(',',
                  JassCommand.ALL.get(3).toString(),
-                 StringSerializer.serializeInt(newTrick.packed()))));
+                 StringSerializer.serializeInt(newTrick.packed())));
          System.out.println("justinformedaboutupdatetrick");
 }
 
@@ -174,9 +178,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
      */
     @Override
      public void updateScore(Score score) {
-         forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
+         forceWritting(StringSerializer.combine(',',
                  JassCommand.ALL.get(5).toString(),
-                 StringSerializer.serializeLong(score.packed()))));
+                 StringSerializer.serializeLong(score.packed())));
          System.out.println("justinformedaboutupdatescore");
   }
 
@@ -185,9 +189,9 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
      */
     @Override
      public void setWinningTeam(TeamId winningTeam) {
-         forceWritting(StringSerializer.serializeString(StringSerializer.combine(',',
+         forceWritting(StringSerializer.combine(',',
                  JassCommand.ALL.get(6).toString(),
-                 StringSerializer.serializeLong(winningTeam.ordinal()))));
+                 StringSerializer.serializeLong(winningTeam.ordinal())));
          System.out.println("justupdateaboutwinningteam");
     }
 }
