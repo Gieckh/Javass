@@ -15,7 +15,6 @@ import java.util.List;
  * 
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
- *
  */
 public final class Card {
     private final int packedCard;
@@ -94,7 +93,6 @@ public final class Card {
         /** 
          * @brief PRIVATE constructor : Creates a new variable of type Rank.
          *
-         * @param type (int) associates the card rank to an int
          * @param trumpOrdinal (int) associates to the card rank its strength, assuming
          *                     it is a trump. for example, the nine of trump color
          *                     beats the ten. Therefore, it has a bigger trumpOrdinal
@@ -153,27 +151,28 @@ public final class Card {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+
     /**
-     * @brief constructs a new card with the chosen color and rank
+     * @brief Constructs a new card with the chosen Color and Rank.
+     *
+     * @param c (Color) - The given Color
+     * @param r (Rank) - The given Rank
      * 
-     * @param "c" a color
-     * @param "r" a rank
-     * 
-     * @return a new Card with the chosen color and rank 
+     * @return (Card) - a new Card corresponding to the given Rank and Color.
     */
     public static Card of(Color c, Rank r) {
         return new Card(pack(c, r));
     }
 
     /**
-     * @brief constructs a new card from the chosen int "packed".
+     * @brief constructs a new card from the specified int "packed".
      * 
      * @param packed (int) - the [packed] card we want to turn into a Card
      * @return a new Card with the chosen int "packed"
      * @throws IllegalArgumentException if the [packed] card given as argument is
      *         not valid.
      */
-    public static Card ofPacked(int packed) throws IllegalArgumentException {
+    public static Card ofPacked(int packed) {
         checkArgument(PackedCard.isValid(packed));
         return new Card(packed);
     }
@@ -189,9 +188,10 @@ public final class Card {
         return packedCard;
     }
 
-    /** returns the color of the card .
+    /**
+     * @brief this Card's color
      * 
-     * @return the color of this card
+     * @return (Color) the color of this card
      * 
      */
     public Color color() {
@@ -199,7 +199,8 @@ public final class Card {
     }
     
     /**
-     * @brief Gives the rank of a card
+     * @brief This Card's rank.
+     *
      * @return (Rank) the rank of this card
      */
     public Rank rank() {
@@ -207,24 +208,24 @@ public final class Card {
     }
     
     /**
-     * @brief returns true if the this card is stronger than the
-     *        packed card "that", false otherwise (weaker or not comparable).
+     * @brief returns true if the "this" Card is stronger than the
+     *        Card "that", false otherwise (weaker or not comparable).
      *
-     * @param trump (Color) the color of the trump. Needed to evaluate the strength of a card
-     * @param that (Card) the Card we use to compare
-     * @return (boolean) true when this card is better than "that".
-     *
+     * @param trump (Color) - the color of the trump. Needed to evaluate the strength of a card
+     * @param that (Card) - the specified Card, to be compared with "this"
+     * @return (boolean) - true when "this" is stronger than "that".
      */
     public boolean isBetter(Color trump, Card that) {
         return PackedCard.isBetter(trump, packedCard, that.packed());
     }
+
     /**
-     * @brief return the value (nb of points a card is worth) of this
-     *        card , given the trump Color  "trump".
+     * @brief The value (nb of points a card is worth) of this
+     *        Card , given the trump Color "trump".
      *
      * @param trump (Color) the color of the trump
      *
-     * @return the value of this card 
+     * @return (int) the value of the Card "this", given the trump
      *
      */
     public int points(Color trump) {
@@ -245,7 +246,7 @@ public final class Card {
         return (thatOCard.color() == this.color()  &&  thatOCard.rank() == this.rank());
     }
 
-    /* 
+    /**
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -258,7 +259,6 @@ public final class Card {
      *        "[its suit]" then "[its rank]", without spaces in between.
      *
      * @return the (String) representation of the card.
-     *
      */
     @Override
     public String toString() {

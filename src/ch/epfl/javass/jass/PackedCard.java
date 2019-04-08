@@ -9,7 +9,8 @@ import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 //TODO: use class preconditions
 
 /**
- * @brief Contains the methods used to manipulate the cards
+ * @brief Non-instantiable.
+ *        Contains the methods used to manipulate the cards
  *
  * @author - Marin Nguyen (288260)
  * @author - Antoine Scardigli (299905)
@@ -41,8 +42,9 @@ public final class PackedCard {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
+    //private so this class is not instantiated
     private PackedCard() {
-        // cuz' we don't want this class to be instantiated.
+        // empty
     }
 
     /** ============================================== **/
@@ -52,34 +54,37 @@ public final class PackedCard {
     /**
      * @brief Indicates whether the pkCard is correctly packed.
      *
-     * @param pkCard (int)
+     * @param pkCard (int) - the [packed] card whose validity we want to check.
      * @return true if the pkCard is correctly packed
      *
     */
     public static boolean isValid(int pkCard) {
-        return (extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) <= MAX_RANK &&  //The rank is valid (we don't check color since it can only be valid)
+        return (extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE) <= MAX_RANK &&  //asserting the rank is valid (we don't check color since it can only be valid)
                 extract(pkCard, EMPTY_BITS_START, EMPTY_BITS_SIZE) == 0);
     }
 
     /**
-     * @brief packs a card, given its color and rank
+     * @brief packs a card, given its Color and Rank
+     *
      * @param c (Color), the color of the card
      * @param r (Rank), the rank of the card
      * @return (int) the corresponding packed card.
      */
     public static int pack(Card.Color c, Card.Rank r) {
-        return Bits32.pack(r.ordinal(), CODED_RANK_SIZE, c.ordinal(), CODED_COLOR_SIZE); //TODO: test
+        return Bits32.pack(r.ordinal(), CODED_RANK_SIZE, c.ordinal(), CODED_COLOR_SIZE);
     }
 
     
-    /** returns the color of the card packed, we assert the int is valid
-     * @param pkCard
-     * @return the color of this card
+    /**
+     * @brief Finds the Color of the given [packed] card.
+     *
+     * @param pkCard (int) - the specified [packed] card.
+     * @return (Color) the color of this [packed] card.
     */
     public static Card.Color color(int pkCard) {
         assert (isValid(pkCard));
 
-        return Card.Color.ALL.get(extract(pkCard, CODED_COLOR_START, CODED_COLOR_SIZE)); //TODO: test again
+        return Card.Color.ALL.get(extract(pkCard, CODED_COLOR_START, CODED_COLOR_SIZE));
     }
 
     /**
@@ -95,7 +100,7 @@ public final class PackedCard {
 
     /**
      * @brief returns true if the packed card "pkCardL" is stronger than the
-     *        packed card "pkCardR", false otherwise (weaker or not comparable).
+     *        packed card "pkCardR", false otherwise (weaker or "not comparable").
      *
      * @param trump (Color) the color of the trump. Needed to evaluate the strength of a card
      * @param pkCardL (int) the int encoding the first card
@@ -112,7 +117,7 @@ public final class PackedCard {
         Card.Rank rankOfL = rank(pkCardL);
         Card.Rank rankOfR = rank(pkCardR);
 
-        if (colorOfL == trump) { //TODO: "==" works too i think ? and is safer / less greedy
+        if (colorOfL == trump) {
             if (colorOfR == trump) {
                 return rankOfL.trumpOrdinal() > rankOfR.trumpOrdinal();
             }
