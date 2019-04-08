@@ -7,9 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//TODO: Java-Doc
-//TODO: check access rights
-//TODO: use class preconditions
 /**
  * The class used to represent a card.
  * 

@@ -89,10 +89,11 @@ public final class PackedCard {
 
     /**
      * @brief Gives the rank of a packed card
-     * @param pkCard (int), a card coded by an int (i.e. a packed card)
-     * @return (Rank) the rank of this card
+     *
+     * @param pkCard (int) - a card coded by an int (i.e. a packed card)
+     * @return (Rank) - the rank of this card
      */
-    public static Card.Rank rank(int pkCard) { //TODO: erase unnecessary comments
+    public static Card.Rank rank(int pkCard) {
         assert isValid(pkCard);
 
         return Card.Rank.ALL.get(extract(pkCard, CODED_RANK_START, CODED_RANK_SIZE));
@@ -106,7 +107,6 @@ public final class PackedCard {
      * @param pkCardL (int) the int encoding the first card
      * @param pkCardR (int) the int encoding the second card
      * @return (boolean) true when pkCardL is better than pkCardR.
-     *
      */
     public static boolean isBetter(Card.Color trump, int pkCardL, int pkCardR) {
         assert (isValid(pkCardL)  &&  isValid(pkCardR));
@@ -139,11 +139,9 @@ public final class PackedCard {
      * @param trump (Color) the color of the trump
      * @param pkCard (int) the int representing a card
      *
-     * @return the value of the (encoded) card "pkCard"
-     *
+     * @return the value of the [encoded] card "pkCard"
      */
     public static int points(Card.Color trump, int pkCard) {
-        //TODO: == or .equals ?
         int lineToExplore = (color(pkCard) == trump)? 0: 1;
         Card.Rank rank = rank(pkCard);
 
@@ -156,8 +154,7 @@ public final class PackedCard {
      *        "[its suit]" then "[its rank]", without spaces in between.
      *
      * @param pkCard (int) the int encoding a card
-     * @return the (String) representation of the card.
-     *
+     * @return (String) the representation of the card.
      */
     public static String toString(int pkCard) {
         return color(pkCard).toString() + rank(pkCard).toString();
