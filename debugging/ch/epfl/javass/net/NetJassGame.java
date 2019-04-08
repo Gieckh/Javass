@@ -46,8 +46,6 @@ public class NetJassGame {
         while (!g.isGameOver()) {
             g.advanceToEndOfNextTrick();
             //hint  : pour le moment on arrive jamais ici
-            System.out.println("on arrive ici ?");
-            System.out.println("-------------------------------------------------------------");
         }
     }
 }
