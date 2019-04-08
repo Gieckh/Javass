@@ -3,8 +3,8 @@ package ch.epfl.javass.bits;
 import static ch.epfl.javass.Preconditions.checkArgument;
 
 /**
- * Bits32
- *
+ * @brief Non-instantiable, this class contains the methods that will be used to
+ *        manipulate vectors of 32 bits, here represented by (int) values.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -14,9 +14,9 @@ public final class Bits32 {
     /** ============================================== **/
     /** ==============   CONSTRUCTEURS   ============= **/
     /** ============================================== **/
-    
+    // Private so we can't instantiate.
     private Bits32() {
-        // Not to be instantiated
+        //empty
     }
 
     /** ============================================== **/
@@ -27,9 +27,11 @@ public final class Bits32 {
      * @brief creates a mask of "size" 1 bits, starting at position "start"
      *        ex : mask(1, 3) = 0...01110
      *
-     * @param start (int) the position of the first 1
-     * @param size  (int) the length of the 1-sequence
-     * @return (int) the mask
+     * @param start (int) - the position of the first 1
+     * @param size  (int) - the length of the 1-sequence
+     * @return (int) - the mask specified by "start" and "size"
+     * @throws IllegalArgumentException if start and size dont indicate a valid
+     *         bits range.
      */
     public static int mask(int start, int size)  {
         checkArgument(start >= 0  &&  size >=0);
@@ -50,6 +52,8 @@ public final class Bits32 {
      * @param start (int)
      * @param size  (int)
      * @return (int) the int formed from the bits [start] to [start + size - 1] of "bits"
+     * @throws IllegalArgumentException if start and size dont indicate a valid
+     *         bits range.
      */
     public static int extract(int bits, int start, int size) {
         // The call to mask checks the exceptions
@@ -65,7 +69,6 @@ public final class Bits32 {
      * @see checkPack(int, int)
      * @param value the bit whose MSB position we want to know, NOT 0.
      * @return (int) the MSB position (an int between 0 and 31)
-     *
      */
     // finds the msb position of an int, assuming there is one (i.e. value != 0)
     private static int msbPosition(int value) {
@@ -91,7 +94,7 @@ public final class Bits32 {
             return true;
         }
 
-        //For sure there is a MSB (bc value != 0)
+        //For sure there is a MSB (because value != 0)
         int msbPosition = msbPosition(value);
 
         return (msbPosition < size); // There mustn't be more bits than indicated by the "size"
@@ -106,8 +109,10 @@ public final class Bits32 {
      * @param v2 (int) the second (int) to concatenate
      * @param s2 (int) the size of v2
      * @return (int) the number formed by the concatenation of v1 and v2 (in binary)
-     * @throws IllegalArgumentException
-     *
+     * @throws IllegalArgumentException if:
+     *         - size is not in {0, 1, ..., 31 = Integer.SIZE - 1}
+     *         - or one (at least) of the values v_i occupies more bits than specified
+     *           by the associated size s_i
      */
     public static int
     pack(int v1, int s1, int v2, int s2) {
@@ -127,8 +132,10 @@ public final class Bits32 {
      *
      * @see "pack(int v1, int s1, int v2, int s2)"
      * @return the number formed by the concatenation (in binary form) of v1, v2 and v3
-     * @throws IllegalArgumentException
-     *
+     * @throws IllegalArgumentException if:
+     *         - size is not in {0, 1, ..., 31 = Integer.SIZE - 1}
+     *         - or one (at least) of the values v_i occupies more bits than specified
+     *           by the associated size s_i
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3) {
@@ -145,8 +152,10 @@ public final class Bits32 {
      *
      * @see "pack(int v1, int s1, int v2, int s2)"
      * @return the number formed by the concatenation (in binary form) of all the "v_i", (where 1 <= i <= 7)
-     * @throws IllegalArgumentException
-     *
+     * @throws IllegalArgumentException if:
+     *         - size is not in {0, 1, ..., 31 = Integer.SIZE - 1}
+     *         - or one (at least) of the values v_i occupies more bits than specified
+     *           by the associated size s_i
      */
     public static int
     pack(int v1, int s1, int v2, int s2, int v3, int s3, int v4, int s4,

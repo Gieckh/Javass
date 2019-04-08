@@ -16,11 +16,11 @@ public final class Preconditions {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    
-    /**
-     *  to make it impossible for precondition to be instantiated
-     */
-    private Preconditions() {}
+
+    // private so we can't instantiate
+    private Preconditions() {
+        // empty
+    }
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
@@ -30,9 +30,8 @@ public final class Preconditions {
     /**
      * @brief checks whether "b" (boolean) is true. If not, throws an exception.
      *
-     * @param b (boolean)
+     * @param b (boolean) - the condition that needs to be verified.
      * @throws IllegalArgumentException if b is false
-     *
      */
     public static void
     checkArgument(boolean b) throws IllegalArgumentException {
@@ -44,12 +43,11 @@ public final class Preconditions {
     /**
      * @brief checks whether the index "index" fits in the array of size "size"
      *
-     * @param index (int), the index to be checked.
-     * @param size (int), the size of the array the index lives in.
-     * @return the index if there is no problem.
+     * @param index (int) - the index to be checked.
+     * @param size (int) - the size of the array the index lives in.
+     * @return (int) - the index if there is no problem.
      * @throws IndexOutOfBoundsException if the index is negative, or
      *         if the index is greater than (or equal to) the size
-     *
      */
     public static int
     checkIndex(int index, int size) throws IndexOutOfBoundsException {
