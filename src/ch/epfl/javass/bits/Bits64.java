@@ -3,6 +3,14 @@ package ch.epfl.javass.bits;
 import static ch.epfl.javass.Preconditions.checkArgument;
 
 //TODO: javadoc
+
+/**
+ * @brief Non-instantiable, this class contains the methods that will be used to
+ *        manipulate vectors of 64 bits, here represented by (long) values.
+ *
+ * @author - Marin Nguyen (288260)
+ * @author - Antoine Scardigli (299905)
+ */
 public class Bits64 {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -10,12 +18,12 @@ public class Bits64 {
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
-    /**
-     * ==============================================
-     **/
+    /** ============================================== **/
+    //empty
     private Bits64() {
-        // Not to be instantiated
+        // Private so we can't instantiate.
     }
+
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
@@ -74,8 +82,8 @@ public class Bits64 {
      * @param value (long)
      * @param size (int)
      * @return (boolean) true if
-     * - 1 <= size <= 31
-     * - and "value" doesn't use more bits than specified by "size"
+     *         - 1 <= size <= 31
+     *         - and "value" doesn't use more bits than specified by "size"
      * @author - Marin Nguyen (288260)
      * @see pack(int, int, int, int)
      */
@@ -92,18 +100,22 @@ public class Bits64 {
         //For sure there is a MSB (bc value != 0L)
         int msbPosition = msbPosition(value);
 
-        return (msbPosition < size); // Secondly, there mustn't be more bits than indicated by the "size"
+        return (msbPosition < size); // Second, check there aren't more bits in "value" than indicated by "size"
     }
 
     /**
-     * @param v1 (int) the first (int) to concatenate
-     * @param s1 (int) the size of v1
-     * @param v2 (int) the second (int) to concatenate
-     * @param s2 (int) the size of v2
-     * @return (int) the number formed by the concatenation of v1 and v2 (in binary)
-     * @throws IllegalArgumentException
-     * @brief concatenates the binary expressions of v1 and v2 (where v2's bits are more significant than v1's ones)
-     * @author - Marin Nguyen (288260)
+     * @brief concatenates the binary expressions of v1 and v2
+     *       (where v2's bits are more significant than v1's ones)
+     *
+     * @param v1 (int) - the first (int) to concatenate
+     * @param s1 (int) - the size of v1
+     * @param v2 (int) - the second (int) to concatenate
+     * @param s2 (int) - the size of v2
+     * @return (int) - the number formed by the concatenation of v1 and v2 (in binary)
+     * @throws IllegalArgumentException if:
+     *         - size is not in {0, 1, ..., 31 = Integer.SIZE - 1}
+     *         - or one (at least) of the values v_i occupies more bits than specified
+     *           by the associated size s_i
      */
     public static long pack(long v1, int s1, long v2, int s2) {
         checkArgument(checkPack(v1, s1) && checkPack(v2, s2));
