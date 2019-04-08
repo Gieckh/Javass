@@ -67,12 +67,13 @@ public final class RemotePlayerServer {
                 BufferedWriter w =
                         new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), US_ASCII))) {
             System.out.println("On passe le try");
-            while(!r.readLine().isEmpty()) {
-                //hint : on arrive jamais ici
-                System.out.println("on passe pas beaucoup par ici");
+            String string;
+            System.out.println("just read");
+            while((string=r.readLine())!= null) {
+                
 
                 // I decided to combine the whole line only with ',' (even the jassCommand) 
-                String words[] = (r.readLine()).split(",");
+                String words[] = (string).split(",");
                 JassCommand Command = JassCommand.valueOf(words[0]);
                 switch(Command) {
                     case PLRS:
@@ -81,20 +82,24 @@ public final class RemotePlayerServer {
                         for(int i = 2 ; i<6 ; ++i) {
                             playerNames.put(PlayerId.ALL.get(i-2), StringSerializer.deserializeString(words[i]));
                         }
-                        this.underLyingPlayer.setPlayers(PlayerId.valueOf(words[1]), playerNames);
-
+                        this.underLyingPlayer.setPlayers(PlayerId.ALL.get(StringSerializer.deserializeInt(words[1])), playerNames);
+                        break;
+                        
                     case TRMP:
                         System.out.println("trump read");
                         this.underLyingPlayer.setTrump(Card.Color.ALL.get(StringSerializer.deserializeInt(words[1])));
-
+                        break;
+                        
                     case HAND:
                         System.out.println("hand read");
                         this.underLyingPlayer.updateHand(CardSet.ofPacked(StringSerializer.deserializeLong(words[1])));
-
+                        break;
+                        
                     case TRCK:
                         System.out.println("trick read");
                         this.underLyingPlayer.updateTrick(Trick.ofPacked(StringSerializer.deserializeInt(words[1])));
-
+                        break;
+                        
                     case CARD:
                         System.out.println("card read");
                         w.write(StringSerializer.serializeInt(this.underLyingPlayer.cardToPlay(
@@ -104,16 +109,22 @@ public final class RemotePlayerServer {
                                         StringSerializer.deserializeInt(words[3])),
                                 CardSet.ofPacked(
                                         StringSerializer.deserializeLong(words[4]))).packed()));
+                        w.write("\n");
                         w.flush();
+                        break;
 
                     case SCOR:
                         System.out.println("score read");
                         this.underLyingPlayer.updateScore(Score.ofPacked(
                                 StringSerializer.deserializeLong(words[1])));
+                        break;
+                        
                     case WINR:
                         System.out.println("win read");
                         this.underLyingPlayer.setWinningTeam(TeamId.ALL.get(
                                 StringSerializer.deserializeInt(words[1])));
+                        break;
+                        
 
                     default:
                         throw new IllegalArgumentException("error in remote player ; wrong Jass Command");
@@ -122,6 +133,7 @@ public final class RemotePlayerServer {
             System.out.println("end of while");
         }
         catch (IOException e) {
+            System.out.println("coucou");
             throw new UncheckedIOException(e);
         }
     }
