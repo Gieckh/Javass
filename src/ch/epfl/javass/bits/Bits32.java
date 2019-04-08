@@ -27,9 +27,9 @@ public final class Bits32 {
      * @brief creates a mask of "size" 1 bits, starting at position "start"
      *        ex : mask(1, 3) = 0...01110
      *
-     * @param start (int) the position of the first 1
-     * @param size  (int) the length of the 1-sequence
-     * @return (int) the mask specified by "start" and "size"
+     * @param start (int) - the position of the first 1
+     * @param size  (int) - the length of the 1-sequence
+     * @return (int) - the mask specified by "start" and "size"
      * @throws IllegalArgumentException if start and size dont indicate a valid
      *         bits range.
      */

@@ -19,9 +19,9 @@ public class Bits64 {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    //empty
+    // Private so we can't instantiate.
     private Bits64() {
-        // Private so we can't instantiate.
+        //empty
     }
 
     /** ============================================== **/
