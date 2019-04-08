@@ -13,16 +13,22 @@ public final class Score {
     /** =============================================== **/
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
-    private long packedScore;
+    private final long packedScore;
     public final static Score INITIAL = new Score(PackedScore.INITIAL);
 
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    // because we don't want this class instantiated.
+
+    /**
+     * @brief PRIVATE constructor of the class Score. Called by the method
+     *        "ofPacked(int packed)".
+     *
+     * @param packed (long) an encoded score
+     */
     private Score(long packed) {
-     packedScore = packed;   
+        packedScore = packed;
     }
 
 
@@ -31,12 +37,11 @@ public final class Score {
     /** ============================================== **/
     
     /**
-     * @brief constructs a new score from the chosen long "packed".
+     * @brief Create a new instance of Score from the chosen long "packed".
      * 
-     * @param packed
+     * @param packed (long) - the given [packed] score
      * @return a new Card with the chosen int "packed"
      * @throws IllegalArgumentException
-     * 
      */
     public static Score ofPacked(long packed) {
         checkArgument(PackedScore.isValid(packed));

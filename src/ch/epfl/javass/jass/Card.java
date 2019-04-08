@@ -17,7 +17,7 @@ public final class Card {
     private final int packedCard;
 
     /**
-     * @brief PRIVATE constructor of the class card. Called by method
+     * @brief PRIVATE constructor of the class Card. Called by the methods
      *        "of(Color c, Rank r)" and "ofPacked(int packed)".
      *
      * @param packed (int) an encoded card
