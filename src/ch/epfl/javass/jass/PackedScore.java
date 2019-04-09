@@ -57,8 +57,8 @@ public final class PackedScore {
      *        [though we don't check everything. For example, we don't check whether
      *         the first team's trick + the second's is below 9]
      *
-     * @param  pkScore (long) the long encoding the points and tricks of the game
-     * @return (boolean) true if "pkScore" corresponds to a valid score
+     * @param  pkScore (long) - the long encoding the points and tricks of the game
+     * @return (boolean) - true if "pkScore" corresponds to a valid score
      *
      */
     public static boolean isValid(long pkScore) {
@@ -71,27 +71,26 @@ public final class PackedScore {
               //We want only 0 from the 24th to the 31th bit thus the "+ EMPTY_BIT_SIZE"
 
               //Team2
-              extract(pkScore, TEAM_TWO_START, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // number of tricks <=9
-              extract(pkScore, TEAM_TWO_START + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // number of points per turn is valid (<258)
-              extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME // number of points of the game is valid (<=000)
+              extract(pkScore, TEAM_TWO_START, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // number of tricks <= 9
+              extract(pkScore, TEAM_TWO_START + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // points per turn <= 257
+              extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME // number of points of the game is valid (<=2000)
+               //We want only 0 from the 56th to the 63th bit thus the "+ EMPTY_BIT_SIZE"
        );
-              //We want only 0 from the 56th to the 63th bit thus the "+ EMPTY_BIT_SIZE"
     }
 
     /**
      * @brief Creates the packed score encoding the following information.
      *
-     * @param turnTricks1 (int) the tricks team1 earned during this turn
-     * @param turnPoints1 (int) the points team1 earned during this turn
-     * @param gamePoints1 (int) the total number of points team1 earned during the previous turns.
+     * @param turnTricks1 (int) - the tricks team1 earned during this turn
+     * @param turnPoints1 (int) - the points team1 earned during this turn
+     * @param gamePoints1 (int) - the total number of points team1 earned during the previous turns.
      *
-     * @param turnTricks2 (int) the tricks team2 earned during this turn
-     * @param turnPoints2 (int) the points team2 earned during this turn
-     * @param gamePoints2 (int) the total number of points team2 earned during the previous turns.
-     * @return (long) the packed information
-     *
+     * @param turnTricks2 (int) - the tricks team2 earned during this turn
+     * @param turnPoints2 (int) - the points team2 earned during this turn
+     * @param gamePoints2 (int) - the total number of points team2 earned during the previous turns.
+     * @return (long) - the packed information
      */
-    public static long //TODO: tester
+    public static long
     pack (int turnTricks1, int turnPoints1, int gamePoints1,
           int turnTricks2, int turnPoints2, int gamePoints2)
     {
@@ -106,10 +105,9 @@ public final class PackedScore {
     /**
      * @brief The number of tricks the team "t" won during the current turn.
      *
-     * @param pkScore (long) the long encoding the points and tricks of the game
-     * @param t (TeamId) The team we're interested in.
-     * @return (int) How many tricks this team won during this turn
-     *
+     * @param pkScore (long) - the long encoding the points and tricks of the game
+     * @param t (TeamId) - The team we're interested in.
+     * @return (int) - How many tricks this team won during this turn
      */
     public static int turnTricks(long pkScore, TeamId t) {
         assert isValid(pkScore);
@@ -122,26 +120,23 @@ public final class PackedScore {
     /**
      * @brief the number of points won in the current turn in function of the team.
      *
-     * @param pkScore (long) the long encoding the scores
-     * @param t (TeamId) the team we're interested in.
-     * @return (int) the number of points won in the current turn
-     *
+     * @param pkScore (long) - the long encoding the scores
+     * @param t (TeamId) - the team we're interested in.
+     * @return (int) - the number of points won in the current turn
      */
     public static int turnPoints(long pkScore, TeamId t)  {
         assert isValid(pkScore);
 
         int shift = (t == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
-
         return (int) extract(pkScore, shift + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE);
     }
 
     /**
      * @brief the number of points the team won in the whole game, <em>except</em> the current turn.
      *
-     * @param pkScore (long) the long encoding the scores
-     * @param t, the TeamId
-     * @return int : the total number of points won depending on the team
-     *
+     * @param pkScore (long) - the long encoding the scores
+     * @param t - the TeamId
+     * @return (int) - the total number of points won depending on the team
      */
     public static int gamePoints(long pkScore, TeamId t) {
         assert isValid(pkScore);
@@ -153,9 +148,9 @@ public final class PackedScore {
     /**
      * returns the total number of points won in the whole game.
      *
-     * @param pkScore (long) the long encoding the scores
-     * @param t, the TeamId
-     * @return (int): the total number of points won depending on the team
+     * @param pkScore (long) - the long encoding the scores
+     * @param t - the TeamId
+     * @return (int) - the total number of points won depending on the team
      *
      */
     public static int totalPoints(long pkScore, TeamId t) {
@@ -173,11 +168,10 @@ public final class PackedScore {
      *        a trick of value "trickPoints". takes into consideration the <em>additional trick</em>,
      *        but <em>not</em> the <em>last trick</em> bonus.
      *
-     * @param pkScore (long) the long encoding the scores
-     * @param winningTeam (TeamId) the team winning the points
-     * @param trickPoints (int) the value of the won trick
-     * @return (long) the updated pkScore.
-     *
+     * @param pkScore (long) - the long encoding the scores
+     * @param winningTeam (TeamId) - the team winning the points
+     * @param trickPoints (int) - the value of the won trick
+     * @return (long) - the updated pkScore.
      */
     public static long
     withAdditionalTrick(long pkScore, TeamId winningTeam, int trickPoints) {
@@ -200,8 +194,8 @@ public final class PackedScore {
      * @brief a long with global points updated with adding the currents points,
      * and 0 as number of Tricks won and 0 current points for both teams.
      *
-     * @param  pkScore (long) the long encoding the scores
-     * @return a new long with the data updated as it becomes next turn
+     * @param  pkScore (long) - the long encoding the scores
+     * @return (long) - a new long with the data updated as it becomes next turn
      *
      */
     public static long nextTurn(long pkScore) { //TODO: (lata) masking instead of packing?
@@ -223,9 +217,8 @@ public final class PackedScore {
      *        where the first set of parenthesis corresponds to "Team1", and
      *        the second to "Team2".
      *
-     * @param pkScore (long) the long encoding the scores
-     * @return (String) the String with all information about points and tricks of both teams
-     *
+     * @param pkScore (long) - the long encoding the scores
+     * @return (String) - the String with all information about points and tricks of both teams
      */
     public static String toString(long pkScore) {
         assert isValid(pkScore);
