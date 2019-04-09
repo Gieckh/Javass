@@ -1,10 +1,14 @@
 package ch.epfl.javass.jass;
 import static ch.epfl.javass.Preconditions.checkArgument;
-import static ch.epfl.javass.jass.PackedScore.isValid;
 
 /**
- * Score
- *
+ * The class used to represent a Score.
+ * A Score indicates, for each team:
+ *     - the number of tricks they've won this turn,
+ *     - the number of points they've won this turn,
+ *     - the number of points they've won this game (current turn not included)
+ *     - the number of points they've won this game (current turn included)
+ *       [this is just the sum of the 2 previous points].
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -106,6 +110,7 @@ public final class Score {
      * @param winningTeam (TeamId) the team winning the points
      * @param trickPoints (int) the value of the won trick
      * @return (long) this updated pkScore.
+     * @throws IllegalArgumentException if the trickPoints are < 0.
      */
     public Score withAdditionalTrick(TeamId winningTeam, int trickPoints) {
         checkArgument(trickPoints >= 0);
@@ -123,7 +128,7 @@ public final class Score {
     }
 
     
-    /* 
+    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -131,7 +136,7 @@ public final class Score {
         if (!(thatO instanceof Score))
             return false;
 
-        Score thatOScore = (Score) thatO; // Or do 2 "conversions, idk"
+        Score thatOScore = (Score) thatO;
         return (thatOScore.packedScore == this.packedScore);
     }
     
