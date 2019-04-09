@@ -42,9 +42,9 @@ public final class PackedScore {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    //TODO do same for some other classes
+    //private so this class is not instantiated
     private PackedScore() {
-        // because we don't want this class instantiated.
+        // empty
     }
 
 
@@ -64,12 +64,14 @@ public final class PackedScore {
     public static boolean isValid(long pkScore) {
 
        return(
-              //TODO: suppr coms on the right ?
-              extract(pkScore, TRICKS_START, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // number of tricks is valid (<=10)
-              extract(pkScore, POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // number of points per turn is valid (<258)
-              extract(pkScore, POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME && // number of points of the game is valid (<=2000)
+              //Team 1
+              extract(pkScore, TRICKS_START, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // number of tricks <= 9
+              extract(pkScore, POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // number of points per turn <= 257
+              extract(pkScore, POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME && // number of points of the game <= 2000
               //We want only 0 from the 24th to the 31th bit thus the "+ EMPTY_BIT_SIZE"
-              extract(pkScore, TEAM_INFO_SIZE, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // number of tricks is valid (<=9)
+
+              //Team2
+              extract(pkScore, TEAM_TWO_START, TRICKS_SIZE) <= MAX_TRICKS_PER_TURN && // number of tricks <=9
               extract(pkScore, TEAM_TWO_START + POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE) <= MAX_POINTS_PER_TURN && // number of points per turn is valid (<258)
               extract(pkScore, TEAM_TWO_START + POINTS_PER_GAME_START, POINTS_PER_GAME_SIZE + EMPTY_BIT_SIZE) <= MAX_POINTS_PER_GAME // number of points of the game is valid (<=000)
        );

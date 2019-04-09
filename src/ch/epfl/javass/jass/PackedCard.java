@@ -4,10 +4,6 @@ import static ch.epfl.javass.bits.Bits32.extract;
 
 import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
 
-//TODO: handle access rights
-//TODO: check where we assert (tests must not be done here)
-//TODO: use class preconditions
-
 /**
  * @brief Non-instantiable.
  *        Contains the methods used to manipulate the cards
@@ -20,7 +16,7 @@ public final class PackedCard {
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
     public final static int INVALID = 0b111111;
-    //TODO: public or private.
+
     private final static int MAX_RANK = 8;
     private final static int CODED_RANK_START = 0;
     private final static int CODED_RANK_SIZE = 4;
