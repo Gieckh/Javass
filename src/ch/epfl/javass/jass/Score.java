@@ -35,13 +35,13 @@ public final class Score {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    
+
     /**
      * @brief Create a new instance of Score from the chosen long "packed".
      * 
      * @param packed (long) - the given [packed] score
      * @return a new Card with the chosen int "packed"
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the specified [packed] score is invalid
      */
     public static Score ofPacked(long packed) {
         checkArgument(PackedScore.isValid(packed));
@@ -49,10 +49,9 @@ public final class Score {
     }
     
     /**
-     * @brief returns the packedScore corresponding to this score.
+     * @brief The packed version of this score.
      * 
      * @return (long) the packedScore of this card
-     * 
      */
     public long packed() {
         return packedScore;
@@ -63,7 +62,6 @@ public final class Score {
      *
      * @param t (TeamId) The team we're interested in.
      * @return (int) How many tricks this team won during this turn
-     *
      */
     public int turnTricks(TeamId t) {
         return PackedScore.turnTricks(packedScore, t);
@@ -74,7 +72,6 @@ public final class Score {
      *
      * @param t (TeamId) the team we're interested in.
      * @return (int) the number of points won in the current turn
-     *
      */
     
     public int turnPoints(TeamId t) {
@@ -86,7 +83,6 @@ public final class Score {
      *
      * @param t, the TeamId
      * @return int : the total number of points won depending on the team
-     *
      */
     public int gamePoints(TeamId t) {
         return PackedScore.gamePoints(packedScore, t);
@@ -97,7 +93,6 @@ public final class Score {
      *
      * @param t, the TeamId
      * @return (int): the total number of points won depending on the team
-     *
      */
     public int totalPoints(TeamId t) {
         return PackedScore.totalPoints(packedScore, t);
@@ -111,7 +106,6 @@ public final class Score {
      * @param winningTeam (TeamId) the team winning the points
      * @param trickPoints (int) the value of the won trick
      * @return (long) this updated pkScore.
-     *
      */
     public Score withAdditionalTrick(TeamId winningTeam, int trickPoints) {
         checkArgument(trickPoints >= 0);
@@ -123,8 +117,7 @@ public final class Score {
      * and 0 as number of Tricks won and 0 current points for both teams.
      *
      * @return a new long with the data updated as it becomes next turn
-     *
-    */
+     */
     public Score nextTurn() {
         return ofPacked(PackedScore.nextTurn(packedScore));
     }
@@ -135,15 +128,14 @@ public final class Score {
      */
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  !(thatO instanceof Score)) { //todo: test
+        if (!(thatO instanceof Score))
             return false;
-        }
 
         Score thatOScore = (Score) thatO; // Or do 2 "conversions, idk"
-            return (thatOScore.packedScore == this.packedScore);
+        return (thatOScore.packedScore == this.packedScore);
     }
     
-    /* 
+    /**
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -152,16 +144,13 @@ public final class Score {
     }
     
     /**
-     * @brief a paragraph with all the information packed in pkScore. Takes the form:
+     * @brief a String with all the information packed in pkScore. Takes the form:
      *        (trickThisTurn1, pointsThisTurn1, pointsThisGame1)/(trickThisTurn2, pointsThisTurn2, pointsThisGame2)
      *        where the first set of parenthesis corresponds to "Team1", and
      *        the second to "Team2".
      *
-     * @return (String) the String with all information about points and tricks of both teams
-     *
-     * @author Antoine Scardigli - (299905)
-     * @author Marin Nguyen - (288260)
-    */
+     * @return (String) the String representation of this Score
+     */
     @Override
     public String toString() {
         return PackedScore.toString(packedScore);
