@@ -11,8 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
- * ScoreBean is a bean containing the properties of the scores.
- *
+ * ScoreBean is a JavaFx bean containing the properties of the scores.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
