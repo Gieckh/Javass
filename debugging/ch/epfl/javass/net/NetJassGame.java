@@ -29,7 +29,7 @@ public class NetJassGame {
                 player = new RandomPlayer(2019);
                 if(pId ==PlayerId.PLAYER_2) {
                     try {
-                        player = new RemotePlayerClient("128.179.156.75", RemotePlayerClient.PORT_NUMBER);
+                        player = new RemotePlayerClient("localhost", RemotePlayerClient.PORT_NUMBER);
                      
                      
                                           
@@ -45,8 +45,9 @@ public class NetJassGame {
         JassGame g = new JassGame(2019, players, playerNames);
         while (!g.isGameOver()) {
             g.advanceToEndOfNextTrick();
-            //hint  : pour le moment on arrive jamais ici
+            System.out.println("new Trick");
         }
+        System.out.println("finish");
     }
 }
 
