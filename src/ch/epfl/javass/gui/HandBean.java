@@ -32,7 +32,7 @@ public final class HandBean {
         return playableCards; 
     }
     
-    
+    //TODO : why isn't the test of the prof printing correctly ? (althought works)
     public void setHand(CardSet newHand) {
         // TODO je suis un peu embêté de pas la mettre en unmodifiable list, mais ca me semble pas une 
         // bonne idée puisque justement on modifie la liste dans le cas ou newHand.size != 9.
