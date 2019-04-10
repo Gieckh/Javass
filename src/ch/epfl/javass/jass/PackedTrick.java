@@ -5,7 +5,6 @@ import java.util.StringJoiner;
 import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
 
-//TODO: Actually do the J-doc
 /**
  * @brief manipulates the packed representations of the tricks of a game.
  *
