@@ -9,6 +9,9 @@ import java.util.List;
 
 /**
  * The class used to represent a card.
+ * A card is represented by:
+ *     - its Color (Spade, Heart, Diamond or Clubs)
+ *     - its Rank (6, 7, 8, 9, 10, J, Q, K or A)
  * 
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -69,7 +72,7 @@ public final class Card {
 
     /**
      * @brief A Card is represented by two things: its color and its rank.
-     *    n   This enumeration is used to represent a Card's Rank.
+     *        This enumeration is used to represent a Card's Rank.
      */
     public enum Rank {
         SIX   (0),
@@ -176,10 +179,9 @@ public final class Card {
 
 
     /**
-     * @brief returns the packedCard corresponding to this card.
+     * @brief The [packed] version of this Card.
      * 
      * @return (int) the packedCard of this card
-     * 
      */
     public int packed() {
         return packedCard;
@@ -223,7 +225,6 @@ public final class Card {
      * @param trump (Color) the color of the trump
      *
      * @return (int) the value of the Card "this", given the trump
-     *
      */
     public int points(Color trump) {
         return PackedCard.points(trump, packedCard);
