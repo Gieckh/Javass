@@ -165,7 +165,7 @@ public final class Card {
     }
 
     /**
-     * @brief constructs a new card from the specified int "packed".
+     * @brief Creates a new instance of Card from the specified int "packed".
      * 
      * @param packed (int) - the [packed] card we want to turn into a Card
      * @return a new Card with the chosen int "packed"

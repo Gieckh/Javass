@@ -41,7 +41,7 @@ public final class Score {
     /** ============================================== **/
 
     /**
-     * @brief Create a new instance of Score from the chosen long "packed".
+     * @brief Creates a new instance of Score from the specified long "packed".
      * 
      * @param packed (long) - the given [packed] score
      * @return a new Card with the chosen int "packed"
@@ -150,7 +150,7 @@ public final class Score {
     
     /**
      * @brief a String with all the information packed in pkScore. Takes the form:
-     *        (trickThisTurn1, pointsThisTurn1, pointsThisGame1)/(trickThisTurn2, pointsThisTurn2, pointsThisGame2)
+     *        "(trickThisTurn1, pointsThisTurn1, pointsThisGame1)/(trickThisTurn2, pointsThisTurn2, pointsThisGame2)"
      *        where the first set of parenthesis corresponds to "Team1", and
      *        the second to "Team2".
      *

@@ -47,10 +47,10 @@ public final class PackedCardSet {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    /**
-     * @brief This way the class is <em>not instantiable</em>
-     */
-    private PackedCardSet() {};
+    //private so this class is not instantiated
+    private PackedCardSet() {
+        //empty
+    }
 
     
     /** ============================================== **/
@@ -60,10 +60,10 @@ public final class PackedCardSet {
     /**
      * @brief Indicates whether the given set of packed cards is packed correctly
      *        It is iff the bits b_i of "pkCardSet" such that
-     *        <em>9 <= b_i % 16 <= 15</em>cc are zeros [0].
+     *        <em>9 <= b_i % 16 <= 15</em> are zeros [0] [where b_i represents the i-th bit]
      *
      * @param pkCardSet (long) - the set of packed cards we are interested in.
-     * @return (boolean) true if "pkCardSet" encodes a valid set of PackedCards.
+     * @return (boolean) - true if "pkCardSet" encodes a valid set of PackedCards.
      */
     public static boolean isValid(long pkCardSet) {
         long mask = Bits64.mask(SPADE_COLOR_START + UNUSED_BITS_START, UNUSED_BITS_SIZE) |
@@ -135,12 +135,12 @@ public final class PackedCardSet {
 
     /**
      * @brief If the packed card "pkCard" is not already in the set "pkCardSet",
-     *        this method puts it in [the corresponding bit was 0 and takes the value 1].
+     *        this method puts it in [the corresponding bit is shifted from 0 to 1].
      *        Otherwise, does nothing.
      *
      * @param pkCardSet (long) - the set we want to put the packed card in
      * @param pkCard (int) - the packed card we want to put in the set
-     * @return (long) The previous set, where the bit corresponding to the packed card
+     * @return (long) The previous set, except the bit corresponding to the packed card
      *         'pkCard" is at 1.
      */
     public static long add(long pkCardSet, int pkCard) {
@@ -149,13 +149,13 @@ public final class PackedCardSet {
 
     /**
      * @brief If the packed card "pkCard" is already in the set "pkCardSet",
-     *        this method remove it[the corresponding bit was 1 and takes the value 0].
+     *        this method removes it[the corresponding bit is shifted from 1 to 0].
      *        Otherwise, does nothing.
      *
      * @param pkCardSet (long) - the set we want to remove the packed card from
      * @param pkCard (int) - the packed card we want to remove from the set
-     * @return (long) The previous set, where the bit corresponding to the packed card
-     *         'pkCard" is at 0. [i.e. where we have removed "pkCard"]
+     * @return (long) The previous set, except the bit corresponding to the packed card
+     *         'pkCard" must be at 0. [i.e. where we have removed "pkCard"]
      */
     public static long remove(long pkCardSet, int pkCard) {
         return pkCardSet & ~(1L << index(pkCard));
@@ -174,7 +174,7 @@ public final class PackedCardSet {
         return (mask & pkCardSet) == mask;
     }
 
-    //TODO : return change so that newIndex = 1L << oldIndex.
+
     /**
      * @brief Given a packed card, return its index in the (long) encoding any
      *        set of cards
@@ -224,10 +224,15 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief If we interpret a set of packed cards "pkCS" the following way :
-     *        pkCS = <em>{</em>b_63 * (2**63), ..., b_0 * (2 ** 0)<em>}</em>, where b_i represents
-     *        the i-th bit of pkCS.
-     *        Then this method simply return <em>pkCardSet1 \ pkCardSet2</em>
+     * @brief the [packed] set of cards containing all the cards which are in
+     *        "pkCardSet1" but not in "pkCardSet2".
+     *
+     * <p>
+     *     If we interpret a set of packed cards "pkCS" the following way :
+     *     pkCS = <em>{</em>b_63 * (2**63), ..., b_0 * (2 ** 0)<em>]</em>, where b_i represents
+     *     the i-th bit of pkCS.
+     *     Then this method simply returns <em>pkCardSet1 \ pkCardSet2</em>
+     *</p>
      *
      * @param pkCardSet1 (long) - the first set of packed cards
      * @param pkCardSet2 (long) - the second set of packed cards.
@@ -321,7 +326,6 @@ public final class PackedCardSet {
                 Card.Rank.ACE,
                 Card.Rank.NINE,
                 Card.Rank.JACK,
-
         };
     }
 

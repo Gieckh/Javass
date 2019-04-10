@@ -23,7 +23,12 @@ public final class CardSet {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    
+    /**
+     * @brief PRIVATE constructor of the class Score. Called by the method
+     *        "ofPacked(int packed)".
+     *
+     * @param packed (int) an encoded CardSet.
+     */
     private CardSet(long packed) {
         pkCardSet = packed;
     }
@@ -34,9 +39,10 @@ public final class CardSet {
     
     
     /**
-     * @brief constructs a cardSet from a list of cards.
+     * @brief Creates a new instance of (CardSet), corresponding to the given
+     *        list of Cards.
      * 
-     * @param cards ( a list)
+     * @param cards (List of Card)
      * @return a CardSet which contains all cards of the list
      * 
     */
@@ -51,10 +57,10 @@ public final class CardSet {
 
 
     /**
-     * @brief constructs a cardset from a packCardSet.
+     * @brief Creates a new instance of CardSet from the specified long "packed".
      * 
-     * @param packed ( long ) a packedCardSet
-     * @return a CardSet from the packedCardSet "packed"
+     * @param packed (long) a packedCardSet
+     * @return The unpacked version of the specified [packed] set of cards: "packed".
      * 
     */
     public static CardSet ofPacked(long packed) {
@@ -64,30 +70,27 @@ public final class CardSet {
            
 
     /**
-     * @brief returns the packedCardSet corresponding to this cardSet .
+     * @brief the [packed] version of "this" CardSet.
      * 
-     * @return (long) the packedCardSet of this cardSet
-     * 
-    */
+     * @return (long) the [packed] version of "this" CardSet.
+     */
     public long packed() {
         return pkCardSet;
     }
     
     /**
-     * @brief returns true iff this set is empty
+     * @brief Indicates whether 'this" CardSet is empty.
      *
      * @return (boolean) true iff the set of packed cards is empty [i.e. pkCardSet == 00...000]
-     *
      */
     public boolean isEmpty () {
         return PackedCardSet.isEmpty(pkCardSet);
     }
     
     /**
-     * @brief Indicates how many cards are in this set.
+     * @brief Indicates the number of Cards in this set.
      *
      * @return (int) the number of cards in the set
-     *
      */
     public int size() {
         return PackedCardSet.size(pkCardSet);
@@ -110,22 +113,21 @@ public final class CardSet {
      *        Otherwise, does nothing.
      *
      * @param card (Card) the Card we want to add in the set
-     * @return (long) The previous set, where the bit corresponding to the packed card
-     *         'pkCard" is at 1.
-     *
+     * @return (long) The previous set, except the bit corresponding to the packed card
+     *         'pkCard" must be at 1.
      */
     public CardSet add(Card card) {
         return new CardSet( PackedCardSet.add(pkCardSet, card.packed()) );
     }
+
     /**
      * @brief If the card "card" is already in this set,
-     *        this method remove it[the corresponding bit is shifted from 1 to 0].
+     *        this method removes it[the corresponding bit is shifted from 1 to 0].
      *        Otherwise, does nothing.
      *
      * @param card (Card) the card we want to remove from the set
-     * @return (long) The previous set, where the bit corresponding to the packed card
-     *         'pkCard" is at 0. [i.e. where we have "removed" "pkCard"]
-     *
+     * @return (long) The previous set, except the bit corresponding to the packed card
+     *         'pkCard" must be at 0. [i.e. where we have "removed" "pkCard"]
      */
     public CardSet remove(Card card) {
         return new CardSet( PackedCardSet.remove(pkCardSet, card.packed()) );
@@ -137,15 +139,14 @@ public final class CardSet {
      *
      * @param card (Card)
      * @return (boolean) true if this set contains "card".
-     *
      */
     public boolean contains(Card card) {
         return PackedCardSet.contains(pkCardSet, card.packed());
     }
     /**
-     * @brief The complement of this set of packed cards.
+     * @brief The CardSet made of all the cards not in "this" CardSet
      *
-     * @return (long) the complement of this pack of cards
+     * @return (long) the complement of "this" CardSet
      * 
      */
     public CardSet complement() {
@@ -153,10 +154,10 @@ public final class CardSet {
     }
 
     /**
-    * @brief the union of this set with one in the parameters.
+    * @brief The CardSet containing all the Cards in either "this" or "that".
     *
-    * @param pkCardSet2 (long) the second set of packed cards.
-    * @return the union of this set of cards with the second one
+    * @param that (CardSet) another CardSet.
+    * @return (CardSet) the union of "this" and "that"
     *
     */
     public CardSet union(CardSet that) {
@@ -164,26 +165,29 @@ public final class CardSet {
     }
 
     /**
-     * @brief the intersection of this set of cards with one in the parameters.
+     * @brief The CardSet containing all the Cards in both "this" and "that".
      *
-     * @param pkCardSet2 (long) the second set of packed cards.
-     * @return the intersection of the this set of cards with the second one ( the parameter's one).
-     *
+     * @param that (CardSet) another CardSet.
+     * @return (CardSet) the intersection of "this" and  "that"
      */
     public CardSet intersection(CardSet that) {
         return new CardSet (PackedCardSet.intersection(pkCardSet, that.pkCardSet));
     }
     
     /**
-     * @brief If we interpret a set of packed cards "pkCS" the following way :
-     *        pkCS = <em>{</em>b_63 * (2**63), ..., b_0 * (2 ** 0)<em>]</em>, where b_i represents
-     *        the i-th bit of pkCS.
-     *        Then this method simply return <em>pkCardSet1 \ pkCardSet2</em>
+     * @brief the CardSet containing all the Cards that are in "this"
+     *        but not in "that".
      *
-     * @param CardSet (long) the second set of packed cards
-     * @return (long) the set of packed cards formed by all the cards in this
-     *         set, but not in the second.
+     * <p>
+     *     If we interpret a set of packed cards "pkCS" the following way :
+     *     pkCS = <em>{</em>b_63 * (2**63), ..., b_0 * (2 ** 0)<em>]</em>, where b_i represents
+     *     the i-th bit of pkCS.
+     *     Then this method simply returns <em>pkCardSet1 \ pkCardSet2</em>
+     *</p>
      *
+     * @param that (CardSet) another CardSet.
+     * @return (CardSet) the CardSet containing all the Cards that are in "this"
+     *         but not in "that".
      */
     public CardSet difference(CardSet that) {
         return new CardSet (PackedCardSet.difference(pkCardSet, that.pkCardSet));
