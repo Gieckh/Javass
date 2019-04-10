@@ -1,15 +1,11 @@
 package ch.epfl.javass.jass;
 import ch.epfl.javass.bits.Bits64;
 
-import static ch.epfl.javass.bits.Bits64.extract;
-
 import java.util.*;
 
-//TODO: access rights
-
 /**
- *  //TODO : this com. sucks
- * manipulates sets of cards of a jass game.
+ * @brief Non-instantiable
+ *        Contains the methods used to manipulate a CardSet.
  * 
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -251,7 +247,7 @@ public final class PackedCardSet {
      *
      * @param pkCardSet (long) - a [packed] set of cards
      * @param color (Color) - /
-     * @return (long) the set with only the cards from a chosen color and that were already in pkCardSet
+     * @return (long) the set with only the cards from a chosen color which were already in "pkCardSet"
      */
     public static long subsetOfColor(long pkCardSet, Card.Color color) {
         switch (color) {
@@ -269,12 +265,14 @@ public final class PackedCardSet {
     }
 
     /**
-     * @brief the textual representation of "pkCardSet"
+     * @brief A [packed] set of cards corresponds to a number of Cards [c1, ..., cn].
+     *        This method returns the textual representation of the specified "pkCardSet".
+     *        It takes the form: "{c1, ..., cn}".
      * 
      * @param pkCardSet (long) - a set of [packed] cards
-     * @return (String) represents the given set of [packed] cards.
+     * @return (String) the textual representation of "pkCardSet"
      */
-    public static String toString(long pkCardSet) { //TODO: technique tout ça
+    public static String toString(long pkCardSet) {
         StringJoiner j = new StringJoiner(",", "{", "}");
         for (int i = 0; i < 64; ++i) {
             long mask = 1L << i;
@@ -289,7 +287,7 @@ public final class PackedCardSet {
 
     // -------------------------------------------------------------------------
     // Methods to initialize variables,
-    // themselves used to reduce the number of some other methods.
+    // themselves used to reduce the length/complexity of some other methods.
 
     /**
      * @author Michel Schinz

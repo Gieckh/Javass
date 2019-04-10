@@ -6,7 +6,8 @@ import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.bits.Bits64;
 
 /**
- * manipulates scores of a jass game
+ * @brief Non-instantiable
+ *        Contains the methods used to manipulate a Score.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)

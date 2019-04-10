@@ -5,7 +5,8 @@ import static ch.epfl.javass.Preconditions.checkArgument;
 import java.util.List;
 
 /**
- * CardSet
+ * The class used to represent a CardSet.
+ * A CardSet is exactly what is seems: a set of cards.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -194,18 +195,18 @@ public final class CardSet {
     }
     
     /**
-     * @brief returns the set with only the remaining cards of the chosen color from this set of cards.
+     * @brief The CardSet containing only the cards that are both in "this" and of
+     *        the specified Color "color"
      *
-     * @param pkCardSet (long)
      * @param color (Color)
-     * @return (long) the set with only the cards of this cardSet from a chosen color
-     *
+     * @return (CardSet) The CardSet containing only the cards that are both in "this" and of
+     *         the specified Color "color"
      */
     public CardSet subsetOfColor(Card.Color color) {
         return new CardSet (PackedCardSet.subsetOfColor(pkCardSet, color));
     }
     
-    /* 
+    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -219,7 +220,7 @@ public final class CardSet {
     }
 
 
-    /* 
+    /**
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -228,12 +229,11 @@ public final class CardSet {
     }
 
     /**
-     * @brief returns the string with the cards included in the set .
+     * @brief A CardSet corresponds to a number of Cards [c1, ..., cn].
+     *       This method returns the textual representation of "this".
+     *       It takes the form"{c1, ..., cn}
      * 
-     * @return a (String) with the cards in the set
-     *
-     * @author - Marin Nguyen (288260)
-     * @author - Antoine Scardigli (299905)
+     * @return (String) the textual representation of "this".
      */
     @Override
     public String toString() {
