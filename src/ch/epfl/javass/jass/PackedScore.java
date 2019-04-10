@@ -198,7 +198,7 @@ public final class PackedScore {
      * @return (long) - a new long with the data updated as it becomes next turn
      *
      */
-    public static long nextTurn(long pkScore) { //TODO: (lata) masking instead of packing?
+    public static long nextTurn(long pkScore) {
         assert isValid(pkScore);
 
         int turnPointsOf1 = (int) extract(pkScore, POINTS_PER_TURN_START, POINTS_PER_TURN_SIZE);
