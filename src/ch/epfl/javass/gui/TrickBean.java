@@ -16,6 +16,13 @@ import static javafx.collections.FXCollections.observableHashMap;
 
 import com.sun.javafx.collections.UnmodifiableObservableMap;
 
+/**
+ * TrickBean is a JavaFx bean containing the current trick property. 
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public final class TrickBean {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -30,31 +37,64 @@ public final class TrickBean {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
+    //default constructor per default is enough
+    
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-    
+    //TODO demander a marin le billingue si on dit setter of setter on ou setter for.
+    /**
+     * @Brief It is a public getter of the trick property.
+     *
+     * @return the trick property
+    */
     public ObservableMap<PlayerId, Card> trick() {
         return trick;
     }
     
+    /**
+     * @Brief It is a public getter of the trump property.
+     *
+     * @return the trump property
+    */
     public ReadOnlyObjectProperty<Color> trumpProperty() {
         return trump;
     }
     
+    /**
+     * @Brief It is a public getter of the winningPlayer property.
+     *
+     * @return the winningPlayer property
+    */
     public ReadOnlyObjectProperty<PlayerId> winningPlayerProperty() {
         return winningPlayer;
     }
     
+    
+    /**
+     * @Brief public setter of the winningPlayer property given the winning player's Id.
+     *
+     * @param pId the PlayerId of the winning player
+    */
     private void setWinningPlayer(PlayerId pId) {
             winningPlayer = new SimpleObjectProperty<PlayerId>(pId);
     }
-    
+        
+    /**
+     * @Brief public setter of the trump property given the trump's Color.
+     *
+     * @param trump the color of the trump
+    */
     public void setTrump(Color trump) {
         this.trump = new SimpleObjectProperty<Color>(trump);
     }
     
+    /**
+     * @Brief public setter of the trick property given a trick.
+     *
+     * @param newTrick a Trick
+    */
     public void setTrick(Trick newTrick) {
         PlayerId pId = newTrick.winningPlayer();
         setWinningPlayer(pId);
