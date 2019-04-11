@@ -36,7 +36,8 @@ public final class JassGame {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    
+
+    //TODO: constructor
     /**
      * @param rngSeed
      * @param players
@@ -59,16 +60,16 @@ public final class JassGame {
     /** ============================================== **/
 
     /**
-     * @brief returns true iff one team has 1000 points or more.
+     * @brief Indicates whether the game is over (a team has reached 1000 points).
      * 
-     * @return true iff one team has 1000 points or more
+     * @return (boolean) true when the game is over.
      */
     public boolean isGameOver() {
         return gameover;
     }
 
     /**
-     * @brief advance the state of the game until the end of the next trick.
+     * @brief plays the game until the end of the next trick -unless the game is already over.
      */
     public void advanceToEndOfNextTrick() {
         if (isGameOver()) { //Here because the tests decided to call this method, even though the game is already over
@@ -131,13 +132,13 @@ public final class JassGame {
         }
     }
 
-
     //Collects the TurnState and updates the Scores.
     private void collect() {
         turnState = turnState.withTrickCollected();
         updatePlayersScores(turnState.score());
     }
 
+    //self-explanatory
     private void setPlayers() {
         for (Map.Entry<PlayerId, Player> entry : players.entrySet()) {
             entry.getValue().setPlayers(entry.getKey(), playerNames);

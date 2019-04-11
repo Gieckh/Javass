@@ -2,6 +2,7 @@ package ch.epfl.javass.jass;
 
 import java.util.Map;
 
+//TODO: real javadoc
 /**@Brief represents a player.
  * 
  * @author Antoine Scardigli - (299905)
