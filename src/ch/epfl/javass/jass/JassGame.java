@@ -35,11 +35,11 @@ public final class JassGame {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    //TODO: constructor
     /**
-     * @param rngSeed
-     * @param players
-     * @param playerNames
+     * @param rngSeed (long) the seed used to simulate a game [the distribution of the
+     *                hands and the different trumps].
+     * @param players (Map of [PlayerId, Player]) The different players of the game.
+     * @param playerNames (Map of [PlayerId, String]) Their names.
      */
     public JassGame(long rngSeed, Map<PlayerId, Player> players, Map<PlayerId, String> playerNames) {
         Random rng = new Random(rngSeed);

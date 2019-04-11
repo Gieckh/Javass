@@ -16,7 +16,7 @@ public class MctsPlayer implements Player {
     private static final int DEFAULT_EXPLORATION_PARAMETER = 40;
     private final int iterations;
     private final PlayerId ownId;
-    private final long rngSeed;
+//    private final long rngSeed;
     private SplittableRandom rng;
 
 
@@ -27,7 +27,7 @@ public class MctsPlayer implements Player {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
         this.ownId = ownId;
-        this.rngSeed = rngSeed;
+//        this.rngSeed = rngSeed;
         this.rng = new SplittableRandom(rngSeed);
     }
 
