@@ -42,7 +42,8 @@ public class MctsPlayer implements Player {
      * @param state (TurnState) state - the current TurnState.
      * @param hand (CardSet) - the Player's hand
      *
-     * @return (Card) the best card to play - according to the Monte-Carlo tree search algorithm
+     * @return (Card) the best card to play
+     *                [according to the Monte-Carlo tree search algorithm]
      */
     public Card cardToPlay(TurnState state, CardSet hand) {
         //default, the root teamId is this player's and its father is null.
@@ -66,7 +67,7 @@ public class MctsPlayer implements Player {
      *        the number of iterations specified in this class's constructor and
      *        update the scores of each node of the tree
      *
-     * @param root
+     * @param root (Node) the root of the tree.
      */
     private void iterate(Node root) {
         for (int i = 0; i < iterations; ++i) {
@@ -85,7 +86,8 @@ public class MctsPlayer implements Player {
      *
      * @param root (Node) the root of the tree
      *
-     * @return
+     * @return (Node) - either the (Node) which has been added to the tree [if there was one]
+     *                - or the last (Node) reached during the descent [if no Node was added]
      */
     private Node expand(Node root) {
         Node node = root;
@@ -112,8 +114,8 @@ public class MctsPlayer implements Player {
      *        This son won't be full, unless it is a leaf [i.e. it corresponds to
      *        the last card of the turn.
      *
-     * @param father (Node) [not full] the (Node) whose son we wish to create.
-     * @return (Node) a son of the (Node) father.
+     * @param father (Node) - [not full] the (Node) whose son we wish to create.
+     * @return (Node) - a son of the (Node) father.
      */
     private Node createNode(Node father) {
         Card card = father.playableCardsFromTurnState.get(father.nextChildIllPlayIn);
@@ -146,8 +148,8 @@ public class MctsPlayer implements Player {
      * @brief Given a (Node) "node" and the (Score) "score" obtained after simulating
      *        a random turn starting from this Node's TurnState, updates
      *
-     * @param node
-     * @param score
+     * @param node (Node) - the node from which we want to start adding the Score.
+     * @param score (Score) - the score to propagate back.
      */
     private void addScores(Node node, Score score) {
         assert (node != null);
@@ -168,7 +170,7 @@ public class MctsPlayer implements Player {
      *
      * @param state (TurnState) - the current TurnState.
      * @param hand (CardSet) - the player's hand.
-     * @return (Score) the Score at the end of the simulation.
+     * @return (Score) - the Score at the end of the simulation.
      */
     private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
@@ -190,12 +192,14 @@ public class MctsPlayer implements Player {
 
     /**
      * @brief Indicates the Cards the next Player to play
-     *          - will be able to play, if it is "this"
-     *          - might play if it is any of the other 3.
+     *          - can play, if it is "this"
+     *          - could play if it is any of the other 3. [actually there are some
+     *          card that could be played that won't be taken into account, but
+     *          it has be decided to just ignore this case].
      *
      * @param state (TurnState) - the current TurnState.
      * @param hand (CardSet) - The player's hand.
-     * @return (CardSet) The Cards the next Player is likely to play.
+     * @return (CardSet) - The Cards the next Player may play.
      */
     private CardSet playableCards(TurnState state, CardSet hand) {
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
@@ -222,7 +226,7 @@ public class MctsPlayer implements Player {
      *        - It also has an attribute <em>"randomTurnsPlayed"</em> indicating
      *          how many turns were played starting from this Node or one of its children.
      *        - The last remarkable attribute is <em>"playableCardsFromTurnState"</em>
-     *          which correspond to the cards the method "playableCards" s
+     *          which correspond to the cards the method "playableCards"
      */
     private static final class Node {
         /** ============================================== **/
@@ -288,19 +292,19 @@ public class MctsPlayer implements Player {
          * @brief Indicates this node value, according to the evaluation function
          *        of our Monte Carlo algorithm, and given the specified "explorationParameter"
          *
-         * @param node (Node) -
-         * @param explorationParameter (int) -
-         * @return (double) the value of the "node"
+         * @param node (Node) - The (Node) to evaluate
+         * @param explorationParameter (int) - quantifies the likeliness of our algorithm to wander horizontally,
+         *                             i.e. to explore rarely explored branches.
+         * @return (double) the value of the (Node) "node"
          */
         private double evaluate(Node node, int explorationParameter) {
             return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
                     explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / node.randomTurnsPlayed);
         }
 
-        //Never called with a "true leaf"
-
         /**
          * @brief
+         *
          *
          * @return
          */
@@ -309,7 +313,8 @@ public class MctsPlayer implements Player {
         }
 
         /**
-         * @brief
+         * @brief Never called with a "true leaf".
+         *        Indicates which son, of the (Node) it is called by, should be explored.
          *
          * @param explorationParameter (int)
          * @return
