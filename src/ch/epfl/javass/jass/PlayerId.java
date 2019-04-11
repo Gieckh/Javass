@@ -27,7 +27,6 @@ public enum PlayerId {
      *
      * @return (TeamId) TEAM_1 for players 1 and 3
      *                  TEAM_2 for players 2 and 4.
-     *
      */
     public TeamId team() {
         switch (this) {

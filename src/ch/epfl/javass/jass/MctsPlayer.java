@@ -154,10 +154,13 @@ public class MctsPlayer implements Player {
     }
 
     /**
+     * @brief Simulates randomly a turn until the end, given the specified (TurnState) "state"
+     *        and (CardSet) 'hand" - the player's hand.
+     *        Then returns the obtained Score.
      *
-     * @param state
-     * @param hand
-     * @return
+     * @param state (TurnState) - the current TurnState
+     * @param hand (CardSet) - the player's hand
+     * @return (Score) the Score at the end of the simulation.
      */
     private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
@@ -178,18 +181,15 @@ public class MctsPlayer implements Player {
     }
 
     /**
+     * @brief Returns
      *
      * @param state
      * @param hand
      * @return
      */
     private CardSet playableCards(TurnState state, CardSet hand) {
-//        if (state.trick().isFull() && state.trick().isLast()) {
-//            return CardSet.EMPTY;
-//        }
-
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
-        assert(! state.trick().isFull());
+        assert (! state.trick().isFull());
 
         if (state.nextPlayer() == ownId) {
             assert (! hand.equals(CardSet.EMPTY));
