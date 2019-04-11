@@ -10,8 +10,6 @@ import java.util.Random;
 
 import ch.epfl.javass.jass.Card.Color;
 
-//TODO: boolean for gameOver, and update the boolean in our method advanceToEndOfNextTrick, and handle setWinningPLayer
-
 /**
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -29,7 +27,7 @@ public final class JassGame {
     private Card.Color trump;
     private PlayerId gameFirstPlayer;
     private PlayerId turnFirstPlayer;
-    private boolean gameover;
+    private boolean gameOver;
     private int turnNumber = 1; //starts at turn 1
 
 
@@ -51,7 +49,7 @@ public final class JassGame {
         this.players = Collections.unmodifiableMap(new EnumMap<>(players));
         this.playerNames = Collections.unmodifiableMap(new EnumMap<>(playerNames));
 
-        gameover = false;
+        gameOver = false;
     }
 
 
@@ -65,7 +63,7 @@ public final class JassGame {
      * @return (boolean) true when the game is over.
      */
     public boolean isGameOver() {
-        return gameover;
+        return gameOver;
     }
 
     /**
@@ -90,14 +88,14 @@ public final class JassGame {
             if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_1);
                 updatePlayersScores(turnState.score().nextTurn());
-                gameover = true;
+                gameOver = true;
                 return;
             }
 
             else if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_2);
                 updatePlayersScores(turnState.score().nextTurn());
-                gameover = true;
+                gameOver = true;
                 return;
             }
 

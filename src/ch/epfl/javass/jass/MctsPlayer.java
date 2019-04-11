@@ -4,6 +4,11 @@ import static ch.epfl.javass.Preconditions.checkArgument;
 
 import java.util.SplittableRandom;
 
+/**
+ * @brief This class extends Player and only overrides the method "cardToPlay".
+ *        To decide which card to play, the computer uses a Monte-Carlo tree search
+ *        algorithm - hence the name MCTS.
+ */
 public class MctsPlayer implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
