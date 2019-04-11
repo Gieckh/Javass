@@ -7,7 +7,7 @@ import java.util.SplittableRandom;
 /**
  * @brief This class extends Player and only overrides the method "cardToPlay".
  *        To decide which card to play, the computer uses a Monte-Carlo tree search
- *        algorithm - hence the name MCTS.
+ *        algorithm - hence the "MCTS".
  */
 public class MctsPlayer implements Player {
     /** ============================================== **/
@@ -36,6 +36,14 @@ public class MctsPlayer implements Player {
     /** ============================================== **/
     @SuppressWarnings("Duplicates")
     @Override
+    /**
+     * @brief The card "this" [the Player] should play, in order to maximize its points.
+     *
+     * @param state (TurnState) state - the current TurnState.
+     * @param hand (CardSet) - the Player's hand
+     *
+     * @return (Card) the best card to play - according to the Monte-Carlo tree search algorithm
+     */
     public Card cardToPlay(TurnState state, CardSet hand) {
         //default, the root teamId is this player's and its father is null.
         Node root;
@@ -154,10 +162,13 @@ public class MctsPlayer implements Player {
     }
 
     /**
+     * @brief Simulates randomly a turn until the end, given the specified (TurnState) "state"
+     *        and (CardSet) 'hand" - the player's hand.
+     *        Then returns the obtained Score.
      *
-     * @param state
-     * @param hand
-     * @return
+     * @param state (TurnState) - the current TurnState.
+     * @param hand (CardSet) - the player's hand.
+     * @return (Score) the Score at the end of the simulation.
      */
     private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
@@ -178,18 +189,17 @@ public class MctsPlayer implements Player {
     }
 
     /**
+     * @brief Indicates the Cards the next Player to play
+     *          - will be able to play, if it is "this"
+     *          - might play if it is any of the other 3.
      *
-     * @param state
-     * @param hand
-     * @return
+     * @param state (TurnState) - the current TurnState.
+     * @param hand (CardSet) - The player's hand.
+     * @return (CardSet) The Cards the next Player is likely to play.
      */
     private CardSet playableCards(TurnState state, CardSet hand) {
-//        if (state.trick().isFull() && state.trick().isLast()) {
-//            return CardSet.EMPTY;
-//        }
-
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
-        assert(! state.trick().isFull());
+        assert (! state.trick().isFull());
 
         if (state.nextPlayer() == ownId) {
             assert (! hand.equals(CardSet.EMPTY));
@@ -262,22 +272,25 @@ public class MctsPlayer implements Player {
         /** ============================================== **/
         //fake constructor
         /**
+         * @brief Called by another Node -"father"- to create one of his sons.
          *
-         * @param state
-         * @param playableCards
-         * @param hand
-         * @param teamId
-         * @return
+         * @param state (TurnState) - see constructor
+         * @param playableCards (CardSet) - see constructor
+         * @param hand (CardSet) - see constructor
+         * @param teamId (TeamId) - see constructor
+         * @return (Node) - see constructor
          */
         private Node of(TurnState state, CardSet playableCards, CardSet hand, TeamId teamId) {
             return new Node(state, playableCards, hand, this, teamId);
         }
 
         /**
+         * @brief Indicates this node value, according to the evaluation function
+         *        of our Monte Carlo algorithm, and given the specified "explorationParameter"
          *
-         * @param node
-         * @param explorationParameter
-         * @return
+         * @param node (Node) -
+         * @param explorationParameter (int) -
+         * @return (double) the value of the "node"
          */
         private double evaluate(Node node, int explorationParameter) {
             return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
@@ -287,6 +300,7 @@ public class MctsPlayer implements Player {
         //Never called with a "true leaf"
 
         /**
+         * @brief
          *
          * @return
          */
@@ -295,8 +309,9 @@ public class MctsPlayer implements Player {
         }
 
         /**
+         * @brief
          *
-         * @param explorationParameter
+         * @param explorationParameter (int)
          * @return
          */
         private int selectSon(int explorationParameter) {
@@ -323,6 +338,11 @@ public class MctsPlayer implements Player {
             return index;
         }
 
+        /**
+         * @brief
+         *
+         * @return
+         */
         private boolean isReallyLeaf() {
             return directChildrenOfNode.length == 0;
         }
