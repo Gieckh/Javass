@@ -7,7 +7,7 @@ import java.util.SplittableRandom;
 /**
  * @brief This class extends Player and only overrides the method "cardToPlay".
  *        To decide which card to play, the computer uses a Monte-Carlo tree search
- *        algorithm - hence the name MCTS.
+ *        algorithm - hence the "MCTS".
  */
 public class MctsPlayer implements Player {
     /** ============================================== **/
@@ -36,6 +36,14 @@ public class MctsPlayer implements Player {
     /** ============================================== **/
     @SuppressWarnings("Duplicates")
     @Override
+    /**
+     * @brief The card "this" [the Player] should play, in order to maximize its points.
+     *
+     * @param state (TurnState) state - the current TurnState.
+     * @param hand (CardSet) - the Player's hand
+     *
+     * @return (Card) the best card to play - according to the Monte-Carlo tree search algorithm
+     */
     public Card cardToPlay(TurnState state, CardSet hand) {
         //default, the root teamId is this player's and its father is null.
         Node root;
@@ -264,24 +272,25 @@ public class MctsPlayer implements Player {
         /** ============================================== **/
         //fake constructor
         /**
-         * @brief
+         * @brief Called by another Node -"father"- to create one of his sons.
          *
-         * @param state
-         * @param playableCards
-         * @param hand
-         * @param teamId
-         * @return
+         * @param state (TurnState) - see constructor
+         * @param playableCards (CardSet) - see constructor
+         * @param hand (CardSet) - see constructor
+         * @param teamId (TeamId) - see constructor
+         * @return (Node) - see constructor
          */
         private Node of(TurnState state, CardSet playableCards, CardSet hand, TeamId teamId) {
             return new Node(state, playableCards, hand, this, teamId);
         }
 
         /**
-         * @brief
+         * @brief Indicates this node value, according to the evaluation function
+         *        of our Monte Carlo algorithm, and given the specified "explorationParameter"
          *
-         * @param node
-         * @param explorationParameter
-         * @return
+         * @param node (Node) -
+         * @param explorationParameter (int) -
+         * @return (double) the value of the "node"
          */
         private double evaluate(Node node, int explorationParameter) {
             return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
