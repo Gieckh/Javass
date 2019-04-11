@@ -1,7 +1,5 @@
 package ch.epfl.javass.jass;
 
-import com.sun.javaws.exceptions.ErrorCodeResponseException;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
