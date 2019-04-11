@@ -158,8 +158,8 @@ public class MctsPlayer implements Player {
      *        and (CardSet) 'hand" - the player's hand.
      *        Then returns the obtained Score.
      *
-     * @param state (TurnState) - the current TurnState
-     * @param hand (CardSet) - the player's hand
+     * @param state (TurnState) - the current TurnState.
+     * @param hand (CardSet) - the player's hand.
      * @return (Score) the Score at the end of the simulation.
      */
     private Score simulateToEndOfTurn(TurnState state, CardSet hand) {
@@ -181,11 +181,13 @@ public class MctsPlayer implements Player {
     }
 
     /**
-     * @brief Returns
+     * @brief Indicates the Cards the next Player to play
+     *          - will be able to play, if it is "this"
+     *          - might play if it is any of the other 3.
      *
-     * @param state
-     * @param hand
-     * @return
+     * @param state (TurnState) - the current TurnState.
+     * @param hand (CardSet) - The player's hand.
+     * @return (CardSet) The Cards the next Player is likely to play.
      */
     private CardSet playableCards(TurnState state, CardSet hand) {
         assert (! state.unplayedCards().equals(CardSet.EMPTY));
@@ -262,6 +264,7 @@ public class MctsPlayer implements Player {
         /** ============================================== **/
         //fake constructor
         /**
+         * @brief
          *
          * @param state
          * @param playableCards
@@ -274,6 +277,7 @@ public class MctsPlayer implements Player {
         }
 
         /**
+         * @brief
          *
          * @param node
          * @param explorationParameter
@@ -287,6 +291,7 @@ public class MctsPlayer implements Player {
         //Never called with a "true leaf"
 
         /**
+         * @brief
          *
          * @return
          */
@@ -295,8 +300,9 @@ public class MctsPlayer implements Player {
         }
 
         /**
+         * @brief
          *
-         * @param explorationParameter
+         * @param explorationParameter (int)
          * @return
          */
         private int selectSon(int explorationParameter) {
@@ -323,6 +329,11 @@ public class MctsPlayer implements Player {
             return index;
         }
 
+        /**
+         * @brief
+         *
+         * @return
+         */
         private boolean isReallyLeaf() {
             return directChildrenOfNode.length == 0;
         }
