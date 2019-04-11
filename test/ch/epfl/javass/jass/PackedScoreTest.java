@@ -533,10 +533,6 @@ class PackedScoreTest {
                 });
     }
 
-
-
-
-
     @Test
     void checkIsValidWorks(){
         for(int tT = 0 ;tT <= 9 ; tT++) {
@@ -549,7 +545,7 @@ class PackedScoreTest {
     }
 
     @Test
-    void cehckIsValidFailsIfAddOneBeforeScoreValue(){
+    void checkIsValidFailsIfAddOneBeforeScoreValue(){
         for(int tT = 0 ;tT <= 9 ; tT++) {
             for(int tP = 0 ; tP <= 257 ; tP++) {
                 for(int gP = 0; gP <= 2000 ; gP++) {
