@@ -15,7 +15,6 @@ import ch.epfl.javass.jass.Card.Color;
 /**
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
- *
  */
 public final class JassGame {
     /** ============================================== **/
@@ -30,6 +29,7 @@ public final class JassGame {
     private Card.Color trump;
     private PlayerId gameFirstPlayer;
     private PlayerId turnFirstPlayer;
+    private boolean gameover;
     private int turnNumber = 1; //starts at turn 1
 
 
@@ -49,6 +49,8 @@ public final class JassGame {
 
         this.players = Collections.unmodifiableMap(new EnumMap<>(players));
         this.playerNames = Collections.unmodifiableMap(new EnumMap<>(playerNames));
+
+        gameover = false;
     }
 
 
@@ -56,38 +58,23 @@ public final class JassGame {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-
     /**
      * @brief returns true iff one team has 1000 points or more.
      * 
      * @return true iff one team has 1000 points or more
-     *
      */
     public boolean isGameOver() {
-        if (turnState == null)
-            return false;
-
-        if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
-            setPlayersWinningTeam(TeamId.TEAM_1);
-            return true;
-        }
-
-        if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
-            setPlayersWinningTeam(TeamId.TEAM_2);
-            return true;
-        }
-
-        return false;
+        return gameover;
     }
 
     /**
      * @brief advance the state of the game until the end of the next trick.
      */
-    //TODO: update players.
     public void advanceToEndOfNextTrick() {
-        if (isGameOver()) { //Because the tests decided to call this method, even though the game is already over...
+        if (isGameOver()) { //Here because the tests decided to call this method, even though the game is already over
             return;
         }
+
         if (isTrickFirstOfTheGame()) {
             setPlayers();
             setTurn();
@@ -98,10 +85,19 @@ public final class JassGame {
 
         else {
             collect();
-            //We do nothing if the game is over.
-            if (isGameOver()) {
+
+            if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
+                setPlayersWinningTeam(TeamId.TEAM_1);
                 updatePlayersScores(turnState.score().nextTurn());
-                return; //nothing
+                gameover = true;
+                return;
+            }
+
+            else if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
+                setPlayersWinningTeam(TeamId.TEAM_2);
+                updatePlayersScores(turnState.score().nextTurn());
+                gameover = true;
+                return;
             }
 
             if (isTrickFirstOfTheTurn()) {
