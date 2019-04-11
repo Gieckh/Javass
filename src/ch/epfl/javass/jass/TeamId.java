@@ -1,5 +1,7 @@
 package ch.epfl.javass.jass;
 
+import com.sun.javaws.exceptions.ErrorCodeResponseException;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,14 +13,13 @@ import java.util.List;
  * @author Marin Nguyen - (288260)
  */
 public enum TeamId {
-    TEAM_1  (1),
-    TEAM_2  (2);
+    TEAM_1,
+    TEAM_2;
 
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    
-    private final int type;
+
     public final static int COUNT = 2;
     public final static List<TeamId> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
@@ -27,11 +28,6 @@ public enum TeamId {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-
-    // TODO : inutile pour le moment ( et pas demandé) (?? @Marin)
-    private TeamId(int type) {
-        this.type = type;
-    }
     
     
     /** ============================================== **/
@@ -51,7 +47,7 @@ public enum TeamId {
             case TEAM_2:
                 return TEAM_1;
             default: // unreachable statement
-                throw new IllegalArgumentException();
+                throw new Error();
         }
     }
 }
