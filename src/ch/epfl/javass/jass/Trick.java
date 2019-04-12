@@ -5,9 +5,12 @@ import static ch.epfl.javass.Preconditions.checkIndex;
 
 import ch.epfl.javass.jass.Card.Color;
 
-//TODO: javaDoc pour antoine..
 /**
- * @brief
+ * @brief this class represents a Trick. A trick indicates:
+ *        - the Cards which have been played in it
+ *        - the first player of the trick
+ *        - the trump [of the turn]
+ *        - its ordinal in the current turn
  *
  * @see PackedTrick
  * @author Antoine Scardigli - (299905)
@@ -17,13 +20,19 @@ public class Trick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    public static final Trick INVALID = new Trick(PackedTrick.INVALID); //unused?
+    public static final Trick INVALID = new Trick(PackedTrick.INVALID);
     private final int pkTrick;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
- 
+
+    /**
+     * @brief PRIVATE constructor of the class Trick. Called by the following method:
+     * @see #ofPacked(int)
+     *
+     * @param aTrick (int) an encoded trick.
+     */
     private Trick(int aTrick) {
         pkTrick = aTrick;
     }
@@ -32,46 +41,49 @@ public class Trick {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    
-    
+
+
     /**
-     * @brief returns the first Trick of a turn,
-     *        depending on the trumpColor and the starting player.
+     * @brief returns the (int) corresponding to the first [packed] trick of a
+     *        turn, given the trump and the Id of first Player.
      *
-     * @param trump the Color of the trump
-     * @param firstPlayer the Id of the fist Player to play
-     * @return the first PackedTrick of a turn
+     * @param trump (Color) - the Color of the trump
+     * @param firstPlayer - (PlayerId) the first Player of the turn
+     * @return (int) - The first [packed] trick of a turn, given the specified parameters.
      */
     public static Trick firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         return new Trick(PackedTrick.firstEmpty(trump, firstPlayer));
     }
 
-    /**returns a Trick from a PackedTrick.
-     * 
-     * @param packed
-     * @return a Trick
-     * 
+    /**
+     * @brief Given a [packed] trick creates the corresponding object of type Trick.
+     *
+     * @param packed (int) - the given [packed] trick
+     * @return (Trick) - the (Trick) corresponding to the given [packed] trick.
      */
     public static Trick ofPacked(int packed) {
         checkArgument(PackedTrick.isValid(packed));
         return new Trick(packed);
     }
-    
-    /**@brief returns the PackedTrick of this Trick.
-     * 
-     * @return the PackedTrick of this Trick
-     * 
+
+    /**
+     * @brief The [packed] version of "this" Trick
+     *
+     * @return (int) - The [packed] version of "this" Trick
      */
     public int packed() {
         return pkTrick;
     }
-    
-    
+
+
     /**
-     * @brief returns the n+1th PackedTrick of a turn
-     * return invalid if the last trick was the 9th.
+     * @brief Returns the next empty trick.
+     *        If "this" was the last of the turn, returns "INVALID" instead.
+     * @see Trick#INVALID
      *
-     * @return the n+1th PackedTrick of a trick
+     *
+     * @return (int) - the next PackedTrick, or "INVALID" if there is none.
+     * @throws IllegalArgumentException if the (Trick) "this" is full.
      */
     public Trick nextEmpty() {
         if (!PackedTrick.isFull(pkTrick)) {
@@ -82,18 +94,18 @@ public class Trick {
     }
 
     /**
-     * @brief returns true iff this trick is empty : if it has no card.
+     * @brief Indicates whether "this" (Trick) contains any Card.
      *
-     * @return a boolean that is true iff this trick has 0 card
+     * @return (boolean) - true if "this" is empty.
      */
     public boolean isEmpty() {
         return PackedTrick.isEmpty(pkTrick);
     }
-    
+
     /**
-     * @brief returns true iff this trick is full : it has 4 cards
+     * @brief Indicates whether "this" (Trick) contains 4 Cards.
      *
-     * @return boolean that is true iff this trick has 4 card
+     * @return (boolean) true if "this" is full.
      */
     public boolean isFull() {
         return PackedTrick.isFull(pkTrick);
