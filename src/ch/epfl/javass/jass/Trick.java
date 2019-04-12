@@ -71,7 +71,6 @@ public class Trick {
      * @brief returns the n+1th PackedTrick of a turn
      * return invalid if the last trick was the 9th.
      *
-     * @param pkTrick
      * @return the n+1th PackedTrick of a trick
      */
     public Trick nextEmpty() {

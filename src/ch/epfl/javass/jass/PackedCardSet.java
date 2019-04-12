@@ -292,7 +292,7 @@ public final class PackedCardSet {
     // themselves used to reduce the length/complexity of some other methods.
 
     /**
-     * @author Michel Schinz (+41 21 69 31252)
+     * @author Michel Schinz (+31252)
      */
     private static Card.Color[] getAllColors() {
         return new Card.Color[] {
