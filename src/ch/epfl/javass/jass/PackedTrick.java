@@ -195,13 +195,12 @@ public final class PackedTrick {
         }
     }
 
-    //TODO: better?
 
     /**
-     * @brief returns the number of cards in the pkTrick.
+     * @brief The numbers of Cards played in this [packed] trick.
      *
-     * @param pkTrick a trick
-     * @return the number of cards in pkTrick
+     * @param pkTrick (int) - a [packed] trick
+     * @return (int) - the number of cards in "pkTrick"
      */
     public static int size(int pkTrick) {
         int size = 0;
@@ -216,10 +215,11 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns the trump color in the pkTrick.
+     * @brief Indicates the color of the trump, which is specified by the encoding
+     *        of "pkTrick"
      *
-     * @param pkTrick a trick
-     * @return the color of the trump in pkTrick
+     * @param pkTrick (int) - the given [packed] trick
+     * @return (Color) - the color of the trump in pkTrick
      */
     public static Card.Color trump (int pkTrick) {
         int pkColor = Bits32.extract(pkTrick, TRUMP_START, TRUMP_SIZE);
@@ -227,13 +227,17 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns the player that will play at the index'th position .
+     * @brief returns the Id of the player that will play at the index-th position
+     *        of the given [packed] trick.
      *
-     * @param pkTrick
-     * @param index
-     * @return playerId of the index'th player to play at this trick
+     * @param pkTrick (int) - the given [packed] trick
+     * @param index (int) - the index in this [packed] trick, hence between 0 and 3
+     * @return (PlayerId) - the Id of the player that will play at the index-th position
+     *                      of the given [packed] trick.
      */
     public static PlayerId player (int pkTrick, int index) {
+        assert (0 <= index && index < PlayerId.COUNT);
+
         int firstPlayer = Bits32.extract(pkTrick, PLAYER_START, PLAYER_SIZE);
         return PlayerId.ALL.get((firstPlayer + index) % PlayerId.COUNT);
     }
