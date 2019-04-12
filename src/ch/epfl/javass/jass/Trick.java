@@ -262,7 +262,7 @@ public class Trick {
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() { //TODO: assistant
+    public int hashCode() {
         return pkTrick;
     }
 

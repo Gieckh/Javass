@@ -172,7 +172,6 @@ public final class PackedTrick {
     }
 
 
-    //TODO: not a separate method, cuz it does a copy
     /**
      * @brief Indicates whether the cardNo-th Card of the trick is a valid card
      *        (otherwise, it should be INVALID)

@@ -2,7 +2,6 @@ package ch.epfl.javass.jass;
 
 import java.util.Map;
 
-//TODO: real javadoc
 /**@brief This interface is implemented by the players, whether they are simulated
  *        or real.
  * 

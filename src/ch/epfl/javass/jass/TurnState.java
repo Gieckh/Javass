@@ -2,7 +2,6 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
-//TODO: JavaDoc pour Antoine...
 /**
  * @brief This class represents the [public] state of the game: what every Player
  *        can see/know. Namely the score of each team, the Cards left to play,
@@ -172,7 +171,7 @@ public final class TurnState {
     /**
      * @brief returns a new TurnState in which the next player has played the Card card.
      * 
-     * @param card (Card) -
+     * @param card (Card) - the (Card) to play
      * @return (TurnState) - a new TurnState in which the next player has played the Card card
      */
     public TurnState withNewCardPlayed(Card card) {
@@ -185,9 +184,14 @@ public final class TurnState {
                              PackedTrick.withAddedCard(pkCurrentTrick, pkCard) );
     }
 
-
-    //TODO: check all that follows
-   
+    /**
+     * @brief Method created to avoid duplicates.
+     *        Given the [packed] arguments of a full TurnState, collects it and
+     *        updates it accordingly [i.e. collects the trick and updates the score]
+     *        Then returns the corresponding new TurnState.
+     * @see #withTrickCollected()
+     * @see #withNewCardPlayedAndTrickCollected(Card)
+     */
     private TurnState collectTrick(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
         long withAdditionalTrick = PackedScore.withAdditionalTrick(pkScore,
                 PackedTrick.winningPlayer(pkCurrentTrick).team(),
