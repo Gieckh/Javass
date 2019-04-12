@@ -16,13 +16,7 @@ import javafx.beans.property.SimpleObjectProperty;
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
-/**
- * ScoreBean
- *
- *
- * @author Antoine Scardigli - (299905)
- * @author Marin Nguyen - (288260)
- */
+
 public final class ScoreBean {
     
     /** ============================================== **/
@@ -105,7 +99,7 @@ public final class ScoreBean {
     
     
     /**
-     * @Brief public setter for the turnPoints given the new turnPoints(int) 
+     * @Brief public setter for the turnPoints given the new turnPoints(integer) 
      * and the chosen team.
      *
      * @param team the TeamId of the chosen team
@@ -121,7 +115,7 @@ public final class ScoreBean {
       }
     
     /**
-     * @Brief public setter for the gamePoints given the new gamePoints(int) 
+     * @Brief public setter for the gamePoints given the new gamePoints(integer) 
      * and the chosen team.
      *
      * @param team the TeamId of the chosen team
@@ -137,7 +131,7 @@ public final class ScoreBean {
       }
     
     /**
-     * @Brief public setter for the totalPoints given the new totalPoints(int) 
+     * @Brief public setter for the totalPoints given the new totalPoints(integer) 
      * and the chosen team.
      *
      * @param team the TeamId of the chosen team

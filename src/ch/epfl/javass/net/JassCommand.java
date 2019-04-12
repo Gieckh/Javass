@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * JassCommand, an enumeration of the possibles commands that can be thrown between a remotePlayerClient and a remotePlayerServer
+ * JassCommand is an enumeration of the possibles commands that can be thrown between a remotePlayerClient and a remotePlayerServer
  *
  *
  * @author Antoine Scardigli - (299905)
