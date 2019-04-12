@@ -243,10 +243,11 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns the number of this trick.
+     * @brief Indicates the ordinal of this trick in the current turn
+     *        (between 0 and MAX_INDEX = 8)
      *
-     * @param pkTrick
-     * @return int from 0 to 8 
+     * @param pkTrick (int) - the given [packed] trick
+     * @return (int) - the ordinal of this trick in the current turn.
      */
     public static int index (int pkTrick) {
         return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE);
@@ -254,17 +255,16 @@ public final class PackedTrick {
 
 
     //assuming the card is indeed there.
-
     /**
-     * @brief returns the Card at the index'th position (from 0 to 3).
+     * @brief returns the Card at the index-th position (from 0 to 3).
      *
-     * @param pkTrick
-     * @param index
-     * @return the card at the index'th position
+     * @param pkTrick (int) - the given [packed] trick
+     * @param index (int) - the index, in this trick, of the Card to get
+     * @return (Card) - the card at the index'th position
      */
     public static int card (int pkTrick, int index) {
         assert (isValid(pkTrick));
-        assert (0 <= index  &&  index <= 3);
+        assert (0 <= index  &&  index < PlayerId.COUNT);
         assert (!isEmpty(pkTrick));
 
         switch(index) {
@@ -276,19 +276,19 @@ public final class PackedTrick {
             return (pkTrick & CARD_MASK_3) >>> CARD_3_START;
         case 3:
             return (pkTrick & CARD_MASK_4) >>> CARD_4_START;
-        default:
+        default: //wrong index
             throw new IllegalArgumentException();
         }
     }
 
     //assuming not full.
-
     /**
-     * @brief returns a new pkTrick whose difference is that a card has been added.
+     * @brief returns a new pkTrick where the specified card has been added.
      *
-     * @param pkTrick
-     * @param pkCard
-     * @return a packedTrick with a card added
+     * @param pkTrick (int) - the given [packed] trick - not full.
+     * @param pkCard (int) - the [packed] card to add
+     * @return (int) - the given [packed] trick, except the specified [packed] card
+     *                 "pkCard" has been added.
      */
     public static int withAddedCard(int pkTrick, int pkCard) {
         assert (PackedCard.isValid(pkCard));
@@ -311,37 +311,33 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns the base color of this trick.
+     * @brief The color of the first card of this trick. [will return CLUB if the
+     *        trick is empty]
      *
-     * @param pkTrick
-     * @return the color of the 1st card
+     * @param pkTrick (int) - the given [packed] trick
+     * @return (Color) - the Color of the first Card of this [packed] trick.
      */
     public static Card.Color baseColor(int pkTrick) {
         assert (isValid(pkTrick));
 
         //cuz i dont want to re-extract.
-        //TODO: when its empty, we get CLUB
         int firstCardColor = (pkTrick & 0b110000) >>> CARD_COLOR_START;
         return Color.ALL.get(firstCardColor);
     }
 
 
     //assumed not full
-    //first implementation
-    //easily simplifiable
-
     /**
-     * @brief returns all playable cards from a set of Cards ( pkHand)
-     *  in the current trick case.
+     * @brief Return the Cards which can be played in the [packed] trick "pkTrick"
+     *        given the hand "pkHand".
      *
-     * @param pkTrick this trick 
-     * @param pkHand the set with all the cards you have
-     * @return a PackedCardSet with only the cards you had ,and you can play in current case
+     * @param pkTrick (int) - the given [packed] trick
+     * @param pkHand (long) - the given hand [i.e. [packed] CardSet)
+     * @return (long) - the cards that can be played given the hand and the trick.
      */
     public static long playableCards(int pkTrick, long pkHand) {
         assert(!isFull(pkTrick));
 
-        //TODO: retest
         if (isEmpty(pkTrick)) { //If you are the first player to play.
             return pkHand;
         }
@@ -393,12 +389,11 @@ public final class PackedTrick {
     
 
     //only called with a valid, full trick
-
     /**
-     * @brief returns the points of this trick.
+     * @brief The value of the given [packed] trick, when won
      *
-     * @param pkTrick
-     * @return int : the sum of all cards in this trick
+     * @param pkTrick (int) - the given full [packed] trick
+     * @return (int) the value of the specified [packed] trick
      */
     public static int points(int pkTrick) {
         assert (isValid(pkTrick));
@@ -416,7 +411,7 @@ public final class PackedTrick {
 
 
     // We built 2 different methods "winningCard" and "winningCardIndex" (instead of using "card(winningCardIndex)")
-    // cuz it will reduce chain errors and also enable our program to be a bit faster.
+    // cuz' it will reduce chain errors and also enable our program to be a bit faster.
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
@@ -441,7 +436,6 @@ public final class PackedTrick {
 
     //Here we don't assume 4 cards have been played during this trick.
     //But we assume at least one has been
-
     private static int winningCardIndex(int pkTrick, Card.Color trump) {
         assert (!isEmpty(pkTrick));
 
@@ -462,10 +456,10 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns the Id of the player winning this trick.
+     * @brief The Id of the player currently winning the given [packed] trick.
      *
-     * @param pkTrick
-     * @return PlayerId : the Id of the player which have played the best card in this trick
+     * @param pkTrick (int) - the given [packed] trick
+     * @return (PlayerId) the Id of the player currently winning this [packed] trick
      */
     public static PlayerId winningPlayer(int pkTrick) {
         Card.Color trump = trump(pkTrick);
@@ -474,12 +468,12 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief returns a String representation of the trick.
+     * @brief The textual representation of the given [packed] trick
      *
-     * @param pkTrick
-     * @return String : a string with all informations about this trick
+     * @param pkTrick (int) the given [packed] trick
+     * @return (String) the textual representation of the given [packed] trick
      */
-    public static String toString(int pkTrick) {//TODO: Test again
+    public static String toString(int pkTrick) {
         String str1 = "";
         if (isValid(pkTrick)) {
             str1 = "started by " + player(pkTrick, 0) + "\n";
