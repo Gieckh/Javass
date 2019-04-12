@@ -73,6 +73,8 @@ public final class TurnState {
      * @param pkUnplayedCards (long) - the cards not played yet
      * @param pkCurrentTrick (int) - the current trick
      * @return (TurnState) a new TurnState, given its packed components.
+     * @throws IllegalArgumentException if one [at least] of the components of
+     *                                  the (TurnState) "this" is invalid.
      */
     public static TurnState ofPackedComponents(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
         checkArgument(PackedScore.isValid(pkScore) &&
@@ -158,6 +160,7 @@ public final class TurnState {
      *        Trick of this state is full, throws an IllegalStateException
      * 
      * @return (PlayerId) - the ID of the Player who has to play the next card
+     * @throws IllegalStateException if the (Trick) of the (TurnState) "this" is full.
      */
     public PlayerId nextPlayer() {
         if(PackedTrick.isFull(pkCurrentTrick)) {
@@ -173,6 +176,7 @@ public final class TurnState {
      * 
      * @param card (Card) - the (Card) to play
      * @return (TurnState) - a new TurnState in which the next player has played the Card card
+     * @throws IllegalStateException if the (Trick) of the (TurnState) "this" is full.
      */
     public TurnState withNewCardPlayed(Card card) {
         if(PackedTrick.isFull(pkCurrentTrick)) {
@@ -205,7 +209,8 @@ public final class TurnState {
      * @brief returns a new TurnState in which the current trick has been collected.
      *
      * @return (TurnState) a new TurnState in which the current trick has been collected
-    */
+     * @throws IllegalStateException if the (Trick) of the (TurnState) "this" is not full
+     */
     public TurnState withTrickCollected() {
         if(!PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
@@ -222,6 +227,7 @@ public final class TurnState {
      * @param card (Card)
      * @return (TurnState) a new TurnState in which the Card card
      *         has been added, and the trick collected if it was full at this point
+     * @throws IllegalStateException if the (Trick) of the (TurnState) "this" is full
      */
 
     public TurnState withNewCardPlayedAndTrickCollected(Card card) {
