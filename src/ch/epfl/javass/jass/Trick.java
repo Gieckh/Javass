@@ -175,12 +175,10 @@ public class Trick {
     }
 
     /**
-     * @brief returns a new pkTrick where the specified card has been added.
+     * @brief returns a new (Trick) where the specified card has been added.
      *
-     * @param pkTrick (int) - the given [packed] trick - not full.
-     * @param pkCard (int) - the [packed] card to add
-     * @return (int) - the given [packed] trick, except the specified [packed] card
-     *                 "pkCard" has been added.
+     * @param c (Card) - the Card to add
+     * @return (Trick) - the given (Trick), except the specified Card "c" has been added.
      * @throws IllegalStateException if "this" (Trick) is full.
      */
     public Trick withAddedCard(Card c) {
@@ -190,11 +188,12 @@ public class Trick {
 
         return new Trick ( PackedTrick.withAddedCard(pkTrick, c.packed()) );
     }
-    
+
     /**
-     * @brief returns the base color of this trick.
+     * @brief The color of the first card of "this" (Trick).
      *
-     * @return the color of the 1st card
+     * @return (Color) - the Color of the first Card of this (Trick).
+     * @throws IllegalStateException if "this" is empty.
      */
     public Color baseColor() {
         if(PackedTrick.isEmpty(pkTrick)) {
@@ -203,13 +202,15 @@ public class Trick {
 
         return PackedTrick.baseColor(pkTrick);
     }
-    
+
     /**
-     * @brief returns all playable cards from a set of Cards ( pkHand)
-     *  in the current trick.
+     * @brief Return the Cards which can be played in the "this" (Trick),
+     *        given the hand "pkHand".
      *
-     * @param pkHand the set with all the cards you have
-     * @return a PackedCardSet with only the cards you had ,and you can play in current case
+     * @param hand (CardSet) - the given hand
+     * @return (CardSet) - the cards that can be played in "this" (Trick), given
+     *                     the hand "hand" (CardSet).
+     * @throws IllegalArgumentException if "this" is full.
      */
     public CardSet playableCards(CardSet hand) {
         if( PackedTrick.isFull(pkTrick)) {
@@ -218,20 +219,22 @@ public class Trick {
 
         return CardSet.ofPacked(PackedTrick.playableCards(pkTrick, hand.packed()));
     }
-    
+
+    //should only be called with a valid, full trick - idk why we don't test it.
     /**
-     * @brief returns the points of this trick.
+     * @brief The value of "this" Trick, when won.
      *
-     * @return int : the sum of all cards in this trick
+     * @return (int) the value of "this".
      */
     public int points() {
         return PackedTrick.points(pkTrick);
     }
-    
+
     /**
-     * @brief returns the Id of the player winning this trick.
+     * @brief The Id of the player currently winning "this" (Trick).
      *
-     * @return PlayerId : the Id of the player which have played the best card in this trick
+     * @return (PlayerId) the Id of the player currently winning "this" (Trick).
+     * @throws IllegalStateException if "this" is empty.
      */
     public PlayerId winningPlayer() {
         if(PackedTrick.isEmpty(pkTrick)) {
@@ -242,7 +245,7 @@ public class Trick {
     }
 
 
-    /* 
+    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -262,14 +265,12 @@ public class Trick {
     public int hashCode() { //TODO: assistant
         return pkTrick;
     }
-    
+
     /**
-    * @brief returns a String representation of this trick.
-    *
-    * @return String : a string with all informations about this trick
-    * 
-    * @see java.lang.Object#toString()
-    */
+     * @brief The textual representation of "this" (Trick)
+     *
+     * @return (String) The textual representation of "this" (Trick)
+     */
     @Override
     public String toString() {
         return PackedTrick.toString(pkTrick);
