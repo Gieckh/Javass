@@ -10,6 +10,7 @@ import static ch.epfl.javass.Preconditions.checkArgument;
  *     - the number of points they've won this game (current turn included)
  *       [this is just the sum of the 2 previous points].
  *
+ * @see PackedScore
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */

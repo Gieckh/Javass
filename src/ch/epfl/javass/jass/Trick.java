@@ -6,9 +6,10 @@ import static ch.epfl.javass.Preconditions.checkIndex;
 import ch.epfl.javass.jass.Card.Color;
 
 /**
+ *
+ * @see PackedTrick
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
- *
  */
 public class Trick {
     /** ============================================== **/

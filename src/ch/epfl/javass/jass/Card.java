@@ -12,7 +12,8 @@ import java.util.List;
  * A card is represented by:
  *     - its Color (Spade, Heart, Diamond or Clubs)
  *     - its Rank (6, 7, 8, 9, 10, J, Q, K or A)
- * 
+ *
+ * @see PackedCard
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */

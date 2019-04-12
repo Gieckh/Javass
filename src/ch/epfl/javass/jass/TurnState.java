@@ -2,10 +2,15 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
+//TODO: JavaDoc
 /**
+ * @brief
+ *
+ * @see Score
+ * @see CardSet
+ * @see Trick
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
- *
  */
 public final class TurnState {
     
@@ -26,7 +31,8 @@ public final class TurnState {
      * @brief the only constructor of this class. It is private because static
      *        methods -calling this constructor- will be used to create instances
      *        of the class TurnState
-
+     * @see #ofPackedComponents(long, long, int)
+     *
      * @param pkScore (long) - the score
      * @param pkUnplayedCards (long) - the cards not played yet
      * @param pkCurrentTrick (int) - the current trick
@@ -81,7 +87,7 @@ public final class TurnState {
     /**
      * @brief Acts as a getter for the packed version of the Score.
      * 
-     * @return (long) the packed Score of this TurnState.
+     * @return (long) - the packed Score of this TurnState.
      */
     public long packedScore() {
         return pkScore;
@@ -91,7 +97,7 @@ public final class TurnState {
      * @brief Acts as a getter for the packed version of the CardSet indicating the
      *        unplayed cards.
      * 
-     * @return (long) the packed CardSet of unplayed cards.
+     * @return (long) - the packed CardSet of unplayed cards.
      */
     public long packedUnplayedCards() {
         return pkUnplayedCards;
@@ -100,7 +106,7 @@ public final class TurnState {
     /**
      * @brief Acts as a getter for the packed version of the current Trick.
      * 
-     * @return (int) the packed Trick of this turnState
+     * @return (int) - the packed Trick of this turnState
      */
     public int packedTrick() {
         return pkCurrentTrick;
@@ -111,7 +117,7 @@ public final class TurnState {
     /**
      * @brief Act as a getter for the unpacked version of the Score.
      * 
-     * @return (Score) the [unpacked] Score of this turnState
+     * @return (Score) - the [unpacked] Score of this turnState
      */
     public Score score() {
         return Score.ofPacked(pkScore);
@@ -120,7 +126,7 @@ public final class TurnState {
     /**
      * @brief Acts as a getter for the CardSet indicating the unplayed cards.
      * 
-     * @return (CardSet) the [unpacked] CardSet of unplayed cards.
+     * @return (CardSet) - the [unpacked] CardSet of unplayed cards.
      */
     public CardSet unplayedCards() {
         return CardSet.ofPacked(pkUnplayedCards);
@@ -129,7 +135,7 @@ public final class TurnState {
     /**
      * @brief Acts as a getter for the unpacked version of the Trick.
      * 
-     * @return (Trick) the [unpacked] Trick of this turnState
+     * @return (Trick) - the [unpacked] Trick of this turnState
      */
     public Trick trick() {
         return Trick.ofPacked(pkCurrentTrick);
@@ -140,7 +146,7 @@ public final class TurnState {
     /** 
      * @brief Indicates whether the last trick of this turn has been played
      * 
-     * @return true iff the last trick of this turn has been played
+     * @return (boolean) - true iff the last trick of this turn has been played AND COLLECTED
      */
     public boolean isTerminal() {
         return (pkCurrentTrick == PackedTrick.INVALID);
@@ -150,7 +156,7 @@ public final class TurnState {
      * @brief the PlayerId of the Player who has to play the next card. If the
      *        Trick of this state is full, throws an IllegalStateException
      * 
-     * @return (PlayerId) the ID of the Player who has to play the next card
+     * @return (PlayerId) - the ID of the Player who has to play the next card
      */
     public PlayerId nextPlayer() {
         if(PackedTrick.isFull(pkCurrentTrick)) {
@@ -164,8 +170,8 @@ public final class TurnState {
     /**
      * @brief returns a new TurnState in which the next player has played the Card card.
      * 
-     * @param card (Card)
-     * @return a new TurnState in which the next player has played the Card card
+     * @param card (Card) -
+     * @return (TurnState) - a new TurnState in which the next player has played the Card card
      */
     public TurnState withNewCardPlayed(Card card) {
         if(PackedTrick.isFull(pkCurrentTrick)) {
@@ -192,7 +198,7 @@ public final class TurnState {
     /**
      * @brief returns a new TurnState in which the current trick has been collected.
      *
-     * @return a new TurnState in which the current trick has been collected
+     * @return (TurnState) a new TurnState in which the current trick has been collected
     */
     public TurnState withTrickCollected() {
         if(!PackedTrick.isFull(pkCurrentTrick)) {
@@ -207,9 +213,9 @@ public final class TurnState {
      * @brief returns a new TurnState in which the Card card
      * has been added, and the trick collected if possible.
      * 
-     * @param card
-     * @return a new TurnState in which the Card card
-     * has been added, and the trick collected if it was full at this point
+     * @param card (Card)
+     * @return (TurnState) a new TurnState in which the Card card
+     *         has been added, and the trick collected if it was full at this point
      */
 
     public TurnState withNewCardPlayedAndTrickCollected(Card card) {

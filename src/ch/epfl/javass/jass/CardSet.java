@@ -8,6 +8,7 @@ import java.util.List;
  * The class used to represent a CardSet.
  * A CardSet is exactly what is seems: a set of cards.
  *
+ * @see PackedCardSet
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
