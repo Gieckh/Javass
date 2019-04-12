@@ -6,7 +6,8 @@ import ch.epfl.javass.bits.Bits32;
 import ch.epfl.javass.jass.Card.Color;
 
 /**
- * @brief manipulates the packed representations of the tricks of a game.
+ * @brief Non-instantiable
+ *        Contains the methods used to manipulate the Tricks
  *
  * @author - Marin Nguyen (288260)
  * @author - Antoine Scardigli (299905)
@@ -65,8 +66,8 @@ public final class PackedTrick {
     /**
      * @brief Indicates whether the given "pkTrick" is packed correctly
      *
-     * @param pkTrick
-     * @return true if "pkTrick" encodes a valid trick
+     * @param pkTrick (int) - the [packed] trick to check
+     * @return (boolean) - true if "pkTrick" encodes a valid trick
      */
     public static boolean isValid(int pkTrick) {
         if (Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE) > MAX_INDEX) {
@@ -78,9 +79,6 @@ public final class PackedTrick {
         int masked3 = pkTrick & CARD_MASK_3;
         int masked4 = pkTrick & CARD_MASK_4;
 
-
-        //TODO: simplify
-        //We don't check whether we have the same card 2 times.
         boolean isRank1Valid = ((masked1 & RANK_MASK_1) >>> CARD_1_START) <= MAX_RANK;
         boolean isRank2Valid = ((masked2 & RANK_MASK_2) >>> CARD_2_START) <= MAX_RANK;
         boolean isRank3Valid = ((masked3 & RANK_MASK_3) >>> CARD_3_START) <= MAX_RANK;
@@ -99,18 +97,17 @@ public final class PackedTrick {
         if (!isRank3Valid) {
             return (masked3 == CARD_MASK_3) && (masked4 == CARD_MASK_4);
         }
-        // TODO : 111111 pour le rank 4 retourne true
-        // test : 111111_000000_000000_000000 fait retourner true
+
         return (isRank4Valid || masked4 == CARD_MASK_4);
     }
 
     /**
-     * @brief returns the first PackedTrick of a turn,
-     *        depending on the trumpColor and the starting player.
+     * @brief returns the (int) corresponding to the first [packed] trick of a
+     *        turn, given the trump and the Id of first Player.
      *
-     * @param trump the Color of the trump
-     * @param firstPlayer the Id of the fist Player to play
-     * @return the first PackedTrick of a turn
+     * @param trump (Color) - the Color of the trump
+     * @param firstPlayer - (PlayerId) the first Player of the turn
+     * @return (int) - The first [packed] trick of a turn, given the specified parameters.
      */
     public static int firstEmpty(Card.Color trump, PlayerId firstPlayer) {
         int player = (firstPlayer.ordinal()) << PLAYER_START;
@@ -119,14 +116,14 @@ public final class PackedTrick {
         return EMPTY | player | color;
     }
 
-    //TODO
-
     /**
-     * @brief returns the n+1th PackedTrick of a turn
-     * return invalid if the last trick was the 9th.
+     * @brief Given a full [packed] trick, returns the next empty one. If
+     *        the specified [packed] trick was the last of the turn, returns "INVALID"
+     *        instead.
+     * @see PackedTrick#INVALID
      *
-     * @param pkTrick
-     * @return the n+1th PackedTrick of a trick
+     * @param pkTrick (int) - a full [packed] trick
+     * @return (int) - the next PackedTrick, or "INVALID" if there is none.
      */
     public static int nextEmpty(int pkTrick) {
         if (isLast(pkTrick)) {
@@ -134,65 +131,66 @@ public final class PackedTrick {
         }
 
         //incrementing the index
-        pkTrick += 1 << INDEX_START;
-        //TODO better
-        int winningPlayer = winningPlayer(pkTrick).ordinal();
+        pkTrick += (1 << INDEX_START);
+
+        int winningPlayerOrdinal = winningPlayer(pkTrick).ordinal();
         pkTrick &= ~Bits32.mask(PLAYER_START, PLAYER_SIZE);
-        pkTrick |= (winningPlayer << PLAYER_START);
+        pkTrick |= (winningPlayerOrdinal << PLAYER_START);
+
         return pkTrick | EMPTY;
     }
 
     /**
-     * @brief returns true iff this trick is the 9th.
+     * @brief Indicates whether the specified [packed] trick is the last of the turn
      *
-     * @param pkTrick
-     * @return a boolean that is true iff this trick is the 9th
+     * @param pkTrick (int) - the [packed] trick to check
+     * @return (boolean) - true if the specified [packed] trick is the 9-th of the turn
      */
     public static boolean isLast(int pkTrick) {
         return index(pkTrick) == MAX_INDEX;
     }
 
     /**
-     * @brief returns true iff this trick is empty : if it has no card.
+     * @brief Indicates whether the given [packed] trick contains any Card.
      *
-     * @param pkTrick
-     * @return a boolean that is true iff this trick has 0 card
+     * @param pkTrick (int) - the given [packed] trick
+     * @return (boolean) - true if the specified [packed] trick is empty.
      */
     public static boolean isEmpty (int pkTrick) {
         return (pkTrick & EMPTY) == EMPTY;
     }
 
-    //Assuming the card is valid
 
     /**
-     * @brief returns true iff this trick is full : it has 4 cards
+     * @brief Indicates whether the given [packed] trick contains 4 Cards.
      *
-     * @param pkTrick
-     * @return boolean that is true iff this trick has 4 card
+     * @param pkTrick (int) - the given [packed] trick
+     * @return (boolean) true if the specified [packed] trick is full.
      */
     public static boolean isFull(int pkTrick) {
         return Bits32.extract(pkTrick, CARD_4_START, CARD_SIZE) != PackedCard.INVALID;
     }
 
-    //TODO: not a separate method, cuz it does a copy...
 
+    //TODO: not a separate method, cuz it does a copy
     /**
-     * @brief returns true iff this trick is full : if it has 4 cards.
+     * @brief Indicates whether the cardNo-th Card of the trick is a valid card
+     *        (otherwise, it should be INVALID)
      *
-     * @param pkTrick
-     * @return a boolean that is true iff this trick has 4 card
+     * @param pkTrick (int) - the specifies [packed] trick
+     * @return (boolean) - true if the cardNo-th Card of the trick is not "INVALID"
      */
     private static boolean containsValidCard(int pkTrick, int cardNo) {
         switch(cardNo) {
         case 1:
             return ((RANK_MASK_1 & pkTrick) != RANK_MASK_1);
         case 2:
-            return (((RANK_MASK_2 & pkTrick)) != RANK_MASK_2);
+            return ((RANK_MASK_2 & pkTrick) != RANK_MASK_2);
         case 3:
-            return (((RANK_MASK_3 & pkTrick)) != RANK_MASK_3);
+            return ((RANK_MASK_3 & pkTrick) != RANK_MASK_3);
         case 4:
-            return (((RANK_MASK_4 & pkTrick)) != RANK_MASK_4);
-        default:
+            return ((RANK_MASK_4 & pkTrick) != RANK_MASK_4);
+        default: //wrong cardNo
             throw new IllegalArgumentException();
         }
     }

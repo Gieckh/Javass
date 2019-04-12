@@ -2,11 +2,11 @@ package ch.epfl.javass.bits;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
-//TODO: javadoc
-
 /**
  * @brief Non-instantiable, this class contains the methods that will be used to
  *        manipulate vectors of 64 bits, here represented by (long) values.
+ *
+ * @see Bits32
  *
  * @author - Marin Nguyen (288260)
  * @author - Antoine Scardigli (299905)
@@ -29,8 +29,7 @@ public class Bits64 {
     /** ============================================== **/
 
     /**
-     *
-     * @brief creates a mask of "size" 1 bits, starting at position "start"
+     * @brief creates a mask of "size" 1-bits, starting at position "start"
      *        ex : mask(1, 3) = 0...01110
      *
      * @param start (int) the position of the first 1
@@ -45,18 +44,16 @@ public class Bits64 {
             return -1L;  // = 111...111 with Long.SIZE = 64 ones.
 
         long mask = (1L << size) - 1L;
-
         return mask << start;
     }
 
     /**
      * @brief creates the int formed from the bits [start] to [start + size - 1] of "bits"
      *
-     * @param bits  (int)
-     * @param start (int)
-     * @param size  (int)
-     * @return (int) the int formed from the bits [start] to [start + size - 1] of "bits"
-     * @author - Marin Nguyen (288260)
+     * @param bits  (int) - the vector of bits to extract from
+     * @param start (int) - from where we want to extract
+     * @param size  (int) - until where we want to extract
+     * @return (int) - the int formed from the bits [start] to [start + size - 1] of "bits"
      */
     public static long extract(long bits, int start, int size) {
         // The call to mask checks the exceptions
@@ -65,27 +62,27 @@ public class Bits64 {
     }
 
     /**
-     * @param value the bit whose MSB position we want to know, NOT 0.
+     * @brief Find the position of the MSB of the specified long value
+     *
+     * @see #checkPack(long, int)
+     *
+     * @param value (long) - the bit whose MSB position we want to know, NOT 0.
      * @return (int) the MSB position (an int between 0 and 31)
-     * @brief finds the position of the MSB of the long value
-     * @author - Marin Nguyen (288260)
-     * @see checkPack(int, int)
      */
     private static int msbPosition(long value) {
         return Long.SIZE - 1 - Long.numberOfLeadingZeros(value);
     }
 
-
     /**
      * @brief checks whether "size" and "value" are compatible
      *
-     * @param value (long)
-     * @param size (int)
+     * @see #pack(long, int, long, int)
+     *
+     * @param value (long) - the (long) whose validity is to be checked
+     * @param size (int) - a theoretical upper-bound to "value" length
      * @return (boolean) true if
      *         - 1 <= size <= 31
      *         - and "value" doesn't use more bits than specified by "size"
-     * @author - Marin Nguyen (288260)
-     * @see pack(int, int, int, int)
      */
     private static boolean checkPack(long value, int size) {
         if (size < 1 || size >= Long.SIZE) { //Firstly, the size must be legal
@@ -104,7 +101,7 @@ public class Bits64 {
     }
 
     /**
-     * @brief concatenates the binary expressions of v1 and v2
+     * @brief Concatenates the binary expressions of v1 and v2
      *       (where v2's bits are more significant than v1's ones)
      *
      * @param v1 (int) - the first (int) to concatenate

@@ -8,6 +8,10 @@ import java.util.SplittableRandom;
  * @brief This class extends Player and only overrides the method "cardToPlay".
  *        To decide which card to play, the computer uses a Monte-Carlo tree search
  *        algorithm - hence the "MCTS".
+ *
+ * @see Player
+ *
+ * @author - Marin Nguyen (288260)
  */
 public class MctsPlayer implements Player {
     /** ============================================== **/
@@ -72,7 +76,7 @@ public class MctsPlayer implements Player {
     private void iterate(Node root) {
         for (int i = 0; i < iterations; ++i) {
             Node newNode = expand(root);
-            Score toAdd = (newNode.isReallyLeaf()) ?
+            Score toAdd = (newNode.isLeaf()) ?
                     newNode.state.withTrickCollected().score(): simulateToEndOfTurn(newNode.state, newNode.hand);
             addScores(newNode, toAdd);
             root.totalPointsFromNode += toAdd.turnPoints(root.teamId);
@@ -92,13 +96,13 @@ public class MctsPlayer implements Player {
     private Node expand(Node root) {
         Node node = root;
         int index = root.selectSon();
-        while (!(node.isReallyLeaf() || node.directChildrenOfNode[index] == null)) {
+        while (!(node.isLeaf() || node.directChildrenOfNode[index] == null)) {
             //The 1st condition is there cuz we dont wanna call selectSon() with a "true leaf" (last trick of the game)
             node = node.directChildrenOfNode[index];
             index = node.selectSon();
         }
 
-        if (node.isReallyLeaf()) {
+        if (node.isLeaf()) {
             return node;
         }
 
@@ -289,13 +293,14 @@ public class MctsPlayer implements Player {
         }
 
         /**
-         * @brief Indicates this node value, according to the evaluation function
+         * @brief Called on a (Node) "node" explored at least once.
+         *        Indicates this node value, according to the evaluation function
          *        of our Monte Carlo algorithm, and given the specified "explorationParameter"
          *
          * @param node (Node) - The (Node) to evaluate
          * @param explorationParameter (int) - quantifies the likeliness of our algorithm to wander horizontally,
          *                             i.e. to explore rarely explored branches.
-         * @return (double) the value of the (Node) "node"
+         * @return (double) - the value of the (Node) "node"
          */
         private double evaluate(Node node, int explorationParameter) {
             return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
@@ -303,21 +308,20 @@ public class MctsPlayer implements Player {
         }
 
         /**
-         * @brief
-         *
-         *
-         * @return
+         * @see #selectSon(int)
          */
         private int selectSon() {
             return selectSon(DEFAULT_EXPLORATION_PARAMETER);
         }
 
         /**
-         * @brief Never called with a "true leaf".
+         * @brief Never called with a [true] leaf.
          *        Indicates which son, of the (Node) it is called by, should be explored.
          *
-         * @param explorationParameter (int)
-         * @return
+         * @param explorationParameter (int) - quantifies the likeliness of our algorithm to wander horizontally,
+         *                             i.e. to explore rarely explored branches.
+         * @return (int) - the index of a son for which "evaluate" is maximal.
+         *                 [If a (Node) hasn't been explored yet, its value is considered infinite, and therefore maximal]
          */
         private int selectSon(int explorationParameter) {
             if (directChildrenOfNode.length == 0) {
@@ -344,11 +348,12 @@ public class MctsPlayer implements Player {
         }
 
         /**
-         * @brief
+         * @brief Indicates whether the (Node) "this" is a [true] leaf in the tree.
+         *        [i.e. it corresponds to the last Card of the last Trick of the turn]
          *
-         * @return
+         * @return (boolean) true if "this" is a leaf.
          */
-        private boolean isReallyLeaf() {
+        private boolean isLeaf() {
             return directChildrenOfNode.length == 0;
         }
     }

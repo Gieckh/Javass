@@ -8,6 +8,7 @@ import java.util.List;
  * The class used to represent a CardSet.
  * A CardSet is exactly what is seems: a set of cards.
  *
+ * @see PackedCardSet
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
@@ -25,8 +26,9 @@ public final class CardSet {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     /**
-     * @brief PRIVATE constructor of the class Score. Called by the method
-     *        "ofPacked(int packed)".
+     * @brief PRIVATE constructor of the class Score. Called by the following methods:
+     * @see #of(List)
+     * @see #ofPacked(long)
      *
      * @param packed (int) an encoded CardSet.
      */
@@ -102,7 +104,7 @@ public final class CardSet {
      *        if [index == 0], then the card given by the least significant 1-bit
      *        of the set of cards is returned
      *
-     * @param index (int) //TODO
+     * @param index (int) - indicates which element of the CardSet is to be returned
      * @return (Card) the index-th <em> card</em> from this set of cards.
      */
     public Card get(int index) {

@@ -1,7 +1,10 @@
 package ch.epfl.javass.jass;
 import ch.epfl.javass.bits.Bits64;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * @brief Non-instantiable
@@ -239,7 +242,6 @@ public final class PackedCardSet {
         return pkCardSet1 & ~pkCardSet2;
     }
 
-    //TODO
     /**
      * @brief Given the [packed] set of cards "pkCardSet" and the Color "color",
      *        returns the [packed] set of cards made only of the cards of "pkCardSet"
@@ -260,7 +262,7 @@ public final class PackedCardSet {
         case CLUB:
             return pkCardSet & CLUB_CARDS;
         default: //unreachable statement
-            throw new IllegalArgumentException();
+            throw new Error();
         }
     }
 
@@ -290,7 +292,7 @@ public final class PackedCardSet {
     // themselves used to reduce the length/complexity of some other methods.
 
     /**
-     * @author Michel Schinz
+     * @author Michel Schinz (+31252)
      */
     private static Card.Color[] getAllColors() {
         return new Card.Color[] {

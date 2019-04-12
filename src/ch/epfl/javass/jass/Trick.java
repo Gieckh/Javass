@@ -5,16 +5,19 @@ import static ch.epfl.javass.Preconditions.checkIndex;
 
 import ch.epfl.javass.jass.Card.Color;
 
+//TODO: javaDoc pour antoine..
 /**
+ * @brief
+ *
+ * @see PackedTrick
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
- *
  */
 public class Trick {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    public static final Trick INVALID = new Trick(PackedTrick.INVALID);
+    public static final Trick INVALID = new Trick(PackedTrick.INVALID); //unused?
     private final int pkTrick;
 
     /** ============================================== **/
@@ -68,7 +71,6 @@ public class Trick {
      * @brief returns the n+1th PackedTrick of a turn
      * return invalid if the last trick was the 9th.
      *
-     * @param pkTrick
      * @return the n+1th PackedTrick of a trick
      */
     public Trick nextEmpty() {
@@ -227,7 +229,7 @@ public class Trick {
      */
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  !(thatO instanceof Trick)) { //todo: test
+        if (!(thatO instanceof Trick)) {
             return false;
         }
 
@@ -235,7 +237,7 @@ public class Trick {
             return (thatOTrick.pkTrick == this.pkTrick);
     }
     
-    /*
+    /**
      * @see java.lang.Object#hashCode()
      */
     @Override
