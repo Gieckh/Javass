@@ -8,7 +8,7 @@ import ch.epfl.javass.jass.CardSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
-// TODO : voir les TODO plus bas; il ya 2-3 ptites Questions a poser a michmich , 
+// TODO : voir les TODO plus bas; il y a 2-3 ptites questions à poser à michmich , 
 //mais rien d'urgent je peux faire ca lundi
 // cette classe a été testée en theorie ; ce n'est pas le cas des 2 autres
 
@@ -58,12 +58,9 @@ public final class HandBean {
     //TODO : why isn't the test of the prof printing correctly ? (althought works)
     
     
-    
-    
-    
     /**
-     * @Brief It is a public setter for the hand property given the CardSet newHand,
-     *  if the new CardSet newHand is of size 9, we replace the previous hand property 
+     * @Brief It is a public setter for the hand property, given the CardSet newHand.
+     *  If the new CardSet newHand is of size 9, we replace the previous hand property 
      *  with the new one, overwise we simply put to null the cards that are not in newHand 
      *  but were in the hand attribute.  
      *
@@ -93,7 +90,7 @@ public final class HandBean {
 
     /**
      * @Brief It is a public setter for the playableCards property given the CardSet 
-     *  newPlayableCards, if the new CardSet newPlayableCards is of size 9, we replace
+     *  newPlayableCards. If the new CardSet newPlayableCards is of size 9, we replace
      *  the previous PlayableCards property with the new one, overwise we simply put to 
      *  null the cards that are not in newPlayableCards but were in the playableCards
      *  attribute.  

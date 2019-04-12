@@ -24,9 +24,8 @@ import ch.epfl.javass.jass.TurnState;
 
 /**
  * @Brief RemotePlayerServer instance is a remote server which particularity is that 
- * it acts depending on what a RemotePlayerClient ; which is local; tells him 
- * thus the only method is about receiving informations ,or sending to the local instance 
- * an information about what card to play.
+ * it acts depending on the informations a RemotePlayerClient send to him; this RemotePlayerClient is playing localy in the JassGame.
+ * It tells the RemotePLayerServer everything that happens , and waits for the RemotePlayerServer's decision for what card to play.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -43,7 +42,9 @@ public final class RemotePlayerServer {
     /** ============================================== **/
     
     /**
-     * @param underLyingPlayer
+     * @Brief This underlyingPlayer defines how the RemotePlayerServer will ask the RemotePlayerClient to play.
+     * 
+     * @param underLyingPlayer 
      */
     public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;

@@ -43,7 +43,8 @@ public final class TrickBean {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-    //TODO demander a marin le billingue si on dit setter of setter on ou setter for.
+    //TODO demander a marin le billingue si on dit "setter of" ,"setter on" ou "setter for" ?.
+    
     /**
      * @Brief It is a public getter of the trick property.
      *

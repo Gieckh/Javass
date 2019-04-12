@@ -23,7 +23,9 @@ import ch.epfl.javass.jass.TurnState;
 
 
 /**
- * RemotePlayerClient instance is a local "teleguided" player which exchanges informations with a RemotePlayerServer instance (which plays in remote).
+ * RemotePlayerClient instance acts as a player in a JassGame although it exchanges informations 
+ * with a RemotePlayerServer instance (which plays in remote) and which takes the decisions.
+ * Thus we need exactly one RemotePlayerClient's instance for one RemotePlayerServer's instance.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -46,8 +48,10 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     
 
     /**
-     * @param nameOfHost
-     * @param port
+     * @Brief Constructs a socket, a reader, and an writer.  
+     * 
+     * @param nameOfHost : the name or the IP string of the host in which the RemotePlayerSarver is 
+     * @param port : should be 5108 per default
      * @throws IOException
      */
     public RemotePlayerClient(String nameOfHost, int port) throws IOException {
@@ -93,7 +97,6 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
         System.out.println("writed :" + s);
         try {
             w.write(s+"\n");
-          //  w.write();
             w.flush();
         } catch (IOException e1) {
             throw new UncheckedIOException(e1);

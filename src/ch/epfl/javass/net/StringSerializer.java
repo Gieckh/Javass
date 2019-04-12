@@ -24,20 +24,20 @@ public final class StringSerializer {
     /** ============================================== **/
      
     /**
-     * @Brief returns the string representation of the int in base 16.
+     * @Brief returns the string representation of the integer in base 16.
      *
-     * @param i an int in base 10
-     * @return the string representation of the int in base 16
+     * @param i an integer in base 10
+     * @return the string representation of the integer in base 16
     */
     public  static String serializeInt(int i) {
         return Integer.toUnsignedString(i, 16);
     }
 
     /**
-     * @Brief returns an int in base 10 from the string representation of a base 16 integer.
+     * @Brief returns an integer in base 10 from the string representation of a base 16 integer.
      *
      * @param s a string of a base 16 integer
-     * @return an int in base 10 from the string representation of a base 16 integer
+     * @return an integer in base 10 from the string representation of a base 16 integer
     */
     public static int deserializeInt(String s) {
         return Integer.parseUnsignedInt(s, 16);
