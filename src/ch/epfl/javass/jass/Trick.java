@@ -112,70 +112,76 @@ public class Trick {
     }
 
     /**
-     * @brief returns true iff this trick is the 9th.
+     * @brief Indicates whether "this" (Trick) is the last of the turn
      *
-     * @return a boolean that is true iff this trick is the 9th
+     * @return (boolean) - true if "this" (Trick) is the 9-th of the turn
      */
     public boolean isLast() {
         return PackedTrick.isLast(pkTrick);
     }
 
     /**
-     * @brief returns the number of cards in this Trick.
+     * @brief The numbers of Cards played in this "this" (Trick).
      *
-     * @return the number of cards in this Trick
+     * @return (int) - the number of cards in "this"
      */
     public int size() {
         return PackedTrick.size(pkTrick);
     }
-    
+
     /**
-     * @brief returns the trump color in this Trick.
+     * @brief Indicates the color of the trump in "this" (Trick)
      *
-     * @return the color of the trump in this Trick
+     * @return (Color) - the color of the trump in "this"
      */
     public Color trump() {
         return PackedTrick.trump(pkTrick);
     }
-    
+
     /**
-     * @brief returns the number of this trick.
+     * @brief Indicates the ordinal of "this" (Trick) in the current turn
+     *        (between 0 and MAX_INDEX = 8)
      *
-     * @return int from 0 to 8 
+     * @return (int) - the ordinal of "this" (Trick) in the current turn.
      */
     public int index() {
         return PackedTrick.index(pkTrick);
     }
 
-    //TODO: test checkIndex
     /**
-     * @brief returns the player that will play at the index'th position .
+     * @brief returns the Id of the player that will play at the index-th position
+     *        of "this" (Trick)
      *
-     * @param index
-     * @return playerId of the index'th player to play at this trick
+     * @param index (int) - the index in this (Trick), hence between 0 and 3
+     * @return (PlayerId) - the Id of the player that will play at the index-th position
+     *                      of "this".
+     * @throws IndexOutOfBoundsException if the index is negative, or not smaller than 4 = PlayerId.COUNT
      */
     public PlayerId player(int index) {
         checkIndex(index, PlayerId.COUNT);
         return PackedTrick.player(pkTrick, index);
     }
-    
+
     /**
-     * @brief returns the Card at the index'th position (from 0 to 3).
+     * @brief returns the Card at the index-th position (from 0 to 3).
      *
-     * @param index
-     * @return the card at the index'th position of this trick
+     * @param index (int) - the index, in this (Trick), of the Card to get
+     * @return (Card) - the card at the index'th position
+     * @throws IndexOutOfBoundsException if the there is no Card at the given index
      */
-    public Card card (int index) { //TODO: test
+    public Card card (int index) {
         checkIndex(index, PackedTrick.size(pkTrick));
         return Card.ofPacked(PackedTrick.card(pkTrick, index));
     }
-    
+
     /**
-     * @brief returns a new pkTrick whose difference is that a card has been added.
+     * @brief returns a new pkTrick where the specified card has been added.
      *
-     * @param pkTrick
-     * @param pkCard
-     * @return a packedTrick with a card added
+     * @param pkTrick (int) - the given [packed] trick - not full.
+     * @param pkCard (int) - the [packed] card to add
+     * @return (int) - the given [packed] trick, except the specified [packed] card
+     *                 "pkCard" has been added.
+     * @throws IllegalStateException if "this" (Trick) is full.
      */
     public Trick withAddedCard(Card c) {
         if (PackedTrick.isFull(pkTrick)){

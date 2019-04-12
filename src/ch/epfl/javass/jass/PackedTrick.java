@@ -243,11 +243,11 @@ public final class PackedTrick {
     }
 
     /**
-     * @brief Indicates the ordinal of this trick in the current turn
+     * @brief Indicates the ordinal of this [packed] trick in the current turn
      *        (between 0 and MAX_INDEX = 8)
      *
      * @param pkTrick (int) - the given [packed] trick
-     * @return (int) - the ordinal of this trick in the current turn.
+     * @return (int) - the ordinal of this [packed] trick in the current turn.
      */
     public static int index (int pkTrick) {
         return Bits32.extract(pkTrick, INDEX_START, INDEX_SIZE);
