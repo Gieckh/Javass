@@ -2,7 +2,7 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.bits.Bits32.extract;
 
-import ch.epfl.javass.bits.Bits32; //TODO c'est assez bizarre ces import
+import ch.epfl.javass.bits.Bits32;
 
 /**
  * @brief Non-instantiable.

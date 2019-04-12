@@ -315,7 +315,7 @@ public class MctsPlayer implements Player {
         }
 
         /**
-         * @brief Never called with a "true leaf".
+         * @brief Never called with a [true] leaf.
          *        Indicates which son, of the (Node) it is called by, should be explored.
          *
          * @param explorationParameter (int) - quantifies the likeliness of our algorithm to wander horizontally,
@@ -348,7 +348,7 @@ public class MctsPlayer implements Player {
         }
 
         /**
-         * @brief Indicates whether the (Node) "this" is a leaf in the tree.
+         * @brief Indicates whether the (Node) "this" is a [true] leaf in the tree.
          *        [i.e. it corresponds to the last Card of the last Trick of the turn]
          *
          * @return (boolean) true if "this" is a leaf.

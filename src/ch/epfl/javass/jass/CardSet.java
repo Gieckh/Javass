@@ -104,7 +104,7 @@ public final class CardSet {
      *        if [index == 0], then the card given by the least significant 1-bit
      *        of the set of cards is returned
      *
-     * @param index (int) //TODO
+     * @param index (int) - indicates which element of the CardSet is to be returned
      * @return (Card) the index-th <em> card</em> from this set of cards.
      */
     public Card get(int index) {
