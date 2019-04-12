@@ -2,9 +2,11 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
-//TODO: JavaDoc
+//TODO: JavaDoc pour Antoine...
 /**
- * @brief
+ * @brief This class represents the [public] state of the game: what every Player
+ *        can see/know. Namely the score of each team, the Cards left to play,
+ *        and the current Trick
  *
  * @see Score
  * @see CardSet
