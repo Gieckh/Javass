@@ -26,8 +26,9 @@ public final class CardSet {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     /**
-     * @brief PRIVATE constructor of the class Score. Called by the method
-     *        "ofPacked(int packed)".
+     * @brief PRIVATE constructor of the class Score. Called by the following methods:
+     * @see #of(List)
+     * @see #ofPacked(long)
      *
      * @param packed (int) an encoded CardSet.
      */

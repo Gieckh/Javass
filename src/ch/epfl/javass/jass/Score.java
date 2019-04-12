@@ -27,8 +27,8 @@ public final class Score {
     /** ============================================== **/
 
     /**
-     * @brief PRIVATE constructor of the class Score. Called by the method
-     *        "ofPacked(int packed)".
+     * @brief PRIVATE constructor of the class Score. Called by the following method:
+     * @see #ofPacked(long)
      *
      * @param packed (long) an encoded score
      */

@@ -5,6 +5,7 @@ import static ch.epfl.javass.Preconditions.checkIndex;
 
 import ch.epfl.javass.jass.Card.Color;
 
+//TODO: javaDoc pour antoine..
 /**
  *
  * @see PackedTrick
@@ -228,7 +229,7 @@ public class Trick {
      */
     @Override
     public boolean equals(Object thatO) {
-        if (thatO == null  ||  !(thatO instanceof Trick)) { //todo: test
+        if (!(thatO instanceof Trick)) {
             return false;
         }
 
