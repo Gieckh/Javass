@@ -49,7 +49,7 @@ public final class ScoreBean {
      *
      * @param team the TeamId of a team
      * @return the turnPoints property of the chosen team
-    */
+     */
     public ReadOnlyIntegerProperty turnPointsProperty(TeamId team) {
         return (team == TeamId.TEAM_1) ? turnPointsT1: turnPointsT2;
     }
@@ -59,7 +59,7 @@ public final class ScoreBean {
      *
      * @param team the TeamId of a team
      * @return the gamePoints property of the chosen team
-    */
+     */
     public ReadOnlyIntegerProperty gamePointsProperty(TeamId team) {
         return (team == TeamId.TEAM_1) ? gamePointsT1: gamePointsT2;
     }
@@ -69,7 +69,7 @@ public final class ScoreBean {
      *
      * @param team the TeamId of a team
      * @return the totalPoints property of the chosen team
-    */
+     */
     public ReadOnlyIntegerProperty totalPointsProperty(TeamId team) {
         return (team == TeamId.TEAM_1) ? totalPointsT1: totalPointsT2;
     }
@@ -79,7 +79,7 @@ public final class ScoreBean {
      * @brief It is a public getter for the winningTeam property.
      *
      * @return the winningTeam property
-    */
+     */
     public ReadOnlyObjectProperty<TeamId> winningTeamProperty() {
         return winningTeam;
     }
@@ -91,7 +91,7 @@ public final class ScoreBean {
      *
      * @param team the TeamId of the chosen team
      * @param newTurnPoints an integer
-    */
+     */
     public void setTurnPoints(TeamId team, int newTurnPoints) {
         if (team == TeamId.TEAM_1)
             turnPointsT1 = new SimpleIntegerProperty(newTurnPoints);
@@ -105,7 +105,7 @@ public final class ScoreBean {
      *
      * @param team the TeamId of the chosen team
      * @param newGamePoints an integer
-    */
+     */
     public void setGamePoints(TeamId team, int newGamePoints) {
         if (team == TeamId.TEAM_1)
             gamePointsT1 = new SimpleIntegerProperty(newGamePoints);
@@ -119,7 +119,7 @@ public final class ScoreBean {
      *
      * @param team the TeamId of the chosen team
      * @param newTotalPoints an integer
-    */
+     */
     public void setTotalPoints(TeamId team, int newTotalPoints) {
         if (team == TeamId.TEAM_1)
             totalPointsT1 = new SimpleIntegerProperty(newTotalPoints);
@@ -133,7 +133,7 @@ public final class ScoreBean {
      * @brief public setter for the chosen winning team.
      *
      * @param team the TeamId of the winning team
-    */
+     */
     public void setWinningTeam(TeamId team) {
             winningTeam = new SimpleObjectProperty<TeamId>(team);
     }
