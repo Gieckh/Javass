@@ -135,6 +135,6 @@ public final class ScoreBean {
      * @param team the TeamId of the winning team
      */
     public void setWinningTeam(TeamId team) {
-            winningTeam = new SimpleObjectProperty<TeamId>(team);
+            winningTeam = new SimpleObjectProperty<>(team);
     }
 }
