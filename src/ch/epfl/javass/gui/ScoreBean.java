@@ -45,7 +45,7 @@ public final class ScoreBean {
     /** ============================================== **/
 
     /**
-     * @Brief It is a public getter for the turnPoints property of the chosen team.
+     * @brief It is a public getter for the turnPoints property of the chosen team.
      *
      * @param team the TeamId of a team
      * @return the turnPoints property of the chosen team
@@ -60,7 +60,7 @@ public final class ScoreBean {
     }
     
     /**
-     * @Brief It is a public getter for the gamePoints property of the chosen team.
+     * @brief It is a public getter for the gamePoints property of the chosen team.
      *
      * @param team the TeamId of a team
      * @return the gamePoints property of the chosen team
@@ -91,7 +91,7 @@ public final class ScoreBean {
     
     
     /**
-     * @Brief It is a public getter for the winningTeam property.
+     * @brief It is a public getter for the winningTeam property.
      *
      * @return the winningTeam property
     */
@@ -101,7 +101,7 @@ public final class ScoreBean {
     
     
     /**
-     * @Brief public setter for the turnPoints given the new turnPoints(integer) 
+     * @brief public setter for the turnPoints given the new turnPoints(integer)
      * and the chosen team.
      *
      * @param team the TeamId of the chosen team
@@ -117,7 +117,7 @@ public final class ScoreBean {
       }
     
     /**
-     * @Brief public setter for the gamePoints given the new gamePoints(integer) 
+     * @brief public setter for the gamePoints given the new gamePoints(integer)
      * and the chosen team.
      *
      * @param team the TeamId of the chosen team
@@ -133,7 +133,7 @@ public final class ScoreBean {
       }
     
     /**
-     * @Brief public setter for the totalPoints given the new totalPoints(integer) 
+     * @brief public setter for the totalPoints given the new totalPoints(integer)
      * and the chosen team.
      *
      * @param team the TeamId of the chosen team
@@ -151,7 +151,7 @@ public final class ScoreBean {
     
     
     /**
-     * @Brief public setter for the chosen winning team.
+     * @brief public setter for the chosen winning team.
      *
      * @param team the TeamId of the winning team
     */
