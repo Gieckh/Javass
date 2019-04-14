@@ -51,12 +51,7 @@ public final class ScoreBean {
      * @return the turnPoints property of the chosen team
     */
     public ReadOnlyIntegerProperty turnPointsProperty(TeamId team) {
-        if(team.equals(TeamId.TEAM_1)) {
-            return turnPointsT1;
-        }
-        else {
-            return turnPointsT2;
-        }
+        return (team == TeamId.TEAM_1) ? turnPointsT1: turnPointsT2;
     }
     
     /**
@@ -66,12 +61,7 @@ public final class ScoreBean {
      * @return the gamePoints property of the chosen team
     */
     public ReadOnlyIntegerProperty gamePointsProperty(TeamId team) {
-        if(team.equals(TeamId.TEAM_1)) {
-            return gamePointsT1;
-        }
-        else {
-            return gamePointsT2;
-        }
+        return (team == TeamId.TEAM_1) ? gamePointsT1: gamePointsT2;
     }
     
     /**
@@ -158,6 +148,5 @@ public final class ScoreBean {
     public void setWinningTeam(TeamId team) {
             winningTeam = new SimpleObjectProperty<TeamId>(team);
       }
-    
     
 }
