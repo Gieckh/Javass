@@ -26,10 +26,12 @@ public final class ScoreBean {
     private IntegerProperty turnPointsT1 = new SimpleIntegerProperty();
     private IntegerProperty gamePointsT1 = new SimpleIntegerProperty();
     private IntegerProperty totalPointsT1 = new SimpleIntegerProperty();
+
     private IntegerProperty turnPointsT2 = new SimpleIntegerProperty();
     private IntegerProperty gamePointsT2 = new SimpleIntegerProperty();
     private IntegerProperty totalPointsT2 = new SimpleIntegerProperty();
-    private ObjectProperty<TeamId> winningTeam = new SimpleObjectProperty<TeamId>();
+
+    private ObjectProperty<TeamId> winningTeam = new SimpleObjectProperty<>();
     
     
     /** ============================================== **/
