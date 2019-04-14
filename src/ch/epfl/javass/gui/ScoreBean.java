@@ -71,12 +71,7 @@ public final class ScoreBean {
      * @return the totalPoints property of the chosen team
     */
     public ReadOnlyIntegerProperty totalPointsProperty(TeamId team) {
-        if(team.equals(TeamId.TEAM_1)) {
-            return totalPointsT1;
-        }
-        else {
-            return totalPointsT2;
-        }
+        return (team == TeamId.TEAM_1) ? totalPointsT1: totalPointsT2;
     }
     
     
