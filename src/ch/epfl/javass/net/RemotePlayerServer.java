@@ -58,7 +58,7 @@ public final class RemotePlayerServer {
     /**
      * @Brief receive some informations from the local player (client) and tells him what card to play.
      *
-    */
+     */
     public void run() {
         System.out.println("run");
         try (ServerSocket s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
