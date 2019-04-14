@@ -93,13 +93,11 @@ public final class ScoreBean {
      * @param newTurnPoints an integer
     */
     public void setTurnPoints(TeamId team, int newTurnPoints) {
-        if(team.equals(TeamId.TEAM_1)) {
+        if (team == TeamId.TEAM_1)
             turnPointsT1 = new SimpleIntegerProperty(newTurnPoints);
-        }else {
+        else
             turnPointsT2 = new SimpleIntegerProperty(newTurnPoints);
-            
-        }
-      }
+    }
     
     /**
      * @brief public setter for the gamePoints given the new gamePoints(integer)
@@ -109,13 +107,11 @@ public final class ScoreBean {
      * @param newGamePoints an integer
     */
     public void setGamePoints(TeamId team, int newGamePoints) {
-        if(team.equals(TeamId.TEAM_1)) {
+        if (team == TeamId.TEAM_1)
             gamePointsT1 = new SimpleIntegerProperty(newGamePoints);
-        }else {
+        else
             gamePointsT2 = new SimpleIntegerProperty(newGamePoints);
-            
-        }
-      }
+    }
     
     /**
      * @brief public setter for the totalPoints given the new totalPoints(integer)
@@ -125,13 +121,11 @@ public final class ScoreBean {
      * @param newTotalPoints an integer
     */
     public void setTotalPoints(TeamId team, int newTotalPoints) {
-        if(team.equals(TeamId.TEAM_1)) {
+        if (team == TeamId.TEAM_1)
             totalPointsT1 = new SimpleIntegerProperty(newTotalPoints);
-        }else {
+        else
             totalPointsT2 = new SimpleIntegerProperty(newTotalPoints);
-            
-        }
-      }
+    }
     
     
     
@@ -143,5 +137,4 @@ public final class ScoreBean {
     public void setWinningTeam(TeamId team) {
             winningTeam = new SimpleObjectProperty<TeamId>(team);
       }
-    
 }
