@@ -51,27 +51,26 @@ public class GraphicalPlayer {
         Label namesOfTeam2 = new Label(playerNames.get(PlayerId.PLAYER_2).toString()
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString());
-        //j'ai fais n'importe nawak au niveau des points, le trick c'est pas ce luila
         Label totalString = new Label("/Total : ");
         
         Label gamePointsOfTeam1 = new Label(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)).toString());
         
-        Label turnPointOfTeam1 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_1)).toString());
+        Label turnPointsOfTeam1 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_1)).toString());
         
-        Label totalPointOfTeam1 = new Label(Bindings.convert(score.totalPointsProperty(TeamId.TEAM_1)).toString());
+        Label trickPointsOfTeam1 = new Label( " ( + " + Bindings.convert(score.totalPointsProperty(TeamId.TEAM_1)).toString() + " ) " );
         
         Label gamePointsOfTeam2 = new Label(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_2)).toString());
         
-        Label turnPointOfTeam2 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_2)).toString());
+        Label turnPointsOfTeam2 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_2)).toString());
         
-        Label totalPointOfTeam2 = new Label(Bindings.convert(score.totalPointsProperty(TeamId.TEAM_2)).toString());
+        Label trickPointsOfTeam2 = new Label( " ( + " + Bindings.convert(score.totalPointsProperty(TeamId.TEAM_2)).toString() + " ) " );
 
         GridPane grid = new GridPane();
         
-        grid.addRow(0,namesOfTeam1 , turnPointOfTeam1 , gamePointsOfTeam1,totalString , totalPointOfTeam1);
+        grid.addRow(0,namesOfTeam1 , trickPointsOfTeam1 , turnPointsOfTeam1,totalString , gamePointsOfTeam1);
 
         
-        grid.addRow(1,namesOfTeam2 , turnPointOfTeam2 , gamePointsOfTeam2,totalString , totalPointOfTeam2);
+        grid.addRow(1,namesOfTeam2 , trickPointsOfTeam2 , turnPointsOfTeam2,totalString , gamePointsOfTeam2);
 
         grid.setStyle("-fx-font: 16 Optima;\n" + 
                     "-fx-background-color: lightgray;\n" + 
