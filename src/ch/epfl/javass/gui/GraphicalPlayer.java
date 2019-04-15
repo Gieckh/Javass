@@ -5,8 +5,13 @@ import java.util.Map;
 
 import ch.epfl.javass.jass.PlayerId;import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 public class GraphicalPlayer {
     /** ============================================== **/
@@ -39,11 +44,11 @@ public class GraphicalPlayer {
 
     private void createScorePane() {
         Label namesOfTeam1 = new Label(playerNames.get(PlayerId.PLAYER_1).toString()
-            +"+"+
+            +" et "+
             playerNames.get(PlayerId.PLAYER_3).toString());
         
         Label namesOfTeam2 = new Label(playerNames.get(PlayerId.PLAYER_2).toString()
-                +"+"+
+                +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString());
         //j'ai fais n'importe nawak au niveau des points, le trick c'est pas ce luila
         Label totalString = new Label("/Total : ");
@@ -76,6 +81,24 @@ public class GraphicalPlayer {
         
     }
     private void createVictoryPanes() {
+        
+        BorderPane border = new BorderPane();
+        String namesOfWinningTeam = score.winningTeamProperty().get().equals(TeamId.TEAM_1)? 
+                playerNames.get(PlayerId.PLAYER_1).toString()
+                +" et "+
+                playerNames.get(PlayerId.PLAYER_3).toString() : 
+                playerNames.get(PlayerId.PLAYER_2).toString()
+                +" et "+
+                playerNames.get(PlayerId.PLAYER_4).toString();   
+                
+                TeamId winningTeam = score.winningTeamProperty().get();
+                
+        String scoreOfwinnigTeam = Bindings.convert(score.totalPointsProperty(winningTeam)).toString();
+        
+        String scoreOfloosingTeam = Bindings.convert(score.totalPointsProperty(winningTeam.other())).toString();
+
+        Text finalString= new Text(namesOfWinningTeam +" ont gagné avec " + scoreOfwinnigTeam + " points contre " + scoreOfloosingTeam + ".");
+        BorderPane.setAlignment(finalString, Pos.CENTER);
         
     }
 }
