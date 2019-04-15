@@ -2,6 +2,8 @@ package ch.epfl.javass.gui;
 
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.collections.FXCollections.observableSet;
+import static javafx.collections.FXCollections.unmodifiableObservableList;
+import static javafx.collections.FXCollections.unmodifiableObservableSet;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
@@ -43,7 +45,7 @@ public final class HandBean {
      * @return the hand property
     */
     public ObservableList<Card> hand() {
-        return hand;
+        return unmodifiableObservableList(hand);
     }
     
     /**
@@ -52,7 +54,7 @@ public final class HandBean {
      * @return the playableCards property
     */
     public ObservableSet<Card> playableCards() {
-        return playableCards; 
+        return unmodifiableObservableSet(playableCards); 
     }
     
     //TODO : why isn't the test of the prof printing correctly ? (althought works)
@@ -67,15 +69,14 @@ public final class HandBean {
      * @param newHand the new CardSet
     */
     public void setHand(CardSet newHand) {
-        // TODO je suis un peu embêté de pas la mettre en unmodifiable list, mais ca me semble pas une 
-        // bonne idée puisque justement on modifie la liste dans le cas ou newHand.size != 9.
         ObservableList<Card> hand = observableArrayList();
         if(newHand.size()==9) {
             for(int i = 0 ; i < 9 ; ++i) {
                 System.out.println( "null replaced by " + newHand.get(i));
                 hand.add(newHand.get(i));
             }
-            this.hand = hand;
+            this.hand.clear();
+            this.hand.addAll(hand);
         }else {
           for(int i = 0 ; i < 9 ; ++i) {
               if((this.hand.get(i)!=null) && (!newHand.contains(this.hand.get(i)))) {
@@ -98,15 +99,14 @@ public final class HandBean {
      * @param newPlaybleCards the new CardSet
     */
     public void setPlayableCards(CardSet newPlayableCards) {
-        // TODO je suis un peu embêté de pas la mettre en unmodifiable set, mais ca me semble pas une 
-        // bonne idée puisque justement on modifie le set dans le cas ou newHand.size != 9.
         ObservableSet<Card> playableCards = observableSet();
         if(newPlayableCards.size()==9) {
             for(int i = 0 ; i < 9 ; ++i) {
                 System.out.println( "null replaced by " + newPlayableCards.get(i));
                 playableCards.add(newPlayableCards.get(i));
             }
-            this.playableCards = playableCards;
+            this.playableCards.clear();
+            this.playableCards.addAll(playableCards);
         }else {
             ObservableSet<Card> delete = observableSet();
           for(Card c : this.playableCards) {
