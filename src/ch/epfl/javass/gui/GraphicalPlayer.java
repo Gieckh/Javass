@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.javass.jass.PlayerId;
+import javafx.beans.binding.Bindings;
+import javafx.scene.layout.GridPane;
 
 public class GraphicalPlayer {
     /** ============================================== **/
@@ -35,6 +37,12 @@ public class GraphicalPlayer {
     
 
     private void createScorePane() {
+        Label namesOfTeam1 = new Label(playerNames.get(PlayerId.PLAYER_1).toString();
+            +"+"+
+            playerNames.get(PlayerId.PLAYER_3).toString());
+
+        
+        GridPane PaniniPouletPané = new GridPane();
         
     }
     private void createTrickPane() {
