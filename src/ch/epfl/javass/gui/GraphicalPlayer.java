@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.epfl.javass.jass.PlayerId;import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -91,12 +92,17 @@ public class GraphicalPlayer {
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString();   
                 
+              // pas certain   
+        StringExpression upDatingString = Bindings.format("-fx-font: 16 Optima;\n",
+                namesOfWinningTeam,
+                " ont gagné avec ",
+                score.totalPointsProperty(winningTeam),
+                " points contre ",
+                score.totalPointsProperty(winningTeam.other()),
+                ".");
                 
-        String scoreOfwinnigTeam = Bindings.convert(score.totalPointsProperty(winningTeam)).toString();
         
-        String scoreOfloosingTeam = Bindings.convert(score.totalPointsProperty(winningTeam.other())).toString();
-
-        Text finalString= new Text(namesOfWinningTeam +" ont gagné avec " + scoreOfwinnigTeam + " points contre " + scoreOfloosingTeam + ".");
+        Text finalString= new Text(upDatingString.get());
         BorderPane.setAlignment(finalString, Pos.CENTER);
         
         border.setStyle("-fx-font: 16 Optima;\n" + 
