@@ -24,41 +24,41 @@ public final class StringSerializer {
     /** ============================================== **/
      
     /**
-     * @Brief returns the string representation of the integer in base 16.
+     * @brief returns the string representation of the integer in base 16.
      *
      * @param i an integer in base 10
      * @return the string representation of the integer in base 16
-    */
+     */
     public  static String serializeInt(int i) {
         return Integer.toUnsignedString(i, 16);
     }
 
     /**
-     * @Brief returns an integer in base 10 from the string representation of a base 16 integer.
+     * @brief returns an integer in base 10 from the string representation of a base 16 integer.
      *
      * @param s a string of a base 16 integer
      * @return an integer in base 10 from the string representation of a base 16 integer
-    */
+     */
     public static int deserializeInt(String s) {
         return Integer.parseUnsignedInt(s, 16);
     }
     
     /**
-     * @Brief returns the string representation of the long in base 16.
+     * @brief returns the string representation of the long in base 16.
      *
      * @param l an long in base 10
      * @return the string representation of the long in base 16
-    */
+     */
     public static String serializeLong(long l ) {
         return Long.toUnsignedString(l, 16);
     }
 
     /**
-     * @Brief returns a long in base 10 from the string representation of a base 16 long.
+     * @brief returns a long in base 10 from the string representation of a base 16 long.
      *
      * @param s a string of a base 16 long
      * @return a long in base 10 from the string representation of a base 16 long
-    */
+     */
     public static long deserializeLong(String s) {
         return Long.parseUnsignedLong(s, 16);
     }
@@ -74,20 +74,20 @@ public final class StringSerializer {
     
     
     /**
-     * @Brief  Returns a new String composed of copies of the
+     * @brief  Returns a new String composed of copies of the
      * list of strings joined together with the specified char.
      *
      * @param c the char
      * @param s the list of strings
      * @return a new String that is composed of the list of strings
      *         separated by the char
-    */
-    public static String combine(char  c, String ... s ) {
-        return String.join(",", s);
+     */
+    public static String combine(char c, String... s ) { //TODO: ici la virgule.
+        return String.join(Character.toString(c), s);
     }
     
     /**
-     * @Brief Splits this string around matches of the given.
+     * @brief Splits this string around matches of the given.
      *
      * @param s a String
      * @param c a Char
