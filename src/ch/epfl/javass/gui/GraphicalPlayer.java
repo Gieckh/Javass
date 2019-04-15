@@ -73,17 +73,17 @@ public class GraphicalPlayer {
         grid.addRow(1,namesOfTeam2 , turnPointOfTeam2 , gamePointsOfTeam2,totalString , totalPointOfTeam2);
 
         grid.setStyle("-fx-font: 16 Optima;\n" + 
-                "-fx-background-color: lightgray;\n" + 
-                "-fx-padding: 5px;\n" + 
-                "-fx-alignment: center;");
+                    "-fx-background-color: lightgray;\n" + 
+                    "-fx-padding: 5px;\n" + 
+                    "-fx-alignment: center;");
     }
     private void createTrickPane() {
         
     }
-    private void createVictoryPanes() {
+    private void createVictoryPanes(TeamId winningTeam) {
         
         BorderPane border = new BorderPane();
-        String namesOfWinningTeam = score.winningTeamProperty().get().equals(TeamId.TEAM_1)? 
+        String namesOfWinningTeam = winningTeam.equals(TeamId.TEAM_1)? 
                 playerNames.get(PlayerId.PLAYER_1).toString()
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_3).toString() : 
@@ -91,7 +91,6 @@ public class GraphicalPlayer {
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString();   
                 
-                TeamId winningTeam = score.winningTeamProperty().get();
                 
         String scoreOfwinnigTeam = Bindings.convert(score.totalPointsProperty(winningTeam)).toString();
         
@@ -100,5 +99,7 @@ public class GraphicalPlayer {
         Text finalString= new Text(namesOfWinningTeam +" ont gagné avec " + scoreOfwinnigTeam + " points contre " + scoreOfloosingTeam + ".");
         BorderPane.setAlignment(finalString, Pos.CENTER);
         
+        border.setStyle("-fx-font: 16 Optima;\n" + 
+                "-fx-background-color: white;");
     }
 }
