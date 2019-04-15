@@ -6,6 +6,9 @@ import java.util.Map;
 import ch.epfl.javass.jass.PlayerId;import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -53,17 +56,33 @@ public class GraphicalPlayer {
                 playerNames.get(PlayerId.PLAYER_4).toString());
         Label totalString = new Label("/Total : ");
         
-        Label gamePointsOfTeam1 = new Label(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)).toString());
+        ReadOnlyIntegerProperty turnPointsT1 = score.turnPointsProperty(TeamId.TEAM_1);
+        ReadOnlyIntegerProperty turnPointsT2 = score.turnPointsProperty(TeamId.TEAM_2);
+        IntegerProperty TrickPoints1= new SimpleIntegerProperty(0);
+        IntegerProperty temp1 = new SimpleIntegerProperty(0);
+        IntegerProperty TrickPoints2=new SimpleIntegerProperty(0);
+        IntegerProperty temp2 = new SimpleIntegerProperty(0);
+        if(temp1.get()!=turnPointsT1.get()) {
+            TrickPoints1 = new SimpleIntegerProperty(Math.max(0, turnPointsT1.get()-temp1.get()));
+            temp1 = new SimpleIntegerProperty(turnPointsT1.get());
+        }
+        if(temp2.get()!=turnPointsT2.get()) {
+            TrickPoints2 = new SimpleIntegerProperty(Math.max(0, turnPointsT2.get()-temp2.get()));
+            temp2 = new SimpleIntegerProperty(turnPointsT2.get());
+        }
+
         
-        Label turnPointsOfTeam1 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_1)).toString());
+        Label gamePointsOfTeam1 = new Label(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)).get());
         
-        Label trickPointsOfTeam1 = new Label( " ( + " + Bindings.convert(score.totalPointsProperty(TeamId.TEAM_1)).toString() + " ) " );
+        Label turnPointsOfTeam1 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_1)).get());
         
-        Label gamePointsOfTeam2 = new Label(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_2)).toString());
+        Label trickPointsOfTeam1 = new Label( " ( + " + Bindings.convert(TrickPoints1).get() + " ) " );
         
-        Label turnPointsOfTeam2 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_2)).toString());
+        Label gamePointsOfTeam2 = new Label(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_2)).get());
         
-        Label trickPointsOfTeam2 = new Label( " ( + " + Bindings.convert(score.totalPointsProperty(TeamId.TEAM_2)).toString() + " ) " );
+        Label turnPointsOfTeam2 = new Label(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_2)).get());
+        
+        Label trickPointsOfTeam2 = new Label( " ( + " + Bindings.convert(TrickPoints2).get() + " ) " );
 
         GridPane grid = new GridPane();
         
