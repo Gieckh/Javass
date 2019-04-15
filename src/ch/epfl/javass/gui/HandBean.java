@@ -40,19 +40,19 @@ public final class HandBean {
     /** ============================================== **/
     
     /**
-     * @Brief It is a public getter of the hand property.
+     * @brief It is a public getter of the hand property.
      *
      * @return the hand property
-    */
+     */
     public ObservableList<Card> hand() {
         return unmodifiableObservableList(hand);
     }
     
     /**
-     * @Brief It is a public getter of the playableCards property.
+     * @brief It is a public getter of the playableCards property.
      *
      * @return the playableCards property
-    */
+     */
     public ObservableSet<Card> playableCards() {
         return unmodifiableObservableSet(playableCards); 
     }
@@ -61,30 +61,30 @@ public final class HandBean {
     
     
     /**
-     * @Brief It is a public setter for the hand property, given the CardSet newHand.
+     * @brief It is a public setter for the hand property, given the CardSet newHand.
      *  If the new CardSet newHand is of size 9, we replace the previous hand property 
      *  with the new one, overwise we simply put to null the cards that are not in newHand 
      *  but were in the hand attribute.  
      *
      * @param newHand the new CardSet
-    */
+     */
     public void setHand(CardSet newHand) {
         ObservableList<Card> hand = observableArrayList();
-        if(newHand.size()==9) {
+        if(newHand.size() == 9) {
             for(int i = 0 ; i < 9 ; ++i) {
                 System.out.println( "null replaced by " + newHand.get(i));
                 hand.add(newHand.get(i));
             }
             this.hand.clear();
             this.hand.addAll(hand);
-        }else {
-          for(int i = 0 ; i < 9 ; ++i) {
-              if((this.hand.get(i)!=null) && (!newHand.contains(this.hand.get(i)))) {
-                  System.out.println( this.hand.get(i) + " replaced by null " );
-                  this.hand.remove(i);
-                  this.hand.add(i, null);
-              }
-          }
+        } else {
+            for(int i = 0 ; i < 9 ; ++i) {
+                if( (this.hand.get(i) != null) && !newHand.contains(this.hand.get(i)) ) {
+                    System.out.println( this.hand.get(i) + " replaced by null " );
+                    this.hand.remove(i);
+                    this.hand.add(i, null);
+                }
+            }
        }
    }
     
