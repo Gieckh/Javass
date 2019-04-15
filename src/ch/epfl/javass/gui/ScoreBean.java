@@ -39,6 +39,7 @@ public final class ScoreBean {
     /** ============================================== **/
 
     //default constructor per default is enough
+    //TODO: why not private ? -> cf corrigé
     
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
