@@ -94,7 +94,7 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
      * @param s a String
     */
     private void forceWritting(String s) {
-        System.out.println("writed :" + s);
+        System.out.println("written :" + s);
         try {
             w.write(s+"\n");
             w.flush();
