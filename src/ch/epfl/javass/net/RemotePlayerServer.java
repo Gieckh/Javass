@@ -10,7 +10,10 @@ import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.javass.jass.Card;
@@ -73,31 +76,33 @@ public final class RemotePlayerServer {
                 
 
                 // I decided to combine the whole line only with ',' (even the jassCommand) 
-                String words[] = (string).split(",");
-                JassCommand Command = JassCommand.valueOf(words[0]);
+                List<String> words = Arrays.asList(string.split(",")); 
+                words.add(0, words.get(0).split(" ")[1]);
+                words.add(0, words.get(0).split(" ")[0]);
+                JassCommand Command = JassCommand.valueOf(words.get(0));
                 switch(Command) {
                     case PLRS:
                         System.out.println("players read");
                         Map<PlayerId, String> playerNames = new HashMap<>();
                         for(int i = 2 ; i<6 ; ++i) {
-                            playerNames.put(PlayerId.ALL.get(i-2), StringSerializer.deserializeString(words[i]));
+                            playerNames.put(PlayerId.ALL.get(i-2), StringSerializer.deserializeString(words.get(i)));
                         }
-                        this.underLyingPlayer.setPlayers(PlayerId.ALL.get(StringSerializer.deserializeInt(words[1])), playerNames);
+                        this.underLyingPlayer.setPlayers(PlayerId.ALL.get(StringSerializer.deserializeInt(words.get(1))), playerNames);
                         break;
                         
                     case TRMP:
                         System.out.println("trump read");
-                        this.underLyingPlayer.setTrump(Card.Color.ALL.get(StringSerializer.deserializeInt(words[1])));
+                        this.underLyingPlayer.setTrump(Card.Color.ALL.get(StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
                     case HAND:
                         System.out.println("hand read");
-                        this.underLyingPlayer.updateHand(CardSet.ofPacked(StringSerializer.deserializeLong(words[1])));
+                        this.underLyingPlayer.updateHand(CardSet.ofPacked(StringSerializer.deserializeLong(words.get(1))));
                         break;
                         
                     case TRCK:
                         System.out.println("trick read");
-                        this.underLyingPlayer.updateTrick(Trick.ofPacked(StringSerializer.deserializeInt(words[1])));
+                        this.underLyingPlayer.updateTrick(Trick.ofPacked(StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
                     case CARD:
@@ -105,11 +110,11 @@ public final class RemotePlayerServer {
                         System.out.println();
                         w.write(StringSerializer.serializeInt(this.underLyingPlayer.cardToPlay(
                                 TurnState.ofPackedComponents(
-                                        StringSerializer.deserializeLong(words[1]),
-                                        StringSerializer.deserializeLong(words[2]),
-                                        StringSerializer.deserializeInt(words[3])),
+                                        StringSerializer.deserializeLong(words.get(1)),
+                                        StringSerializer.deserializeLong(words.get(2)),
+                                        StringSerializer.deserializeInt(words.get(3))),
                                 CardSet.ofPacked(
-                                        StringSerializer.deserializeLong(words[4]))).packed()));
+                                        StringSerializer.deserializeLong(words.get(4)))).packed()));
                         w.write("\n");
                         w.flush();
                         break;
@@ -117,13 +122,13 @@ public final class RemotePlayerServer {
                     case SCOR:
                         System.out.println("score read");
                         this.underLyingPlayer.updateScore(Score.ofPacked(
-                                StringSerializer.deserializeLong(words[1])));
+                                StringSerializer.deserializeLong(words.get(1))));
                         break;
                         
                     case WINR:
                         System.out.println("win read");
                         this.underLyingPlayer.setWinningTeam(TeamId.ALL.get(
-                                StringSerializer.deserializeInt(words[1])));
+                                StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
 

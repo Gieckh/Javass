@@ -29,7 +29,8 @@ public class NetJassGame {
                 player = new RandomPlayer(2019);
                 if(pId ==PlayerId.PLAYER_2) {
                     try {
-                        player = new RemotePlayerClient("128.179.142.70", RemotePlayerClient.PORT_NUMBER);
+                        //128.179.142.70
+                        player = new RemotePlayerClient("localhost", RemotePlayerClient.PORT_NUMBER);
                      
                      
                                           
