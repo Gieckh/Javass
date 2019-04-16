@@ -25,7 +25,7 @@ import ch.epfl.javass.net.RemotePlayerServer;
  */
 public class SuccServer {
     public static void main(String[] args) throws IOException {
-        Player player = new RandomPlayer(2019);
+        Player player = new MctsPlayer(PlayerId.PLAYER_1, 2019, 100);
         RemotePlayerServer gali =  new RemotePlayerServer(player);
         gali.run();
         System.out.println("on devrais pas arriver la");

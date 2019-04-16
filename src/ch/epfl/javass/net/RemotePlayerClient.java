@@ -112,10 +112,11 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     public Card cardToPlay(TurnState state, CardSet hand) {
         try {
             forceWritting(JassCommand.ALL.get(4).toString(),
+                    StringSerializer.combine(' ',
                     StringSerializer.combine(',', 
                     StringSerializer.serializeLong(state.packedScore()),
                     StringSerializer.serializeLong(state.packedUnplayedCards()),
-                    StringSerializer.serializeInt(state.packedTrick()), 
+                    StringSerializer.serializeInt(state.packedTrick())), 
                     StringSerializer.serializeLong(hand.packed())));
             System.out.println("just informed about cardToplay");
             return Card.ofPacked(StringSerializer.deserializeInt(r.readLine()));

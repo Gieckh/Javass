@@ -38,7 +38,8 @@ public final class RemotePlayerServer {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    Player underLyingPlayer;
+    private Player underLyingPlayer;
+    private final ServerSocket s0;
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
@@ -50,6 +51,11 @@ public final class RemotePlayerServer {
      */
     public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;
+        try {
+            s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
+        } catch (IOException e) {
+            throw new UncheckedIOException("ehh",e);
+        }
     }
     
     /** ============================================== **/
@@ -63,7 +69,7 @@ public final class RemotePlayerServer {
      */
     public void run() {
         System.out.println("run");
-        try (ServerSocket s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
+        try (
                 Socket s = s0.accept();
                 BufferedReader r = new BufferedReader(
                         new InputStreamReader(s.getInputStream(), US_ASCII));
@@ -140,5 +146,7 @@ public final class RemotePlayerServer {
             System.out.println("coucou");
             throw new UncheckedIOException(e);
         }
+        run();
     }
+    
 }

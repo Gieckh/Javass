@@ -23,33 +23,65 @@ public class NetJassGame {
         //marche pour n'importe quelle seed
         Player player;
         for (PlayerId pId: PlayerId.ALL) {
-            if (pId.team() == TeamId.TEAM_1)
-                player = new MctsPlayer(pId, 2019, 10_000);
+            
+            if(pId ==PlayerId.PLAYER_1) {
+           
+                    //128.179.142.70
+                    player = new MctsPlayer(PlayerId.PLAYER_1, 2019, 1000);
+                 
+                 
+
+            }
+            else if(pId ==PlayerId.PLAYER_2) {
+                try {
+                    //128.179.142.70
+                    player = new RemotePlayerClient("128.179.137.194", RemotePlayerClient.PORT_NUMBER);
+                 
+                 
+                                      
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }
+            else if(pId ==PlayerId.PLAYER_3) {
+                try {
+                    //128.179.142.70
+                    player = new RemotePlayerClient("128.179.190.46", RemotePlayerClient.PORT_NUMBER);
+                 
+                 
+                                      
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }
             else {
-                player = new RandomPlayer(2019);
-                if(pId ==PlayerId.PLAYER_2) {
-                    try {
-                        player = new RemotePlayerClient("localhost", RemotePlayerClient.PORT_NUMBER);
-                     
-                     
-                                          
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
+                try {
+                    //128.179.142.70
+                    player = new RemotePlayerClient("128.179.144.133", RemotePlayerClient.PORT_NUMBER);
+                 
+                 
+                                      
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
                 }
             }
             players.put(pId, player);
             playerNames.put(pId, pId.name());
         }
+int winTeam1 =0;
+        for(int i =0; i<100 ; ++i) {
+            JassGame g = new JassGame(2019, players, playerNames);
 
-        JassGame g = new JassGame(2019, players, playerNames);
         while (!g.isGameOver()) {
-            System.out.println("on arrive a commencer la game");
             g.advanceToEndOfNextTrick();
-            //hint  : pour le moment on arrive jamais ici
-            System.out.println("on arrive ici ?");
-            System.out.println("-------------------------------------------------------------");
+            System.out.println("new Trick");
+            if(g.isGameOver()) {
+                
+            }
         }
+       
+        }
+        System.out.println("finish");
     }
 }
 
