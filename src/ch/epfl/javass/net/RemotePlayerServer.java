@@ -76,9 +76,7 @@ public final class RemotePlayerServer {
                 
 
                 // I decided to combine the whole line only with ',' (even the jassCommand) 
-                List<String> words = Arrays.asList(string.split(",")); 
-                words.add(0, words.get(0).split(" ")[1]);
-                words.add(0, words.get(0).split(" ")[0]);
+                List<String> words = new LinkedList<>(Arrays.asList(string.split("[ ,]"))); 
                 JassCommand Command = JassCommand.valueOf(words.get(0));
                 switch(Command) {
                     case PLRS:

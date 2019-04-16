@@ -16,7 +16,7 @@ import ch.epfl.javass.jass.RandomPlayer;
  */
 public class serverNetGame {
     public static void main(String[] args) throws IOException {
-        Player player =new MctsPlayer(PlayerId.PLAYER_2, 2019 , 100000);
+        Player player =new MctsPlayer(PlayerId.PLAYER_1, 2019 , 1000);
         RemotePlayerServer gali =  new RemotePlayerServer(player);
         gali.run();
         System.out.println("on devrait pas arriver la");

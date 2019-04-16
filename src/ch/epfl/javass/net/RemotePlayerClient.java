@@ -138,7 +138,7 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
             }
             str+= StringSerializer.serializeString(playerNames.get(p));
         }
-        forceWritting(JassCommand.ALL.get(0).toString(),StringSerializer.combine(',',s ,str)); 
+        forceWritting(JassCommand.ALL.get(0).toString(),StringSerializer.combine(' ',s ,str)); 
         System.out.println("justinformedaboutsetplayers");
     }
         
