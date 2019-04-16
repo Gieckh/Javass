@@ -26,7 +26,7 @@ import ch.epfl.javass.net.RemotePlayerServer;
 public class serverNetGame {
     public static void main(String[] args) throws IOException {
         Player player =new RandomPlayer(2019);
-        RemotePlayerServer gali =  new RemotePlayerServer(player,5108);
+        RemotePlayerServer gali =  new RemotePlayerServer(player);
         gali.run();
         System.out.println("on devrais pas arriver la");
     }

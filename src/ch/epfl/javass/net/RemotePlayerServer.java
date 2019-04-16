@@ -36,7 +36,6 @@ public final class RemotePlayerServer {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     Player underLyingPlayer;
-    int port;
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
@@ -46,9 +45,8 @@ public final class RemotePlayerServer {
      * 
      * @param underLyingPlayer 
      */
-    public RemotePlayerServer(Player underLyingPlayer,int port ) {
+    public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;
-        this.port = port;
     }
     
     /** ============================================== **/
@@ -62,7 +60,7 @@ public final class RemotePlayerServer {
      */
     public void run() {
         System.out.println("run");
-        try (ServerSocket s0 = new ServerSocket(port);
+        try (ServerSocket s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
                 Socket s = s0.accept();
                 BufferedReader r = new BufferedReader(
                         new InputStreamReader(s.getInputStream(), US_ASCII));

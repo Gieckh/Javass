@@ -37,7 +37,10 @@ public class GraphicalPlayer {
         this.playerNames = playerNames; 
         this.score = score; 
         this.trick =trick;
-            
+        createScorePane();
+        createTrickPane();
+        createVictoryPanes(TeamId.TEAM_1);
+        createVictoryPanes(TeamId.TEAM_2);
     }
     
     
@@ -45,6 +48,7 @@ public class GraphicalPlayer {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
+   // private Image
 
     private void createScorePane() {
         Label namesOfTeam1 = new Label(playerNames.get(PlayerId.PLAYER_1).toString()
