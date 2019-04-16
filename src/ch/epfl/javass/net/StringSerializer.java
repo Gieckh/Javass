@@ -2,8 +2,6 @@ package ch.epfl.javass.net;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.StringJoiner;
-
 
 public final class StringSerializer {
 
@@ -17,7 +15,7 @@ public final class StringSerializer {
     /** ============================================== **/   
     
     // cannot be instantiated
-    private StringSerializer() {};
+    private StringSerializer() {}
     
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
