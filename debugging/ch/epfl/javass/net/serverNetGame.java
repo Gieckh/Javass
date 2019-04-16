@@ -7,7 +7,9 @@ import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import ch.epfl.javass.jass.MctsPlayer;
 import ch.epfl.javass.jass.Player;
+import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.RandomPlayer;
 import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
@@ -23,8 +25,8 @@ import ch.epfl.javass.net.RemotePlayerServer;
  */
 public class serverNetGame {
     public static void main(String[] args) throws IOException {
-        Player player = new RandomPlayer(2019);
-        RemotePlayerServer gali =  new RemotePlayerServer(player);
+        Player player =new RandomPlayer(2019);
+        RemotePlayerServer gali =  new RemotePlayerServer(player,5108);
         gali.run();
         System.out.println("on devrais pas arriver la");
     }
