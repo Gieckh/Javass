@@ -27,7 +27,7 @@ public final class JassGame {
     private Card.Color trump;
     private PlayerId gameFirstPlayer;
     private PlayerId turnFirstPlayer;
-    private boolean gameOver;
+    private boolean isGameOver;
     private int turnNumber = 1; //starts at turn 1
 
 
@@ -49,7 +49,7 @@ public final class JassGame {
         this.players = Collections.unmodifiableMap(new EnumMap<>(players));
         this.playerNames = Collections.unmodifiableMap(new EnumMap<>(playerNames));
 
-        gameOver = false;
+        isGameOver = false;
     }
 
 
@@ -63,7 +63,7 @@ public final class JassGame {
      * @return (boolean) true when the game is over.
      */
     public boolean isGameOver() {
-        return gameOver;
+        return isGameOver;
     }
 
     /**
@@ -88,14 +88,14 @@ public final class JassGame {
             if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_1);
                 updatePlayersScores(turnState.score().nextTurn());
-                gameOver = true;
+                isGameOver = true;
                 return;
             }
 
             else if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_2);
                 updatePlayersScores(turnState.score().nextTurn());
-                gameOver = true;
+                isGameOver = true;
                 return;
             }
 

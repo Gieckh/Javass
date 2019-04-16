@@ -40,19 +40,19 @@ public final class HandBean {
     /** ============================================== **/
     
     /**
-     * @Brief It is a public getter of the hand property.
+     * @brief It is a public getter of the hand property.
      *
      * @return the hand property
-    */
+     */
     public ObservableList<Card> hand() {
         return unmodifiableObservableList(hand);
     }
     
     /**
-     * @Brief It is a public getter of the playableCards property.
+     * @brief It is a public getter of the playableCards property.
      *
      * @return the playableCards property
-    */
+     */
     public ObservableSet<Card> playableCards() {
         return unmodifiableObservableSet(playableCards); 
     }
@@ -61,30 +61,30 @@ public final class HandBean {
     
     
     /**
-     * @Brief It is a public setter for the hand property, given the CardSet newHand.
+     * @brief It is a public setter for the hand property, given the CardSet newHand.
      *  If the new CardSet newHand is of size 9, we replace the previous hand property 
-     *  with the new one, overwise we simply put to null the cards that are not in newHand 
+     *  with the new one, otherwise we simply put to null the cards that are not in newHand
      *  but were in the hand attribute.  
      *
      * @param newHand the new CardSet
-    */
+     */
     public void setHand(CardSet newHand) {
         ObservableList<Card> hand = observableArrayList();
-        if(newHand.size()==9) {
+        if(newHand.size() == 9) {
             for(int i = 0 ; i < 9 ; ++i) {
                 System.out.println( "null replaced by " + newHand.get(i));
                 hand.add(newHand.get(i));
             }
             this.hand.clear();
             this.hand.addAll(hand);
-        }else {
-          for(int i = 0 ; i < 9 ; ++i) {
-              if((this.hand.get(i)!=null) && (!newHand.contains(this.hand.get(i)))) {
-                  System.out.println( this.hand.get(i) + " replaced by null " );
-                  this.hand.remove(i);
-                  this.hand.add(i, null);
-              }
-          }
+        } else {
+            for(int i = 0 ; i < 9 ; ++i) {
+                Card cardToReplace = this.hand.get(i);
+                if ( (cardToReplace != null)  &&  !newHand.contains(cardToReplace) ) {
+                    System.out.println( this.hand.get(i) + " replaced by null" );
+                    this.hand.set(i, null);
+                }
+            }
        }
    }
     
@@ -92,7 +92,7 @@ public final class HandBean {
     /**
      * @brief It is a public setter for the playableCards property given the CardSet
      *  newPlayableCards. If the new CardSet newPlayableCards is of size 9, we replace
-     *  the previous PlayableCards property with the new one, overwise we simply put to 
+     *  the previous PlayableCards property with the new one, otherwise we simply put to
      *  null the cards that are not in newPlayableCards but were in the playableCards
      *  attribute.
      *
@@ -105,17 +105,20 @@ public final class HandBean {
                 System.out.println( "null replaced by " + newPlayableCards.get(i));
                 playableCards.add(newPlayableCards.get(i));
             }
+
             this.playableCards.clear();
             this.playableCards.addAll(playableCards);
-        }else {
+        }
+
+        else {
             ObservableSet<Card> delete = observableSet();
-          for(Card c : this.playableCards) {
-              if(!newPlayableCards.contains(c)) {
-                  System.out.println( c + " replaced by null " );
-                  delete.add(c);
-              }
-          }
-          this.playableCards.removeAll(delete);
+                for(Card c: this.playableCards) {
+                    if(!newPlayableCards.contains(c)) {
+                        System.out.println(c + " replaced by null." );
+                        delete.add(c);
+                    }
+                }
+            this.playableCards.removeAll(delete);
         }
     }
 }
