@@ -27,7 +27,12 @@ public class NetJassGame {
             if(pId ==PlayerId.PLAYER_1) {
            
                     //128.179.142.70
-                    player = new MctsPlayer(PlayerId.PLAYER_1, 2019, 1000);
+                    try {
+                        player = new RemotePlayerClient("localhost", 5108);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                  
                  
 
