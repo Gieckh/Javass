@@ -148,8 +148,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     @Override
     public void setTrump(Card.Color trump) {
         forceWritting(JassCommand.ALL.get(1).toString(),
-                StringSerializer.combine(',',
-                StringSerializer.serializeInt(trump.ordinal())));     
+                      StringSerializer.combine(',',
+                      StringSerializer.serializeInt(trump.ordinal()))
+        );
         System.out.println("justInformedAboutSetTrump");
    }
     
