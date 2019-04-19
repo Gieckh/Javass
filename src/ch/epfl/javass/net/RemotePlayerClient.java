@@ -138,11 +138,11 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
             str+= StringSerializer.serializeString(playerNames.get(p));
         }
         forceWritting(JassCommand.ALL.get(0).toString(),StringSerializer.combine(' ',s ,str)); 
-        System.out.println("justinformedaboutsetplayers");
+        System.out.println("justInformedAboutSetPlayers");
     }
         
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#setTrump(ch.epfl.javass.jass.Card.Color)
      */
     @Override
@@ -150,10 +150,10 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         forceWritting(JassCommand.ALL.get(1).toString(),
                 StringSerializer.combine(',',
                 StringSerializer.serializeInt(trump.ordinal())));     
-        System.out.println("justinformedaboutsettrump");
+        System.out.println("justInformedAboutSetTrump");
    }
     
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#updateHand(ch.epfl.javass.jass.CardSet)
      */
     @Override
@@ -166,7 +166,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
 
   
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#updateTrick(ch.epfl.javass.jass.Trick)
      */
     @Override
@@ -177,7 +177,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
          System.out.println("justinformedaboutupdatetrick");
 }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#updateScore(ch.epfl.javass.jass.Score)
      */
     @Override
@@ -185,10 +185,10 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
          forceWritting(JassCommand.ALL.get(5).toString(),
                  StringSerializer.combine(',',
                  StringSerializer.serializeLong(score.packed())));
-         System.out.println("justinformedaboutupdatescore");
+         System.out.println("justInformedAboutUpdateScore");
   }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#setWinningTeam(ch.epfl.javass.jass.TeamId)
      */
     @Override
@@ -196,7 +196,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
          forceWritting(JassCommand.ALL.get(6).toString(),
                  StringSerializer.combine(',',
                  StringSerializer.serializeLong(winningTeam.ordinal())));
-         System.out.println("justupdateaboutwinningteam");
+         System.out.println("justUpdateAboutWinningTeam");
     }
 }
 
