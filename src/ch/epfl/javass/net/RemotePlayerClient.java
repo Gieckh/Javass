@@ -163,7 +163,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                       StringSerializer.combine(',',
                       StringSerializer.serializeLong(newHand.packed()))
         );
-        System.out.println("justinformedaboutupdatehand");
+        System.out.println("just informed about updateHand");
     }
 
   
