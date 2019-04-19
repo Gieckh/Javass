@@ -20,11 +20,10 @@ public class NetJassGame {
     public static void main(String[] args)  {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
-        //marche pour n'importe quelle seed
+        //works for any seed //TODO: suppr
         Player player;
         for (PlayerId pId: PlayerId.ALL) {
-            
-            if(pId ==PlayerId.PLAYER_1) {
+            if(pId == PlayerId.PLAYER_1) {
                 //128.179.142.70
                 try {
                     player = new RemotePlayerClient("localhost", Net.PORT_NUMBER);
@@ -67,18 +66,18 @@ public class NetJassGame {
             players.put(pId, player);
             playerNames.put(pId, pId.name());
         }
-int winTeam1 =0;
-        for(int i =0; i<100 ; ++i) {
+
+        int winTeam1 =0;
+        for(int i =0; i < 100; ++i) {
             JassGame g = new JassGame(2019, players, playerNames);
 
-        while (!g.isGameOver()) {
-            g.advanceToEndOfNextTrick();
-            System.out.println("new Trick");
-            if(g.isGameOver()) {
-                
+            while (!g.isGameOver()) {
+                g.advanceToEndOfNextTrick();
+                System.out.println("new Trick");
+                if(g.isGameOver()) {
+                    System.out.println("game is over");
+                }
             }
-        }
-       
         }
         System.out.println("finish");
     }
