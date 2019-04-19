@@ -159,8 +159,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     @Override
      public void updateHand(CardSet newHand) {
         forceWritting(JassCommand.ALL.get(2).toString(),
-                StringSerializer.combine(',',
-                StringSerializer.serializeLong(newHand.packed())));
+                      StringSerializer.combine(',',
+                      StringSerializer.serializeLong(newHand.packed()))
+        );
         System.out.println("justinformedaboutupdatehand");
     }
 
@@ -172,9 +173,10 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     @Override
      public void updateTrick(Trick newTrick) {
          forceWritting(JassCommand.ALL.get(3).toString(),
-         StringSerializer.combine(',',
-         StringSerializer.serializeInt(newTrick.packed())));
-         System.out.println("justinformedaboutupdatetrick");
+                       StringSerializer.combine(',',
+                       StringSerializer.serializeInt(newTrick.packed()))
+         );
+         System.out.println("justInformedAboutUpdateTrick");
 }
 
     /**
@@ -183,8 +185,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     @Override
      public void updateScore(Score score) {
          forceWritting(JassCommand.ALL.get(5).toString(),
-                 StringSerializer.combine(',',
-                 StringSerializer.serializeLong(score.packed())));
+                       StringSerializer.combine(',',
+                       StringSerializer.serializeLong(score.packed()))
+         );
          System.out.println("justInformedAboutUpdateScore");
   }
 
@@ -194,8 +197,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     @Override
      public void setWinningTeam(TeamId winningTeam) {
          forceWritting(JassCommand.ALL.get(6).toString(),
-                 StringSerializer.combine(',',
-                 StringSerializer.serializeLong(winningTeam.ordinal())));
+                       StringSerializer.combine(',',
+                       StringSerializer.serializeLong(winningTeam.ordinal()))
+         );
          System.out.println("justUpdateAboutWinningTeam");
     }
 }
