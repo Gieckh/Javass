@@ -26,9 +26,11 @@ import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
 
 /**
- * @Brief RemotePlayerServer instance is a remote server which particularity is that 
- * it acts depending on the informations a RemotePlayerClient send to him; this RemotePlayerClient is playing localy in the JassGame.
- * It tells the RemotePLayerServer everything that happens , and waits for the RemotePlayerServer's decision for what card to play.
+ * @brief RemotePlayerServer instance is a remote server which particularity is that
+ * it acts depending on the information a RemotePlayerClient sends to him;
+ * this RemotePlayerClient is playing locally in the JassGame.
+ * It tells the RemotePLayerServer everything that happens,
+ * and waits for the RemotePlayerServer's decision for what card to play.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -54,7 +56,7 @@ public final class RemotePlayerServer {
         try {
             s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
         } catch (IOException e) {
-            throw new UncheckedIOException("ehh",e);
+            throw new UncheckedIOException("unchecked: " + e.getMessage(),e);
         }
     }
     
@@ -64,7 +66,7 @@ public final class RemotePlayerServer {
     
     
     /**
-     * @Brief receive some informations from the local player (client) and tells him what card to play.
+     * @brief receive some information from the local player (client) and tells him what card to play.
      *
      */
     public void run() {
@@ -116,9 +118,12 @@ public final class RemotePlayerServer {
                                 TurnState.ofPackedComponents(
                                         StringSerializer.deserializeLong(words.get(1)),
                                         StringSerializer.deserializeLong(words.get(2)),
-                                        StringSerializer.deserializeInt(words.get(3))),
+                                        StringSerializer.deserializeInt(words.get(3))
+                                ),
                                 CardSet.ofPacked(
-                                        StringSerializer.deserializeLong(words.get(4)))).packed()));
+                                        StringSerializer.deserializeLong(words.get(4)))).packed())
+                        );
+
                         w.write("\n");
                         w.flush();
                         break;
@@ -137,7 +142,7 @@ public final class RemotePlayerServer {
                         
 
                     default:
-                        throw new IllegalArgumentException("error in remote player ; wrong Jass Command");
+                        throw new Error("JassCommand enum has been changed?");
                 }
             }
             System.out.println("end of while");

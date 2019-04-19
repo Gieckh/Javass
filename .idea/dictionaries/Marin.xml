@@ -9,10 +9,15 @@
       <w>jass</w>
       <w>jeune</w>
       <w>mcts</w>
+      <w>plrs</w>
       <w>randomizer</w>
+      <w>scor</w>
       <w>suppr</w>
+      <w>trck</w>
+      <w>trmp</w>
       <w>unplayed</w>
       <w>vieux</w>
+      <w>winr</w>
     </words>
   </dictionary>
 </component>

@@ -30,13 +30,14 @@ import ch.epfl.javass.jass.TurnState;
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
-public final class RemotePlayerClient implements Player , AutoCloseable {
+public final class RemotePlayerClient implements Player, AutoCloseable {
     
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
+
     public final static int PORT_NUMBER = 5108;
-    String nameOfHost;
+    String hostName;
     int port;
     Socket s;
     BufferedReader r;
@@ -50,12 +51,12 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
     /**
      * @Brief Constructs a socket, a reader, and an writer.  
      * 
-     * @param nameOfHost : the name or the IP string of the host in which the RemotePlayerSarver is 
+     * @param hostName : the name or the IP string of the host in which the RemotePlayerSarver is
      * @param port : should be 5108 per default
      * @throws IOException
      */
-    public RemotePlayerClient(String nameOfHost, int port) throws IOException {
-        Socket s = new Socket(nameOfHost, PORT_NUMBER);
+    public RemotePlayerClient(String hostName, int port) throws IOException {
+        Socket s = new Socket(hostName, PORT_NUMBER);
                 BufferedReader r =
                   new BufferedReader(
                     new InputStreamReader(s.getInputStream(),
@@ -67,7 +68,7 @@ public final class RemotePlayerClient implements Player , AutoCloseable {
         this.s = s;
         this.r = r;
         this.w = w;
-        this.nameOfHost = nameOfHost;
+        this.hostName = hostName;
         this.port = port;
     }
 
