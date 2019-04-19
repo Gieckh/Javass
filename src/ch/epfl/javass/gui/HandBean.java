@@ -99,26 +99,10 @@ public final class HandBean {
      * @param newPlayableCards the new CardSet
      */
     public void setPlayableCards(CardSet newPlayableCards) {
-        ObservableSet<Card> playableCards = observableSet();
-        if(newPlayableCards.size()==9) {
-            for(int i = 0 ; i < 9 ; ++i) {
-                System.out.println( "null replaced by " + newPlayableCards.get(i));
-                playableCards.add(newPlayableCards.get(i));
-            }
-
-            this.playableCards.clear();
-            this.playableCards.addAll(playableCards);
-        }
-
-        else {
-            ObservableSet<Card> delete = observableSet();
-                for(Card c: this.playableCards) {
-                    if(!newPlayableCards.contains(c)) {
-                        System.out.println(c + " replaced by null." );
-                        delete.add(c);
-                    }
-                }
-            this.playableCards.removeAll(delete);
+        this.playableCards.clear();
+        for(int i = 0 ; i < newPlayableCards.size() ; ++i) {
+            System.out.println( "null replaced by " + newPlayableCards.get(i));
+            playableCards.add(newPlayableCards.get(i));
         }
     }
 }

@@ -3,6 +3,7 @@ import java.io.IOException;
 import ch.epfl.javass.jass.MctsPlayer;
 import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
+import ch.epfl.javass.jass.RandomPlayer;
 
 /**
  * test thus non Jdoc 
@@ -15,8 +16,8 @@ import ch.epfl.javass.jass.PlayerId;
  */
 public class serverNetGame {
     public static void main(String[] args) throws IOException {
-        Player player =new MctsPlayer(PlayerId.PLAYER_2, 2019, 100_000);
-        RemotePlayerServer gali =  new RemotePlayerServer(player,5108);
+        Player player =new MctsPlayer(PlayerId.PLAYER_1, 2019 , 1000);
+        RemotePlayerServer gali =  new RemotePlayerServer(player);
         gali.run();
         System.out.println("on devrait pas arriver la");
     }

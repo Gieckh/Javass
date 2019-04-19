@@ -9,6 +9,7 @@ public final class StringSerializer {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     
+    private static int RADIX = 16;
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -22,43 +23,43 @@ public final class StringSerializer {
     /** ============================================== **/
      
     /**
-     * @brief returns the string representation of the integer in base 16.
+     * @brief returns the string representation of the integer in base RADIX.
      *
      * @param i an integer in base 10
-     * @return the string representation of the integer in base 16
+     * @return the string representation of the integer in base RADIX
      */
     public  static String serializeInt(int i) {
-        return Integer.toUnsignedString(i, 16);
+        return Integer.toUnsignedString(i, RADIX);
     }
 
     /**
-     * @brief returns an integer in base 10 from the string representation of a base 16 integer.
+     * @brief returns an integer in base 10 from the string representation of a base RADIX integer.
      *
-     * @param s a string of a base 16 integer
-     * @return an integer in base 10 from the string representation of a base 16 integer
+     * @param s a string of a base RADIX integer
+     * @return an integer in base 10 from the string representation of a base RADIX integer
      */
     public static int deserializeInt(String s) {
-        return Integer.parseUnsignedInt(s, 16);
+        return Integer.parseUnsignedInt(s, RADIX);
     }
     
     /**
-     * @brief returns the string representation of the long in base 16.
+     * @brief returns the string representation of the long in base RADIX.
      *
      * @param l an long in base 10
-     * @return the string representation of the long in base 16
+     * @return the string representation of the long in base RADIX
      */
     public static String serializeLong(long l ) {
-        return Long.toUnsignedString(l, 16);
+        return Long.toUnsignedString(l, RADIX);
     }
 
     /**
-     * @brief returns a long in base 10 from the string representation of a base 16 long.
+     * @brief returns a long in base 10 from the string representation of a base RADIX long.
      *
-     * @param s a string of a base 16 long
-     * @return a long in base 10 from the string representation of a base 16 long
+     * @param s a string of a base RADIX long
+     * @return a long in base 10 from the string representation of a base RADIX long
      */
     public static long deserializeLong(String s) {
-        return Long.parseUnsignedLong(s, 16);
+        return Long.parseUnsignedLong(s, RADIX);
     }
     
     public static String serializeString(String s) {

@@ -13,45 +13,19 @@ import javafx.collections.SetChangeListener;
 //this is  a test, thus no need of javadoc
 public class test {
     public static void main(String[] args) throws Base64DecodingException {
-//        HandBean hb = new HandBean();
-//        SetChangeListener<Card> listener = e -> System.out.println(e);
-//        hb.playableCards().addListener(listener);
-//
-//        CardSet h = CardSet.EMPTY
-//          .add(Card.of(Color.SPADE, Rank.SIX))
-//          .add(Card.of(Color.SPADE, Rank.NINE))
-//          .add(Card.of(Color.SPADE, Rank.JACK))
-//          .add(Card.of(Color.HEART, Rank.SEVEN))
-//          .add(Card.of(Color.HEART, Rank.ACE))
-//          .add(Card.of(Color.DIAMOND, Rank.KING))
-//          .add(Card.of(Color.DIAMOND, Rank.ACE))
-//          .add(Card.of(Color.CLUB, Rank.TEN))
-//          .add(Card.of(Color.CLUB, Rank.QUEEN));
-//        hb.setPlayableCards(h);
-//        while (! h.isEmpty()) {
-//          h = h.remove(h.get(0));
-//          hb.setPlayableCards(h);
-//        }
-//    }
+        String s = "WLH deux,trois,quatre,cinq";
+    
+        String hello[] = s.split(",");
+        for(int i = 0 ; i< hello.length ; ++i) {
+            System.out.println(hello[i]);
 
-    HandBean hb = new HandBean();
-   ListChangeListener<Card> listener = e -> System.out.println(e);
-    hb.hand().addListener(listener);
+        }
+        String[] coucou = hello[0].split(" ",",");
+        String[] hey = coucou + hello;
+        for(int i = 0 ; i< hello.length ; ++i) {
+            System.out.println(coucou[0]);
+            System.out.println(coucou[1]);
 
-    CardSet h = CardSet.EMPTY
-      .add(Card.of(Color.SPADE, Rank.SIX))
-      .add(Card.of(Color.SPADE, Rank.NINE))
-      .add(Card.of(Color.SPADE, Rank.JACK))
-      .add(Card.of(Color.HEART, Rank.SEVEN))
-      .add(Card.of(Color.HEART, Rank.ACE))
-      .add(Card.of(Color.DIAMOND, Rank.KING))
-      .add(Card.of(Color.DIAMOND, Rank.ACE))
-      .add(Card.of(Color.CLUB, Rank.TEN))
-      .add(Card.of(Color.CLUB, Rank.QUEEN));
-    hb.setHand(h);
-    while (! h.isEmpty()) {
-      h = h.remove(h.get(0));
-      hb.setHand(h);
+        }
     }
-}
 }
