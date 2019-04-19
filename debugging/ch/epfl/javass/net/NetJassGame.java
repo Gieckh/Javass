@@ -33,7 +33,7 @@ public class NetJassGame {
                 }
             }
 
-            else if(pId ==PlayerId.PLAYER_2) {
+            else if(pId == PlayerId.PLAYER_2) {
                 try {
                     //128.179.142.70
                     player = new RemotePlayerClient("128.179.137.194", Net.PORT_NUMBER);
@@ -43,7 +43,7 @@ public class NetJassGame {
                 }
             }
 
-            else if(pId ==PlayerId.PLAYER_3) {
+            else if(pId == PlayerId.PLAYER_3) {
                 try {
                     //128.179.142.70
                     player = new RemotePlayerClient("128.179.190.46", Net.PORT_NUMBER);
