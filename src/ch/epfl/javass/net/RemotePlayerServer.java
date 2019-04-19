@@ -1,5 +1,6 @@
 package ch.epfl.javass.net;
 
+import static ch.epfl.javass.net.Net.PORT_NUMBER;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
 import java.io.BufferedReader;
@@ -54,7 +55,7 @@ public final class RemotePlayerServer {
     public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;
         try {
-            s0 = new ServerSocket(RemotePlayerClient.PORT_NUMBER);
+            s0 = new ServerSocket(Net.PORT_NUMBER);
         } catch (IOException e) {
             throw new UncheckedIOException("unchecked: " + e.getMessage(),e);
         }

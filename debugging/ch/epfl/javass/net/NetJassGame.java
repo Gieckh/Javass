@@ -40,7 +40,7 @@ public class NetJassGame {
             else if(pId ==PlayerId.PLAYER_2) {
                 try {
                     //128.179.142.70
-                    player = new RemotePlayerClient("128.179.137.194", RemotePlayerClient.PORT_NUMBER);
+                    player = new RemotePlayerClient("128.179.137.194", Net.PORT_NUMBER);
                  
                  
                                       
@@ -51,7 +51,7 @@ public class NetJassGame {
             else if(pId ==PlayerId.PLAYER_3) {
                 try {
                     //128.179.142.70
-                    player = new RemotePlayerClient("128.179.190.46", RemotePlayerClient.PORT_NUMBER);
+                    player = new RemotePlayerClient("128.179.190.46", Net.PORT_NUMBER);
                  
                  
                                       
@@ -62,7 +62,7 @@ public class NetJassGame {
             else {
                 try {
                     //128.179.142.70
-                    player = new RemotePlayerClient("128.179.144.133", RemotePlayerClient.PORT_NUMBER);
+                    player = new RemotePlayerClient("128.179.144.133", Net.PORT_NUMBER);
                  
                  
                                       
@@ -70,6 +70,7 @@ public class NetJassGame {
                     throw new UncheckedIOException(e);
                 }
             }
+            //TODO: not initalized ?
             players.put(pId, player);
             playerNames.put(pId, pId.name());
         }

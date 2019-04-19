@@ -56,7 +56,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
      * @throws IOException
      */
     public RemotePlayerClient(String hostName, int port) throws IOException {
-        Socket s = new Socket(hostName, PORT_NUMBER);
+        Socket s = new Socket(hostName, Net.PORT_NUMBER);
                 BufferedReader r =
                   new BufferedReader(
                     new InputStreamReader(s.getInputStream(),
