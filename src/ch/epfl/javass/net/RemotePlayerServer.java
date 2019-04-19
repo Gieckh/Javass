@@ -81,10 +81,9 @@ public final class RemotePlayerServer {
             System.out.println("On passe le try");
             String string;
             System.out.println("just read");
-            while((string=r.readLine())!= null) {
+            while((string = r.readLine()) !=  null) {
                 
-
-                // I decided to combine the whole line only with ',' (even the jassCommand) 
+                // I decided to combine the whole line only with ',' (even the jassCommand) //TODO: change that
                 List<String> words = new LinkedList<>(Arrays.asList(string.split("[ ,]"))); 
                 JassCommand Command = JassCommand.valueOf(words.get(0));
                 switch(Command) {
