@@ -23,9 +23,9 @@ import ch.epfl.javass.jass.TurnState;
 
 
 /**
- * RemotePlayerClient instance acts as a player in a JassGame although it exchanges informations 
+ * RemotePlayerClient instance acts as a player in a JassGame although it exchanges information
  * with a RemotePlayerServer instance (which plays in remote) and which takes the decisions.
- * Thus we need exactly one RemotePlayerClient's instance for one RemotePlayerServer's instance.
+ * Thus we need exactly one RemotePlayerClient's instance for each RemotePlayerServer's instance.
  *
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
@@ -50,8 +50,8 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     /**
      * @Brief Constructs a socket, a reader, and an writer.  
      * 
-     * @param hostName : the name or the IP string of the host in which the RemotePlayerServer is
-     * @param port : should be 5108 per default
+     * @param hostName ({@code String}) - the name or the IP string of the host in which the RemotePlayerServer is
+     * @param port ({@code int}) - should be 5108 per default
      * @throws IOException
      */
     public RemotePlayerClient(String hostName, int port) throws IOException {
@@ -74,7 +74,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     /** ============================================== **/
 
     
-    /* 
+    /**
      * @see java.lang.AutoCloseable#close()
      */
     @Override
@@ -102,7 +102,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         }
     }
     
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#cardToPlay(ch.epfl.javass.jass.TurnState, ch.epfl.javass.jass.CardSet)
      */
     @Override
@@ -115,7 +115,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                     StringSerializer.serializeLong(state.packedUnplayedCards()),
                     StringSerializer.serializeInt(state.packedTrick())), 
                     StringSerializer.serializeLong(hand.packed())));
-            System.out.println("just informed about cardToplay");
+            System.out.println("just informed about cardToPlay");
             return Card.ofPacked(StringSerializer.deserializeInt(r.readLine()));
         } catch (IOException e) {
             System.out.println("exception ?");
@@ -123,7 +123,7 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         }
     }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
      */
     @Override

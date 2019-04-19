@@ -62,7 +62,7 @@ public class NetJassGame {
                     throw new UncheckedIOException(e);
                 }
             }
-            //TODO: player not initalized ?
+            //TODO: player not initialized ?
             players.put(pId, player);
             playerNames.put(pId, pId.name());
         }
