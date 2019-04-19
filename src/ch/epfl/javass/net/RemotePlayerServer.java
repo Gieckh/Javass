@@ -90,7 +90,7 @@ public final class RemotePlayerServer {
                     case PLRS:
                         System.out.println("players read");
                         Map<PlayerId, String> playerNames = new HashMap<>();
-                        for(int i = 2 ; i<6 ; ++i) {
+                        for(int i = 2; i < 6 ; ++i) {
                             playerNames.put(PlayerId.ALL.get(i-2), StringSerializer.deserializeString(words.get(i)));
                         }
                         this.underLyingPlayer.setPlayers(PlayerId.ALL.get(StringSerializer.deserializeInt(words.get(1))), playerNames);
@@ -153,5 +153,4 @@ public final class RemotePlayerServer {
         }
         run();
     }
-    
 }
