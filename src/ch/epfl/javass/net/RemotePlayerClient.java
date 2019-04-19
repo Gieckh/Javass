@@ -36,7 +36,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
 
-    public final static int PORT_NUMBER = 5108;
     String hostName;
     int port;
     Socket s;
@@ -51,20 +50,18 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     /**
      * @Brief Constructs a socket, a reader, and an writer.  
      * 
-     * @param hostName : the name or the IP string of the host in which the RemotePlayerSarver is
+     * @param hostName : the name or the IP string of the host in which the RemotePlayerServer is
      * @param port : should be 5108 per default
      * @throws IOException
      */
     public RemotePlayerClient(String hostName, int port) throws IOException {
-        Socket s = new Socket(hostName, Net.PORT_NUMBER);
+        Socket s = new Socket(hostName, Net.PORT_NUMBER); //TODO: why not just "port" ?
                 BufferedReader r =
-                  new BufferedReader(
-                    new InputStreamReader(s.getInputStream(),
-                              US_ASCII));
+                    new BufferedReader(
+                        new InputStreamReader(s.getInputStream(), US_ASCII));
                 BufferedWriter w =
-                  new BufferedWriter(
-                    new OutputStreamWriter(s.getOutputStream(),
-                               US_ASCII));
+                    new BufferedWriter(
+                        new OutputStreamWriter(s.getOutputStream(), US_ASCII));
         this.s = s;
         this.r = r;
         this.w = w;

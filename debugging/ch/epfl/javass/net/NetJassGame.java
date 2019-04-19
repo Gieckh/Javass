@@ -25,52 +25,45 @@ public class NetJassGame {
         for (PlayerId pId: PlayerId.ALL) {
             
             if(pId ==PlayerId.PLAYER_1) {
-           
-                    //128.179.142.70
-                    try {
-                        player = new RemotePlayerClient("localhost", 5108);
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                 
-                 
-
+                //128.179.142.70
+                try {
+                    player = new RemotePlayerClient("localhost", Net.PORT_NUMBER);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
+
             else if(pId ==PlayerId.PLAYER_2) {
                 try {
                     //128.179.142.70
                     player = new RemotePlayerClient("128.179.137.194", Net.PORT_NUMBER);
-                 
-                 
                                       
                 } catch (IOException e) {
                     throw new UncheckedIOException(e);
                 }
             }
+
             else if(pId ==PlayerId.PLAYER_3) {
                 try {
                     //128.179.142.70
                     player = new RemotePlayerClient("128.179.190.46", Net.PORT_NUMBER);
-                 
-                 
                                       
                 } catch (IOException e) {
                     throw new UncheckedIOException(e);
                 }
             }
+
             else {
                 try {
                     //128.179.142.70
                     player = new RemotePlayerClient("128.179.144.133", Net.PORT_NUMBER);
-                 
-                 
                                       
                 } catch (IOException e) {
                     throw new UncheckedIOException(e);
                 }
             }
-            //TODO: not initalized ?
+            //TODO: player not initalized ?
             players.put(pId, player);
             playerNames.put(pId, pId.name());
         }
