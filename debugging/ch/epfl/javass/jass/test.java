@@ -11,27 +11,35 @@ import ch.epfl.javass.gui.HandBean;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.net.StringSerializer;
+import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 //this is  a test, thus no need of javadoc
-public class test {
-    private static Map<Card,Image> cardImpage160 = cardImage160();
-    public static Map<Card,Image> cardImage160() {
-        Map<Card,Image> map = new HashMap<>();
-        for(int i = 0 ; i<Color.ALL.size(); ++i) {
-            for(int j = 0 ; j < Rank.ALL.size(); ++j) {
-                String s = "/"+"card_"+i+"_"+j+"_"+160+".png";
-                map.put(Card.of(Color.ALL.get(i),Rank.ALL.get(j)),  new Image(s));
-            }
-        }
-        //unsure transtypage askip
-        return  map;
-    }
+public class test extends Application {
+    
     
     public static void main(String[] args) {
-       // Image image = cardImpage160.get(Card.of(Color.CLUB, Rank.ACE));
+            for(int i = 0 ; i<Color.ALL.size(); ++i) {
+                for(int j = 0 ; j < Rank.ALL.size(); ++j) {
+                    String s = "/"+"card_"+i+"_"+j+"_"+160+".png";
+                    System.out.println(new Image(s));
+                }
+            }
+            for(int i = 0 ; i<Color.ALL.size(); ++i) {
+                String s = "/"+"trump_"+i+".png";
+                System.out.println(new Image(s));
+            }
+        }      
+        
+    
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // TODO Auto-generated method stub
         
     }
     

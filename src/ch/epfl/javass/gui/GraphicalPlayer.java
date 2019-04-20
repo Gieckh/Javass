@@ -115,7 +115,7 @@ public class GraphicalPlayer {
     private static Map<Color,Image> trumpImage() {
         Map<Color,Image> map = new HashMap<>();
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
-            String s = "/"+"card_"+i+"_"+".png";
+            String s = "/"+"trump_"+i+".png";
             map.put(Color.ALL.get(i),new Image(s));
         }
         

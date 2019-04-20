@@ -21,7 +21,7 @@ public class NetJassGame {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
         //marche pour n'importe quelle seed
-        Player player;
+        Player player = null;
         for (PlayerId pId: PlayerId.ALL) {
             
             if(pId ==PlayerId.PLAYER_1) {
