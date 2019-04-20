@@ -63,7 +63,7 @@ public class GraphicalPlayer {
         BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
         BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
         GridPane empty = new GridPane();
-        this.mainPane = new BorderPane(trickPane, empty, scorePane, empty, empty);
+        this.mainPane = new BorderPane(trickPane, new GridPane() , scorePane, new GridPane(), new GridPane());
 //        StackPane s = new StackPane(mainPane , victoryPaneForTeam1,victoryPaneForTeam2);
 //        
 //        StackPane PaneInCaseTeam1Win = new StackPane(victoryPaneForTeam1);
@@ -132,6 +132,7 @@ public class GraphicalPlayer {
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString());
         Label totalString = new Label("/Total : ");
+        Label totalStringBis = new Label("/Total : ");
         
         ReadOnlyIntegerProperty turnPointsT1 = score.turnPointsProperty(TeamId.TEAM_1);
         ReadOnlyIntegerProperty turnPointsT2 = score.turnPointsProperty(TeamId.TEAM_2);
@@ -166,7 +167,7 @@ public class GraphicalPlayer {
         grid.addRow(0,namesOfTeam1 , trickPointsOfTeam1 , turnPointsOfTeam1,totalString , gamePointsOfTeam1);
 
         
-        grid.addRow(1,namesOfTeam2 , trickPointsOfTeam2 , turnPointsOfTeam2,totalString , gamePointsOfTeam2);
+        grid.addRow(1,namesOfTeam2 , trickPointsOfTeam2 , turnPointsOfTeam2,totalStringBis , gamePointsOfTeam2);
 
         grid.setStyle("-fx-font: 16 Optima;\n" + 
                     "-fx-background-color: lightgray;\n" + 
