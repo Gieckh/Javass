@@ -77,14 +77,15 @@ public final class RemotePlayerServer {
                 BufferedReader r = new BufferedReader(
                         new InputStreamReader(s.getInputStream(), US_ASCII));
                 BufferedWriter w =
-                        new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), US_ASCII))) {
+                        new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), US_ASCII))
+        ) {
             System.out.println("On passe le try");
-            String string;
+            String message;
             System.out.println("just read");
-            while((string = r.readLine()) !=  null) {
-                
+            while((message = r.readLine()) !=  null) {
+                assert (message.length() >= 6);
                 // I decided to combine the whole line only with ',' (even the jassCommand) //TODO: change that
-                List<String> words = new LinkedList<>(Arrays.asList(string.split("[ ,]"))); 
+                List<String> words = new LinkedList<>(Arrays.asList(message.split("[ ,]")));
                 JassCommand Command = JassCommand.valueOf(words.get(0));
                 switch(Command) {
                     case PLRS:
