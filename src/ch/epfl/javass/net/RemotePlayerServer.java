@@ -1,8 +1,8 @@
 package ch.epfl.javass.net;
 
-import static ch.epfl.javass.net.Net.PORT_NUMBER;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -134,17 +134,22 @@ public final class RemotePlayerServer {
 
                 //TODO
                     case CARD:
-                        assert (words.size() == 4);
+                        assert (words.size() == 3);
                         System.out.println("card read");
                         System.out.println();
+
+                        //because there is a freaking space in the CARD line. //TODO
+                        String[] trickThenHand = StringSerializer.split(words.get(2), ' ');
+                        assert (trickThenHand.length == 2);
+
                         w.write(StringSerializer.serializeInt(underLyingPlayer.cardToPlay(
                                 TurnState.ofPackedComponents(
                                         StringSerializer.deserializeLong(words.get(0)),
                                         StringSerializer.deserializeLong(words.get(1)),
-                                        StringSerializer.deserializeInt(words.get(2))
+                                        StringSerializer.deserializeInt(trickThenHand[0])
                                 ),
                                 CardSet.ofPacked(
-                                        StringSerializer.deserializeLong(words.get(3)))).packed()
+                                        StringSerializer.deserializeLong(trickThenHand[1]))).packed()
                                 )
                         );
 
