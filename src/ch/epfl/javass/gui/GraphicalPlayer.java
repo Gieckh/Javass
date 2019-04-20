@@ -163,10 +163,19 @@ public class GraphicalPlayer {
                 "-fx-stroke-width: 5;\n" + 
                 "-fx-opacity: 0.5;");
         stackpane.setEffect(new GaussianBlur(4));
-        
-        Text textForCouple1 = 
+        int playerIndexForCouple1 = (thisId.ordinal()+2)%4;
+        int playerIndexForCouple2 = (thisId.ordinal()+3)%4;
+        int playerIndexForCouple3 = thisId.ordinal();
+        int playerIndexForCouple4 = (thisId.ordinal()+1)%4; 
+        Text textForCouple1 = new Text(playerNames.get(PlayerId.ALL.get(playerIndexForCouple1).toString()));
+        Text textForCouple2 = new Text(playerNames.get(PlayerId.ALL.get(playerIndexForCouple2).toString()));
+        Text textForCouple3 = new Text(playerNames.get(playerIndexForCouple3).toString());        
+        Text textForCouple4 = new Text(playerNames.get(PlayerId.ALL.get(playerIndexForCouple4).toString()));
         textForCouple1.setStyle("-fx-font: 14 Optima;");      
-        ImageView ImageForCouple1 =
+        textForCouple2.setStyle("-fx-font: 14 Optima;");      
+        textForCouple3.setStyle("-fx-font: 14 Optima;");      
+        textForCouple4.setStyle("-fx-font: 14 Optima;");      
+        ImageView ImageForCouple1 = trick.
         VBox couple1 = 
         GridPane grid = new GridPane();
         
