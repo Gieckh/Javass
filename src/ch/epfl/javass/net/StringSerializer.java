@@ -33,10 +33,10 @@ public final class StringSerializer {
     }
 
     /**
-     * @brief returns an integer in base 10 from the string representation of a base RADIX integer.
+     * @brief returns an integer from the string representation of a base RADIX integer.
      *
      * @param s a string of a base RADIX integer
-     * @return an integer in base 10 from the string representation of a base RADIX integer
+     * @return an integer from the string representation of a base RADIX integer
      */
     public static int deserializeInt(String s) {
         return Integer.parseUnsignedInt(s, RADIX);
@@ -45,18 +45,18 @@ public final class StringSerializer {
     /**
      * @brief returns the string representation of the long in base RADIX.
      *
-     * @param l an long in base 10
+     * @param l an long
      * @return the string representation of the long in base RADIX
      */
-    public static String serializeLong(long l ) {
+    public static String serializeLong(long l) {
         return Long.toUnsignedString(l, RADIX);
     }
 
     /**
-     * @brief returns a long in base 10 from the string representation of a base RADIX long.
+     * @brief returns a long from the string representation of a base RADIX long.
      *
      * @param s a string of a base RADIX long
-     * @return a long in base 10 from the string representation of a base RADIX long
+     * @return a long from the string representation of a base RADIX long
      */
     public static long deserializeLong(String s) {
         return Long.parseUnsignedLong(s, RADIX);
