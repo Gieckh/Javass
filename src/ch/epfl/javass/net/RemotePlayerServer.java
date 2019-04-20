@@ -134,9 +134,10 @@ public final class RemotePlayerServer {
 
                 //TODO
                     case CARD:
+                        assert (words.size() == 4);
                         System.out.println("card read");
                         System.out.println();
-                        w.write(StringSerializer.serializeInt(this.underLyingPlayer.cardToPlay(
+                        w.write(StringSerializer.serializeInt(underLyingPlayer.cardToPlay(
                                 TurnState.ofPackedComponents(
                                         StringSerializer.deserializeLong(words.get(0)),
                                         StringSerializer.deserializeLong(words.get(1)),
@@ -147,20 +148,26 @@ public final class RemotePlayerServer {
                                 )
                         );
 
-                        w.write("\n");
+                        w.write('\n');
                         w.flush();
                         break;
 
                     case SCOR:
+                        assert (words.size() == 1);
                         System.out.println("score read");
                         this.underLyingPlayer.updateScore(Score.ofPacked(
-                                StringSerializer.deserializeLong(words.get(1))));
+                                StringSerializer.deserializeLong(words.get(0))
+                                )
+                        );
                         break;
                         
                     case WINR:
+                        assert (words.size() == 1);
                         System.out.println("win read");
                         this.underLyingPlayer.setWinningTeam(TeamId.ALL.get(
-                                StringSerializer.deserializeInt(words.get(1))));
+                                StringSerializer.deserializeInt(words.get(0))
+                                )
+                        );
                         break;
                         
 
@@ -171,7 +178,7 @@ public final class RemotePlayerServer {
             System.out.println("end of while");
         }
         catch (IOException e) {
-            System.out.println("coucou");
+            System.out.println("IOException caught");
             throw new UncheckedIOException(e);
         }
         run();
