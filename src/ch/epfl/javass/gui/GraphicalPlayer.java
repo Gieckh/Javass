@@ -63,7 +63,7 @@ public class GraphicalPlayer {
         BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
         BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
         GridPane empty = new GridPane();
-        this.mainPane = new BorderPane(trickPane, new GridPane() , scorePane, new GridPane(), new GridPane());
+        this.mainPane = new BorderPane(trickPane, scorePane , new GridPane() , new GridPane(), new GridPane());
 //        StackPane s = new StackPane(mainPane , victoryPaneForTeam1,victoryPaneForTeam2);
 //        
 //        StackPane PaneInCaseTeam1Win = new StackPane(victoryPaneForTeam1);
