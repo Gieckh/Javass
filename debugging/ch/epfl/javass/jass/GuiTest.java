@@ -9,6 +9,7 @@ import ch.epfl.javass.gui.TrickBean;
 import ch.epfl.javass.jass.Card.Color;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public final class GuiTest extends Application {
