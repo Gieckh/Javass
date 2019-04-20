@@ -101,7 +101,7 @@ public final class TrickBean {
         setWinningPlayer(pId);
         ObservableMap<PlayerId,Card> thisTrick = observableHashMap();
 
-        for(int i = 0 ; i < 4 ; ++i) {
+        for(int i = 0 ; i < newTrick.size() ; ++i) {
             thisTrick.put(newTrick.player(i), newTrick.card(i));
         }
         trick = new UnmodifiableObservableMap<>(thisTrick);
