@@ -163,20 +163,26 @@ public class GraphicalPlayer {
                 "-fx-stroke-width: 5;\n" + 
                 "-fx-opacity: 0.5;");
         stackpane.setEffect(new GaussianBlur(4));
-        int playerIndexForCouple1 = (thisId.ordinal()+2)%4;
-        int playerIndexForCouple2 = (thisId.ordinal()+3)%4;
-        int playerIndexForCouple3 = thisId.ordinal();
-        int playerIndexForCouple4 = (thisId.ordinal()+1)%4; 
-        Text textForCouple1 = new Text(playerNames.get(PlayerId.ALL.get(playerIndexForCouple1).toString()));
-        Text textForCouple2 = new Text(playerNames.get(PlayerId.ALL.get(playerIndexForCouple2).toString()));
-        Text textForCouple3 = new Text(playerNames.get(playerIndexForCouple3).toString());        
-        Text textForCouple4 = new Text(playerNames.get(PlayerId.ALL.get(playerIndexForCouple4).toString()));
+        PlayerId playerIdForCouple1 = PlayerId.ALL.get((thisId.ordinal()+2)%4);
+        PlayerId playerIdForCouple2 = PlayerId.ALL.get((thisId.ordinal()+3)%4);
+        PlayerId playerIdForCouple3 = thisId;
+        PlayerId playerIdForCouple4 = PlayerId.ALL.get((thisId.ordinal()+1)%4);
+        Text textForCouple1 = new Text(playerNames.get(playerIdForCouple1.toString()));
+        Text textForCouple2 = new Text(playerNames.get(playerIdForCouple2.toString()));
+        Text textForCouple3 = new Text(playerNames.get(playerIdForCouple3.toString()));        
+        Text textForCouple4 = new Text(playerNames.get(playerIdForCouple4.toString()));
         textForCouple1.setStyle("-fx-font: 14 Optima;");      
         textForCouple2.setStyle("-fx-font: 14 Optima;");      
         textForCouple3.setStyle("-fx-font: 14 Optima;");      
         textForCouple4.setStyle("-fx-font: 14 Optima;");      
-        ImageView ImageForCouple1 = trick.
-        VBox couple1 = 
+        ImageView ImageForCouple1 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple1)));
+        ImageView ImageForCouple2 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple2)));
+        ImageView ImageForCouple3 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple3)));
+        ImageView ImageForCouple4 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple4)));
+        VBox couple1 = new VBox(textForCouple1,ImageForCouple1);
+        VBox couple2 = new VBox(textForCouple1,ImageForCouple2);
+        VBox couple3 = new VBox(textForCouple1,ImageForCouple3);
+        VBox couple4 = new VBox(textForCouple1,ImageForCouple4);
         GridPane grid = new GridPane();
         
         
