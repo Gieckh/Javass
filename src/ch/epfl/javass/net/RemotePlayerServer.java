@@ -85,44 +85,66 @@ public final class RemotePlayerServer {
             while((message = r.readLine()) !=  null) {
                 assert (message.length() >= 6);
                 // I decided to combine the whole line only with ',' (even the jassCommand) //TODO: change that
-                List<String> words = new LinkedList<>(Arrays.asList(message.split("[ ,]")));
-                JassCommand Command = JassCommand.valueOf(words.get(0));
+//                List<String> words = new LinkedList<>(Arrays.asList(message.split("[ ,]")));
+                List<String> words = new LinkedList<>(Arrays.asList(
+                        StringSerializer.split(message.substring(5), ',')
+                    )
+                );
+                JassCommand Command = JassCommand.valueOf(message.substring(0, 4));
                 switch(Command) {
                     case PLRS:
+                        assert (words.size() == 5);
                         System.out.println("players read");
                         Map<PlayerId, String> playerNames = new HashMap<>();
-                        for(int i = 2; i < 6 ; ++i) {
-                            playerNames.put(PlayerId.ALL.get(i-2), StringSerializer.deserializeString(words.get(i)));
+                        for(int i = 1; i < 5 ; ++i) {
+                            playerNames.put(PlayerId.ALL.get(i-1), StringSerializer.deserializeString(words.get(i)));
                         }
-                        this.underLyingPlayer.setPlayers(PlayerId.ALL.get(StringSerializer.deserializeInt(words.get(1))), playerNames);
+                        this.underLyingPlayer.setPlayers(
+                                PlayerId.ALL.get(StringSerializer.deserializeInt(words.get(0))),
+                                playerNames
+                        );
                         break;
-                        
+
+
                     case TRMP:
+                        assert (words.size() == 1);
                         System.out.println("trump read");
-                        this.underLyingPlayer.setTrump(Card.Color.ALL.get(StringSerializer.deserializeInt(words.get(1))));
+                        this.underLyingPlayer.setTrump(Card.Color.ALL.get(StringSerializer.deserializeInt(words.get(0))));
                         break;
-                        
+
                     case HAND:
+                        assert (words.size() == 1);
                         System.out.println("hand read");
-                        this.underLyingPlayer.updateHand(CardSet.ofPacked(StringSerializer.deserializeLong(words.get(1))));
+                        this.underLyingPlayer.updateHand(
+                                CardSet.ofPacked(
+                                        StringSerializer.deserializeLong(words.get(0))
+                                )
+                        );
                         break;
-                        
+
                     case TRCK:
+                        assert (words.size() == 1);
                         System.out.println("trick read");
-                        this.underLyingPlayer.updateTrick(Trick.ofPacked(StringSerializer.deserializeInt(words.get(1))));
+                        this.underLyingPlayer.updateTrick(
+                                Trick.ofPacked(
+                                        StringSerializer.deserializeInt(words.get(0))
+                                )
+                        );
                         break;
-                        
+
+                //TODO
                     case CARD:
                         System.out.println("card read");
                         System.out.println();
                         w.write(StringSerializer.serializeInt(this.underLyingPlayer.cardToPlay(
                                 TurnState.ofPackedComponents(
+                                        StringSerializer.deserializeLong(words.get(0)),
                                         StringSerializer.deserializeLong(words.get(1)),
-                                        StringSerializer.deserializeLong(words.get(2)),
-                                        StringSerializer.deserializeInt(words.get(3))
+                                        StringSerializer.deserializeInt(words.get(2))
                                 ),
                                 CardSet.ofPacked(
-                                        StringSerializer.deserializeLong(words.get(4)))).packed())
+                                        StringSerializer.deserializeLong(words.get(3)))).packed()
+                                )
                         );
 
                         w.write("\n");
