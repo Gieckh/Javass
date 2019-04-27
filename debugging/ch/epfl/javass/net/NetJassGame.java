@@ -63,7 +63,7 @@ public class NetJassGame {
                 }
             }
             //TODO: player not initialized ?
-            players.put(pId, player);
+            //players.put(pId, player); //TODO: uncomment
             playerNames.put(pId, pId.name());
         }
 

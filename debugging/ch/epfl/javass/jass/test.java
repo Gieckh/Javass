@@ -1,46 +1,22 @@
 package ch.epfl.javass.jass;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SplittableRandom;
 
-import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
-
-import ch.epfl.javass.gui.GraphicalPlayer;
-import ch.epfl.javass.gui.HandBean;
-import ch.epfl.javass.jass.Card.Color;
-import ch.epfl.javass.jass.Card.Rank;
-import ch.epfl.javass.net.StringSerializer;
-import javafx.application.Application;
-import javafx.collections.ListChangeListener;
-import javafx.collections.SetChangeListener;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 //this is  a test, thus no need of javadoc
-public class test extends Application {
-    
-    
+public class test {
     public static void main(String[] args) {
-            for(int i = 0 ; i<Color.ALL.size(); ++i) {
-                for(int j = 0 ; j < Rank.ALL.size(); ++j) {
-                    String s = "/"+"card_"+i+"_"+j+"_"+160+".png";
-                    System.out.println(new Image(s));
-                }
-            }
-            for(int i = 0 ; i<Color.ALL.size(); ++i) {
-                String s = "/"+"trump_"+i+".png";
-                System.out.println(new Image(s));
-            }
-        }      
-        
-    
+        ObjectProperty<String> p1 = new SimpleObjectProperty<>();
+        ObjectProperty<String> p2 = new SimpleObjectProperty<>();
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        // TODO Auto-generated method stub
-        
+        p1.addListener((o, oV, nV) -> System.out.println(nV));
+        p1.addListener((o, oV, nV) -> System.out.println(oV));
+        p1.addListener((o, oV, nV) -> System.out.println(""));
+
+        p2.set("hello");                // n'affiche rien
+        System.out.println("--- binding p1 to p2");
+        p1.bindBidirectional(p2);       // affiche "hello"
+        p2.set("world");                // affiche "world"
+        p1.set("bonjour");
     }
-    
 }
