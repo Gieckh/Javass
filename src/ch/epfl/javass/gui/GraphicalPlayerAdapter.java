@@ -40,7 +40,7 @@ public class GraphicalPlayerAdapter implements Player {
 
     @Override public void setPlayers(PlayerId ownId,
             Map<PlayerId, String> playerNames) {
-        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean);
+        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean);
         runLater(() -> { graphicalPlayer.createStage().show(); });
     
     }

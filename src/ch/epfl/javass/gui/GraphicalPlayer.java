@@ -4,7 +4,9 @@ import static javafx.beans.binding.Bindings.valueAt;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.javass.jass.Card;
@@ -24,11 +26,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sun.text.normalizer.CharTrie.FriendAgent;
 
 public class GraphicalPlayer {
     /** ============================================== **/
@@ -39,8 +43,9 @@ public class GraphicalPlayer {
     private Map<PlayerId, String> playerNames;
     private ScoreBean score;
     private TrickBean trick; 
+    private HandBean handBean;
     private static ObservableMap<Card,Image> cardImpage240 = GraphicalPlayer.cardImage240();
-    private static Map<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
+    private static ObservableMap<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
     private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
     public BorderPane mainPane;
 
@@ -51,17 +56,20 @@ public class GraphicalPlayer {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames, ScoreBean score, TrickBean trick) {
+    public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames, 
+            ScoreBean score, TrickBean trick, HandBean handBean) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
         this.score = score; 
         this.trick =trick;
+        this.handBean = handBean;
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
+        HBox handPane = createHandPane();
         
 //        BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
 //        BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
-        this.mainPane = new BorderPane(trickPane, scorePane , new GridPane(),new GridPane(), new GridPane());
+        this.mainPane = new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
 //        StackPane s = new StackPane(mainPane , victoryPaneForTeam1,victoryPaneForTeam2);
 //        
 //        StackPane PaneInCaseTeam1Win = new StackPane(victoryPaneForTeam1);
@@ -270,5 +278,28 @@ public class GraphicalPlayer {
                 "-fx-background-color: white;");
         
         return border;
+    }
+    
+    private HBox createHandPane() {
+        
+        ImageView nineChildrens[] = new ImageView[9];
+        for(int i = 0 ; i < 9 ; ++i) {
+            ImageView children = new ImageView();
+            children.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage160,handBean.hand().get(i)));
+            children.setFitHeight(120);
+            children.setFitHeight(80);
+            nineChildrens[i] = children;
+        }
+        
+
+        
+        
+        
+        HBox handPane = new HBox(nineChildrens);
+        handPane.setStyle("-fx-background-color: lightgray;\n" + 
+                "-fx-spacing: 5px;\n" + 
+                "-fx-padding: 5px;");
+        return handPane;
+        
     }
 }
