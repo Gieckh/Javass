@@ -3,16 +3,30 @@ package ch.epfl.javass.gui;
 import ch.epfl.javass.jass.*;
 
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class GraphicalPlayerAdapter implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-
+    ScoreBean scoreBean;
+    TrickBean trickBean;
+    HandBean handBean;
+    GraphicalPlayer graphicalInterface;
+    ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);
+    
+    
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-
+    public GraphicalPlayerAdapter(ScoreBean scoreBean, TrickBean trickBean, HandBean handBean, GraphicalPlayer graphicalInterface ) {
+        this.graphicalInterface = graphicalInterface;
+        this.handBean = handBean;
+        this.scoreBean = scoreBean;
+        this.trickBean = trickBean;
+        
+    }
+    
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
