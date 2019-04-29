@@ -48,7 +48,7 @@ public class GraphicalPlayer {
     private TrickBean trick; 
     private static ObservableMap<Card,Image> cardImpage240 = GraphicalPlayer.cardImage240();
     private static Map<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
-    private static Map<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
+    private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
     public BorderPane mainPane;
 
 
@@ -65,8 +65,6 @@ public class GraphicalPlayer {
         this.trick =trick;
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
-        GridPane trickPane1 = createTrickPane();
-        GridPane trickPane2 = createTrickPane();
         
         BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
         BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
@@ -231,7 +229,6 @@ public class GraphicalPlayer {
         ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
         ImageTrump.setFitHeight(101);
         ImageTrump.setFitWidth(101);
-        
         GridPane grid = new GridPane();
         grid.add(couple4, 0, 1, 1, 3);
         grid.add(couple2, 2, 1, 1, 3);
