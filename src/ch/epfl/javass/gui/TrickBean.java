@@ -25,7 +25,7 @@ public final class TrickBean {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
 
-    private ObjectProperty<Color> trump = new SimpleObje    ctProperty<>();
+    private ObjectProperty<Color> trump = new SimpleObjectProperty<>();
     private ObservableMap<PlayerId,Card> trick = observableHashMap();
     private ObjectProperty<PlayerId> winningPlayer = new SimpleObjectProperty<>();
     
@@ -74,7 +74,7 @@ public final class TrickBean {
      * @param pId the PlayerId of the winning player
     */
     private void setWinningPlayer(PlayerId pId) {
-            winningPlayer = new SimpleObjectProperty<PlayerId>(pId);
+            winningPlayer = new SimpleObjectProperty<>(pId);
     }
         
     /**
@@ -83,7 +83,7 @@ public final class TrickBean {
      * @param trump the color of the trump
     */
     public void setTrump(Color trump) {
-        this.trump = new SimpleObjectProperty<Color>(trump);
+        this.trump = new SimpleObjectProperty<>(trump);
     }
     
     /**
