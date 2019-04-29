@@ -10,12 +10,17 @@ import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.PackedCard;
-import ch.epfl.javass.jass.PlayerId;import ch.epfl.javass.jass.TeamId;
+import ch.epfl.javass.jass.PlayerId;
+import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
+import static javafx.beans.binding.Bindings.valueAt;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableMap;
+import static javafx.collections.FXCollections.observableMap;
+import static javafx.collections.FXCollections.unmodifiableObservableMap;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -41,7 +46,7 @@ public class GraphicalPlayer {
     private Map<PlayerId, String> playerNames;
     private ScoreBean score;
     private TrickBean trick; 
-    private static Map<Card,Image> cardImpage240 = GraphicalPlayer.cardImage240();
+    private static ObservableMap<Card,Image> cardImpage240 = GraphicalPlayer.cardImage240();
     private static Map<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
     private static Map<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
     public BorderPane mainPane;
@@ -87,42 +92,36 @@ public class GraphicalPlayer {
         return stage;
     }
     
-    @SuppressWarnings("unchecked")
-    private static Map<Card,Image> cardImage160() {
-        Map<Card,Image> map = new HashMap<>();
+    private static ObservableMap<Card,Image> cardImage160() {
+        ObservableMap<Card,Image> map =  observableMap( new HashMap<>());
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
             for(int j = 0 ; j < Rank.ALL.size(); ++j) {
                 String s = "/"+"card_"+i+"_"+j+"_"+160+".png";
                 map.put(Card.of(Color.ALL.get(i),Rank.ALL.get(j)), new Image(s));
             }
         }
-        //unsure transtypage askip
-        return  Collections.unmodifiableMap(new HashMap(map));
+        return  unmodifiableObservableMap(map);
     }
     
-    @SuppressWarnings("unchecked")
-    private static Map<Card,Image> cardImage240() {
-        Map<Card,Image> map = new HashMap<>();
+    private static ObservableMap<Card,Image> cardImage240() {
+        ObservableMap<Card,Image> map = observableMap(new HashMap<>()); 
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
             for(int j = 0 ; j < Rank.ALL.size(); ++j) {
                 String s = "/"+"card_"+i+"_"+j+"_"+240+".png";
                 map.put(Card.of(Color.ALL.get(i),Rank.ALL.get(j)), new Image(s));
             }
         }
-        //unsure transtypage askip
-        return  Collections.unmodifiableMap(new HashMap(map));
+        return  unmodifiableObservableMap(map);
     }
     
-    @SuppressWarnings("unchecked")
-    private static Map<Color,Image> trumpImage() {
-        Map<Color,Image> map = new HashMap<>();
+    private static ObservableMap<Color,Image> trumpImage() {
+        ObservableMap<Color,Image> map = observableMap(new HashMap<>());
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
             String s = "/"+"trump_"+i+".png";
             map.put(Color.ALL.get(i),new Image(s));
         }
         
-        //unsure transtypage askip
-        return  Collections.unmodifiableMap(new HashMap(map));
+        return  unmodifiableObservableMap(map);
     }
 
     private GridPane createScorePane() {
@@ -203,31 +202,34 @@ public class GraphicalPlayer {
         textForCouple2.setStyle("-fx-font: 14 Optima;");      
         textForCouple3.setStyle("-fx-font: 14 Optima;");      
         textForCouple4.setStyle("-fx-font: 14 Optima;");   
-        // j'ai pas compris ce passage la : e choix de l'image à afficher peut se faire au moyen 
-        //d'une simple liaison de la propriété imageProperty du nœud ImageView à la propriété trick
-        //du bean du pli, moyennant une utilisation judicieuse de la variante 1 et de la variante 2
-        //de la méthode valueAt de Bindings.
-        ImageView ImageForCouple1 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple1)));
-        ImageView ImageForCouple2 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple2)));
-        ImageView ImageForCouple3 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple3)));
-        ImageView ImageForCouple4 = new ImageView(GraphicalPlayer.cardImpage240.get(trick.trick().get(playerIdForCouple4)));
         
-        ImageForCouple1.setFitHeight(180);
-        ImageForCouple1.setFitWidth(120);
-        ImageForCouple2.setFitHeight(180);
-        ImageForCouple2.setFitWidth(120);
-        ImageForCouple3.setFitHeight(180);
-        ImageForCouple3.setFitWidth(120);
-        ImageForCouple4.setFitHeight(180);
-        ImageForCouple4.setFitWidth(120);
+        ImageView imageForCouple1 = new ImageView();
+        ImageView imageForCouple2 = new ImageView();
+        ImageView imageForCouple3 = new ImageView();
+        ImageView imageForCouple4 = new ImageView();
         
-        VBox couple1 = new VBox(textForCouple1,ImageForCouple1);
-        VBox couple2 = new VBox(textForCouple1,ImageForCouple2);
-        VBox couple3 = new VBox(textForCouple1,ImageForCouple3);
-        VBox couple4 = new VBox(textForCouple1,ImageForCouple4);
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple1)));
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple2)));
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple3)));
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple4)));
+        
+        imageForCouple1.setFitHeight(180);
+        imageForCouple1.setFitWidth(120);
+        imageForCouple2.setFitHeight(180);
+        imageForCouple2.setFitWidth(120);
+        imageForCouple3.setFitHeight(180);
+        imageForCouple3.setFitWidth(120);
+        imageForCouple4.setFitHeight(180);
+        imageForCouple4.setFitWidth(120);
+        
+        VBox couple1 = new VBox(textForCouple1,imageForCouple1);
+        VBox couple2 = new VBox(textForCouple1,imageForCouple2);
+        VBox couple3 = new VBox(textForCouple1,imageForCouple3);
+        VBox couple4 = new VBox(textForCouple1,imageForCouple4);
         
         @SuppressWarnings("unlikely-arg-type")
-        ImageView ImageTrump = new ImageView(GraphicalPlayer.trumpImage.get(trick.trumpProperty()));
+        ImageView ImageTrump = new ImageView();
+        ImageTrump.imageProperty().bind(Bindings.valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
         ImageTrump.setFitHeight(101);
         ImageTrump.setFitWidth(101);
         
