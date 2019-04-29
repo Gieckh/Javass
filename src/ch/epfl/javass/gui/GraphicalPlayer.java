@@ -54,9 +54,9 @@ public class GraphicalPlayer {
     /** ============================================== **/
 
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames, ScoreBean score, TrickBean trick) {
-        this.thisId = thisId; 
-        this.playerNames = playerNames; 
-        this.score = score; 
+        this.thisId = thisId;
+        this.playerNames = playerNames;
+        this.score = score;
         this.trick =trick;
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
