@@ -93,14 +93,14 @@ public final class HandBean {
      *  newPlayableCards. If the new CardSet newPlayableCards is of size 9, we replace
      *  the previous PlayableCards property with the new one, otherwise we simply put to
      *  null the cards that are not in newPlayableCards but were in the playableCards
-     *  attribute.
+     *  attribute. //TODO: faut lire ce que t'écris...
      *
      * @param newPlayableCards the new CardSet
      */
     public void setPlayableCards(CardSet newPlayableCards) {
         this.playableCards.clear();
         for(int i = 0 ; i < newPlayableCards.size() ; ++i) {
-            System.out.println( "null replaced by " + newPlayableCards.get(i));
+            System.out.println( "[null] replaced by [" + newPlayableCards.get(i) + "]");
             playableCards.add(newPlayableCards.get(i));
         }
     }
