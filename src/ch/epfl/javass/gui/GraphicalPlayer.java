@@ -200,7 +200,8 @@ public class GraphicalPlayer {
         textForCouple1.setStyle("-fx-font: 14 Optima;");      
         textForCouple2.setStyle("-fx-font: 14 Optima;");      
         textForCouple3.setStyle("-fx-font: 14 Optima;");      
-        textForCouple4.setStyle("-fx-font: 14 Optima;");   
+        textForCouple4.setStyle("-fx-font: 14 Optima;");
+        
         
         ImageView imageForCouple1 = new ImageView();
         ImageView imageForCouple2 = new ImageView();
@@ -226,17 +227,26 @@ public class GraphicalPlayer {
         VBox couple3 = new VBox(imageForCouple3, textForCouple3);
         VBox couple4 = new VBox(textForCouple4,imageForCouple4);
         
+        couple1.setAlignment(Pos.TOP_CENTER);
+        couple2.setAlignment(Pos.TOP_CENTER);
+        couple3.setAlignment(Pos.TOP_CENTER);
+        couple4.setAlignment(Pos.TOP_CENTER);
+
+        
         ImageView ImageTrump = new ImageView();
         ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
         ImageTrump.setFitHeight(101);
         ImageTrump.setFitWidth(101);
+        VBox trump = new VBox(ImageTrump);
+        trump.setAlignment(Pos.CENTER);
+        
         GridPane grid = new GridPane();
-        grid.add(couple2, 0, 1, 1, 3);
-        grid.add(couple4, 2, 1, 1, 3);
-        grid.addColumn(1, couple1,ImageTrump, couple3);
-//        grid.add(couple1, 1,0,1,1);
-//        grid.add(ImageTrump, 1,1,1,1);
-//        grid.add(couple3, 1,2,1,1);
+        grid.add(couple2, 0, 1, 1, 1);
+        grid.add(couple4, 2, 1, 1, 1);
+       // grid.addColumn(1, couple1,ImageTrump, couple3);
+        grid.add(couple1, 1,0,1,1);
+        grid.add(trump, 1,1,1,1);
+        grid.add(couple3, 1,2,1,1);
         grid.setStyle("-fx-background-color: whitesmoke;\n" + 
                 "-fx-padding: 5px;\n" + 
                 "-fx-border-width: 3px 0px;\n" + 
