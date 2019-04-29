@@ -2,14 +2,11 @@ package ch.epfl.javass.gui;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
+import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
-import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.Trick;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableMap;
 import static javafx.collections.FXCollections.observableHashMap;
@@ -28,9 +25,9 @@ public final class TrickBean {
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
 
+    private ObjectProperty<Color> trump = new SimpleObjectProperty<>();
     private ObservableMap<PlayerId,Card> trick = observableHashMap();
-    private ObjectProperty<Color> trump = new SimpleObjectProperty<Color>();
-    private ObjectProperty<PlayerId> winningPlayer = new SimpleObjectProperty<PlayerId>();
+    private ObjectProperty<PlayerId> winningPlayer = new SimpleObjectProperty<>();
     
     
     /** ============================================== **/
@@ -42,8 +39,6 @@ public final class TrickBean {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-
-    //TODO demander a marin le bilingue si on dit "setter of" ,"setter on" ou "setter for" ?.
     
     /**
      * @brief It is a public getter of the trick property.
@@ -79,7 +74,7 @@ public final class TrickBean {
      * @param pId the PlayerId of the winning player
     */
     private void setWinningPlayer(PlayerId pId) {
-            winningPlayer = new SimpleObjectProperty<PlayerId>(pId);
+            winningPlayer = new SimpleObjectProperty<>(pId);
     }
         
     /**
@@ -88,7 +83,7 @@ public final class TrickBean {
      * @param trump the color of the trump
     */
     public void setTrump(Color trump) {
-        this.trump = new SimpleObjectProperty<Color>(trump);
+        this.trump = new SimpleObjectProperty<>(trump);
     }
     
     /**
@@ -97,15 +92,19 @@ public final class TrickBean {
      * @param newTrick a Trick
     */
     public void setTrick(Trick newTrick) {
-        PlayerId pId = newTrick.winningPlayer();
-        setWinningPlayer(pId);
+        PlayerId winnerId = newTrick.winningPlayer();
+        setWinningPlayer(winnerId);
         ObservableMap<PlayerId,Card> thisTrick = observableHashMap();
 
-        for(int i = 0 ; i < newTrick.size() ; ++i) {
+        for(int i = 0 ; i < newTrick.size() ; ++i)
             thisTrick.put(newTrick.player(i), newTrick.card(i));
+
+        for (PlayerId pId: PlayerId.ALL) {
+            if (!thisTrick.containsKey(pId))
+                thisTrick.put(pId, null);
         }
+
+        assert (thisTrick.size() == 4);
         trick = new UnmodifiableObservableMap<>(thisTrick);
-        
     }
-    
 }
