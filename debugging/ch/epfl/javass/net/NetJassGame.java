@@ -28,7 +28,7 @@ public class NetJassGame {
                 try {
                     player = new RemotePlayerClient("localhost", Net.PORT_NUMBER);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                    // TODO: why not throw unchecked ?
                     e.printStackTrace();
                 }
             }
@@ -63,7 +63,7 @@ public class NetJassGame {
                 }
             }
             //TODO: player not initialized ?
-            //players.put(pId, player); //TODO: uncomment
+            players.put(pId, player); //TODO: uncomment
             playerNames.put(pId, pId.name());
         }
 
@@ -74,7 +74,7 @@ public class NetJassGame {
             while (!g.isGameOver()) {
                 g.advanceToEndOfNextTrick();
                 System.out.println("new Trick");
-                if(g.isGameOver()) {
+                if (g.isGameOver()) {
                     //TODO
                     System.out.println("game is over");
                 }

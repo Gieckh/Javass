@@ -132,7 +132,6 @@ public final class RemotePlayerServer {
                         );
                         break;
 
-                //TODO
                     case CARD:
                         assert (words.size() == 3);
                         System.out.println("card read");
