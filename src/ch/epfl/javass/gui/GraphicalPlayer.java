@@ -203,9 +203,9 @@ public class GraphicalPlayer {
         ImageView imageForCouple4 = new ImageView();
         
         imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple1)));
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple2)));
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple3)));
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple4)));
+        imageForCouple2.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple2)));
+        imageForCouple3.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple3)));
+        imageForCouple4.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple4)));
         
         imageForCouple1.setFitHeight(180);
         imageForCouple1.setFitWidth(120);
@@ -217,17 +217,17 @@ public class GraphicalPlayer {
         imageForCouple4.setFitWidth(120);
         
         VBox couple1 = new VBox(textForCouple1,imageForCouple1);
-        VBox couple2 = new VBox(textForCouple1,imageForCouple2);
-        VBox couple3 = new VBox(textForCouple1,imageForCouple3);
-        VBox couple4 = new VBox(textForCouple1,imageForCouple4);
+        VBox couple2 = new VBox(textForCouple2,imageForCouple2);
+        VBox couple3 = new VBox(textForCouple3,imageForCouple3);
+        VBox couple4 = new VBox(textForCouple4,imageForCouple4);
         
         ImageView ImageTrump = new ImageView();
         ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
         ImageTrump.setFitHeight(101);
         ImageTrump.setFitWidth(101);
         GridPane grid = new GridPane();
-        grid.add(couple4, 0, 1, 1, 3);
-        grid.add(couple2, 2, 1, 1, 3);
+        grid.add(couple2, 0, 1, 1, 3);
+        grid.add(couple4, 2, 1, 1, 3);
         grid.addColumn(1, couple1,ImageTrump, couple3);
 //        grid.add(couple1, 1,0,1,1);
 //        grid.add(ImageTrump, 1,1,1,1);
