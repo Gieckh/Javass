@@ -1,6 +1,7 @@
 package ch.epfl.javass.gui;
 
 import ch.epfl.javass.jass.*;
+import static javafx.application.Platform.runLater;
 
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -12,18 +13,18 @@ public class GraphicalPlayerAdapter implements Player {
     ScoreBean scoreBean;
     TrickBean trickBean;
     HandBean handBean;
-    GraphicalPlayer graphicalInterface;
-    ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);
+    GraphicalPlayer graphicalPlayer;
+    ArrayBlockingQueue<Card> queueOfCommunication ;
     
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    public GraphicalPlayerAdapter(ScoreBean scoreBean, TrickBean trickBean, HandBean handBean, GraphicalPlayer graphicalInterface ) {
-        this.graphicalInterface = graphicalInterface;
-        this.handBean = handBean;
-        this.scoreBean = scoreBean;
-        this.trickBean = trickBean;
+    public GraphicalPlayerAdapter() {
+        this.handBean = new HandBean();
+        this.scoreBean = new ScoreBean();
+        this.trickBean = new TrickBean();
+        this.queueOfCommunication =  new ArrayBlockingQueue<>(1);
         
     }
     
@@ -31,33 +32,40 @@ public class GraphicalPlayerAdapter implements Player {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-
+// remplacer par take?
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
-        return null;
+        return queueOfCommunication.poll();
+        
     }
 
     @Override public void setPlayers(PlayerId ownId,
             Map<PlayerId, String> playerNames) {
-
+        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean);
+        runLater(() -> { graphicalPlayer.createStage().show(); });
+    
     }
 
     @Override public void updateHand(CardSet newHand) {
-
+        handBean.setHand(newHand);
     }
 
     @Override public void setTrump(Card.Color trump) {
-
+        trickBean.setTrump(trump);
     }
 
     @Override public void updateTrick(Trick newTrick) {
-
+        trickBean.setTrick(newTrick);
     }
 
     @Override public void updateScore(Score score) {
-
+        for(TeamId teamId :TeamId.ALL ) {
+            scoreBean.setGamePoints(teamId, score.gamePoints(teamId));
+            scoreBean.setTotalPoints(teamId, score.totalPoints(teamId));
+            scoreBean.setTurnPoints(teamId, score.turnPoints(teamId));
+        }
     }
 
     @Override public void setWinningTeam(TeamId winningTeam) {
-
+        scoreBean.setWinningTeam(winningTeam);
     }
 }
