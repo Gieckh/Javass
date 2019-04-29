@@ -1,32 +1,24 @@
 package ch.epfl.javass.gui;
 
-import java.util.Collections;
+import static javafx.beans.binding.Bindings.valueAt;
+import static javafx.collections.FXCollections.observableMap;
+import static javafx.collections.FXCollections.unmodifiableObservableMap;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.sun.javafx.collections.UnmodifiableObservableMap;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
-import ch.epfl.javass.jass.PackedCard;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
-import static javafx.beans.binding.Bindings.valueAt;
 import javafx.beans.binding.StringExpression;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableMap;
-import static javafx.collections.FXCollections.observableMap;
-import static javafx.collections.FXCollections.unmodifiableObservableMap;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -67,8 +59,8 @@ public class GraphicalPlayer {
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
         
-        BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
-        BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
+//        BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
+//        BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
         this.mainPane = new BorderPane(trickPane, scorePane , new GridPane(),new GridPane(), new GridPane());
 //        StackPane s = new StackPane(mainPane , victoryPaneForTeam1,victoryPaneForTeam2);
 //        
@@ -124,13 +116,14 @@ public class GraphicalPlayer {
     }
 
     private GridPane createScorePane() {
+        
         Text namesOfTeam1 = new Text(playerNames.get(PlayerId.PLAYER_1).toString()
             +" et "+
             playerNames.get(PlayerId.PLAYER_3).toString() + " : ");
-        
         Text namesOfTeam2 = new Text(playerNames.get(PlayerId.PLAYER_2).toString()
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString()+ " : ");
+        
         Text totalString = new Text("/Total : ");
         Text totalStringBis = new Text("/Total : ");
         
@@ -139,7 +132,6 @@ public class GraphicalPlayer {
         
         SimpleStringProperty trickOf1 = new SimpleStringProperty();
         score.turnPointsProperty(TeamId.TEAM_1).addListener((object, old, New ) ->  trickOf1.set( " ( + "+ Math.max(0, New.intValue()-old.intValue())+" ) " ));
-        
         SimpleStringProperty trickOf2 = new SimpleStringProperty();
         score.turnPointsProperty(TeamId.TEAM_2).addListener((object, old, New ) ->  trickOf2.set( " ( + "+ Math.max(0, New.intValue()-old.intValue())+" ) " ));
         
@@ -160,17 +152,14 @@ public class GraphicalPlayer {
         GridPane grid = new GridPane();
         
         grid.addRow(0,namesOfTeam1  , turnPointsOfTeam1 , trickPointsOfTeam1,totalString , gamePointsOfTeam1);
-
-        
         grid.addRow(1,namesOfTeam2 , turnPointsOfTeam2  , trickPointsOfTeam2 ,totalStringBis , gamePointsOfTeam2);
-
         grid.setStyle("-fx-font: 16 Optima;\n" + 
                     "-fx-background-color: lightgray;\n" + 
                     "-fx-padding: 5px;\n" + 
                     "-fx-alignment: center;"); 
-        
         return grid;
     }
+    
     private GridPane createTrickPane() {
         
         StackPane stackpane = new StackPane(new Rectangle(120, 180));
@@ -191,28 +180,29 @@ public class GraphicalPlayer {
         Text textForCouple2 = new Text();
         Text textForCouple3 = new Text();
         Text textForCouple4 = new Text();
+        
         textForCouple1.textProperty().set(playerNames.get(playerIdForCouple1));
         textForCouple2.textProperty().set(playerNames.get(playerIdForCouple2));
         textForCouple3.textProperty().set(playerNames.get(playerIdForCouple3));
         textForCouple4.textProperty().set(playerNames.get(playerIdForCouple4));
 
-        
         textForCouple1.setStyle("-fx-font: 14 Optima;");      
         textForCouple2.setStyle("-fx-font: 14 Optima;");      
         textForCouple3.setStyle("-fx-font: 14 Optima;");      
         textForCouple4.setStyle("-fx-font: 14 Optima;");
         
-        
         ImageView imageForCouple1 = new ImageView();
         ImageView imageForCouple2 = new ImageView();
         ImageView imageForCouple3 = new ImageView();
         ImageView imageForCouple4 = new ImageView();
-        
+        ImageView ImageTrump = new ImageView();
+
         imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple1)));
         imageForCouple2.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple2)));
         imageForCouple3.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple3)));
         imageForCouple4.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple4)));
-        
+        ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
+
         imageForCouple1.setFitHeight(180);
         imageForCouple1.setFitWidth(120);
         imageForCouple2.setFitHeight(180);
@@ -221,29 +211,24 @@ public class GraphicalPlayer {
         imageForCouple3.setFitWidth(120);
         imageForCouple4.setFitHeight(180);
         imageForCouple4.setFitWidth(120);
+        ImageTrump.setFitHeight(101);   
+        ImageTrump.setFitWidth(101);
         
         VBox couple1 = new VBox(textForCouple1,imageForCouple1);
         VBox couple2 = new VBox(textForCouple2,imageForCouple2);
         VBox couple3 = new VBox(imageForCouple3, textForCouple3);
         VBox couple4 = new VBox(textForCouple4,imageForCouple4);
+        VBox trump = new VBox(ImageTrump);
         
         couple1.setAlignment(Pos.TOP_CENTER);
         couple2.setAlignment(Pos.TOP_CENTER);
         couple3.setAlignment(Pos.TOP_CENTER);
         couple4.setAlignment(Pos.TOP_CENTER);
-
-        
-        ImageView ImageTrump = new ImageView();
-        ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
-        ImageTrump.setFitHeight(101);
-        ImageTrump.setFitWidth(101);
-        VBox trump = new VBox(ImageTrump);
         trump.setAlignment(Pos.CENTER);
         
         GridPane grid = new GridPane();
         grid.add(couple2, 0, 1, 1, 1);
         grid.add(couple4, 2, 1, 1, 1);
-       // grid.addColumn(1, couple1,ImageTrump, couple3);
         grid.add(couple1, 1,0,1,1);
         grid.add(trump, 1,1,1,1);
         grid.add(couple3, 1,2,1,1);
@@ -256,6 +241,7 @@ public class GraphicalPlayer {
         
         return grid;
     }
+    
     private BorderPane createVictoryPanes(TeamId winningTeam) {
         
         BorderPane border = new BorderPane();
