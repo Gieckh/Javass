@@ -23,47 +23,27 @@ public class NetJassGame {
         //works for any seed //TODO: suppr
         Player player;
         for (PlayerId pId: PlayerId.ALL) {
-            if(pId == PlayerId.PLAYER_1) {
-                //128.179.142.70
-                try {
+            try {
+                if (pId == PlayerId.PLAYER_1) {
+                    //128.179.142.70
                     player = new RemotePlayerClient("localhost", Net.PORT_NUMBER);
-                } catch (IOException e) {
-                    // TODO: why not throw unchecked ?
-                    e.printStackTrace();
-                }
-            }
-
-            else if(pId == PlayerId.PLAYER_2) {
-                try {
+                } else if (pId == PlayerId.PLAYER_2) {
                     //128.179.142.70
                     player = new RemotePlayerClient("128.179.137.194", Net.PORT_NUMBER);
-                                      
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-            }
-
-            else if(pId == PlayerId.PLAYER_3) {
-                try {
+                } else if (pId == PlayerId.PLAYER_3) {
                     //128.179.142.70
                     player = new RemotePlayerClient("128.179.190.46", Net.PORT_NUMBER);
-                                      
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
+                } else {
+                    //128.179.142.70
+                    player = new RemotePlayerClient("128.179.144.133", Net.PORT_NUMBER);
                 }
             }
 
-            else {
-                try {
-                    //128.179.142.70
-                    player = new RemotePlayerClient("128.179.144.133", Net.PORT_NUMBER);
-                                      
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
+            catch (IOException e) {
+                throw new UncheckedIOException(e);
             }
-            //TODO: player not initialized ?
-            players.put(pId, player); //TODO: uncomment
+
+            players.put(pId, player);
             playerNames.put(pId, pId.name());
         }
 
