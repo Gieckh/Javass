@@ -126,11 +126,11 @@ public class GraphicalPlayer {
     private GridPane createScorePane() {
         Text namesOfTeam1 = new Text(playerNames.get(PlayerId.PLAYER_1).toString()
             +" et "+
-            playerNames.get(PlayerId.PLAYER_3).toString());
+            playerNames.get(PlayerId.PLAYER_3).toString() + " : ");
         
         Text namesOfTeam2 = new Text(playerNames.get(PlayerId.PLAYER_2).toString()
                 +" et "+
-                playerNames.get(PlayerId.PLAYER_4).toString());
+                playerNames.get(PlayerId.PLAYER_4).toString()+ " : ");
         Text totalString = new Text("/Total : ");
         Text totalStringBis = new Text("/Total : ");
         
@@ -140,29 +140,29 @@ public class GraphicalPlayer {
         SimpleStringProperty trickOf1 = new SimpleStringProperty();
         score.turnPointsProperty(TeamId.TEAM_1).addListener((object, old, New ) ->  trickOf1.set( " ( + "+ Math.max(0, New.intValue()-old.intValue())+" ) " ));
         
+        SimpleStringProperty trickOf2 = new SimpleStringProperty();
+        score.turnPointsProperty(TeamId.TEAM_2).addListener((object, old, New ) ->  trickOf2.set( " ( + "+ Math.max(0, New.intValue()-old.intValue())+" ) " ));
+        
         Text gamePointsOfTeam1 = new Text();
         gamePointsOfTeam1.textProperty().bind(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)));
-        
         Text turnPointsOfTeam1 = new Text();
         turnPointsOfTeam1.textProperty().bind(Bindings.convert(turnPointsT1));
-
-        
         Text trickPointsOfTeam1 = new Text();        
-        
         trickPointsOfTeam1.textProperty().bind(  trickOf1);
         
-        Text gamePointsOfTeam2 = new Text(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)).get());
+        Text gamePointsOfTeam2 = new Text();
+        gamePointsOfTeam2.textProperty().bind(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_2)));
+        Text turnPointsOfTeam2 = new Text();
+        turnPointsOfTeam2.textProperty().bind(Bindings.convert(turnPointsT2));
+        Text trickPointsOfTeam2 = new Text();        
+        trickPointsOfTeam2.textProperty().bind(  trickOf2);
         
-        Text turnPointsOfTeam2 = new Text(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_2)).get());
-        
-        Text trickPointsOfTeam2 = new Text( " ( + " +" ) " );
-
         GridPane grid = new GridPane();
         
-        grid.addRow(0,namesOfTeam1 , trickPointsOfTeam1 , turnPointsOfTeam1,totalString , gamePointsOfTeam1);
+        grid.addRow(0,namesOfTeam1  , turnPointsOfTeam1 , trickPointsOfTeam1,totalString , gamePointsOfTeam1);
 
         
-        grid.addRow(1,namesOfTeam2 , trickPointsOfTeam2 , turnPointsOfTeam2,totalStringBis , gamePointsOfTeam2);
+        grid.addRow(1,namesOfTeam2 , turnPointsOfTeam2  , trickPointsOfTeam2 ,totalStringBis , gamePointsOfTeam2);
 
         grid.setStyle("-fx-font: 16 Optima;\n" + 
                     "-fx-background-color: lightgray;\n" + 
@@ -223,7 +223,7 @@ public class GraphicalPlayer {
         
         VBox couple1 = new VBox(textForCouple1,imageForCouple1);
         VBox couple2 = new VBox(textForCouple2,imageForCouple2);
-        VBox couple3 = new VBox(textForCouple3,imageForCouple3);
+        VBox couple3 = new VBox(imageForCouple3, textForCouple3);
         VBox couple4 = new VBox(textForCouple4,imageForCouple4);
         
         ImageView ImageTrump = new ImageView();
