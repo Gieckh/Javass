@@ -52,6 +52,7 @@ public final class ScoreBean {
      * @return the turnPoints property of the chosen team
      */
     public ReadOnlyIntegerProperty turnPointsProperty(TeamId team) {
+        System.out.println("ca derait");
         return (team == TeamId.TEAM_1) ? turnPointsT1: turnPointsT2;
     }
     
@@ -95,9 +96,9 @@ public final class ScoreBean {
      */
     public void setTurnPoints(TeamId team, int newTurnPoints) {
         if (team == TeamId.TEAM_1)
-            turnPointsT1 = new SimpleIntegerProperty(newTurnPoints);
+            turnPointsT1.set(newTurnPoints);
         else
-            turnPointsT2 = new SimpleIntegerProperty(newTurnPoints);
+            turnPointsT2.set(newTurnPoints);
     }
     
     /**
@@ -109,9 +110,9 @@ public final class ScoreBean {
      */
     public void setGamePoints(TeamId team, int newGamePoints) {
         if (team == TeamId.TEAM_1)
-            gamePointsT1 = new SimpleIntegerProperty(newGamePoints);
+            gamePointsT1.set(newGamePoints);
         else
-            gamePointsT2 = new SimpleIntegerProperty(newGamePoints);
+            gamePointsT2.set(newGamePoints);
     }
     
     /**
@@ -123,9 +124,9 @@ public final class ScoreBean {
      */
     public void setTotalPoints(TeamId team, int newTotalPoints) {
         if (team == TeamId.TEAM_1)
-            totalPointsT1 = new SimpleIntegerProperty(newTotalPoints);
+            totalPointsT1.set(newTotalPoints);
         else
-            totalPointsT2 = new SimpleIntegerProperty(newTotalPoints);
+            totalPointsT2.set(newTotalPoints);
     }
     
     
@@ -136,6 +137,6 @@ public final class ScoreBean {
      * @param team the TeamId of the winning team
      */
     public void setWinningTeam(TeamId team) {
-            winningTeam = new SimpleObjectProperty<>(team);
+            winningTeam.set(team);
     }
 }
