@@ -181,11 +181,12 @@ public class GraphicalPlayer {
         
         StackPane stackpane = new StackPane(new Rectangle(120, 180));
         stackpane.setStyle("-fx-arc-width: 20;\n" + 
-                "-fx-arc-height: 20;\n" + 
-                "-fx-fill: transparent;\n" + 
-                "-fx-stroke: lightpink;\n" + 
-                "-fx-stroke-width: 5;\n" + 
-                "-fx-opacity: 0.5;");
+                           "-fx-arc-height: 20;\n" +
+                           "-fx-fill: transparent;\n" +
+                           "-fx-stroke: lightpink;\n" +
+                           "-fx-stroke-width: 5;\n" +
+                           "-fx-opacity: 0.5;"
+                          );
         stackpane.setEffect(new GaussianBlur(4));
         
         PlayerId playerIdForCouple1 = PlayerId.ALL.get((thisId.ordinal()+2)%4);
@@ -226,10 +227,9 @@ public class GraphicalPlayer {
         VBox couple2 = new VBox(textForCouple1,imageForCouple2);
         VBox couple3 = new VBox(textForCouple1,imageForCouple3);
         VBox couple4 = new VBox(textForCouple1,imageForCouple4);
-        
-        @SuppressWarnings("unlikely-arg-type")
+
         ImageView ImageTrump = new ImageView();
-        ImageTrump.imageProperty().bind(Bindings.valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
+        ImageTrump.imageProperty().bind(Bindings.valueAt(GraphicalPlayer.trumpImage, trick.trumpProperty()));
         ImageTrump.setFitHeight(101);
         ImageTrump.setFitWidth(101);
         
@@ -241,11 +241,12 @@ public class GraphicalPlayer {
 //        grid.add(ImageTrump, 1,1,1,1);
 //        grid.add(couple3, 1,2,1,1);
         grid.setStyle("-fx-background-color: whitesmoke;\n" + 
-                "-fx-padding: 5px;\n" + 
-                "-fx-border-width: 3px 0px;\n" + 
-                "-fx-border-style: solid;\n" + 
-                "-fx-border-color: gray;\n" + 
-                "-fx-alignment: center;");
+                      "-fx-padding: 5px;\n" +
+                      "-fx-border-width: 3px 0px;\n" +
+                      "-fx-border-style: solid;\n" +
+                      "-fx-border-color: gray;\n" +
+                      "-fx-alignment: center;"
+                     );
         
         return grid;
     }
@@ -274,7 +275,7 @@ public class GraphicalPlayer {
         BorderPane.setAlignment(finalString, Pos.CENTER);
         
         border.setStyle("-fx-font: 16 Optima;\n" + 
-                "-fx-background-color: white;");
+                        "-fx-background-color: white;");
         
         return border;
     }
