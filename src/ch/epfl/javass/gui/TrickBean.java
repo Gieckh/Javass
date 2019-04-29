@@ -74,7 +74,7 @@ public final class TrickBean {
      * @param pId the PlayerId of the winning player
     */
     private void setWinningPlayer(PlayerId pId) {
-            winningPlayer = new SimpleObjectProperty<>(pId);
+            winningPlayer.set(pId);
     }
         
     /**
@@ -83,7 +83,7 @@ public final class TrickBean {
      * @param trump the color of the trump
     */
     public void setTrump(Color trump) {
-        this.trump = new SimpleObjectProperty<>(trump);
+        this.trump.set(trump);
     }
     
     /**
@@ -105,6 +105,7 @@ public final class TrickBean {
         }
 
         assert (thisTrick.size() == 4);
-        trick = new UnmodifiableObservableMap<>(thisTrick);
+        this.trick.clear();
+        this.trick.putAll(thisTrick);
     }
 }
