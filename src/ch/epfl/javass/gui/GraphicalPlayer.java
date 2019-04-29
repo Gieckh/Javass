@@ -171,9 +171,9 @@ public class GraphicalPlayer {
         grid.addRow(1,namesOfTeam2 , trickPointsOfTeam2 , turnPointsOfTeam2,totalStringBis , gamePointsOfTeam2);
 
         grid.setStyle("-fx-font: 16 Optima;\n" + 
-                    "-fx-background-color: lightgray;\n" + 
-                    "-fx-padding: 5px;\n" + 
-                    "-fx-alignment: center;"); 
+                      "-fx-background-color: lightgray;\n" +
+                      "-fx-padding: 5px;\n" +
+                      "-fx-alignment: center;");
         
         return grid;
     }
