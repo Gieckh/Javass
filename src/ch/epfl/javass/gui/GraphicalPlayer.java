@@ -227,9 +227,8 @@ public class GraphicalPlayer {
         VBox couple3 = new VBox(textForCouple1,imageForCouple3);
         VBox couple4 = new VBox(textForCouple1,imageForCouple4);
         
-        @SuppressWarnings("unlikely-arg-type")
         ImageView ImageTrump = new ImageView();
-        ImageTrump.imageProperty().bind(Bindings.valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
+        ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
         ImageTrump.setFitHeight(101);
         ImageTrump.setFitWidth(101);
         
