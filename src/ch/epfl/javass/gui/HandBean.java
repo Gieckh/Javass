@@ -65,20 +65,23 @@ public final class HandBean {
      * @param newHand the new CardSet
      */
     public void setHand(CardSet newHand) {
-        ObservableList<Card> hand = observableArrayList();
         if(newHand.size() == 9) {
+            hand.clear();
             for(int i = 0 ; i < 9 ; ++i) {
-                System.out.println( "null replaced by " + newHand.get(i));
+                System.out.println( "[null] replaced by [" + newHand.get(i) + "]"); //TODO ?
                 hand.add(newHand.get(i));
             }
-            this.hand.clear();
-            this.hand.addAll(hand);
-        } else {
+        }
+
+        else { //newHand.size() < 9
+            assert (newHand.size() < 9);
+            //TODO: newHand is included in current hand right ?
+
             for(int i = 0 ; i < 9 ; ++i) {
-                Card cardToReplace = this.hand.get(i);
+                Card cardToReplace = hand.get(i);
                 if ( (cardToReplace != null)  &&  !newHand.contains(cardToReplace) ) {
-                    System.out.println( this.hand.get(i) + " replaced by null" );
-                    this.hand.set(i, null);
+                    System.out.println("[" + hand.get(i) + "] replaced by [null]" );
+                    hand.set(i, null);
                 }
             }
        }
