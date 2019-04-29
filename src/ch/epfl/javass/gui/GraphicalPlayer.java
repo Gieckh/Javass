@@ -187,10 +187,15 @@ public class GraphicalPlayer {
         PlayerId playerIdForCouple3 = thisId;
         PlayerId playerIdForCouple4 = PlayerId.ALL.get((thisId.ordinal()+1)%4);
         
-        Text textForCouple1 = new Text(playerNames.get(playerIdForCouple1.toString()));
-        Text textForCouple2 = new Text(playerNames.get(playerIdForCouple2.toString()));
-        Text textForCouple3 = new Text(playerNames.get(playerIdForCouple3.toString()));        
-        Text textForCouple4 = new Text(playerNames.get(playerIdForCouple4.toString()));
+        Text textForCouple1 = new Text();
+        Text textForCouple2 = new Text();
+        Text textForCouple3 = new Text();
+        Text textForCouple4 = new Text();
+        textForCouple1.textProperty().set(playerNames.get(playerIdForCouple1));
+        textForCouple2.textProperty().set(playerNames.get(playerIdForCouple2));
+        textForCouple3.textProperty().set(playerNames.get(playerIdForCouple3));
+        textForCouple4.textProperty().set(playerNames.get(playerIdForCouple4));
+
         
         textForCouple1.setStyle("-fx-font: 14 Optima;");      
         textForCouple2.setStyle("-fx-font: 14 Optima;");      
