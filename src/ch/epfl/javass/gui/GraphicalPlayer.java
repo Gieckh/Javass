@@ -136,19 +136,6 @@ public class GraphicalPlayer {
         
         ReadOnlyIntegerProperty turnPointsT1 = score.turnPointsProperty(TeamId.TEAM_1);
         ReadOnlyIntegerProperty turnPointsT2 = score.turnPointsProperty(TeamId.TEAM_2);
-        IntegerProperty TrickPoints1=  new SimpleIntegerProperty(0);
-        IntegerProperty temp1 = new SimpleIntegerProperty(0);
-        IntegerProperty TrickPoints2=new SimpleIntegerProperty(0);
-        IntegerProperty temp2 = new SimpleIntegerProperty(0);
-        if(temp1.get()!=turnPointsT1.get()) {
-            TrickPoints1 = new SimpleIntegerProperty(Math.max(0, turnPointsT1.get()-temp1.get()));
-            temp1 = new SimpleIntegerProperty(turnPointsT1.get());
-        }
-        if(temp2.get()!=turnPointsT2.get()) {
-            TrickPoints2 = new SimpleIntegerProperty(Math.max(0, turnPointsT2.get()-temp2.get()));
-            temp2 = new SimpleIntegerProperty(turnPointsT2.get());
-        }
-
         
         SimpleStringProperty trickOf1 = new SimpleStringProperty();
         score.turnPointsProperty(TeamId.TEAM_1).addListener((object, old, New ) ->  trickOf1.set( " ( + "+ Math.max(0, New.intValue()-old.intValue())+" ) " ));
@@ -157,18 +144,18 @@ public class GraphicalPlayer {
         gamePointsOfTeam1.textProperty().bind(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)));
         
         Text turnPointsOfTeam1 = new Text();
-        turnPointsOfTeam1.textProperty().bind(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_1)));
+        turnPointsOfTeam1.textProperty().bind(Bindings.convert(turnPointsT1));
 
         
         Text trickPointsOfTeam1 = new Text();        
         
         trickPointsOfTeam1.textProperty().bind(  trickOf1);
         
-        Text gamePointsOfTeam2 = new Text(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_2)).get());
+        Text gamePointsOfTeam2 = new Text(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)).get());
         
         Text turnPointsOfTeam2 = new Text(Bindings.convert(score.turnPointsProperty(TeamId.TEAM_2)).get());
         
-        Text trickPointsOfTeam2 = new Text( " ( + " + Bindings.convert(TrickPoints2).get() + " ) " );
+        Text trickPointsOfTeam2 = new Text( " ( + " +" ) " );
 
         GridPane grid = new GridPane();
         
