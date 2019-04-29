@@ -1,17 +1,14 @@
 package ch.epfl.javass.gui;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.sun.javafx.collections.UnmodifiableObservableMap;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
-import ch.epfl.javass.jass.PackedCard;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
+
 import javafx.beans.binding.Bindings;
 import static javafx.beans.binding.Bindings.valueAt;
 import javafx.beans.binding.StringExpression;
@@ -21,9 +18,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableMap;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.effect.GaussianBlur;
@@ -46,9 +41,9 @@ public class GraphicalPlayer {
     private Map<PlayerId, String> playerNames;
     private ScoreBean score;
     private TrickBean trick; 
-    private static ObservableMap<Card,Image> cardImpage240 = GraphicalPlayer.cardImage240();
-    private static Map<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
-    private static Map<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
+    private static ObservableMap<Card,Image> cardImage240 = cardImage240();
+    private static Map<Card,Image> cardImage160 = cardImage160();
+    private static Map<Color,Image> trumpImage = trumpImage();
     public BorderPane mainPane;
 
 
@@ -177,6 +172,7 @@ public class GraphicalPlayer {
         
         return grid;
     }
+
     private GridPane createTrickPane() {
         
         StackPane stackpane = new StackPane(new Rectangle(120, 180));
@@ -209,10 +205,10 @@ public class GraphicalPlayer {
         ImageView imageForCouple3 = new ImageView();
         ImageView imageForCouple4 = new ImageView();
         
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple1)));
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple2)));
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple3)));
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple4)));
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImage240,valueAt(trick.trick(), playerIdForCouple1)));
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImage240,valueAt(trick.trick(), playerIdForCouple2)));
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImage240,valueAt(trick.trick(), playerIdForCouple3)));
+        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImage240,valueAt(trick.trick(), playerIdForCouple4)));
         
         imageForCouple1.setFitHeight(180);
         imageForCouple1.setFitWidth(120);
@@ -250,6 +246,7 @@ public class GraphicalPlayer {
         
         return grid;
     }
+
     private BorderPane createVictoryPanes(TeamId winningTeam) {
         
         BorderPane border = new BorderPane();
