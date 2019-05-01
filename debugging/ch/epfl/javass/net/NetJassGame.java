@@ -29,13 +29,13 @@ public class NetJassGame {
                     player = new RemotePlayerClient("localhost", Net.PORT_NUMBER);
                 } else if (pId == PlayerId.PLAYER_2) {
                     //128.179.142.70
-                    player = new RemotePlayerClient("128.179.137.194", Net.PORT_NUMBER);
+                    player = new MctsPlayer(PlayerId.PLAYER_2, 2019, 100);
                 } else if (pId == PlayerId.PLAYER_3) {
                     //128.179.142.70
-                    player = new RemotePlayerClient("128.179.190.46", Net.PORT_NUMBER);
+                    player = new MctsPlayer(PlayerId.PLAYER_3, 2019, 100);
                 } else {
                     //128.179.142.70
-                    player = new RemotePlayerClient("128.179.144.133", Net.PORT_NUMBER);
+                    player = new MctsPlayer(PlayerId.PLAYER_4, 2019, 100);
                 }
             }
 
