@@ -40,12 +40,13 @@ public class GraphicalPlayerAdapter implements Player {
 
     @Override public void setPlayers(PlayerId ownId,
             Map<PlayerId, String> playerNames) {
-        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean);
+        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean, this.queueOfCommunication);
         runLater(() -> { graphicalPlayer.createStage().show(); });
     
     }
 
     @Override public void updateHand(CardSet newHand) {
+        System.out.println("herer");
         runLater(() -> {handBean.setHand(newHand);});
     }
 

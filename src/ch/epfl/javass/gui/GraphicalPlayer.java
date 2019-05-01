@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
@@ -24,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -47,6 +50,7 @@ public class GraphicalPlayer {
     private static ObservableMap<Card,Image> cardImpage240 = GraphicalPlayer.cardImage240();
     private static ObservableMap<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
     private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
+    private ArrayBlockingQueue<Card> queueOfCommunication;
     public BorderPane mainPane;
 
 
@@ -56,13 +60,14 @@ public class GraphicalPlayer {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames, 
-            ScoreBean score, TrickBean trick, HandBean handBean) {
+    public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
+            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication ) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
         this.score = score; 
         this.trick =trick;
         this.handBean = handBean;
+        this.queueOfCommunication = queueOfCommunication;
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
         HBox handPane = createHandPane();
@@ -283,18 +288,23 @@ public class GraphicalPlayer {
     private HBox createHandPane() {
         
         ImageView nineChildrens[] = new ImageView[9];
-        for(int i = 0 ; i < 9 ; ++i) {
+        for(int i = 0 ; i < handBean.hand().size() ; ++i) {
             ImageView children = new ImageView();
-            children.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage160,handBean.hand().get(i)));
+            Card card = handBean.hand().get(i);
+            children.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage160,card));
+            children.setOnMouseClicked((e)-> {
+                try {
+                    queueOfCommunication.put(card);
+                } catch (InterruptedException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+            
             children.setFitHeight(120);
             children.setFitHeight(80);
             nineChildrens[i] = children;
         }
-        
-
-        
-        
-        
         HBox handPane = new HBox(nineChildrens);
         handPane.setStyle("-fx-background-color: lightgray;\n" + 
                 "-fx-spacing: 5px;\n" + 

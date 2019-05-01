@@ -52,7 +52,6 @@ public final class ScoreBean {
      * @return the turnPoints property of the chosen team
      */
     public ReadOnlyIntegerProperty turnPointsProperty(TeamId team) {
-        System.out.println("ca derait");
         return (team == TeamId.TEAM_1) ? turnPointsT1: turnPointsT2;
     }
     
