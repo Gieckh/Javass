@@ -46,26 +46,27 @@ public class GraphicalPlayerAdapter implements Player {
     }
 
     @Override public void updateHand(CardSet newHand) {
-        handBean.setHand(newHand);
+        runLater(() -> {handBean.setHand(newHand);});
     }
 
     @Override public void setTrump(Card.Color trump) {
-        trickBean.setTrump(trump);
+        runLater(()-> {trickBean.setTrump(trump);});
     }
 
     @Override public void updateTrick(Trick newTrick) {
-        trickBean.setTrick(newTrick);
+        runLater(()-> {trickBean.setTrick(newTrick);});
     }
 
     @Override public void updateScore(Score score) {
-        for(TeamId teamId :TeamId.ALL ) {
+        runLater(()-> {for(TeamId teamId :TeamId.ALL ) {
             scoreBean.setGamePoints(teamId, score.gamePoints(teamId));
             scoreBean.setTotalPoints(teamId, score.totalPoints(teamId));
             scoreBean.setTurnPoints(teamId, score.turnPoints(teamId));
-        }
+            }
+        });
     }
 
     @Override public void setWinningTeam(TeamId winningTeam) {
-        scoreBean.setWinningTeam(winningTeam);
+        runLater(()-> {scoreBean.setWinningTeam(winningTeam);});
     }
 }
