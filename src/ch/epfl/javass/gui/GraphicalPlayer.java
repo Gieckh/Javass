@@ -17,6 +17,7 @@ import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -288,13 +289,13 @@ public class GraphicalPlayer {
     private HBox createHandPane() {
         
         ImageView nineChildrens[] = new ImageView[9];
-        for(int i = 0 ; i < handBean.hand().size() ; ++i) {
+        for(int i = 0 ; i < 9 ; ++i) {
             ImageView children = new ImageView();
-            Card card = handBean.hand().get(i);
-            children.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage160,card));
+            ObjectBinding<Card> coucou = valueAt( handBean.hand(), i);
+            children.imageProperty().bind(valueAt(cardImpage160, coucou));
             children.setOnMouseClicked((e)-> {
                 try {
-                    queueOfCommunication.put(card);
+                    queueOfCommunication.put(coucou.get());
                 } catch (InterruptedException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -302,7 +303,7 @@ public class GraphicalPlayer {
             });
             
             children.setFitHeight(120);
-            children.setFitHeight(80);
+            children.setFitWidth(80);
             nineChildrens[i] = children;
         }
         HBox handPane = new HBox(nineChildrens);
