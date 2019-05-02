@@ -10,6 +10,7 @@ import ch.epfl.javass.jass.CardSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
+//TODO https://piazza.com/class/jrhvyjm5czn4f?cid=346 ?
 /**
  * HandBean is a JavaFx bean containing the hand and playableCards properties.
  *
