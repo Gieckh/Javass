@@ -34,6 +34,7 @@ public class GraphicalPlayerAdapter implements Player {
 
 // remplacer par take?
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
+        System.out.println("he");
         return queueOfCommunication.poll();
         
     }

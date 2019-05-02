@@ -84,7 +84,6 @@ public class GraphicalPlayer {
         
     }
     
-    
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
@@ -92,8 +91,7 @@ public class GraphicalPlayer {
     public Stage createStage() {
         Stage stage = new Stage();
         stage.setTitle("Javass - "+playerNames.get(thisId).toString() );
-        Scene scene = new Scene(mainPane);
-        stage.setScene(scene);
+        stage.setScene(new Scene(mainPane));
         return stage;
     }
     
@@ -295,6 +293,7 @@ public class GraphicalPlayer {
             children.imageProperty().bind(valueAt(cardImpage160, coucou));
             children.setOnMouseClicked((e)-> {
                 try {
+                    System.out.println("clicked");
                     queueOfCommunication.put(coucou.get());
                 } catch (InterruptedException e1) {
                     // TODO Auto-generated catch block
