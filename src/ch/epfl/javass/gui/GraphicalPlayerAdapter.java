@@ -6,6 +6,14 @@ import static javafx.application.Platform.runLater;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
+/**
+ * @Brief This class extends PlaGraphicalPlayerAdapter 
+ *
+ *@see Player
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class GraphicalPlayerAdapter implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -32,10 +40,17 @@ public class GraphicalPlayerAdapter implements Player {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-// remplacer par take?
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
         System.out.println("he");
-        return queueOfCommunication.poll();
+        try {
+            handBean.setPlayableCards(state.trick().playableCards(hand));
+            Card card = queueOfCommunication.take();
+            handBean.setPlayableCards(CardSet.EMPTY);
+            return card;
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            throw new Error();
+        }
         
     }
 
@@ -47,7 +62,6 @@ public class GraphicalPlayerAdapter implements Player {
     }
 
     @Override public void updateHand(CardSet newHand) {
-        System.out.println("herer");
         runLater(() -> {handBean.setHand(newHand);});
     }
 
@@ -56,7 +70,8 @@ public class GraphicalPlayerAdapter implements Player {
     }
 
     @Override public void updateTrick(Trick newTrick) {
-        runLater(()-> {trickBean.setTrick(newTrick);});
+        runLater(()-> {System.out.println(newTrick.toString());
+            trickBean.setTrick(newTrick);});
     }
 
     @Override public void updateScore(Score score) {

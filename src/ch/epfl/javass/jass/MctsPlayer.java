@@ -190,7 +190,6 @@ public class MctsPlayer implements Player {
             copyHand = copyHand.remove(randomCardToPlay);
             copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
         }
-
         return copyState.score();
     }
 

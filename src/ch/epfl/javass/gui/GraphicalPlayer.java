@@ -3,7 +3,8 @@ package ch.epfl.javass.gui;
 import static javafx.beans.binding.Bindings.valueAt;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
-
+import static javafx.beans.binding.Bindings.createBooleanBinding;
+import static javafx.beans.binding.Bindings.when;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +18,11 @@ import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.binding.When;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableMap;
@@ -289,12 +293,20 @@ public class GraphicalPlayer {
         ImageView nineChildrens[] = new ImageView[9];
         for(int i = 0 ; i < 9 ; ++i) {
             ImageView children = new ImageView();
-            ObjectBinding<Card> coucou = valueAt( handBean.hand(), i);
-            children.imageProperty().bind(valueAt(cardImpage160, coucou));
+            ObjectBinding<Card> correspondingCard = valueAt( handBean.hand(), i);
+            if(correspondingCard.get()==null) {
+                System.out.println("is null");
+
+            }
+            children.imageProperty().bind(valueAt(cardImpage160, correspondingCard));
+            BooleanBinding isPlayable =  createBooleanBinding( () -> handBean.playableCards().contains(correspondingCard.get()),handBean.playableCards(),handBean.hand());
+            isPlayable.addListener((o , oV, nV)-> System.out.println("coucoucoucou"));
+            children.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
+            children.disableProperty().bind(isPlayable.not());
             children.setOnMouseClicked((e)-> {
                 try {
                     System.out.println("clicked");
-                    queueOfCommunication.put(coucou.get());
+                    queueOfCommunication.put(correspondingCard.get());
                 } catch (InterruptedException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();

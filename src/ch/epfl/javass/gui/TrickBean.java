@@ -92,7 +92,8 @@ public final class TrickBean {
      * @param newTrick a Trick
     */
     public void setTrick(Trick newTrick) {
-        PlayerId winnerId = newTrick.winningPlayer();
+        PlayerId winnerId;
+        winnerId = newTrick.isEmpty() ? null : newTrick.winningPlayer() ;
         setWinningPlayer(winnerId);
         ObservableMap<PlayerId,Card> thisTrick = observableHashMap();
 
