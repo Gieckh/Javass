@@ -6,6 +6,14 @@ import static javafx.application.Platform.runLater;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
+/**
+ * @Brief This class extends PlaGraphicalPlayerAdapter 
+ *
+ *@see Player
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class GraphicalPlayerAdapter implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/

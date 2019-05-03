@@ -52,7 +52,7 @@ public final class PacedPlayer implements Player{
         if (timeElapsed < minTime) {
             try {
                 Thread.sleep((long) minTime - timeElapsed);
-            } catch (InterruptedException e) { /* ignore */ }
+            } catch (InterruptedException e) { throw new Error(); }
         }
         
         return cardToPlay;
