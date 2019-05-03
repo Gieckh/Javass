@@ -42,6 +42,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sun.text.normalizer.CharTrie.FriendAgent;
 
+/**
+ * GraphicalPlayer is class creating a JavaFx Stage which is the graphical interface of a complete
+ * jass virtual game. It is being adapted by graphicalPlayerAdapter to represent a player. 
+ * 
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class GraphicalPlayer {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -65,6 +73,17 @@ public class GraphicalPlayer {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
+    /**
+     * @Brief a lot of properties are shared between the graphicalPlayerAdapter and the graphicalPlayer thanks to this constructor. 
+     * The graphical Stage is created in this constructor.
+     * 
+     * @param thisId
+     * @param playerNames
+     * @param score
+     * @param trick
+     * @param handBean
+     * @param queueOfCommunication
+     */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
             TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication ) {
         this.thisId = thisId; 
@@ -92,6 +111,11 @@ public class GraphicalPlayer {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
+    /**
+     * @Brief create the javaFx stage of a graphic Jass game.
+     *
+     * @return the stage corresponding to a complete graphic Jass game.
+    */
     public Stage createStage() {
         Stage stage = new Stage();
         stage.setTitle("Javass - "+playerNames.get(thisId).toString() );
@@ -99,6 +123,10 @@ public class GraphicalPlayer {
         return stage;
     }
     
+    /**
+     * @Brief generates an observable map from Card to Image of width 160
+     *
+    */
     private static ObservableMap<Card,Image> cardImage160() {
         ObservableMap<Card,Image> map =  observableMap( new HashMap<>());
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
@@ -110,6 +138,10 @@ public class GraphicalPlayer {
         return  unmodifiableObservableMap(map);
     }
     
+    /**
+     * @Brief generates an observable map from Card to Image of width 240
+     *
+    */
     private static ObservableMap<Card,Image> cardImage240() {
         ObservableMap<Card,Image> map = observableMap(new HashMap<>()); 
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
@@ -121,6 +153,10 @@ public class GraphicalPlayer {
         return  unmodifiableObservableMap(map);
     }
     
+    /**
+     * @Brief generates an observable map from trump to Image
+     *
+     */
     private static ObservableMap<Color,Image> trumpImage() {
         ObservableMap<Color,Image> map = observableMap(new HashMap<>());
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
@@ -130,6 +166,7 @@ public class GraphicalPlayer {
         
         return  unmodifiableObservableMap(map);
     }
+
 
     private GridPane createScorePane() {
         
