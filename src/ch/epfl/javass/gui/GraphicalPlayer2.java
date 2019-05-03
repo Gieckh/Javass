@@ -1,13 +1,18 @@
 package ch.epfl.javass.gui;
 
+import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
+import ch.epfl.javass.jass.TeamId;
 import com.sun.javafx.collections.UnmodifiableObservableMap;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
@@ -36,9 +41,9 @@ public class GraphicalPlayer2 {
         GridPane trickPane = createTrickPane(trickBean);
         trickPane.setStyle("-fx-background-color: whitesmoke; -fx-padding: 5px; -fx-border-width: 3px 0px; -fx-border-style: solid; -fx-border-color: gray; -fx-alignment: center;");
 
-        BorderPane team1Pane = createTeam1Pane(scoreBean);
+        BorderPane team1Pane = createTeamPane(scoreBean, TeamId.TEAM_1);
         team1Pane.setStyle("-fx-font: 16 Optima; -fx-background-color: white;");
-        BorderPane team2Pane = createTeam2Pane(scoreBean);
+        BorderPane team2Pane = createTeamPane(scoreBean, TeamId.TEAM_2);
         team2Pane.setStyle("-fx-font: 16 Optima; -fx-background-color: white;");
 
     }
@@ -64,18 +69,14 @@ public class GraphicalPlayer2 {
     }
 
 
-    private BorderPane createTeam1Pane(ScoreBean scoreBean) {
-        //TODO
-        return null;
-    }
-
-    private BorderPane createTeam2Pane(ScoreBean scoreBean) {
+    private BorderPane createTeamPane(ScoreBean scoreBean, TeamId team) {
         //TODO
         return null;
     }
 
 
     private UnmodifiableObservableMap cards160() {
+        ObservableMap<Card, Image> observableMap = FXCollections.observableMap(new HashMap<>());
 
     }
 
