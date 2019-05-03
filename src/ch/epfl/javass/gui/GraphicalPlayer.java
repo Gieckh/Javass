@@ -64,7 +64,8 @@ public class GraphicalPlayer {
     private static ObservableMap<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
     private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
     private ArrayBlockingQueue<Card> queueOfCommunication;
-    public BorderPane mainPane;
+    private BorderPane victoryPaneForTeam[] = new BorderPane[2];
+    private StackPane finalPane;
 
 
     
@@ -95,15 +96,14 @@ public class GraphicalPlayer {
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
         HBox handPane = createHandPane();
-        
-//        BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
-//        BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
-        this.mainPane = new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
-//        StackPane s = new StackPane(mainPane , victoryPaneForTeam1,victoryPaneForTeam2);
-//        
-//        StackPane PaneInCaseTeam1Win = new StackPane(victoryPaneForTeam1);
-//        StackPane PaneInCaseTeam2Win = new StackPane(victoryPaneForTeam2);
-      //  mainPane.addEventHandler(score.winningTeamProperty().get().equals(TeamId.TEAM_1), mainPane.PaneInCaseTeam1Win);
+        for(TeamId t : TeamId.ALL) {
+             this.victoryPaneForTeam[t.ordinal()] = createVictoryPanes(t);
+             BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
+             this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
+        }
+
+        BorderPane main= new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
+        this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
         
     }
     
@@ -119,7 +119,7 @@ public class GraphicalPlayer {
     public Stage createStage() {
         Stage stage = new Stage();
         stage.setTitle("Javass - "+playerNames.get(thisId).toString() );
-        stage.setScene(new Scene(mainPane));
+        stage.setScene(new Scene(finalPane));
         return stage;
     }
     
@@ -306,19 +306,17 @@ public class GraphicalPlayer {
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString();   
                 
-              // pas certain   
-        StringExpression upDatingString = Bindings.format("-fx-font: 16 Optima;\n",
-                namesOfWinningTeam,
-                " ont gagné avec ",
-                score.totalPointsProperty(winningTeam),
-                " points contre ",
-                score.totalPointsProperty(winningTeam.other()),
-                ".");
-                
-        
-        Text finalString= new Text(upDatingString.get());
-        BorderPane.setAlignment(finalString, Pos.CENTER);
-        
+        StringExpression upDatingString = Bindings.createStringBinding(() -> namesOfWinningTeam+
+                " ont gagné avec "+
+                score.totalPointsProperty(winningTeam).get()+
+                " points contre "+
+                score.totalPointsProperty(winningTeam.other()).get()+
+                ".", score.totalPointsProperty(winningTeam),score.totalPointsProperty(winningTeam.other())); 
+                       
+        Text finalString= new Text();
+        finalString.textProperty().bind(Bindings.convert(upDatingString));
+        finalString.setStyle("-fx-font: 16 Optima;\n");
+        border.centerProperty().set(finalString);        
         border.setStyle("-fx-font: 16 Optima;\n" + 
                 "-fx-background-color: white;");
         
@@ -331,13 +329,8 @@ public class GraphicalPlayer {
         for(int i = 0 ; i < 9 ; ++i) {
             ImageView children = new ImageView();
             ObjectBinding<Card> correspondingCard = valueAt( handBean.hand(), i);
-            if(correspondingCard.get()==null) {
-                System.out.println("is null");
-
-            }
             children.imageProperty().bind(valueAt(cardImpage160, correspondingCard));
             BooleanBinding isPlayable =  createBooleanBinding( () -> handBean.playableCards().contains(correspondingCard.get()),handBean.playableCards(),handBean.hand());
-            isPlayable.addListener((o , oV, nV)-> System.out.println("coucoucoucou"));
             children.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
             children.disableProperty().bind(isPlayable.not());
             children.setOnMouseClicked((e)-> {

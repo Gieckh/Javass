@@ -57,17 +57,17 @@ public class GraphicalPlayerAdapter implements Player {
      * @see ch.epfl.javass.jass.Player#cardToPlay(ch.epfl.javass.jass.TurnState, ch.epfl.javass.jass.CardSet)
      */
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
-        System.out.println("he");
-        try {
-            handBean.setPlayableCards(state.trick().playableCards(hand));
-            Card card = queueOfCommunication.take();
-            handBean.setPlayableCards(CardSet.EMPTY);
-            return card;
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            throw new Error();
-        }
-        
+//        try {
+//            handBean.setPlayableCards(state.trick().playableCards(hand));
+//            Card card = queueOfCommunication.take();
+//            handBean.setPlayableCards(CardSet.EMPTY);
+//            return card;
+//            
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            throw new Error();
+//        }
+        return state.trick().playableCards(hand).get(0);
     }
 
     /* 
@@ -98,8 +98,7 @@ public class GraphicalPlayerAdapter implements Player {
      * @see ch.epfl.javass.jass.Player#updateTrick(ch.epfl.javass.jass.Trick)
      */
     @Override public void updateTrick(Trick newTrick) {
-        runLater(()-> {System.out.println(newTrick.toString());
-            trickBean.setTrick(newTrick);});
+        runLater(()-> {trickBean.setTrick(newTrick);});
     }
 
     /* 
