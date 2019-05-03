@@ -35,7 +35,10 @@ public class GraphicalPlayerAdapter implements Player {
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
         System.out.println("he");
         try {
-            return queueOfCommunication.take();
+            handBean.setPlayableCards(state.trick().playableCards(hand));
+            Card card = queueOfCommunication.take();
+            handBean.setPlayableCards(CardSet.EMPTY);
+            return card;
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             throw new Error();

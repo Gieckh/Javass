@@ -47,7 +47,6 @@ public class NetJassGame {
             playerNames.put(pId, pId.name());
         }
 
-        int winTeam1 = 0;
         for(int i =0; i < 100; ++i) {
             JassGame g = new JassGame(2019, players, playerNames);
 

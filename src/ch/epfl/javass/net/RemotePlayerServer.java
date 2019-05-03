@@ -85,7 +85,7 @@ public final class RemotePlayerServer {
             while((message = r.readLine()) !=  null) {
                 assert (message.length() >= 6);
                 // I decided to combine the whole line only with ',' (even the jassCommand) //TODO: change that
-//                List<String> words = new LinkedList<>(Arrays.asList(message.split("[ ,]")));
+//             List<String> words = new LinkedList<>(Arrays.asList(message.split("[ ,]")));
                 List<String> words = new LinkedList<>(Arrays.asList(
                         StringSerializer.split(message.substring(5), ',')
                     )
