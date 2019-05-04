@@ -69,7 +69,6 @@ public final class HandBean {
         if(newHand.size() == 9) {
             hand.clear();
             for(int i = 0 ; i < 9 ; ++i) {
-                System.out.println( "[null] replaced by [" + newHand.get(i) + "]"); //TODO ?
                 hand.add(newHand.get(i));
             }
         }
@@ -81,7 +80,6 @@ public final class HandBean {
             for(int i = 0 ; i < 9 ; ++i) {
                 Card cardToReplace = hand.get(i);
                 if ( (cardToReplace != null)  &&  !newHand.contains(cardToReplace) ) {
-                    System.out.println("[" + hand.get(i) + "] replaced by [null]" );
                     hand.set(i, null);
                 }
             }
@@ -101,7 +99,6 @@ public final class HandBean {
     public void setPlayableCards(CardSet newPlayableCards) {
         this.playableCards.clear();
         for(int i = 0 ; i < newPlayableCards.size() ; ++i) {
-            System.out.println( "[null] replaced by [" + newPlayableCards.get(i) + "]");
             playableCards.add(newPlayableCards.get(i));
         }
     }

@@ -42,6 +42,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sun.text.normalizer.CharTrie.FriendAgent;
 
+/**
+ * GraphicalPlayer is class creating a JavaFx Stage which is the graphical interface of a complete
+ * jass virtual game. It is being adapted by graphicalPlayerAdapter to represent a player. 
+ * 
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class GraphicalPlayer {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -56,7 +64,8 @@ public class GraphicalPlayer {
     private static ObservableMap<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
     private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
     private ArrayBlockingQueue<Card> queueOfCommunication;
-    public BorderPane mainPane;
+    private BorderPane victoryPaneForTeam[] = new BorderPane[2];
+    private StackPane finalPane;
 
 
     
@@ -65,6 +74,17 @@ public class GraphicalPlayer {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
+    /**
+     * @Brief a lot of properties are shared between the graphicalPlayerAdapter and the graphicalPlayer thanks to this constructor. 
+     * The graphical Stage is created in this constructor.
+     * 
+     * @param thisId
+     * @param playerNames
+     * @param score
+     * @param trick
+     * @param handBean
+     * @param queueOfCommunication
+     */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
             TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication ) {
         this.thisId = thisId; 
@@ -76,15 +96,14 @@ public class GraphicalPlayer {
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
         HBox handPane = createHandPane();
-        
-//        BorderPane victoryPaneForTeam1 = createVictoryPanes(TeamId.TEAM_1);
-//        BorderPane victoryPaneForTeam2 = createVictoryPanes(TeamId.TEAM_2);
-        this.mainPane = new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
-//        StackPane s = new StackPane(mainPane , victoryPaneForTeam1,victoryPaneForTeam2);
-//        
-//        StackPane PaneInCaseTeam1Win = new StackPane(victoryPaneForTeam1);
-//        StackPane PaneInCaseTeam2Win = new StackPane(victoryPaneForTeam2);
-      //  mainPane.addEventHandler(score.winningTeamProperty().get().equals(TeamId.TEAM_1), mainPane.PaneInCaseTeam1Win);
+        for(TeamId t : TeamId.ALL) {
+             this.victoryPaneForTeam[t.ordinal()] = createVictoryPanes(t);
+             BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
+             this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
+        }
+
+        BorderPane main= new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
+        this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
         
     }
     
@@ -92,13 +111,22 @@ public class GraphicalPlayer {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
+    /**
+     * @Brief create the javaFx stage of a graphic Jass game.
+     *
+     * @return the stage corresponding to a complete graphic Jass game.
+    */
     public Stage createStage() {
         Stage stage = new Stage();
         stage.setTitle("Javass - "+playerNames.get(thisId).toString() );
-        stage.setScene(new Scene(mainPane));
+        stage.setScene(new Scene(finalPane));
         return stage;
     }
     
+    /**
+     * @Brief generates an observable map from Card to Image of width 160
+     *
+    */
     private static ObservableMap<Card,Image> cardImage160() {
         ObservableMap<Card,Image> map =  observableMap( new HashMap<>());
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
@@ -110,6 +138,10 @@ public class GraphicalPlayer {
         return  unmodifiableObservableMap(map);
     }
     
+    /**
+     * @Brief generates an observable map from Card to Image of width 240
+     *
+    */
     private static ObservableMap<Card,Image> cardImage240() {
         ObservableMap<Card,Image> map = observableMap(new HashMap<>()); 
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
@@ -121,6 +153,10 @@ public class GraphicalPlayer {
         return  unmodifiableObservableMap(map);
     }
     
+    /**
+     * @Brief generates an observable map from trump to Image
+     *
+     */
     private static ObservableMap<Color,Image> trumpImage() {
         ObservableMap<Color,Image> map = observableMap(new HashMap<>());
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
@@ -130,6 +166,7 @@ public class GraphicalPlayer {
         
         return  unmodifiableObservableMap(map);
     }
+
 
     private GridPane createScorePane() {
         
@@ -269,19 +306,17 @@ public class GraphicalPlayer {
                 +" et "+
                 playerNames.get(PlayerId.PLAYER_4).toString();   
                 
-              // pas certain   
-        StringExpression upDatingString = Bindings.format("-fx-font: 16 Optima;\n",
-                namesOfWinningTeam,
-                " ont gagné avec ",
-                score.totalPointsProperty(winningTeam),
-                " points contre ",
-                score.totalPointsProperty(winningTeam.other()),
-                ".");
-                
-        
-        Text finalString= new Text(upDatingString.get());
-        BorderPane.setAlignment(finalString, Pos.CENTER);
-        
+        StringExpression upDatingString = Bindings.createStringBinding(() -> namesOfWinningTeam+
+                " ont gagné avec "+
+                score.totalPointsProperty(winningTeam).get()+
+                " points contre "+
+                score.totalPointsProperty(winningTeam.other()).get()+
+                ".", score.totalPointsProperty(winningTeam),score.totalPointsProperty(winningTeam.other())); 
+                       
+        Text finalString= new Text();
+        finalString.textProperty().bind(Bindings.convert(upDatingString));
+        finalString.setStyle("-fx-font: 16 Optima;\n");
+        border.centerProperty().set(finalString);        
         border.setStyle("-fx-font: 16 Optima;\n" + 
                 "-fx-background-color: white;");
         
@@ -294,13 +329,8 @@ public class GraphicalPlayer {
         for(int i = 0 ; i < 9 ; ++i) {
             ImageView children = new ImageView();
             ObjectBinding<Card> correspondingCard = valueAt( handBean.hand(), i);
-            if(correspondingCard.get()==null) {
-                System.out.println("is null");
-
-            }
             children.imageProperty().bind(valueAt(cardImpage160, correspondingCard));
             BooleanBinding isPlayable =  createBooleanBinding( () -> handBean.playableCards().contains(correspondingCard.get()),handBean.playableCards(),handBean.hand());
-            isPlayable.addListener((o , oV, nV)-> System.out.println("coucoucoucou"));
             children.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
             children.disableProperty().bind(isPlayable.not());
             children.setOnMouseClicked((e)-> {
