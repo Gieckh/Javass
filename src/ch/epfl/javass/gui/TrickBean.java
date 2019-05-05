@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableMap;
 import static javafx.collections.FXCollections.observableHashMap;
 
-import com.sun.javafx.collections.UnmodifiableObservableMap;
 
 /**
  * TrickBean is a JavaFx bean containing the current trick property. 
@@ -39,29 +38,33 @@ public final class TrickBean {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    
+
     /**
-     * @brief It is a public getter of the trick property.
+     * @brief public getter of the trick property - each player is linked to the
+     *        {@code Card} he has played during the trick, or to {@code null} if
+     *        he hasn't played yet.
      *
-     * @return the trick property
+     * @return (ObservableMap<PlayerId, Card>) - the trick property
     */
     public ObservableMap<PlayerId, Card> trick() {
         return trick;
     }
     
     /**
-     * @Brief It is a public getter of the trump property.
+     * @brief public getter of the trump property - indicates the current trump
      *
-     * @return the trump property
+     * @return (ReadOnlyObjectProperty<Color>) - the trump property
     */
     public ReadOnlyObjectProperty<Color> trumpProperty() {
         return trump;
     }
-    
+
+    //TODO: never used for now ?
     /**
-     * @Brief It is a public getter of the winningPlayer property.
+     * @brief It is a public getter of the winningPlayer property - the player
+     *        <em>currently</em> winning the trick.
      *
-     * @return the winningPlayer property
+     * @return (ReadOnlyObjectProperty<PlayerId>) - the winningPlayer property
     */
     public ReadOnlyObjectProperty<PlayerId> winningPlayerProperty() {
         return winningPlayer;
@@ -69,27 +72,27 @@ public final class TrickBean {
     
     
     /**
-     * @Brief public setter of the winningPlayer property given the winning player's Id.
+     * @brief public setter of the winningPlayer property.
      *
-     * @param pId the PlayerId of the winning player
+     * @param pId (PlayerId) - the Id of the player <em>currently</em> winning the trick.
     */
     private void setWinningPlayer(PlayerId pId) {
             winningPlayer.set(pId);
     }
         
     /**
-     * @Brief public setter of the trump property given the trump's Color.
+     * @brief public setter of the trump property.
      *
-     * @param trump the color of the trump
+     * @param trump (Color) - the trump of the current turn.
     */
     public void setTrump(Color trump) {
         this.trump.set(trump);
     }
     
     /**
-     * @Brief public setter of the trick property given a trick.
+     * @brief public setter of the trick property.
      *
-     * @param newTrick a Trick
+     * @param newTrick (Trick) - the current trick.
     */
     public void setTrick(Trick newTrick) {
         PlayerId winnerId;
