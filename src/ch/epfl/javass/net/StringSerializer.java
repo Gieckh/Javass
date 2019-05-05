@@ -23,17 +23,18 @@ public final class StringSerializer {
     /** ============================================== **/
      
     /**
-     * @brief returns the string representation of the integer in base RADIX.
+     * @brief returns the string representation, in base RADIX, of the given int.
      *
-     * @param i an integer in base 10
-     * @return the string representation of the integer in base RADIX
+     * @param i (int) - the int to convert into a {@code String}
+     * @return (String) - the {@code String} representation of the int, in base RADIX
      */
     public  static String serializeInt(int i) {
         return Integer.toUnsignedString(i, RADIX);
     }
 
     /**
-     * @brief returns an integer from the string representation of a base RADIX integer.
+     * @brief Given an the string representation of an {@code int} <em>"n"</em> in base RADIX,
+     *        returns <em>"n"</em>
      *
      * @param s a string of a base RADIX integer
      * @return an integer from the string representation of a base RADIX integer
