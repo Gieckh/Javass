@@ -25,48 +25,53 @@ public final class StringSerializer {
     /**
      * @brief returns the string representation, in base RADIX, of the given int.
      *
-     * @param i (int) - the int to convert into a {@code String}
-     * @return (String) - the {@code String} representation of the int, in base RADIX
+     * @param i (int) - the {@code int} to convert into a {@code String}
+     * @return (String) - the {@code String} representation of the {@code int},
+     *         in base RADIX
      */
     public  static String serializeInt(int i) {
         return Integer.toUnsignedString(i, RADIX);
     }
 
     /**
-     * @brief Given an the string representation of an {@code int} <em>"n"</em> in base RADIX,
-     *        returns <em>"n"</em>
+     * @brief Given an the string representation "<em>s</em>" in base RADIX
+     *        of an {@code int}, returns the latter.
      *
-     * @param s a string of a base RADIX integer
-     * @return an integer from the string representation of a base RADIX integer
+     * @param s (String) - represents an {@code int} in base RADIX
+     * @return (int) - the corresponding {@code int}
      */
     public static int deserializeInt(String s) {
         return Integer.parseUnsignedInt(s, RADIX);
     }
     
     /**
-     * @brief returns the string representation of the long in base RADIX.
+     * @brief returns the string representation, in base RADIX, of the given long.
      *
-     * @param l an long
-     * @return the string representation of the long in base RADIX
+     * @param l (long) - the int to convert into a {@code String}
+     * @return (String) - the {@code String} representation of the {@code long},
+     *      *         in base RADIX
      */
     public static String serializeLong(long l) {
         return Long.toUnsignedString(l, RADIX);
     }
 
     /**
-     * @brief returns a long from the string representation of a base RADIX long.
+     * @brief Given an the string representation "<em>s</em>" in base RADIX
+     *        of an {@code long}, returns the latter.
      *
-     * @param s a string of a base RADIX long
-     * @return a long from the string representation of a base RADIX long
+     * @param s (String) - represents an {@code long} in base RADIX
+     * @return (long) - the corresponding {@code long}
      */
     public static long deserializeLong(String s) {
         return Long.parseUnsignedLong(s, RADIX);
     }
-    
+
+    //TODO
     public static String serializeString(String s) {
         return Base64.getEncoder().encodeToString((s.getBytes(StandardCharsets.UTF_8)));
     }
-    
+
+    //TODO
     public static String deserializeString(String s) {
         return new String(Base64.getDecoder().decode(s), StandardCharsets.UTF_8);
     }
@@ -75,24 +80,27 @@ public final class StringSerializer {
     
     /**
      * @brief  Returns a new String composed of copies of the
-     * list of strings joined together with the specified char.
+     *         list of {@code String} joined together with the specified {@code char}.
+     * @see String#join(CharSequence, CharSequence...)
      *
-     * @param c the char
-     * @param s the list of strings
-     * @return a new String that is composed of the list of strings
-     *         separated by the char
+     * @param c (char) - the delimiter that separates each {@code String}
+     * @param s (String[]) - the Strings to join
+     * @return (String) - a new {@code String} that is composed of the Strings
+     *                    given by "s" separated by the {@code char} "c"
      */
-    public static String combine(char c, String... s ) { //TODO: ici la virgule.
+    public static String combine(char c, String... s ) { //TODO: ici la virgule. que faut-il faire ?
         return String.join(Character.toString(c), s);
     }
     
     /**
-     * @brief Splits this string around matches of the given.
+     * @brief Splits this string around matches of the given {@code char}.
+     * @see String#split(String)
      *
-     * @param s a String
-     * @param c a Char
-     * @return the array of strings computed by splitting this string
-     *          around matches of the given char
+     * @param s (String) - the given [potentially] concatenation of {@code String}
+     * @param c (char) - the splitting {@code char}
+     *
+     * @return (String[]) - the array of {@code String} computed by splitting this string
+     *          around matches of the given {@code char}
     */
     public static String[] split(String s, char c) {
         return s.split(Character.toString(c));
