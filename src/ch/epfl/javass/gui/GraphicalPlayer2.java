@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
 
 public class GraphicalPlayer2 {
     /** ============================================== **/
@@ -110,10 +109,9 @@ public class GraphicalPlayer2 {
 
     private UnmodifiableObservableMap cards160() {
         ObservableMap<Card, Image> observableMap = FXCollections.observableMap(new HashMap<>());
-
+        return null;
     }
 
     private UnmodifiableObservableMap cards240() {
-
-    }
+        return null;    }
 }
