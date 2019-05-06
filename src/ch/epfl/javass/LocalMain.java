@@ -1,6 +1,9 @@
 package ch.epfl.javass;
 
-public class LocalMain {
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class LocalMain extends Application {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
@@ -13,4 +16,12 @@ public class LocalMain {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
