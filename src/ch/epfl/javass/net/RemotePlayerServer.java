@@ -79,9 +79,7 @@ public final class RemotePlayerServer {
                 BufferedWriter w =
                         new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), US_ASCII))
         ) {
-            System.out.println("On passe le try");
             String message;
-            System.out.println("just read");
             while((message = r.readLine()) !=  null) {
                 assert (message.length() >= 6);
                 // I decided to combine the whole line only with ',' (even the jassCommand) //TODO: change that
@@ -89,7 +87,6 @@ public final class RemotePlayerServer {
                 JassCommand Command = JassCommand.valueOf(words.get(0));
                 switch(Command) {
                     case PLRS:
-                        System.out.println("players read");
                         Map<PlayerId, String> playerNames = new HashMap<>();
                         for(int i = 2; i < 6 ; ++i) {
                             playerNames.put(PlayerId.ALL.get(i-2), StringSerializer.deserializeString(words.get(i)));
@@ -98,23 +95,18 @@ public final class RemotePlayerServer {
                         break;
                         
                     case TRMP:
-                        System.out.println("trump read");
                         this.underLyingPlayer.setTrump(Card.Color.ALL.get(StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
                     case HAND:
-                        System.out.println("hand read");
                         this.underLyingPlayer.updateHand(CardSet.ofPacked(StringSerializer.deserializeLong(words.get(1))));
                         break;
                         
                     case TRCK:
-                        System.out.println("trick read");
                         this.underLyingPlayer.updateTrick(Trick.ofPacked(StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
                     case CARD:
-                        System.out.println("card read");
-                        System.out.println();
                         w.write(StringSerializer.serializeInt(this.underLyingPlayer.cardToPlay(
                                 TurnState.ofPackedComponents(
                                         StringSerializer.deserializeLong(words.get(1)),
@@ -130,13 +122,11 @@ public final class RemotePlayerServer {
                         break;
 
                     case SCOR:
-                        System.out.println("score read");
                         this.underLyingPlayer.updateScore(Score.ofPacked(
                                 StringSerializer.deserializeLong(words.get(1))));
                         break;
                         
                     case WINR:
-                        System.out.println("win read");
                         this.underLyingPlayer.setWinningTeam(TeamId.ALL.get(
                                 StringSerializer.deserializeInt(words.get(1))));
                         break;
@@ -146,10 +136,8 @@ public final class RemotePlayerServer {
                         throw new Error("JassCommand enum has been changed?");
                 }
             }
-            System.out.println("end of while");
         }
         catch (IOException e) {
-            System.out.println("coucou");
             throw new UncheckedIOException(e);
         }
         run();
