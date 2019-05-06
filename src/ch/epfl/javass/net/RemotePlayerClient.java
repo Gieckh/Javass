@@ -21,6 +21,7 @@ import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
 
 
+//TODO: does it actually work - without the "println(...)" ?
 
 /**
  * RemotePlayerClient instance acts as a player in a JassGame although it exchanges information
@@ -38,9 +39,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
 
     String hostName;
     int port;
-    Socket s;
-    BufferedReader r;
-    BufferedWriter w;
+    Socket socket;
+    BufferedReader reader;
+    BufferedWriter writer;
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -48,23 +49,25 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     
 
     /**
-     * @Brief Constructs a socket, a reader, and an writer.  
+     * @brief Constructs a socket, a reader, and an writer.
      * 
-     * @param hostName ({@code String}) - the name or the IP string of the host in which the RemotePlayerServer is
-     * @param port ({@code int}) - should be 5108 per default
+     * @param hostName (String) - the name or the IP string of the host in which the RemotePlayerServer is
+     * @param port (int) - should be 5108 per default
      * @throws IOException
      */
     public RemotePlayerClient(String hostName, int port) throws IOException {
         Socket s = new Socket(hostName, Net.PORT_NUMBER); //TODO: why not just "port" ?
-                BufferedReader r =
-                    new BufferedReader(
+        BufferedReader r =
+                new BufferedReader(
                         new InputStreamReader(s.getInputStream(), US_ASCII));
-                BufferedWriter w =
-                    new BufferedWriter(
+        BufferedWriter w =
+                new BufferedWriter(
                         new OutputStreamWriter(s.getOutputStream(), US_ASCII));
-        this.s = s;
-        this.r = r;
-        this.w = w;
+
+        this.socket = s;
+        this.reader = r;
+        this.writer = w;
+
         this.hostName = hostName;
         this.port = port;
     }
@@ -79,24 +82,24 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
      */
     @Override
     public void close() throws Exception {
-        s.close();
-        r.close();
-        w.close();
+        socket.close();
+        reader.close();
+        writer.close();
         System.out.println("closed");
     }
-    
-    
+
     /**
-     * @brief writes and flushes the string in the BufferedReader.
+     * @brief writes and flushes the {@code String} in the BufferedReader.
      *
-     * @param s a String
-    */
+     * @param command (String) - the {@code String} representation of a {@code JassCommand}
+     * @param s (String) - specifies the actions associated to the given command
+     */
     private void forceWrite(String command, String s) {
-        System.out.println("written: " + s);
         try {
             String line = command + " " + s + "\n";
-            w.write(line);
-            w.flush();
+            writer.write(line);
+            writer.flush();
+            System.out.println("written: " + s);
         } catch (IOException e1) {
             throw new UncheckedIOException(e1);
         }
@@ -110,14 +113,15 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         try {
             forceWrite(JassCommand.CARD.toString(),
                     StringSerializer.combine(' ',
-                    StringSerializer.combine(',', 
-                    StringSerializer.serializeLong(state.packedScore()),
-                    StringSerializer.serializeLong(state.packedUnplayedCards()),
-                    StringSerializer.serializeInt(state.packedTrick())), 
-                    StringSerializer.serializeLong(hand.packed()))
+                            StringSerializer.combine(',',
+                                    StringSerializer.serializeLong(state.packedScore()),
+                                    StringSerializer.serializeLong(state.packedUnplayedCards()),
+                                    StringSerializer.serializeInt(state.packedTrick())),
+                            StringSerializer.serializeLong(hand.packed()))
             );
+
             System.out.println("just informed about cardToPlay");
-            return Card.ofPacked(StringSerializer.deserializeInt(r.readLine()));
+            return Card.ofPacked(StringSerializer.deserializeInt(reader.readLine()));
         } catch (IOException e) {
             System.out.println("exception ?");
             throw new UncheckedIOException(e);
