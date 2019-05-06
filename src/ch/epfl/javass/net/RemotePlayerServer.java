@@ -49,7 +49,7 @@ public final class RemotePlayerServer {
     /**
      * @brief This underlyingPlayer defines how the RemotePlayerServer will ask the RemotePlayerClient to play.
      * 
-     * @param underLyingPlayer (Player) -
+     * @param underLyingPlayer (Player) - //TODO
      */
     public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;
