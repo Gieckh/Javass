@@ -4,7 +4,6 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.application.Application;
 
 public class LocalMain extends Application {
 
