@@ -39,7 +39,7 @@ public class NetJassGame {
                 }
             }
 
-            catch (IOException e) {
+            catch (IOException e) { 
                 throw new UncheckedIOException(e);
             }
 

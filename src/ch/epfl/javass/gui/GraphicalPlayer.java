@@ -207,7 +207,7 @@ public class GraphicalPlayer {
     }
     
     private GridPane createTrickPane() {
-        
+        //TODO vendredi : je crois que ce stockpane n'est pas utilisé , antoine s'en occupe
         StackPane stackpane = new StackPane(new Rectangle(120, 180));
         stackpane.setStyle("-fx-arc-width: 20;\n" + 
                 "-fx-arc-height: 20;\n" + 
