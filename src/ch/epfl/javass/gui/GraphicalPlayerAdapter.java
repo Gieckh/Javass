@@ -67,7 +67,7 @@ public class GraphicalPlayerAdapter implements Player {
             // TODO Auto-generated catch block
             throw new Error();
         }
-      //  return state.trick().playableCards(hand).get(0);
+//        return state.trick().playableCards(hand).get(0);
     }
 
     /* 
