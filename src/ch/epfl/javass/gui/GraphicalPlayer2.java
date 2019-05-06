@@ -75,14 +75,17 @@ public class GraphicalPlayer2 {
     private BorderPane
     createTeamPane(ScoreBean scoreBean, TeamId winningTeam, TeamId losingTeam, Map<PlayerId, String> playerNames)
     {
-        //TODO: does this work ?
+        //TODO: test
         String[] winningPlayerNames = findWinningPlayerNames(winningTeam, playerNames);
 
         Text victoryText = new Text();
         victoryText.textProperty().bind(Bindings.format(
-                winningPlayerNames[0] + " et " + winningPlayerNames[1] + "ont gagné avec %d points contre %d.",
+                 "%s et %s ont gagné avec %d points contre %d.",
+                winningPlayerNames[0],
+                winningPlayerNames[1],
                 scoreBean.totalPointsProperty(winningTeam),
-                scoreBean.totalPointsProperty(losingTeam))
+                scoreBean.totalPointsProperty(losingTeam)
+                )
         );
 
         BorderPane victoryPane = new BorderPane(victoryText);
