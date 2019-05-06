@@ -88,7 +88,7 @@ public final class StringSerializer {
      * @return (String) - a new {@code String} that is composed of the Strings
      *                    given by "s" separated by the {@code char} "c"
      */
-    public static String combine(char c, String... s ) { //TODO: ici la virgule. que faut-il faire ?
+    public static String combine(char c, String... s ) {
         return String.join(Character.toString(c), s);
     }
     

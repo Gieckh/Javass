@@ -11,7 +11,7 @@ public class LocalMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        List<String> args2 = Application.getParameters().getRaw();
+        List<String> args = getParameters().getRaw();
     }
 
     public static void main(String[] args) {
