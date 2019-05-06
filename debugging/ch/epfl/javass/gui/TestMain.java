@@ -1,12 +1,12 @@
-package ch.epfl.javass.jass;
+package ch.epfl.javass.gui;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 import ch.epfl.javass.gui.GraphicalPlayerAdapter;
+import ch.epfl.javass.jass.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import  ch.epfl.javass.jass.PlayerId;
 
 public final class TestMain extends Application {
   public static void main(String[] args) { launch(args); }
