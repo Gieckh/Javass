@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
-
 public class GraphicalPlayer2 {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
