@@ -86,7 +86,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         socket.close();
         reader.close();
         writer.close();
-        System.out.println("closed");
     }
 
     /**
@@ -100,7 +99,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
             String line = command + " " + s + "\n";
             writer.write(line);
             writer.flush();
-            System.out.println("written: " + s);
         } catch (IOException e1) {
             throw new UncheckedIOException(e1);
         }
@@ -121,10 +119,8 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                             StringSerializer.serializeLong(hand.packed()))
             );
 
-            System.out.println("just informed about cardToPlay");
             return Card.ofPacked(StringSerializer.deserializeInt(reader.readLine()));
         } catch (IOException e) {
-            System.out.println("exception ?");
             throw new UncheckedIOException(e);
         }
     }
@@ -152,7 +148,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         forceWrite(JassCommand.PLRS.toString(),
                    combine(' ', s, str.toString())
         );
-        System.out.println("justInformedAboutSetPlayers");
     }
         
 
@@ -165,7 +160,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                       combine(',',
                       StringSerializer.serializeInt(trump.ordinal()))
         );
-        System.out.println("justInformedAboutSetTrump");
    }
     
     /**
@@ -177,7 +171,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                       combine(',',
                       StringSerializer.serializeLong(newHand.packed()))
         );
-        System.out.println("just informed about updateHand");
     }
 
     /**
@@ -189,7 +182,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                        combine(',',
                        StringSerializer.serializeInt(newTrick.packed()))
          );
-         System.out.println("justInformedAboutUpdateTrick");
 }
 
     /**
@@ -201,7 +193,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                        combine(',',
                        StringSerializer.serializeLong(score.packed()))
          );
-         System.out.println("justInformedAboutUpdateScore");
     }
 
     /**
@@ -213,7 +204,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                        combine(',',
                        StringSerializer.serializeLong(winningTeam.ordinal()))
          );
-         System.out.println("justUpdateAboutWinningTeam");
     }
 }
 

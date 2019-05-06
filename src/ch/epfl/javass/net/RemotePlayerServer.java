@@ -78,9 +78,7 @@ public final class RemotePlayerServer {
                 BufferedWriter w =
                         new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), US_ASCII))
         ) {
-            System.out.println("On passe le try");
             String message;
-            System.out.println("just read");
             while((message = r.readLine()) !=  null) {
                 assert (message.length() >= 6);
                 // I decided to combine the whole line only with ',' (even the jassCommand) //TODO: change that
@@ -152,10 +150,8 @@ public final class RemotePlayerServer {
                         throw new Error("JassCommand enum has been changed?");
                 }
             }
-            System.out.println("end of while");
         }
         catch (IOException e) {
-            System.out.println("coucou");
             throw new UncheckedIOException(e);
         }
         run();
