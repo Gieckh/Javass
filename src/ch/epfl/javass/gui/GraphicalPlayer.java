@@ -139,7 +139,7 @@ public class GraphicalPlayer {
         ObservableMap<Card,Image> map = observableMap(new HashMap<>()); 
         for(int i = 0 ; i<Color.ALL.size(); ++i) {
             for(int j = 0 ; j < Rank.ALL.size(); ++j) {
-                String s = "/"+"card_"+i+"_"+j+"_"+240+".png";
+                String s = "/card_" + i + "_" + j + "_" + 240 + ".png";
                 map.put(Card.of(Color.ALL.get(i),Rank.ALL.get(j)), new Image(s));
             }
         }

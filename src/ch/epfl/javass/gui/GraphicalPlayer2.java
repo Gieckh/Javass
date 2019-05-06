@@ -2,9 +2,7 @@ package ch.epfl.javass.gui;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.PlayerId;
-import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
-import com.sun.javafx.collections.UnmodifiableObservableMap;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -26,8 +24,8 @@ public class GraphicalPlayer2 {
 //    private ScoreBean scoreBean;
 //    private TrickBean trickBean;
 
-    private ObservableMap cards160 = cards160();
-    private ObservableMap cards240 = cards240();
+    private final ObservableMap cards160 = cards(160);
+    private final ObservableMap cards240 = cards(240);
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -107,11 +105,21 @@ public class GraphicalPlayer2 {
         return winningPlayerNames;
     }
 
-    private UnmodifiableObservableMap cards160() {
-        ObservableMap<Card, Image> observableMap = FXCollections.observableMap(new HashMap<>());
-        return null;
+    private ObservableMap<Card, Image> cards(int width) {
+        ObservableMap<Card, Image> map = FXCollections.observableMap(new HashMap<>());
+
+        for (int c = 0; c < Card.Color.COUNT; ++c) {
+            for (int r = 0; r < Card.Rank.COUNT; ++r) {
+                map.put(Card.of(Card.Color.ALL.get(c), Card.Rank.ALL.get(r)),
+                                  toCardName(c, r, width)
+                );
+            }
+        }
+
+        return FXCollections.unmodifiableObservableMap(map);
     }
 
-    private UnmodifiableObservableMap cards240() {
-        return null;    }
+    private Image toCardName(int c, int r, int width) {
+        return new Image("/card_" + c + "_" + r + "_" + width + ".png");
+    }
 }
