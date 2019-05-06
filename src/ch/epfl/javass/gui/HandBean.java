@@ -88,11 +88,9 @@ public final class HandBean {
     
 
     /**
-     * @brief It is a public setter for the playableCards property given the CardSet
-     *  newPlayableCards. If the new CardSet newPlayableCards is of size 9, we replace
-     *  the previous PlayableCards property with the new one, otherwise we simply put to
-     *  null the cards that are not in newPlayableCards but were in the playableCards
-     *  attribute. //TODO: faut lire ce que t'écris...
+     * @brief public setter for the playableCards property. The current list of
+     *        (Card) is cleared, and [re]filled with the list of (Card) indicated
+     *        by the (CardSet) "newPlayableCards"
      *
      * @param newPlayableCards the new CardSet
      */

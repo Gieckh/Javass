@@ -48,8 +48,8 @@ public final class ScoreBean {
     /**
      * @brief It is a public getter for the turnPoints property of the chosen team.
      *
-     * @param team the TeamId of a team
-     * @return the turnPoints property of the chosen team
+     * @param team (TeamId) - the team we want the information from
+     * @return (ReadOnlyIntegerProperty) - the turnPoints property of the chosen team
      */
     public ReadOnlyIntegerProperty turnPointsProperty(TeamId team) {
         return (team == TeamId.TEAM_1) ? turnPointsT1: turnPointsT2;
@@ -58,8 +58,8 @@ public final class ScoreBean {
     /**
      * @brief It is a public getter for the gamePoints property of the chosen team.
      *
-     * @param team the TeamId of a team
-     * @return the gamePoints property of the chosen team
+     * @param team (TeamId) - the team we want the information from
+     * @return (ReadOnlyIntegerProperty) - the gamePoints property of the chosen team
      */
     public ReadOnlyIntegerProperty gamePointsProperty(TeamId team) {
         return (team == TeamId.TEAM_1) ? gamePointsT1: gamePointsT2;
@@ -68,14 +68,15 @@ public final class ScoreBean {
     /**
      * @Brief It is a public getter for the totalPoints property of the chosen team.
      *
-     * @param team the TeamId of a team
+     * @param team (TeamId) - the team we want the information from
      * @return the totalPoints property of the chosen team
      */
     public ReadOnlyIntegerProperty totalPointsProperty(TeamId team) {
         return (team == TeamId.TEAM_1) ? totalPointsT1: totalPointsT2;
     }
     
-    
+
+    //TODO: indicates which team HAS WON right ? (and not IS CURRENTLY WINNING)
     /**
      * @brief It is a public getter for the winningTeam property.
      *
@@ -90,8 +91,8 @@ public final class ScoreBean {
      * @brief public setter for the turnPoints given the new turnPoints(integer)
      * and the chosen team.
      *
-     * @param team the TeamId of the chosen team
-     * @param newTurnPoints an integer
+     * @param team (TeamId) - the TeamId of the chosen team
+     * @param newTurnPoints (int) - the value we set the turnPoints of "team" at.
      */
     public void setTurnPoints(TeamId team, int newTurnPoints) {
         if (team == TeamId.TEAM_1)
@@ -104,8 +105,8 @@ public final class ScoreBean {
      * @brief public setter for the gamePoints given the new gamePoints(integer)
      * and the chosen team.
      *
-     * @param team the TeamId of the chosen team
-     * @param newGamePoints an integer
+     * @param team (TeamId) - the TeamId of the chosen team
+     * @param newGamePoints (int) - the value we set the game points of "team" at.
      */
     public void setGamePoints(TeamId team, int newGamePoints) {
         if (team == TeamId.TEAM_1)
@@ -118,8 +119,8 @@ public final class ScoreBean {
      * @brief public setter for the totalPoints given the new totalPoints(integer)
      * and the chosen team.
      *
-     * @param team the TeamId of the chosen team
-     * @param newTotalPoints an integer
+     * @param team (TeamId) - the TeamId of the chosen team
+     * @param newTotalPoints (int) - the value we set the total points of "team" at.
      */
     public void setTotalPoints(TeamId team, int newTotalPoints) {
         if (team == TeamId.TEAM_1)
@@ -127,13 +128,14 @@ public final class ScoreBean {
         else
             totalPointsT2.set(newTotalPoints);
     }
-    
-    
-    
+
+
+
+    //TODO: indicates which team HAS WON right ? (and not IS CURRENTLY WINNING)
     /**
      * @brief public setter for the chosen winning team.
      *
-     * @param team the TeamId of the winning team
+     * @param team (TeamId) - the TeamId of the winning team
      */
     public void setWinningTeam(TeamId team) {
             winningTeam.set(team);
