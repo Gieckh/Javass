@@ -297,7 +297,6 @@ public class GraphicalPlayer {
     
     private BorderPane createVictoryPanes(TeamId winningTeam) {
         
-        BorderPane border = new BorderPane();
         String namesOfWinningTeam = winningTeam.equals(TeamId.TEAM_1)? 
                 playerNames.get(PlayerId.PLAYER_1).toString()
                 +" et "+
@@ -316,6 +315,7 @@ public class GraphicalPlayer {
         Text finalString= new Text();
         finalString.textProperty().bind(Bindings.convert(upDatingString));
         finalString.setStyle("-fx-font: 16 Optima;\n");
+        BorderPane border = new BorderPane(finalString);
         border.centerProperty().set(finalString);        
         border.setStyle("-fx-font: 16 Optima;\n" + 
                 "-fx-background-color: white;");
