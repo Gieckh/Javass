@@ -26,6 +26,8 @@ public class LocalMain extends Application {
                     " où graine est optionnelle et est forcément en 5ème position \n ");
             System.exit(1);
         }
+        
+        
     }
 
     public static void main(String[] args) {
