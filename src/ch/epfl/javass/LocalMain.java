@@ -1,5 +1,6 @@
 package ch.epfl.javass;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.epfl.javass.gui.GraphicalPlayerAdapter;
+import ch.epfl.javass.jass.JassGame;
 import ch.epfl.javass.jass.MctsPlayer;
 import ch.epfl.javass.jass.PacedPlayer;
 import ch.epfl.javass.jass.Player;
@@ -19,6 +21,11 @@ import javafx.stage.Stage;
 
 public class LocalMain extends Application {
     private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
+    private List<String> typeOfPlayer = new ArrayList<String>(4);
+    private List<String> names = new ArrayList<String>(4);
+    private List<String> hosts = new ArrayList<String>(4);
+    private List<Long> randomForPlayer = new ArrayList<>(4);
+    private List<Integer> iterations = new ArrayList<>(4); 
     
     private void checkSize(int size) {
         if(size!=4 || size !=5) {
@@ -78,7 +85,8 @@ public class LocalMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         List<String> args = getParameters().getRaw();
-        List<List<String>> informations = new ArrayList<List<String>>(4);
+        Map<PlayerId, Player> ps = new EnumMap<>(PlayerId.class);
+        Map<PlayerId, String> ns = new EnumMap<>(PlayerId.class);
         boolean hasFiveArgs = false; 
         long generatingSeed =0;
         int size = args.size();
@@ -97,16 +105,16 @@ public class LocalMain extends Application {
             }
             else {
                 List<String> list = Arrays.asList(args.get(i).split(":"));
+                names.set(i, ((list.get(1).isEmpty()) ? LocalMain.defaultNames[i] : list.get(1)));
                 if(list.get(0).equals("h")){
-                    list.set(1, ((list.get(1).isEmpty()) ? LocalMain.defaultNames[i] : list.get(1)));
                     checkParameters(list, "h", i);
-                    informations.set(i,list);
-
+                    typeOfPlayer.set(i, "h");
                 }
                 if(list.get(0).equals("s")){
-                    list.set(1, ((list.get(1).isEmpty()) ? LocalMain.defaultNames[i] : list.get(1)));
+                    checkParameters(list, "s", i);
+                    typeOfPlayer.set(i,"s");
                     try {
-                        if(!list.get(2).isEmpty()&& Integer.parseInt(list.get(2))<10) {
+                        if(!list.get(2).isEmpty()|| Integer.parseInt(list.get(2))<10) {
                             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                                     "où :\n" + 
                                     "<j"+i+"> est un joueur simulé (s) "+
@@ -123,16 +131,13 @@ public class LocalMain extends Application {
                                 "forcément un entier"
                                 );
                     }
-                    list.set(2, ((list.get(2).isEmpty()) ? "10000" : list.get(2)));
-                    checkParameters(list, "s", i);
-                    informations.set(i,list);
+                    iterations.set(i, (list.get(2).isEmpty()) ? 10000 : Integer.parseInt(list.get(2)));
 
                 }
                 if(list.get(0).equals("r")){
-                    list.set(1, ((list.get(1).isEmpty()) ? LocalMain.defaultNames[i] : list.get(1)));
-                    list.set(2, ((list.get(2).isEmpty()) ? "localhost" : list.get(2)));
                     checkParameters(list, "r", i);
-                    informations.set(i,list);
+                    typeOfPlayer.set(i, "r");
+                    hosts.set(i, list.set(2, ((list.get(2).isEmpty()) ? "localhost" : list.get(2))));
 
                 }
                 if(!(list.get(0).equals("r")||list.get(0).equals("h")||list.get(0).equals("s"))){
@@ -143,46 +148,53 @@ public class LocalMain extends Application {
                             "où <a> doit être <r>, <s>, ou <h> ");
                 }
                 
-                Random random = hasFiveArgs ?  new Random(generatingSeed) : new Random();
-                long randomForJassGame = random.nextLong();
-                List<Long> randomForPlayer = new ArrayList<>();
-                randomForPlayer.add(0, random.nextLong());
-                randomForPlayer.add(1, random.nextLong());
-                randomForPlayer.add(2, random.nextLong());
-                randomForPlayer.add(3, random.nextLong());
-                                
-                Map<PlayerId, Player> ps = new EnumMap<>(PlayerId.class);
-                for(int j = 0 ; j<4 ; ++j) {
-                    putCustomedPlayer(j, informations, ps, randomForPlayer);
-                }
-                Map<PlayerId, String> ns = new EnumMap<>(PlayerId.class);
-                PlayerId.ALL.forEach(k -> ns.put(k, informations.get(k.ordinal()).get(1)));
                 
+             }
+        }
                 
-                ps.put(PlayerId.PLAYER_1, new GraphicalPlayerAdapter());
-                
-                ps.put(PlayerId.PLAYER_2, new PacedPlayer(new MctsPlayer(PlayerId.PLAYER_2, 789, 10_000),1));
-                ps.put(PlayerId.PLAYER_3, new PacedPlayer(new MctsPlayer(PlayerId.PLAYER_3, 456, 10_000),1));
-                ps.put(PlayerId.PLAYER_4, new PacedPlayer(new MctsPlayer(PlayerId.PLAYER_4, 789, 10_000),1));
-               
-                
-            }
-            
+        Random random = hasFiveArgs ?  new Random(generatingSeed) : new Random();
+        long randomForJassGame = random.nextLong();
+                        
+        for(int j = 0 ; j<4 ; ++j) {
+            randomForPlayer.set(j, random.nextLong());
+            putCustomedPlayer(j,ps);
+            ns.put(PlayerId.ALL.get(j), names.get(j));
         }
         
-    }
+        new Thread(() -> {
+            JassGame g = new JassGame(randomForJassGame, ps, ns);
+            while (! g.isGameOver()) {
+              g.advanceToEndOfNextTrick();
+              try { Thread.sleep(1000); } catch (Exception e) {}
+            }
+            }).start();
+
+        
+
     
-    private void putCustomedPlayer(int i,List<List<String>>  list,Map<PlayerId,Player> ps , List<Long> seeds) {
-        switch (list.get(i).get(0)) {
+        
+    }
+        
+    
+    
+    private void putCustomedPlayer(int i, Map<PlayerId,Player> ps) {
+        switch (typeOfPlayer.get(i)) {
         
         case "h": ps.put(PlayerId.ALL.get(i), new GraphicalPlayerAdapter());
             break;
             
-        case "s" : ps.put(PlayerId.ALL.get(i), new PacedPlayer(new MctsPlayer(PlayerId.PLAYER_2, seeds.get(i), list.get(i).get(2)),2));
-
+        case "s" : ps.put(PlayerId.ALL.get(i), new PacedPlayer(new MctsPlayer(PlayerId.ALL.get(i), randomForPlayer.get(i), iterations.get(i)),2));
             break;
             
-        case "r": ps.put(PlayerId.ALL.get(i), new RemotePlayerClient("localhost", Net.PORT_NUMBER);)
+        case "r": try {
+                ps.put(PlayerId.ALL.get(i), new RemotePlayerClient(hosts.get(i)));
+            } catch (IOException e) {
+                displayError("Utilisation: java ch.epfl.javass.LocalMain .\n" + 
+                        "où une erreur de connexion au serveur à eu lieu pour le joueur distant "+i+" :\n" + 
+                        " il devrait avoir la structure suivante : <r>:<name>:<IpAdress> \n" + 
+                        " l'IpAdress est peut etre mauvaise , ou le serveur n'est peut etre pas lancé.\"");
+                e.printStackTrace();
+            }
             break;
             
         default: displayError("wrong input on switch");            
