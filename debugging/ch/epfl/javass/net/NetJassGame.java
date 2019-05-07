@@ -26,7 +26,7 @@ public class NetJassGame {
             try {
                 if (pId == PlayerId.PLAYER_1) {
                     //128.179.142.70
-                    player = new RemotePlayerClient("localhost", Net.PORT_NUMBER);
+                    player = new RemotePlayerClient("localhost");
                 } else if (pId == PlayerId.PLAYER_2) {
                     //128.179.142.70
                     player = new MctsPlayer(PlayerId.PLAYER_2, 2019, 100);

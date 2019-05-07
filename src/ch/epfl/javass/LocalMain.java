@@ -161,17 +161,15 @@ public class LocalMain extends Application {
             ns.put(PlayerId.ALL.get(j), names.get(j));
         }
         
-        new Thread(() -> {
+        Thread gameThread = new Thread(() -> {
             JassGame g = new JassGame(randomForJassGame, ps, ns);
             while (! g.isGameOver()) {
               g.advanceToEndOfNextTrick();
               try { Thread.sleep(1000); } catch (Exception e) {}
-            }
-            }).start();
+            }});
 
-        
-
-    
+        gameThread.setDaemon(true);
+        gameThread.start();
         
     }
         
