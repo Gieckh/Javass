@@ -10,7 +10,19 @@ import ch.epfl.javass.net.RemotePlayerServer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * RemoteMain is the main class to run to launch the remotePlayerServer that will create a graphical player
+ *  on this computer playing remotely a jassGame throwed by a LocalMain.
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class RemoteMain extends Application {
+    
+    /* 
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         Thread gameThread = new Thread(() -> {
@@ -23,6 +35,12 @@ public class RemoteMain extends Application {
         gameThread.start();
     }
 
+    
+    /**
+     * @Brief executes launch that will make the server waiting for a connexion.
+     *
+     * @param args
+    */
     public static void main(String[] args) {
         launch(args);
     }

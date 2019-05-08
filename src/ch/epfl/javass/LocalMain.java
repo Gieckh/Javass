@@ -19,13 +19,36 @@ import ch.epfl.javass.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * LocalMain Is the main launcher of the whole project.
+ * It is using the String of arguments "args" to build a customed game.
+ *
+ *
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen - (288260)
+ */
 public class LocalMain extends Application {
+    /** =============================================== **/
+    /** ===============    ATTRIBUTES    ============== **/
+    /** =============================================== **/
+    
+    // I fought it was a good thing to do to create a list for each information we may need up to 4 times 
+    //instead of a list of lists for example.
     private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
     private List<String> typeOfPlayer = new ArrayList<String>(4);
     private List<String> names = new ArrayList<String>(4);
     private List<String> hosts = new ArrayList<String>(4);
     private List<Long> randomForPlayer = new ArrayList<>(4);
     private List<Integer> iterations = new ArrayList<>(4); 
+    
+    /** ============================================== **/
+    /** ==============   PRIVATE METHODS  ============ **/
+    /** ============================================== **/
+    
+    private void displayError(String s) {
+        System.err.println(s);
+        System.exit(1);
+    }
     
     private void checkSize(int size) {
         if(size!=4 || size !=5) {
@@ -43,7 +66,7 @@ public class LocalMain extends Application {
         }
     }
     
-    private void checkParameters(List list, String s, int i) {
+    private void checkParameters(List<String> list, String s, int i) {
         switch (s) {
         
         case "h": if(list.size()>2) {
@@ -80,8 +103,38 @@ public class LocalMain extends Application {
         }
     }
     
+    private void putCustomedPlayer(int i, Map<PlayerId,Player> ps) {
+        switch (typeOfPlayer.get(i)) {
+        
+        case "h": ps.put(PlayerId.ALL.get(i), new GraphicalPlayerAdapter());
+            break;
+            
+        case "s" : ps.put(PlayerId.ALL.get(i), new PacedPlayer(new MctsPlayer(PlayerId.ALL.get(i), randomForPlayer.get(i), iterations.get(i)),2));
+            break;
+            
+        case "r": try {
+                ps.put(PlayerId.ALL.get(i), new RemotePlayerClient(hosts.get(i)));
+            } catch (IOException e) {
+                displayError("Utilisation: java ch.epfl.javass.LocalMain .\n" + 
+                        "où une erreur de connexion au serveur à eu lieu pour le joueur distant "+i+" :\n" + 
+                        " il devrait avoir la structure suivante : <r>:<name>:<IpAdress> \n" + 
+                        " l'IpAdress est peut etre mauvaise , ou le serveur n'est peut etre pas lancé.\"");
+                e.printStackTrace();
+            }
+            break;
+            
+        default: displayError("wrong input on switch");            
+        }
+    }
+    
+    /** ============================================== **/
+    /** =============    MAIN METHODS    ============= **/
+    /** ============================================== **/
     
     
+    /* 
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         List<String> args = getParameters().getRaw();
@@ -175,40 +228,21 @@ public class LocalMain extends Application {
         
     
     
-    private void putCustomedPlayer(int i, Map<PlayerId,Player> ps) {
-        switch (typeOfPlayer.get(i)) {
-        
-        case "h": ps.put(PlayerId.ALL.get(i), new GraphicalPlayerAdapter());
-            break;
-            
-        case "s" : ps.put(PlayerId.ALL.get(i), new PacedPlayer(new MctsPlayer(PlayerId.ALL.get(i), randomForPlayer.get(i), iterations.get(i)),2));
-            break;
-            
-        case "r": try {
-                ps.put(PlayerId.ALL.get(i), new RemotePlayerClient(hosts.get(i)));
-            } catch (IOException e) {
-                displayError("Utilisation: java ch.epfl.javass.LocalMain .\n" + 
-                        "où une erreur de connexion au serveur à eu lieu pour le joueur distant "+i+" :\n" + 
-                        " il devrait avoir la structure suivante : <r>:<name>:<IpAdress> \n" + 
-                        " l'IpAdress est peut etre mauvaise , ou le serveur n'est peut etre pas lancé.\"");
-                e.printStackTrace();
-            }
-            break;
-            
-        default: displayError("wrong input on switch");            
-        }
-    }
+  
     
     
 
+    /**
+     * @Brief the main of the whole project. It runs "launch" that will create a new thread for a game
+     * customed by the args array. 
+     *
+     * @param args an Array of string that are infomations about players 
+    */
     public static void main(String[] args) {
         launch(args);
     }
     
-    private void displayError(String s) {
-        System.err.println(s);
-        System.exit(1);
-    }
+   
     
 }
 
