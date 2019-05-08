@@ -208,37 +208,30 @@ public class GraphicalPlayer {
     
 
     private GridPane createTrickPane() {
-        PlayerId playerIdForCouple[] = new PlayerId[4];
-        Text textForCouple[] = new Text[4];
-        ImageView imageForCouple[] = new ImageView[4];
-        VBox couple[] = new VBox[4];
-        StackPane imageWithHalo[] = new StackPane[4];
-        Rectangle rectangle[] = new Rectangle[4];
+        
+      VBox couple[] = new VBox[4];
       for(int i = 0 ; i < 4 ; ++i) {
-           playerIdForCouple[i] = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
-            textForCouple[i] = new Text();
-            textForCouple[i].textProperty().set(playerNames.get(playerIdForCouple[i]));
-            textForCouple[i].setStyle("-fx-font: 14 Optima;"); 
-            imageForCouple[i] = new ImageView();
-            imageForCouple[i].imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple[i])));
-            imageForCouple[i].setFitHeight(180);
-            imageForCouple[i].setFitWidth(120);
-            rectangle[i] = new Rectangle(120, 180);
-            rectangle[i].setStyle("-fx-arc-width: 20;\n" + 
+            PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
+            Text textForCouple = new Text();
+            textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
+            textForCouple.setStyle("-fx-font: 14 Optima;"); 
+            ImageView imageForCouple = new ImageView();
+            imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
+            imageForCouple.setFitHeight(180);
+            imageForCouple.setFitWidth(120);
+            Rectangle rectangle = new Rectangle(120, 180);
+            rectangle.setStyle("-fx-arc-width: 20;\n" + 
                     "-fx-arc-height: 20;\n" + 
                     "-fx-fill: transparent;\n" + 
                     "-fx-stroke: lightpink;\n" + 
                     "-fx-stroke-width: 5;\n" + 
                     "-fx-opacity: 0.5;");
-            int j=i;
-            BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple[j].equals(trick.winningPlayerProperty().get()),
+            BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple.equals(trick.winningPlayerProperty().get()),
                     trick.winningPlayerProperty() );
-            rectangle[i].visibleProperty().bind(shouldDisplay);
-            rectangle[i].setEffect(new GaussianBlur(4));
-
-            imageWithHalo[i]  = new StackPane(imageForCouple[i], rectangle[i]);
-            
-            couple[i] = new VBox(textForCouple[i],imageWithHalo[i]);
+            rectangle.visibleProperty().bind(shouldDisplay);
+            rectangle.setEffect(new GaussianBlur(4));
+            StackPane imageWithHalo  = new StackPane(imageForCouple, rectangle);
+            couple[i] = new VBox(textForCouple,imageWithHalo);
             couple[i].setAlignment(Pos.TOP_CENTER);
 
       }
@@ -249,6 +242,8 @@ public class GraphicalPlayer {
         ImageTrump.setFitWidth(101);
         VBox trump = new VBox(ImageTrump);
         trump.setAlignment(Pos.CENTER);
+        
+        
         GridPane grid = new GridPane();
         grid.add(couple[1], 0, 1, 1, 1);
         grid.add(couple[3], 2, 1, 1, 1);
