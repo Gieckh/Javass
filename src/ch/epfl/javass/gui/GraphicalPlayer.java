@@ -206,13 +206,14 @@ public class GraphicalPlayer {
         return grid;
     }
     
-    //        BooleanBinding shouldDisplay =  createBooleanBinding( () -> trick.winningPlayerProperty().equals(playerIdForCouple1));
-    //image1WithHalo.visibleProperty().bind(shouldDisplay);
+
     private GridPane createTrickPane() {
         PlayerId playerIdForCouple[] = new PlayerId[4];
         Text textForCouple[] = new Text[4];
         ImageView imageForCouple[] = new ImageView[4];
         VBox couple[] = new VBox[4];
+        StackPane imageWithHalo[] = new StackPane[4];
+        Rectangle rectangle[] = new Rectangle[4];
       for(int i = 0 ; i < 4 ; ++i) {
            playerIdForCouple[i] = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
             textForCouple[i] = new Text();
@@ -222,7 +223,22 @@ public class GraphicalPlayer {
             imageForCouple[i].imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple[i])));
             imageForCouple[i].setFitHeight(180);
             imageForCouple[i].setFitWidth(120);
-            couple[i] = new VBox(textForCouple[i],imageForCouple[i]);
+            rectangle[i] = new Rectangle(120, 180);
+            rectangle[i].setStyle("-fx-arc-width: 20;\n" + 
+                    "-fx-arc-height: 20;\n" + 
+                    "-fx-fill: transparent;\n" + 
+                    "-fx-stroke: lightpink;\n" + 
+                    "-fx-stroke-width: 5;\n" + 
+                    "-fx-opacity: 0.5;");
+            int j=i;
+            BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple[j].equals(trick.winningPlayerProperty().get()),
+                    trick.winningPlayerProperty() );
+            rectangle[i].visibleProperty().bind(shouldDisplay);
+            rectangle[i].setEffect(new GaussianBlur(4));
+
+            imageWithHalo[i]  = new StackPane(imageForCouple[i], rectangle[i]);
+            
+            couple[i] = new VBox(textForCouple[i],imageWithHalo[i]);
             couple[i].setAlignment(Pos.TOP_CENTER);
 
       }
@@ -247,45 +263,8 @@ public class GraphicalPlayer {
                 "-fx-alignment: center;");
         
         return grid;
-        
-//        StackPane image1WithHalo  = new StackPane(imageForCouple1, new Rectangle(120, 180));
-//        StackPane image2WithHalo  = new StackPane(imageForCouple2, new Rectangle(120, 180));
-//        StackPane image3WithHalo  = new StackPane(imageForCouple3 , new Rectangle(120, 180));
-//        StackPane image4WithHalo  = new StackPane(imageForCouple4 , new Rectangle(120, 180));
-//        image1WithHalo.setStyle("-fx-arc-width: 20;\n" + 
-//                "-fx-arc-height: 20;\n" + 
-//                "-fx-fill: transparent;\n" + 
-//                "-fx-stroke: lightpink;\n" + 
-//                "-fx-stroke-width: 5;\n" + 
-//                "-fx-opacity: 0.5;");
-//        image2WithHalo.setStyle("-fx-arc-width: 20;\n" + 
-//                "-fx-arc-height: 20;\n" + 
-//                "-fx-fill: transparent;\n" + 
-//                "-fx-stroke: lightpink;\n" + 
-//                "-fx-stroke-width: 5;\n" + 
-//                "-fx-opacity: 0.5;");
-//        image3WithHalo.setStyle("-fx-arc-width: 20;\n" + 
-//                "-fx-arc-height: 20;\n" + 
-//                "-fx-fill: transparent;\n" + 
-//                "-fx-stroke: lightpink;\n" + 
-//                "-fx-stroke-width: 5;\n" + 
-//                "-fx-opacity: 0.5;");
-//        image4WithHalo.setStyle("-fx-arc-width: 20;\n" + 
-//                "-fx-arc-height: 20;\n" + 
-//                "-fx-fill: transparent;\n" + 
-//                "-fx-stroke: lightpink;\n" + 
-//                "-fx-stroke-width: 5;\n" + 
-//                "-fx-opacity: 0.5;");
-//        image1WithHalo.setEffect(new GaussianBlur(4));
-//        image2WithHalo.setEffect(new GaussianBlur(4));
-//        image3WithHalo.setEffect(new GaussianBlur(4));
-//        image4WithHalo.setEffect(new GaussianBlur(4));
-
-
-  
-        
-        
     }
+    
     
     private BorderPane createVictoryPanes(TeamId winningTeam) {
         
@@ -327,7 +306,6 @@ public class GraphicalPlayer {
             children.disableProperty().bind(isPlayable.not());
             children.setOnMouseClicked((e)-> {
                 try {
-                    System.out.println("clicked");
                     queueOfCommunication.put(correspondingCard.get());
                 } catch (InterruptedException e1) {
                     // TODO Auto-generated catch block
