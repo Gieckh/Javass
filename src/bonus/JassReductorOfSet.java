@@ -2,6 +2,7 @@ package bonus;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
+import ch.epfl.javass.jass.Card.Rank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public Trick trick;
         Color baseColor = trick.baseColor();
         Color trumpColor = trick.trump();
         List<CardSet> cardsThePlayerDontHave  = new ArrayList<>(4);
+        List<CardSet> cardsThePlayerHavnt = new ArrayList<>(4);
         List<Card> cardPlayed = new ArrayList<>(4);        
         for(int i =0 ; i< trick.index() ; ++i ) {
             cardPlayed.set(i, trick.card(i));    
@@ -49,8 +51,12 @@ public Trick trick;
                 }
             }
         }
-        
-        return cardsThePlayerDontHave;
+        int shift = trick.player(0).ordinal();
+        for(PlayerId p : PlayerId.ALL) {
+            cardsThePlayerHavnt.add(p.ordinal(), CardSet.ofPacked(PackedCardSet.difference(cardsThePlayerDontHave.get((-shift+p.ordinal()+4 )%4).packed(), PackedCardSet.add(PackedCardSet.EMPTY, PackedCard.pack(trumpColor, Rank.JACK)))));
+        }
+        return cardsThePlayerHavnt;
+
     }
 
 }

@@ -34,6 +34,7 @@ public class LocalMain extends Application {
     
     // I fought it was a good thing to do to create a list for each information we may need up to 4 times 
     //instead of a list of lists for example.
+    //TODO pas tres propre j'ai du initialiser certaines listes pour pas qu'il y ai de bug.
     private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
     private List<String> typeOfPlayer = new ArrayList<String>(4);
     private List<String> names = new ArrayList<String>(4);
