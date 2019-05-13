@@ -37,13 +37,33 @@ public class LocalMain extends Application {
     private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
     private List<String> typeOfPlayer = new ArrayList<String>(4);
     private List<String> names = new ArrayList<String>(4);
-    private List<String> hosts = new ArrayList<String>(4);
+    private List<String> hosts = string();
+            //new ArrayList<String>(4);
     private List<Long> randomForPlayer = new ArrayList<>(4);
-    private List<Integer> iterations = new ArrayList<>(4); 
+    private List<Integer> iterations = integer(); 
     
     /** ============================================== **/
     /** ==============   PRIVATE METHODS  ============ **/
     /** ============================================== **/
+    
+    private List<String> string(){
+        List<String> coucou = new ArrayList<String>(4);
+        coucou.add("");
+        coucou.add("");
+        coucou.add("");
+        coucou.add("");
+        return coucou;
+    }
+    private List<Integer> integer(){
+        List<Integer> coucou = new ArrayList<Integer>(4);
+        coucou.add(0);
+        coucou.add(0);
+        coucou.add(0);
+        coucou.add(0);
+        return coucou;
+    }
+    
+    
     
     private void displayError(String s) {
         System.err.println(s);
@@ -51,7 +71,8 @@ public class LocalMain extends Application {
     }
     
     private void checkSize(int size) {
-        if(size!=4 || size !=5) {
+        if(size!=4 && size !=5) {
+            System.out.println(size);
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
                     "<jn> spécifie le joueur n, ainsi:\n" + 
@@ -146,7 +167,7 @@ public class LocalMain extends Application {
         checkSize(size);
         for ( int i = 0 ; i < size; ++i) {
             if(i == 5) {
-                try {
+                try {   
                 generatingSeed = Long.parseLong(args.get(i));
                 hasFiveArgs = true;
                 }
@@ -158,16 +179,18 @@ public class LocalMain extends Application {
             }
             else {
                 List<String> list = Arrays.asList(args.get(i).split(":"));
-                names.set(i, ((list.get(1).isEmpty()) ? LocalMain.defaultNames[i] : list.get(1)));
+                System.out.println(list.toString());
+                names.add(i, ((list.size() !=2 || list.get(1).isEmpty()) ?
+                        LocalMain.defaultNames[i] : list.get(1)));
                 if(list.get(0).equals("h")){
                     checkParameters(list, "h", i);
-                    typeOfPlayer.set(i, "h");
+                    typeOfPlayer.add(i, "h");
                 }
                 if(list.get(0).equals("s")){
                     checkParameters(list, "s", i);
-                    typeOfPlayer.set(i,"s");
+                    typeOfPlayer.add(i,"s");
                     try {
-                        if(!list.get(2).isEmpty()|| Integer.parseInt(list.get(2))<10) {
+                        if(list.size()==3 &&Integer.parseInt(list.get(2))<10) {
                             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                                     "où :\n" + 
                                     "<j"+i+"> est un joueur simulé (s) "+
@@ -184,13 +207,14 @@ public class LocalMain extends Application {
                                 "forcément un entier"
                                 );
                     }
-                    iterations.set(i, (list.get(2).isEmpty()) ? 10000 : Integer.parseInt(list.get(2)));
+                    iterations.add(i, (list.size()!=3 || list.get(2).isEmpty()) ? 10000 : Integer.parseInt(list.get(2)));
 
                 }
                 if(list.get(0).equals("r")){
                     checkParameters(list, "r", i);
-                    typeOfPlayer.set(i, "r");
-                    hosts.set(i, list.set(2, ((list.get(2).isEmpty()) ? "localhost" : list.get(2))));
+                    typeOfPlayer.add(i, "r");
+                    //list.set(2, ();
+                    hosts.add(i, (list.size()!=3 || list.get(2).isEmpty()) ? "localhost" : list.get(2));
 
                 }
                 if(!(list.get(0).equals("r")||list.get(0).equals("h")||list.get(0).equals("s"))){
@@ -209,7 +233,7 @@ public class LocalMain extends Application {
         long randomForJassGame = random.nextLong();
                         
         for(int j = 0 ; j<4 ; ++j) {
-            randomForPlayer.set(j, random.nextLong());
+            randomForPlayer.add(j, random.nextLong());
             putCustomedPlayer(j,ps);
             ns.put(PlayerId.ALL.get(j), names.get(j));
         }
