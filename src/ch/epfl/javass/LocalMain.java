@@ -36,8 +36,8 @@ public class LocalMain extends Application {
     //instead of a list of lists for example.
     //TODO pas tres propre j'ai du initialiser certaines listes pour pas qu'il y ai de bug.
     private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
-    private List<String> typeOfPlayer = new ArrayList<String>(4);
-    private List<String> names = new ArrayList<String>(4);
+    private List<String> typeOfPlayer = string();
+    private List<String> names = string();
     private List<String> hosts = string();
             //new ArrayList<String>(4);
     private List<Long> randomForPlayer = new ArrayList<>(4);
@@ -166,8 +166,9 @@ public class LocalMain extends Application {
         long generatingSeed =0;
         int size = args.size();
         checkSize(size);
+        System.out.println(size);
         for ( int i = 0 ; i < size; ++i) {
-            if(i == 5) {
+            if(i == 4) {
                 try {   
                 generatingSeed = Long.parseLong(args.get(i));
                 hasFiveArgs = true;
@@ -182,7 +183,8 @@ public class LocalMain extends Application {
                 List<String> list = Arrays.asList(args.get(i).split(":"));
                 System.out.println(list.toString());
                 names.add(i, ((list.size() !=2 || list.get(1).isEmpty()) ?
-                        LocalMain.defaultNames[i] : list.get(1)));
+                        LocalMain.defaultNames[i] 
+                                : list.get(1)));
                 if(list.get(0).equals("h")){
                     checkParameters(list, "h", i);
                     typeOfPlayer.add(i, "h");
