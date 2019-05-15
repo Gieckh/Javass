@@ -3,6 +3,7 @@ package ch.epfl.javass;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class LocalMain extends Application {
     private List<String> names = string();
     private List<String> hosts = string();
             //new ArrayList<String>(4);
-    private List<Long> randomForPlayer = new ArrayList<>(4);
+    private List<Long> randomForPlayer = new ArrayList<Long>(Collections.nCopies(4, 0l));
     private List<Integer> iterations = integer(); 
     
     /** ============================================== **/
@@ -55,6 +56,7 @@ public class LocalMain extends Application {
         coucou.add("");
         return coucou;
     }
+    
     private List<Integer> integer(){
         List<Integer> coucou = new ArrayList<Integer>(4);
         coucou.add(0);
