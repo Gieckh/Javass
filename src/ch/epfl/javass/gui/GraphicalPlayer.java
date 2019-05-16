@@ -165,10 +165,10 @@ public class GraphicalPlayer {
         
         Text namesOfTeam1 = new Text(playerNames.get(PlayerId.PLAYER_1).toString()
             +" et "+
-            playerNames.get(PlayerId.PLAYER_3).toString() + " : ");
+            playerNames.get(PlayerId.PLAYER_3) + " : ");
         Text namesOfTeam2 = new Text(playerNames.get(PlayerId.PLAYER_2).toString()
             +" et "+
-            playerNames.get(PlayerId.PLAYER_4).toString()+ " : ");
+            playerNames.get(PlayerId.PLAYER_4) + " : ");
         
         Text totalString = new Text("/Total : ");
         Text totalStringBis = new Text("/Total : ");
@@ -186,14 +186,14 @@ public class GraphicalPlayer {
         Text turnPointsOfTeam1 = new Text();
         turnPointsOfTeam1.textProperty().bind(Bindings.convert(turnPointsT1));
         Text trickPointsOfTeam1 = new Text();        
-        trickPointsOfTeam1.textProperty().bind(  trickOf1);
+        trickPointsOfTeam1.textProperty().bind(trickOf1);
         
         Text gamePointsOfTeam2 = new Text();
         gamePointsOfTeam2.textProperty().bind(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_2)));
         Text turnPointsOfTeam2 = new Text();
         turnPointsOfTeam2.textProperty().bind(Bindings.convert(turnPointsT2));
         Text trickPointsOfTeam2 = new Text();        
-        trickPointsOfTeam2.textProperty().bind(  trickOf2);
+        trickPointsOfTeam2.textProperty().bind(trickOf2);
         
         GridPane grid = new GridPane();
         

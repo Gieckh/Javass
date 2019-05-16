@@ -49,25 +49,64 @@ public class GraphicalPlayer2 {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+
+    /**
+     *
+     * @return
+     */
     public Stage createStage() {
         //TODO
         return null;
     }
 
-
-    private GridPane createScorePane(ScoreBean scoreBean) {
+    /**
+     *
+     * @param scoreBean
+     * @return
+     */
+    private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
         // https://piazza.com/class/jrhvyjm5czn4f?cid=372
+        Text textL1C1 = new Text();
+        Text textL1C2 = new Text();
+        Text textL1C3 = new Text();
+        Text textL1C4 = new Text();
+        Text textL1C5 = new Text();
+
+        Text textL2C1 = new Text();
+        Text textL2C2 = new Text();
+        Text textL2C3 = new Text();
+        Text textL2C4 = new Text();
+        Text textL2C5 = new Text();
+
+        textL1C1.textProperty().set();
+
+        GridPane scoreGrid = new GridPane();
+        scoreGrid.addRow(0, textL1C1, textL1C2, textL1C3, textL1C4, textL1C5);
+        scoreGrid.addRow(1, textL2C1, textL2C2, textL2C3, textL2C4, textL2C5);
+
         //TODO
         return null;
     }
 
-
+    /**
+     *
+     * @param trickBean
+     * @return
+     */
     private GridPane createTrickPane(TrickBean trickBean) {
         //TODO
         return null;
     }
 
-
+    /**
+     * @brief The victory panes.
+     *
+     * @param scoreBean
+     * @param winningTeam
+     * @param losingTeam
+     * @param playerNames
+     * @return
+     */
     private BorderPane
     createTeamPane(ScoreBean scoreBean, TeamId winningTeam, TeamId losingTeam, Map<PlayerId, String> playerNames)
     {
@@ -90,6 +129,12 @@ public class GraphicalPlayer2 {
         return victoryPane;
     }
 
+    /**
+     *
+     * @param winningTeam
+     * @param playerNames
+     * @return
+     */
     private String[] findWinningPlayerNames(TeamId winningTeam, Map<PlayerId, String> playerNames) {
         String[] winningPlayerNames = new String[2];
         if (winningTeam == TeamId.TEAM_1) {
@@ -104,6 +149,11 @@ public class GraphicalPlayer2 {
         return winningPlayerNames;
     }
 
+    /**
+     *
+     * @param width
+     * @return
+     */
     private ObservableMap<Card, Image> cards(int width) {
         ObservableMap<Card, Image> map = FXCollections.observableMap(new HashMap<>());
 
@@ -118,6 +168,13 @@ public class GraphicalPlayer2 {
         return FXCollections.unmodifiableObservableMap(map);
     }
 
+    /**
+     *
+     * @param c
+     * @param r
+     * @param width
+     * @return
+     */
     private Image toCardName(int c, int r, int width) {
         return new Image("/card_" + c + "_" + r + "_" + width + ".png");
     }
