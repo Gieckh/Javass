@@ -37,35 +37,16 @@ public class LocalMain extends Application {
     //instead of a list of lists for example.
     //TODO pas tres propre j'ai du initialiser certaines listes pour pas qu'il y ai de bug.
     private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
-    private List<String> typeOfPlayer = string();
-    private List<String> names = string();
-    private List<String> hosts = string();
+    private List<String> typeOfPlayer = new ArrayList<String>(Collections.nCopies(4, ""));
+    private List<String> names = new ArrayList<String>(Collections.nCopies(4, ""));
+    private List<String> hosts = new ArrayList<String>(Collections.nCopies(4, ""));
             //new ArrayList<String>(4);
     private List<Long> randomForPlayer = new ArrayList<Long>(Collections.nCopies(4, 0l));
-    private List<Integer> iterations = integer(); 
+    private List<Integer> iterations = new ArrayList<Integer>(Collections.nCopies(4, 0));
     
     /** ============================================== **/
     /** ==============   PRIVATE METHODS  ============ **/
     /** ============================================== **/
-    
-    private List<String> string(){
-        List<String> coucou = new ArrayList<String>(4);
-        coucou.add("");
-        coucou.add("");
-        coucou.add("");
-        coucou.add("");
-        return coucou;
-    }
-    
-    private List<Integer> integer(){
-        List<Integer> coucou = new ArrayList<Integer>(4);
-        coucou.add(0);
-        coucou.add(0);
-        coucou.add(0);
-        coucou.add(0);
-        return coucou;
-    }
-    
     
     
     private void displayError(String s) {
