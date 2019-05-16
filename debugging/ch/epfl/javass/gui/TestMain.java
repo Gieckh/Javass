@@ -25,7 +25,7 @@ public final class TestMain extends Application {
     JassGame g = new JassGame(1000, ps, ns);
     while (! g.isGameOver()) {
       g.advanceToEndOfNextTrick();
-      try { Thread.sleep(0000); } catch (Exception e) {}
+      try { Thread.sleep(1000); } catch (Exception e) {}
     }
     }).start();
   }

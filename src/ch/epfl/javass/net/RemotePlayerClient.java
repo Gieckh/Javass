@@ -57,8 +57,8 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
      * @param port (int) - should be 5108 per default
      * @throws IOException
      */
-    public RemotePlayerClient(String hostName, int port) throws IOException {
-        Socket s = new Socket(hostName, port); //TODO: why not just "port" ?
+    public RemotePlayerClient(String hostName) throws IOException {
+        Socket s = new Socket(hostName, Net.PORT_NUMBER); 
         BufferedReader r =
                 new BufferedReader(
                         new InputStreamReader(s.getInputStream(), US_ASCII));

@@ -167,8 +167,8 @@ public class GraphicalPlayer {
             +" et "+
             playerNames.get(PlayerId.PLAYER_3).toString() + " : ");
         Text namesOfTeam2 = new Text(playerNames.get(PlayerId.PLAYER_2).toString()
-                +" et "+
-                playerNames.get(PlayerId.PLAYER_4).toString()+ " : ");
+            +" et "+
+            playerNames.get(PlayerId.PLAYER_4).toString()+ " : ");
         
         Text totalString = new Text("/Total : ");
         Text totalStringBis = new Text("/Total : ");
@@ -206,78 +206,50 @@ public class GraphicalPlayer {
         return grid;
     }
     
+
     private GridPane createTrickPane() {
         
-        StackPane stackpane = new StackPane(new Rectangle(120, 180));
-        stackpane.setStyle("-fx-arc-width: 20;\n" + 
-                "-fx-arc-height: 20;\n" + 
-                "-fx-fill: transparent;\n" + 
-                "-fx-stroke: lightpink;\n" + 
-                "-fx-stroke-width: 5;\n" + 
-                "-fx-opacity: 0.5;");
-        stackpane.setEffect(new GaussianBlur(4));
-        
-        PlayerId playerIdForCouple1 = PlayerId.ALL.get((thisId.ordinal()+2)%4);
-        PlayerId playerIdForCouple2 = PlayerId.ALL.get((thisId.ordinal()+3)%4);
-        PlayerId playerIdForCouple3 = thisId;
-        PlayerId playerIdForCouple4 = PlayerId.ALL.get((thisId.ordinal()+1)%4);
-        
-        Text textForCouple1 = new Text();
-        Text textForCouple2 = new Text();
-        Text textForCouple3 = new Text();
-        Text textForCouple4 = new Text();
-        
-        textForCouple1.textProperty().set(playerNames.get(playerIdForCouple1));
-        textForCouple2.textProperty().set(playerNames.get(playerIdForCouple2));
-        textForCouple3.textProperty().set(playerNames.get(playerIdForCouple3));
-        textForCouple4.textProperty().set(playerNames.get(playerIdForCouple4));
+      VBox couple[] = new VBox[4];
+      for(int i = 0 ; i < 4 ; ++i) {
+            PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
+            Text textForCouple = new Text();
+            textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
+            textForCouple.setStyle("-fx-font: 14 Optima;"); 
+            ImageView imageForCouple = new ImageView();
+            imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
+            imageForCouple.setFitHeight(180);
+            imageForCouple.setFitWidth(120);
+            Rectangle rectangle = new Rectangle(120, 180);
+            rectangle.setStyle("-fx-arc-width: 20;\n" + 
+                    "-fx-arc-height: 20;\n" + 
+                    "-fx-fill: transparent;\n" + 
+                    "-fx-stroke: lightpink;\n" + 
+                    "-fx-stroke-width: 5;\n" + 
+                    "-fx-opacity: 0.5;");
+            BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple.equals(trick.winningPlayerProperty().get()),
+                    trick.winningPlayerProperty() );
+            rectangle.visibleProperty().bind(shouldDisplay);
+            rectangle.setEffect(new GaussianBlur(4));
+            StackPane imageWithHalo  = new StackPane(imageForCouple, rectangle);
+            couple[i] = new VBox(textForCouple,imageWithHalo);
+            couple[i].setAlignment(Pos.TOP_CENTER);
 
-        textForCouple1.setStyle("-fx-font: 14 Optima;");      
-        textForCouple2.setStyle("-fx-font: 14 Optima;");      
-        textForCouple3.setStyle("-fx-font: 14 Optima;");      
-        textForCouple4.setStyle("-fx-font: 14 Optima;");
-        
-        ImageView imageForCouple1 = new ImageView();
-        ImageView imageForCouple2 = new ImageView();
-        ImageView imageForCouple3 = new ImageView();
-        ImageView imageForCouple4 = new ImageView();
+      }
+
         ImageView ImageTrump = new ImageView();
-
-        imageForCouple1.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple1)));
-        imageForCouple2.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple2)));
-        imageForCouple3.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple3)));
-        imageForCouple4.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple4)));
         ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
-
-        imageForCouple1.setFitHeight(180);
-        imageForCouple1.setFitWidth(120);
-        imageForCouple2.setFitHeight(180);
-        imageForCouple2.setFitWidth(120);
-        imageForCouple3.setFitHeight(180);
-        imageForCouple3.setFitWidth(120);
-        imageForCouple4.setFitHeight(180);
-        imageForCouple4.setFitWidth(120);
         ImageTrump.setFitHeight(101);   
         ImageTrump.setFitWidth(101);
-        
-        VBox couple1 = new VBox(textForCouple1,imageForCouple1);
-        VBox couple2 = new VBox(textForCouple2,imageForCouple2);
-        VBox couple3 = new VBox(imageForCouple3, textForCouple3);
-        VBox couple4 = new VBox(textForCouple4,imageForCouple4);
         VBox trump = new VBox(ImageTrump);
-        
-        couple1.setAlignment(Pos.TOP_CENTER);
-        couple2.setAlignment(Pos.TOP_CENTER);
-        couple3.setAlignment(Pos.TOP_CENTER);
-        couple4.setAlignment(Pos.TOP_CENTER);
         trump.setAlignment(Pos.CENTER);
         
+        
         GridPane grid = new GridPane();
-        grid.add(couple2, 0, 1, 1, 1);
-        grid.add(couple4, 2, 1, 1, 1);
-        grid.add(couple1, 1,0,1,1);
+        grid.add(couple[1], 0, 1, 1, 1);
+        grid.add(couple[3], 2, 1, 1, 1);
+        grid.add(couple[0], 1,0,1,1);
         grid.add(trump, 1,1,1,1);
-        grid.add(couple3, 1,2,1,1);
+        grid.add(couple[2], 1,2,1,1);
         grid.setStyle("-fx-background-color: whitesmoke;\n" + 
                 "-fx-padding: 5px;\n" + 
                 "-fx-border-width: 3px 0px;\n" + 
@@ -287,6 +259,7 @@ public class GraphicalPlayer {
         
         return grid;
     }
+    
     
     private BorderPane createVictoryPanes(TeamId winningTeam) {
         
@@ -328,7 +301,6 @@ public class GraphicalPlayer {
             children.disableProperty().bind(isPlayable.not());
             children.setOnMouseClicked((e)-> {
                 try {
-                    System.out.println("clicked");
                     queueOfCommunication.put(correspondingCard.get());
                 } catch (InterruptedException e1) {
                     // TODO Auto-generated catch block
