@@ -66,14 +66,7 @@ public final class TurnStateBonus {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    
-    public CardSet cardsAPlayerDoesntHave(PlayerId p) {
-        return cardsThePlayersDontHave.get(p.ordinal());
-    }
-    
-    private List<CardSet> actualizeCardsThePlayersDontHave(){
-        this.cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(trick(),cardsThePlayersDontHave);
-    }
+   
 
     //fake constructors
     /**
