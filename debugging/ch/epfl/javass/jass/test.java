@@ -1,5 +1,7 @@
 package ch.epfl.javass.jass;
 
+import java.util.Collections;
+
 import bonus.JassReductorOfSet;
 import ch.epfl.javass.gui.HandBean;
 import ch.epfl.javass.jass.Card.Color;
@@ -12,12 +14,12 @@ import javafx.collections.ListChangeListener;
 public class test {
     public static void main(String[] args) {
         
-       Trick coucou = Trick.firstEmpty(Color.CLUB, PlayerId.PLAYER_1);
-       coucou = coucou.withAddedCard(Card.of(Color.DIAMOND, Rank.NINE));
-       coucou = coucou.withAddedCard(Card.of(Color.HEART,Rank.ACE));
-       coucou= coucou.withAddedCard(Card.of(Color.CLUB, Rank.QUEEN));
-       coucou = coucou.withAddedCard(Card.of(Color.CLUB, Rank.SIX));
-       System.out.println(JassReductorOfSet.CardsThePlayerHavnt(coucou));
+       Trick coucou = Trick.firstEmpty(Color.CLUB, PlayerId.PLAYER_2);
+       coucou = coucou.withAddedCard(Card.of(Color.CLUB, Rank.NINE));
+       coucou = coucou.withAddedCard(Card.of(Color.CLUB,Rank.QUEEN));
+       coucou= coucou.withAddedCard(Card.of(Color.CLUB, Rank.TEN));
+      // coucou = coucou.withAddedCard(Card.of(Color.CLUB, Rank.SIX));
+       System.out.println(JassReductorOfSet.CardsThePlayerHavnt(coucou, Collections.nCopies(4,CardSet.EMPTY)));
        
     }
 }

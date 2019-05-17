@@ -88,14 +88,17 @@ public Trick trick;
                 }
                
             }
-            
+            Card bestCard = null ;
             for(int i = 0 ; i < index-1 ; ++i) {
-                if(cardPlayed.get(i).color().equals(trumpColor)) {
-                    for(int j =i+1 ; j< index ; ++j) {
-                        if(cardPlayed.get(j).color().equals(trumpColor)) {
-                            if(cardPlayed.get(i).isBetter(trumpColor,  cardPlayed.get(j))) {
-                                cardsThePlayerDontHave.set(j, cardsThePlayerDontHave.get(j).union(CardSet.ofPacked(PackedCardSet.trumpAbove(cardPlayed.get(i).packed()))));
-                                
+                if(bestCard == null || cardPlayed.get(i).isBetter(trumpColor, bestCard)) {
+                    bestCard = cardPlayed.get(i);
+                    if(cardPlayed.get(i).color().equals(trumpColor)) {
+                        for(int j =i+1 ; j< index ; ++j) {
+                            if(cardPlayed.get(j).color().equals(trumpColor)) {
+                                if(cardPlayed.get(i).isBetter(trumpColor,  cardPlayed.get(j))) {
+                                    cardsThePlayerDontHave.set(j, cardsThePlayerDontHave.get(j).union(CardSet.ofPacked(PackedCardSet.trumpAbove(cardPlayed.get(i).packed()))));
+                                    
+                                }
                             }
                         }
                     }

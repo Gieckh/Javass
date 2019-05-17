@@ -35,7 +35,8 @@ public class TurnState {
         if(!(cardsThePlayersDontHave.get(0).isEmpty() &&
                 cardsThePlayersDontHave.get(1).isEmpty() && 
                 cardsThePlayersDontHave.get(2).isEmpty() &&
-                cardsThePlayersDontHave.get(3).isEmpty())) {
+                cardsThePlayersDontHave.get(3).isEmpty())&&
+                (!trick().baseColor().equals(trick().trump()))) {
             System.out.println(trick().index());
             System.out.println(PackedTrick.toString(pkCurrentTrick));
             System.out.println(cardsThePlayersDontHave);
