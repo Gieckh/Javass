@@ -145,7 +145,14 @@ public final class RemotePlayerServer {
                                 StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
+                    case CHET:
+                        assert (words.size() == 2);
+                        w.write(StringSerializer.serializeInt(this.underLyingPlayer.cheat(StringSerializer
+                                        .deserializeInt(words.get(1)))));
 
+                        w.write("\n");
+                        w.flush();
+                        
                     default:
                         throw new Error("JassCommand enum has been changed?");
                 }

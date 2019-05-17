@@ -9,6 +9,8 @@ import java.util.Map;
  * @author Marin Nguyen - (288260)
  */
 public interface Player {
+    
+    
     /**
      * @brief Returns the Card the [underlying] Player wants to play, given its hand
      *        and the actual TurnState.
@@ -33,6 +35,17 @@ public interface Player {
         //default is empty
     }
 
+    
+    /**
+     * @Brief Called during a TurnState, will provoke some specific 
+     * cheating events in function of the int case.
+     *
+     * @param Case an int which will cause a specific event 
+     * @return 
+    */
+    default public int cheat(int Case) {
+        return 0;
+    }
 
     /**
      * @brief Called when the hand of the Player is updated [distribution, or when he plays].

@@ -30,6 +30,7 @@ public class GraphicalPlayerAdapter implements Player {
     HandBean handBean;
     GraphicalPlayer graphicalPlayer;
     ArrayBlockingQueue<Card> queueOfCommunication ;
+    ArrayBlockingQueue<Integer> CheatingQueue;
     
     
     /** ============================================== **/
@@ -47,6 +48,7 @@ public class GraphicalPlayerAdapter implements Player {
         this.scoreBean = new ScoreBean();
         this.trickBean = new TrickBean();
         this.queueOfCommunication =  new ArrayBlockingQueue<>(1);
+        this.CheatingQueue = new ArrayBlockingQueue<>(1);
         
     }
     
@@ -70,13 +72,29 @@ public class GraphicalPlayerAdapter implements Player {
         }
 //        return state.trick().playableCards(hand).get(0);
     }
+    
+    
+    /* 
+     * @see ch.epfl.javass.jass.Player#cheat(int)
+     */
+    @Override
+    public int cheat(int Case) {
+        try {
+            System.out.println("reveived");
+            return CheatingQueue.isEmpty() ? 0 : CheatingQueue.take() ;
+            
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            throw new Error();
+        }
+    }
 
     /* 
      * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
      */
-    @Override public void
-    setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean, this.queueOfCommunication);
+    @Override
+    public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
+        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean, this.queueOfCommunication, this.CheatingQueue);
         runLater(() -> { graphicalPlayer.createStage().show(); });
     
     }

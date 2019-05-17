@@ -21,11 +21,14 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableMap;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -59,6 +62,7 @@ public class GraphicalPlayer {
     private ArrayBlockingQueue<Card> queueOfCommunication;
     private BorderPane victoryPaneForTeam[] = new BorderPane[2];
     private StackPane finalPane;
+    private ArrayBlockingQueue<Integer> cheatingQueue;
 
 
     
@@ -79,13 +83,15 @@ public class GraphicalPlayer {
      * @param queueOfCommunication
      */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
-            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication ) {
+            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication,
+            ArrayBlockingQueue<Integer> cheatingQueue ) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
         this.score = score; 
         this.trick =trick;
         this.handBean = handBean;
         this.queueOfCommunication = queueOfCommunication;
+        this.cheatingQueue = cheatingQueue;
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
         HBox handPane = createHandPane();
@@ -96,13 +102,36 @@ public class GraphicalPlayer {
         }
 
         BorderPane main= new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
-        this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
         
+        this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
+        cheatingManager();
     }
     
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    
+    private void cheatingManager() {
+        finalPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(final KeyEvent keyEvent) {
+                if (keyEvent.getCode().isDigitKey() && cheatingQueue.isEmpty()) {
+                    try {
+                        int code = Integer.parseInt(keyEvent.getCode().toString().substring(
+                                keyEvent.getCode().toString().length()-1));
+                        if(code<4)
+                            cheatingQueue.put(code);
+
+                    } catch (InterruptedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                 keyEvent.consume();
+                
+               }
+            }
+        });
+    }
+    
     
     /**
      * @Brief create the javaFx stage of a graphic Jass game.
@@ -112,9 +141,14 @@ public class GraphicalPlayer {
     public Stage createStage() {
         Stage stage = new Stage();
         stage.setTitle("Javass - "+playerNames.get(thisId).toString() );
-        stage.setScene(new Scene(finalPane));
+        Scene finalScene = new Scene(finalPane);
+        finalScene.getRoot().requestFocus();
+        stage.setScene(finalScene);
+        
         return stage;
     }
+    
+   
     
     /**
      * @Brief generates an observable map from Card to Image of width 160
