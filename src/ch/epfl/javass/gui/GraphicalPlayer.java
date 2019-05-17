@@ -147,7 +147,7 @@ public class GraphicalPlayer {
     }
     
     /**
-     * @Brief generates an observable map from trump to Image
+     * @brief generates an observable map from trump to Image
      *
      */
     private static ObservableMap<Color,Image> trumpImage() {

@@ -73,8 +73,8 @@ public class GraphicalPlayerAdapter implements Player {
     /* 
      * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
      */
-    @Override public void setPlayers(PlayerId ownId,
-            Map<PlayerId, String> playerNames) {
+    @Override public void
+    setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean, this.queueOfCommunication);
         runLater(() -> { graphicalPlayer.createStage().show(); });
     

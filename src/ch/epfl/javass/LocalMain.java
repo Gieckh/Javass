@@ -188,8 +188,7 @@ public class LocalMain extends Application {
                                 "où :\n" + 
                                 "<j"+i+"> est un joueur simulé (s) "+
                                 "qui n'admet doit avoir comme deuxième paramètre "+
-                                "le nombre d'itérations "+
-                                "forcément un entier"
+                                "le nombre d'itérations, forcément un entier."
                                 );
                     }
                     iterations.set(i, (list.size()!=3 || list.get(2).isEmpty()) ? 10000 : Integer.parseInt(list.get(2)));
@@ -199,7 +198,7 @@ public class LocalMain extends Application {
                     checkParameters(list, "r", i);
                     typeOfPlayer.set(i, "r");
                     //list.set(2, ();
-                    hosts.set(i, (list.size()!=3 || list.get(2).isEmpty()) ? "localhost" : list.get(2));
+                    hosts.set(i, (list.size()!= 3 || list.get(2).isEmpty()) ? "localhost" : list.get(2));
 
                 }
                 if(!(list.get(0).equals("r")||list.get(0).equals("h")||list.get(0).equals("s"))){
@@ -215,7 +214,7 @@ public class LocalMain extends Application {
         Random random = hasFiveArgs ?  new Random(generatingSeed) : new Random();
         long randomForJassGame = random.nextLong();
                         
-        for(int j = 0 ; j<4 ; ++j) {
+        for(int j = 0; j < 4 ; ++j) {
             randomForPlayer.set(j, random.nextLong());
             putCustomPlayer(j,ps);
             ns.put(PlayerId.ALL.get(j), names.get(j));
@@ -230,7 +229,7 @@ public class LocalMain extends Application {
 
         gameThread.setDaemon(true);
         gameThread.start();
-        
+
     }
     
     
