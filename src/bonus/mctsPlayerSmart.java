@@ -1,10 +1,8 @@
 package bonus;
 
+
 import static ch.epfl.javass.Preconditions.checkArgument;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.SplittableRandom;
 
 import ch.epfl.javass.jass.Card;
@@ -13,7 +11,6 @@ import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
-import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
 
 /**
@@ -34,7 +31,7 @@ public class mctsPlayerSmart implements Player {
     private final PlayerId ownId;
 //    private final long rngSeed;
     private SplittableRandom rng;
-    List<CardSet> cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
+    private TurnState gameState;
 
 
 
@@ -54,19 +51,7 @@ public class mctsPlayerSmart implements Player {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
-    
-    @Override
-    public void updateTrick(Trick newTrick) {
-        //System.out.println("update");
-        this.cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(newTrick, cardsThePlayersDontHave);
-        Player.super.updateTrick(newTrick);
-
-    }
-    
-    
-    private CardSet cardsOnePlayerDoesntHave(PlayerId p) {
-        return cardsThePlayersDontHave.get(p.ordinal());
-    }
+   
 
     
     @SuppressWarnings("Duplicates")
@@ -82,9 +67,7 @@ public class mctsPlayerSmart implements Player {
      */
     public Card cardToPlay(TurnState state, CardSet hand) {
         
-        if(state.trick().index()==0) {
-            this.cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
-        }
+        this.gameState = state;
         
         
         //default, the root teamId is this player's and its father is null.
@@ -97,8 +80,6 @@ public class mctsPlayerSmart implements Player {
         }
         else
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
-       // System.out.println(hand.toString());
-        //System.out.println(cardsThePlayersDontHave.get(0).complement().intersection(hand).toString());
         iterate(root);
 
         return root.playableCardsFromTurnState.get(root.selectSon(0));
@@ -170,7 +151,7 @@ public class mctsPlayerSmart implements Player {
         assert (! father.state.trick().isFull());
         sonTeamId = father.state.nextPlayer().team();
 
-        //We never wanna have a full trick in our turnState, unless it is the last trick of the turn
+        //We never wanna have a full trick in our TurnState, unless it is the last trick of the turn
         if (father.state.trick().isLast()) {
             sonState = father.state.withNewCardPlayed(card);
             //PlayableCards should never be called at the last turn of the game
@@ -223,7 +204,7 @@ public class mctsPlayerSmart implements Player {
 //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
-            CardSet OnlyPossiblePlayableCards = playableCards.intersection(cardsOnePlayerDoesntHave(this.ownId).complement());
+            CardSet OnlyPossiblePlayableCards = playableCards.intersection(     state.cardsOnePlayerDoesntHave(this.ownId).complement());
             if(OnlyPossiblePlayableCards.size()==0) {
                 //System.out.println(cardsOnePlayerDoesntHave(this.ownId).complement());
                 //System.out.println(playableCards);

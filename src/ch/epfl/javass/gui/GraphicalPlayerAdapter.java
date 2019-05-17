@@ -21,6 +21,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @author Marin Nguyen - (288260)
  */
 public class GraphicalPlayerAdapter implements Player {
+    
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/

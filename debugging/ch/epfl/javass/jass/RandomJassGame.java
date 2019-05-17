@@ -75,10 +75,10 @@ public final class RandomJassGame {
               new mctsPlayerSmart(PlayerId.PLAYER_1, 2019, k);
            }
          if (pId == PlayerId.PLAYER_4) {
-             player = new MctsPlayer(PlayerId.PLAYER_4, 2019, k);
+             player = new mctsPlayerSmart(PlayerId.PLAYER_4, 2019, k);
           }
          if (pId == PlayerId.PLAYER_2) {
-             player = new MctsPlayer(PlayerId.PLAYER_2, 2019, k);
+             player = new mctsPlayerSmart(PlayerId.PLAYER_2, 2019, k);
            }
        if (pId == PlayerId.PLAYER_3) {
            player = new mctsPlayerSmart(PlayerId.PLAYER_3, 2019, k);
@@ -87,12 +87,11 @@ public final class RandomJassGame {
           playerNames.put(pId, pId.name());
         }
         int l = 0;
-        for(int i =0 ; i < 10 ; ++i) {
+        for(int i =0 ; i < 1 ; ++i) {
             JassGame g = new JassGame(i, players, playerNames);
             while (!g.isGameOver()) {
                 g.advanceToEndOfNextTrick();
             }
-            l=g.turnState.score().totalPoints(TeamId.TEAM_1) - g.turnState.score().totalPoints(TeamId.TEAM_2);
             System.out.println(l);
         }
         System.out.println(l);

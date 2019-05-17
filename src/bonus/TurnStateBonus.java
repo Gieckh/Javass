@@ -15,6 +15,7 @@ import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
+import ch.epfl.javass.jass.TurnStateTest;
 
 /**
  * @brief This class represents the [public] state of the game: what every Player
@@ -27,7 +28,7 @@ import ch.epfl.javass.jass.TurnState;
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
-public final class TurnStateBonus {
+public final class TurnStateBonus extends TurnState {
     
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -36,7 +37,6 @@ public final class TurnStateBonus {
     private final long pkScore;
     private final long pkUnplayedCards;
     private final int pkCurrentTrick;
-    private List<CardSet> cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
 
     
 
@@ -56,9 +56,7 @@ public final class TurnStateBonus {
      * @param pkCurrentTrick (int) - the current trick
      */
     private TurnStateBonus(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
-        this.pkScore =  pkScore;
-        this.pkUnplayedCards = pkUnplayedCards;
-        this.pkCurrentTrick  = pkCurrentTrick;
+        super
         
     }
 
@@ -190,6 +188,11 @@ public final class TurnStateBonus {
     }
 
     
+    
+    
+    
+    
+    
     /**
      * @brief returns a new TurnState in which the next player has played the Card card.
      * 
@@ -201,10 +204,10 @@ public final class TurnStateBonus {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
         }
-
         int pkCard = card.packed();
-        return new TurnStateBonus(pkScore, PackedCardSet.remove(pkUnplayedCards, pkCard),
-                             PackedTrick.withAddedCard(pkCurrentTrick, pkCard) );
+        TurnStateBonus state = new   TurnStateBonus(pkScore, PackedCardSet.remove(pkUnplayedCards, pkCard),
+                PackedTrick.withAddedCard(pkCurrentTrick, pkCard) );
+        return  state;
     }
 
     /**
@@ -253,6 +256,7 @@ public final class TurnStateBonus {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
         }
+        
 
         int pkCard = card.packed();
         long newUnplayedCards = PackedCardSet.remove(pkUnplayedCards, pkCard);
