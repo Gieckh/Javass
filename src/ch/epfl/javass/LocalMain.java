@@ -96,7 +96,7 @@ public class LocalMain extends Application {
         case "s": if(list.size()>3) {
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
-                    "<j"+i+"> est un joueur simulé (s) "+
+                    "<j"+i+"> est un joueur simulé (s) "+//TODO: ?
                     "qui n'admet que deux paramètres maximums :"+
                     "le nom du joueur et le nombre d'itérations "+
                     "ex : <j"+i+">:<"+list.get(1)+">:<"+list.get(2)+">  .");
@@ -107,7 +107,7 @@ public class LocalMain extends Application {
         }
     }
     
-    private void putCustomedPlayer(int i, Map<PlayerId,Player> ps) {
+    private void putCustomPlayer(int i, Map<PlayerId,Player> ps) {
         switch (typeOfPlayer.get(i)) {
         
         case "h": ps.put(PlayerId.ALL.get(i), new GraphicalPlayerAdapter());
@@ -122,7 +122,7 @@ public class LocalMain extends Application {
                 displayError("Utilisation: java ch.epfl.javass.LocalMain .\n" + 
                         "où une erreur de connexion au serveur à eu lieu pour le joueur distant "+i+" :\n" + 
                         " il devrait avoir la structure suivante : <r>:<name>:<IpAdress> \n" + 
-                        " l'IpAdress est peut etre mauvaise , ou le serveur n'est peut etre pas lancé.\"");
+                        " l'adress IP est peut-être mauvaise, ou le serveur pas lancé.\""); //TODO: guillemets intentionnels ?
                 e.printStackTrace();
             }
             break;
@@ -159,7 +159,7 @@ public class LocalMain extends Application {
                 catch (NumberFormatException e){
                     displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
-                    "<graine> devrait etre de type long:\n");
+                    "<graine> devrait être de type long:\n");
                 }
             }
             else {
@@ -180,8 +180,8 @@ public class LocalMain extends Application {
                             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                                     "où :\n" + 
                                     "<j"+i+"> est un joueur simulé (s) "+
-                                    "et doit avoir comme deuxieme paramètre "+
-                                    "un nombre d'itérations strictement superieur a 9");
+                                    "et doit avoir comme deuxième paramètre "+
+                                    "un nombre d'itérations strictement supérieur a 9");
                         }
                     }
                     catch (NumberFormatException e){
@@ -206,7 +206,7 @@ public class LocalMain extends Application {
                 if(!(list.get(0).equals("r")||list.get(0).equals("h")||list.get(0).equals("s"))){
                     displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                             "où :\n" + 
-                            "<j"+i +"> à la structure suivante : "+
+                            "<j"+i +"> a la structure suivante : "+
                             "<a>:<b>:<c>"+
                             "où <a> doit être <r>, <s>, ou <h> ");
                 }
@@ -220,7 +220,7 @@ public class LocalMain extends Application {
                         
         for(int j = 0 ; j<4 ; ++j) {
             randomForPlayer.set(j, random.nextLong());
-            putCustomedPlayer(j,ps);
+            putCustomPlayer(j,ps);
             ns.put(PlayerId.ALL.get(j), names.get(j));
         }
         
