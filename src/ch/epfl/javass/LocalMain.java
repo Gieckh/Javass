@@ -229,7 +229,6 @@ public class LocalMain extends Application {
 
         gameThread.setDaemon(true);
         gameThread.start();
-
     }
     
     
