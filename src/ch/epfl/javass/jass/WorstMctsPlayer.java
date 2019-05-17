@@ -1,5 +1,7 @@
 package ch.epfl.javass.jass;
-
+//TODO: com vitef
+//TODO: an "AbstractMCTSPlayer" class, but it would change the architecture for the "rendu obligatoire".
+//TODO: test
 import static ch.epfl.javass.Preconditions.checkArgument;
 
 import java.util.SplittableRandom;
@@ -13,14 +15,14 @@ import java.util.SplittableRandom;
  *
  * @author - Marin Nguyen (288260)
  */
-public class MctsPlayer implements Player {
+public class WorstMctsPlayer implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     private static final int DEFAULT_EXPLORATION_PARAMETER = 40;
     private final int iterations;
     private final PlayerId ownId;
-//    private final long rngSeed;
+    //    private final long rngSeed;
     private SplittableRandom rng;
 
 
@@ -28,11 +30,11 @@ public class MctsPlayer implements Player {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     //TODO: why no JDoc there ?
-    public MctsPlayer(PlayerId ownId, long rngSeed, int iterations) {
+    public WorstMctsPlayer(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
         this.ownId = ownId;
-//        this.rngSeed = rngSeed;
+        //        this.rngSeed = rngSeed;
         this.rng = new SplittableRandom(rngSeed);
     }
 
@@ -67,6 +69,7 @@ public class MctsPlayer implements Player {
         return root.playableCardsFromTurnState.get(root.selectSon(0));
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Quite straightforward: will call the method "expand" on the root
      *        the number of iterations specified in this class's constructor and
@@ -85,6 +88,7 @@ public class MctsPlayer implements Player {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Given the root of the tree, this method <em>expands</em> it by a node if it can,
      *        and returns it. If a leaf was reached, this method simply returns it.
@@ -113,6 +117,7 @@ public class MctsPlayer implements Player {
         return son;
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Given a (Node) "father" whose trick is not full --"father" is therefore not a leaf,
      *        creates his next son (indicated by the parameter "nextChildIllPlayIn".
@@ -149,6 +154,7 @@ public class MctsPlayer implements Player {
         return father.of(sonState, sonPlayableCards, sonHand, sonTeamId);
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Given a (Node) "node" and the (Score) "score" obtained after simulating
      *        a random turn starting from this Node's TurnState, updates
@@ -168,6 +174,7 @@ public class MctsPlayer implements Player {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Simulates randomly a turn until the end, given the specified (TurnState) "state"
      *        and (CardSet) 'hand" - the player's hand.
@@ -183,7 +190,7 @@ public class MctsPlayer implements Player {
 
         TurnState copyState = state;
         CardSet copyHand = hand;
-//        SplittableRandom rng = new SplittableRandom(rngSeed);
+        //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
             Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
@@ -194,6 +201,7 @@ public class MctsPlayer implements Player {
         return copyState.score();
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Indicates the Cards the next Player to play
      *          - can play, if it is "this"
@@ -214,7 +222,7 @@ public class MctsPlayer implements Player {
             return state.trick().playableCards(hand);
         }
 
-//        return state.unplayedCards().difference(hand);
+        //        return state.unplayedCards().difference(hand);
         return state.trick().playableCards(state.unplayedCards().difference(hand));
     }
 
@@ -251,6 +259,7 @@ public class MctsPlayer implements Player {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
+        @SuppressWarnings("Duplicates")
         /**
          * @brief Creates a new Node, given all its necessary parameters
          *
@@ -303,7 +312,7 @@ public class MctsPlayer implements Player {
          * @return (double) - the value of the (Node) "node"
          */
         private double evaluate(Node node, int explorationParameter) {
-            return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
+            return -(float)node.totalPointsFromNode / node.randomTurnsPlayed +
                     explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / node.randomTurnsPlayed);
         }
 
@@ -317,12 +326,12 @@ public class MctsPlayer implements Player {
         @SuppressWarnings("Duplicates")
         /**
          * @brief Never called with a [true] leaf.
-         *        Indicates which son, of the (Node) it is called by, should be explored.
+         *        Indicates which son, of the {@code Node} it is called by, should be explored.
          *
          * @param explorationParameter (int) - quantifies the likeliness of our algorithm to wander horizontally,
          *                             i.e. to explore rarely explored branches.
          * @return (int) - the index of a son for which "evaluate" is maximal.
-         *                 [If a {@code Node} hasn't been explored yet, its value is considered infinite, and therefore maximal]
+         *                 [If a (Node) hasn't been explored yet, its value is considered infinite, and therefore maximal]
          */
         private int selectSon(int explorationParameter) {
             if (directChildrenOfNode.length == 0) {
@@ -338,7 +347,7 @@ public class MctsPlayer implements Player {
                     return i;
                 }
                 double tmpValue = evaluate(node, explorationParameter);
-                if (tmpValue > value) {
+                if (tmpValue < value) {
                     value = tmpValue;
                     index = i;
                 }
@@ -348,7 +357,7 @@ public class MctsPlayer implements Player {
         }
 
         /**
-         * @brief Indicates whether the {@code Node} "this" is a [true] leaf in the tree.
+         * @brief Indicates whether the (Node) "this" is a [true] leaf in the tree.
          *        [i.e. it corresponds to the last Card of the last Trick of the turn]
          *
          * @return (boolean) true if "this" is a leaf.
