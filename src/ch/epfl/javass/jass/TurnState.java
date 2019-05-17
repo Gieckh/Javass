@@ -32,15 +32,15 @@ public class TurnState {
     private List<CardSet> cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
 
     public CardSet cardsOnePlayerDoesntHave(PlayerId p) {
-        if(!(cardsThePlayersDontHave.get(0).isEmpty() &&
-                cardsThePlayersDontHave.get(1).isEmpty() && 
-                cardsThePlayersDontHave.get(2).isEmpty() &&
-                cardsThePlayersDontHave.get(3).isEmpty())&&
-                (!trick().baseColor().equals(trick().trump()))) {
-            System.out.println(trick().index());
-            System.out.println(PackedTrick.toString(pkCurrentTrick));
-            System.out.println(cardsThePlayersDontHave);
-        }
+//        if(!(cardsThePlayersDontHave.get(0).isEmpty() &&
+//                cardsThePlayersDontHave.get(1).isEmpty() && 
+//                cardsThePlayersDontHave.get(2).isEmpty() &&
+//                cardsThePlayersDontHave.get(3).isEmpty())&&
+//                (!trick().baseColor().equals(trick().trump()))) {
+//            System.out.println(trick().index());
+//            System.out.println(PackedTrick.toString(pkCurrentTrick));
+//            System.out.println(cardsThePlayersDontHave);
+//        }
         
         return cardsThePlayersDontHave.get(p.ordinal());
     }
@@ -60,6 +60,13 @@ public class TurnState {
      * @param pkCurrentTrick (int) - the current trick
      */
     public TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
+        this.pkScore =  pkScore;
+        this.pkUnplayedCards = pkUnplayedCards;
+        this.pkCurrentTrick  = pkCurrentTrick;
+    }
+    
+    public TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick , List<CardSet> cardsUnHaved) {
+        this.cardsThePlayersDontHave = cardsUnHaved;
         this.pkScore =  pkScore;
         this.pkUnplayedCards = pkUnplayedCards;
         this.pkCurrentTrick  = pkCurrentTrick;

@@ -204,6 +204,7 @@ public class mctsPlayerSmart implements Player {
 //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
+            //this.gameState
             CardSet OnlyPossiblePlayableCards = playableCards.intersection(     state.cardsOnePlayerDoesntHave(this.ownId).complement());
             if(OnlyPossiblePlayableCards.size()==0) {
                 //System.out.println(cardsOnePlayerDoesntHave(this.ownId).complement());

@@ -68,17 +68,17 @@ public final class RandomJassGame {
         // after test, team 2 have almost 200 more points , with 10 000 iterations ;
         //which is not  great at all , but maybe a proof mcts does something
         
-        int k = 10_000;
+        int k = 100_000;
         for (PlayerId pId: PlayerId.ALL) {
           Player player = new PacedPlayer(new RandomPlayer(2019), 1);
           if (pId == PlayerId.PLAYER_1) {
-              new mctsPlayerSmart(PlayerId.PLAYER_1, 2019, k);
+             player =  new PrintingPlayer(new mctsPlayerSmart(PlayerId.PLAYER_1, 2019, k));
            }
          if (pId == PlayerId.PLAYER_4) {
-             player = new mctsPlayerSmart(PlayerId.PLAYER_4, 2019, k);
+             player = new MctsPlayer(PlayerId.PLAYER_4, 2019, k);
           }
          if (pId == PlayerId.PLAYER_2) {
-             player = new mctsPlayerSmart(PlayerId.PLAYER_2, 2019, k);
+             player = new MctsPlayer(PlayerId.PLAYER_2, 2019, k);
            }
        if (pId == PlayerId.PLAYER_3) {
            player = new mctsPlayerSmart(PlayerId.PLAYER_3, 2019, k);
@@ -86,14 +86,17 @@ public final class RandomJassGame {
           players.put(pId, player);
           playerNames.put(pId, pId.name());
         }
-        int l = 0;
-        for(int i =0 ; i < 1 ; ++i) {
+        int l = 3;
+        int p = 100;
+        for(int i =5 ; i < 100 ; ++i) {
             JassGame g = new JassGame(i, players, playerNames);
             while (!g.isGameOver()) {
                 g.advanceToEndOfNextTrick();
             }
-            System.out.println(l);
+            if(g.turnState.score().totalPoints(TeamId.TEAM_1)>=1000)l++;
+           p= p+  g.turnState.score().totalPoints(TeamId.TEAM_1) - g.turnState.score().totalPoints(TeamId.TEAM_2);
+           System.out.println(l + " " + p);
         }
-        System.out.println(l);
+        System.out.println("victries of team 1 : " + l+ "out of 100 and total point gap of " + p );
     }
 }
