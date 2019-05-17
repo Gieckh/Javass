@@ -57,8 +57,10 @@ public class mctsPlayerSmart implements Player {
     
     @Override
     public void updateTrick(Trick newTrick) {
-        Player.super.updateTrick(newTrick);
+        //System.out.println("update");
         this.cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(newTrick, cardsThePlayersDontHave);
+        Player.super.updateTrick(newTrick);
+
     }
     
     
@@ -79,9 +81,15 @@ public class mctsPlayerSmart implements Player {
      *                [according to the Monte-Carlo tree search algorithm]
      */
     public Card cardToPlay(TurnState state, CardSet hand) {
+        
+        if(state.trick().index()==0) {
+            this.cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
+        }
+        
+        
         //default, the root teamId is this player's and its father is null.
         Node root;
-
+       
         //The trick corresponding to the TurnState of a Node should NEVER be full -using our implementation
         if (state.trick().isFull()) {
             assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
@@ -89,7 +97,8 @@ public class mctsPlayerSmart implements Player {
         }
         else
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
-
+       // System.out.println(hand.toString());
+        //System.out.println(cardsThePlayersDontHave.get(0).complement().intersection(hand).toString());
         iterate(root);
 
         return root.playableCardsFromTurnState.get(root.selectSon(0));
@@ -215,7 +224,11 @@ public class mctsPlayerSmart implements Player {
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
             CardSet OnlyPossiblePlayableCards = playableCards.intersection(cardsOnePlayerDoesntHave(this.ownId).complement());
-            Card randomCardToPlay = OnlyPossiblePlayableCards.get(rng.nextInt(OnlyPossiblePlayableCards.size()));
+            if(OnlyPossiblePlayableCards.size()==0) {
+                //System.out.println(cardsOnePlayerDoesntHave(this.ownId).complement());
+                //System.out.println(playableCards);
+            }
+            Card randomCardToPlay = OnlyPossiblePlayableCards.size() !=0 ? OnlyPossiblePlayableCards.get(rng.nextInt(OnlyPossiblePlayableCards.size())) : playableCards.get(rng.nextInt(playableCards.size()));
 
             copyHand = copyHand.remove(randomCardToPlay);
             copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);

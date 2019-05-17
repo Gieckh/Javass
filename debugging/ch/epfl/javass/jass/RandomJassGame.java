@@ -67,27 +67,34 @@ public final class RandomJassGame {
         //I expect the team 1 to lose ^^
         // after test, team 2 have almost 200 more points , with 10 000 iterations ;
         //which is not  great at all , but maybe a proof mcts does something
+        
+        int k = 10_000;
         for (PlayerId pId: PlayerId.ALL) {
           Player player = new PacedPlayer(new RandomPlayer(2019), 1);
-          if (pId == PlayerId.PLAYER_3) {
-              player = new PrintingPlayer(new mctsPlayerSmart(PlayerId.PLAYER_3, 2019, 100_000));
+          if (pId == PlayerId.PLAYER_1) {
+              new mctsPlayerSmart(PlayerId.PLAYER_1, 2019, k);
            }
          if (pId == PlayerId.PLAYER_4) {
-             player = new MctsPlayer(PlayerId.PLAYER_4, 2019, 100_000);
+             player = new MctsPlayer(PlayerId.PLAYER_4, 2019, k);
           }
          if (pId == PlayerId.PLAYER_2) {
-             player = new MctsPlayer(PlayerId.PLAYER_2, 2019, 100_000);
+             player = new MctsPlayer(PlayerId.PLAYER_2, 2019, k);
            }
-       if (pId == PlayerId.PLAYER_1) {
-           player = new mctsPlayerSmart(PlayerId.PLAYER_1, 2019, 100_000);
+       if (pId == PlayerId.PLAYER_3) {
+           player = new mctsPlayerSmart(PlayerId.PLAYER_3, 2019, k);
    }
           players.put(pId, player);
           playerNames.put(pId, pId.name());
         }
-        JassGame g = new JassGame(2019, players, playerNames);
-        while (!g.isGameOver()) {
-            g.advanceToEndOfNextTrick();
-            System.out.println("-------------------------------------------------------------");
+        int l = 0;
+        for(int i =0 ; i < 10 ; ++i) {
+            JassGame g = new JassGame(i, players, playerNames);
+            while (!g.isGameOver()) {
+                g.advanceToEndOfNextTrick();
+            }
+            l=g.turnState.score().totalPoints(TeamId.TEAM_1) - g.turnState.score().totalPoints(TeamId.TEAM_2);
+            System.out.println(l);
         }
+        System.out.println(l);
     }
 }
