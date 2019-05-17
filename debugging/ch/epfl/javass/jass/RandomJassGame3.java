@@ -24,7 +24,7 @@ public final class RandomJassGame3 {
             long cardsOfOne = PackedCardSet.ALL_CARDS;
             while (!g.isGameOver()) {
                 g.advanceToEndOfNextTrick();
-                PackedCardSet.difference(CardSet.ofPacked(cardsOfOne),CardSet.of(g.));
+                //PackedCardSet.difference(CardSet.ofPacked(cardsOfOne),CardSet.of(g.));
         }
     }
 }

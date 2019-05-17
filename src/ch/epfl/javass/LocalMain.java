@@ -15,7 +15,6 @@ import ch.epfl.javass.jass.MctsPlayer;
 import ch.epfl.javass.jass.PacedPlayer;
 import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
-import ch.epfl.javass.net.Net;
 import ch.epfl.javass.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -33,16 +32,16 @@ public class LocalMain extends Application {
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
     
-    // I fought it was a good thing to do to create a list for each information we may need up to 4 times 
+    // I thought it was a good thing to do to create a list for each information we may need up to 4 times
     //instead of a list of lists for example.
     //TODO pas tres propre j'ai du initialiser certaines listes pour pas qu'il y ai de bug.
-    private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
-    private List<String> typeOfPlayer = new ArrayList<String>(Collections.nCopies(4, ""));
-    private List<String> names = new ArrayList<String>(Collections.nCopies(4, ""));
-    private List<String> hosts = new ArrayList<String>(Collections.nCopies(4, ""));
+    private static String[] defaultNames = {"Aline", "Bastien", "Colette", "David"};
+    private List<String> typeOfPlayer = new ArrayList<>(Collections.nCopies(4, ""));
+    private List<String> names = new ArrayList<>(Collections.nCopies(4, ""));
+    private List<String> hosts = new ArrayList<>(Collections.nCopies(4, ""));
             //new ArrayList<String>(4);
-    private List<Long> randomForPlayer = new ArrayList<Long>(Collections.nCopies(4, 0l));
-    private List<Integer> iterations = new ArrayList<Integer>(Collections.nCopies(4, 0));
+    private List<Long> randomForPlayer = new ArrayList<>(Collections.nCopies(4, 0L));
+    private List<Integer> iterations = new ArrayList<>(Collections.nCopies(4, 0));
     
     /** ============================================== **/
     /** ==============   PRIVATE METHODS  ============ **/
@@ -55,7 +54,7 @@ public class LocalMain extends Application {
     }
     
     private void checkSize(int size) {
-        if(size!=4 && size !=5) {
+        if( !(size == 4 || size == 5) ) {
             System.out.println(size);
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
@@ -64,7 +63,7 @@ public class LocalMain extends Application {
                     "  s:<nom>:<itérations>  un joueur simulé nommé <nom> avec <itérations> itérations \n" +
                     "  r:<nom>:<IP-Host>  un joueur humain à distance nommé <nom> et avec l'adresse IP <IP-Host> \n"+
                     "  <graine> la graine génératrice des autres graines utilisées partout dans le jeu \n"+
-                    " où les noms sont optionnels (par defaut : Aline, Bastien, Colette et David dans l'ordre ) \n " +
+                    " où les noms sont optionnels (par défaut : Aline, Bastien, Colette et David dans l'ordre ) \n " +
                     " où les itérations sont optionnelles (par defaut : 10 000 )\n " +
                     " où les IP-Host sont optionnels (par defaut : localhost )\n "+
                     " où graine est optionnelle et est forcément en 5ème position \n ");
@@ -97,7 +96,7 @@ public class LocalMain extends Application {
         case "s": if(list.size()>3) {
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
-                    "<j"+i+"> est un joueur simulé (s) "+
+                    "<j"+i+"> est un joueur simulé (s) "+//TODO: ?
                     "qui n'admet que deux paramètres maximums :"+
                     "le nom du joueur et le nombre d'itérations "+
                     "ex : <j"+i+">:<"+list.get(1)+">:<"+list.get(2)+">  .");
@@ -108,7 +107,7 @@ public class LocalMain extends Application {
         }
     }
     
-    private void putCustomedPlayer(int i, Map<PlayerId,Player> ps) {
+    private void putCustomPlayer(int i, Map<PlayerId,Player> ps) {
         switch (typeOfPlayer.get(i)) {
         
         case "h": ps.put(PlayerId.ALL.get(i), new GraphicalPlayerAdapter());
@@ -123,7 +122,7 @@ public class LocalMain extends Application {
                 displayError("Utilisation: java ch.epfl.javass.LocalMain .\n" + 
                         "où une erreur de connexion au serveur à eu lieu pour le joueur distant "+i+" :\n" + 
                         " il devrait avoir la structure suivante : <r>:<name>:<IpAdress> \n" + 
-                        " l'IpAdress est peut etre mauvaise , ou le serveur n'est peut etre pas lancé.\"");
+                        " l'adress IP est peut-être mauvaise, ou le serveur pas lancé.\""); //TODO: guillemets intentionnels ?
                 e.printStackTrace();
             }
             break;
@@ -145,21 +144,22 @@ public class LocalMain extends Application {
         List<String> args = getParameters().getRaw();
         Map<PlayerId, Player> ps = new EnumMap<>(PlayerId.class);
         Map<PlayerId, String> ns = new EnumMap<>(PlayerId.class);
-        boolean hasFiveArgs = false; 
+
+        boolean hasFiveArgs = args.size() == 5;
         long generatingSeed =0;
         int size = args.size();
+
         checkSize(size);
         System.out.println(size);
         for ( int i = 0 ; i < size; ++i) {
             if(i == 4) {
                 try {   
                 generatingSeed = Long.parseLong(args.get(i));
-                hasFiveArgs = true;
                 }
                 catch (NumberFormatException e){
                     displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
-                    "<graine> devrait etre de type long:\n");
+                    "<graine> devrait être de type long:\n");
                 }
             }
             else {
@@ -180,8 +180,8 @@ public class LocalMain extends Application {
                             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                                     "où :\n" + 
                                     "<j"+i+"> est un joueur simulé (s) "+
-                                    "et doit avoir comme deuxieme paramètre "+
-                                    "un nombre d'itérations strictement superieur a 9");
+                                    "et doit avoir comme deuxième paramètre "+
+                                    "un nombre d'itérations strictement supérieur a 9");
                         }
                     }
                     catch (NumberFormatException e){
@@ -206,7 +206,7 @@ public class LocalMain extends Application {
                 if(!(list.get(0).equals("r")||list.get(0).equals("h")||list.get(0).equals("s"))){
                     displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                             "où :\n" + 
-                            "<j"+i +"> à la structure suivante : "+
+                            "<j"+i +"> a la structure suivante : "+
                             "<a>:<b>:<c>"+
                             "où <a> doit être <r>, <s>, ou <h> ");
                 }
@@ -220,7 +220,7 @@ public class LocalMain extends Application {
                         
         for(int j = 0 ; j<4 ; ++j) {
             randomForPlayer.set(j, random.nextLong());
-            putCustomedPlayer(j,ps);
+            putCustomPlayer(j,ps);
             ns.put(PlayerId.ALL.get(j), names.get(j));
         }
         
@@ -235,15 +235,11 @@ public class LocalMain extends Application {
         gameThread.start();
         
     }
-        
-    
-    
-  
     
     
 
     /**
-     * @Brief the main of the whole project. It runs "launch" that will create a new thread for a game
+     * @brief the main of the whole project. It runs "launch" that will create a new thread for a game
      * customed by the args array. 
      *
      * @param args an Array of string that are infomations about players 
