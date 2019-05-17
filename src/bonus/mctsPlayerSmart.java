@@ -13,6 +13,7 @@ import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
+import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
 
 /**
@@ -52,6 +53,20 @@ public class mctsPlayerSmart implements Player {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    
+    
+    @Override
+    public void updateTrick(Trick newTrick) {
+        Player.super.updateTrick(newTrick);
+        this.cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(newTrick, cardsThePlayersDontHave);
+    }
+    
+    
+    private CardSet cardsOnePlayerDoesntHave(PlayerId p) {
+        return cardsThePlayersDontHave.get(p.ordinal());
+    }
+
+    
     @SuppressWarnings("Duplicates")
     @Override
     /**
@@ -199,7 +214,8 @@ public class mctsPlayerSmart implements Player {
 //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
-            Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
+            CardSet OnlyPossiblePlayableCards = playableCards.intersection(cardsOnePlayerDoesntHave(this.ownId).complement());
+            Card randomCardToPlay = OnlyPossiblePlayableCards.get(rng.nextInt(OnlyPossiblePlayableCards.size()));
 
             copyHand = copyHand.remove(randomCardToPlay);
             copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
