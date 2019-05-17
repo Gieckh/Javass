@@ -54,7 +54,7 @@ public class LocalMain extends Application {
     }
     
     private void checkSize(int size) {
-        if(size!=4 && size !=5) {
+        if( !(size == 4 || size == 5) ) {
             System.out.println(size);
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
@@ -144,16 +144,17 @@ public class LocalMain extends Application {
         List<String> args = getParameters().getRaw();
         Map<PlayerId, Player> ps = new EnumMap<>(PlayerId.class);
         Map<PlayerId, String> ns = new EnumMap<>(PlayerId.class);
-        boolean hasFiveArgs = false; 
+
+        boolean hasFiveArgs = args.size() == 5;
         long generatingSeed =0;
         int size = args.size();
+
         checkSize(size);
         System.out.println(size);
         for ( int i = 0 ; i < size; ++i) {
             if(i == 4) {
                 try {   
                 generatingSeed = Long.parseLong(args.get(i));
-                hasFiveArgs = true;
                 }
                 catch (NumberFormatException e){
                     displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
