@@ -20,7 +20,7 @@ public final class JassGame {
     /** ============================================== **/
     private final Random shuffleRng;
     private final Random trumpRng;
-    private TurnState turnState = null;
+    public TurnState turnState = null;
     private final Map<PlayerId, Player> players;
     private final Map<PlayerId, String> playerNames;
     private Map<PlayerId, CardSet> playerHands;

@@ -19,7 +19,7 @@ public final class RandomJassGame3 {
             players.put(pId, player);
             playerNames.put(pId, pId.name());
         }
-
+        
             JassGame g = new JassGame(2084, players, playerNames);
             long cardsOfOne = PackedCardSet.ALL_CARDS;
             while (!g.isGameOver()) {
