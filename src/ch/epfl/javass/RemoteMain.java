@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  */
 public class RemoteMain extends Application {
     
-    /* 
+    /**
      * @see javafx.application.Application#start(javafx.stage.Stage)
      */
     @Override
@@ -37,7 +37,7 @@ public class RemoteMain extends Application {
 
     
     /**
-     * @Brief executes launch that will make the server waiting for a connexion.
+     * @brief executes launch that will make the server waiting for a connexion.
      *
      * @param args
     */

@@ -146,7 +146,7 @@ public class LocalMain extends Application {
         Map<PlayerId, String> ns = new EnumMap<>(PlayerId.class);
 
         boolean hasFiveArgs = args.size() == 5;
-        long generatingSeed =0;
+        long generatingSeed = 0;
         int size = args.size();
 
         checkSize(size);
