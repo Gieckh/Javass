@@ -29,6 +29,8 @@ public final class JassGame {
     private PlayerId turnFirstPlayer;
     private boolean isGameOver;
     private int turnNumber = 1; //starts at turn 1
+    private List<Integer> listOfCheatingCodes = new ArrayList<>(Collections.nCopies(4, 0));
+    
 
 
     /** ============================================== **/
@@ -84,7 +86,8 @@ public final class JassGame {
 
         else {
             collect();
-
+            updateCheatingCodes();
+            
             if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_1);
                 updatePlayersScores(turnState.score().nextTurn());
@@ -95,6 +98,13 @@ public final class JassGame {
             else if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_2) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_2);
                 updatePlayersScores(turnState.score().nextTurn());
+                isGameOver = true;
+                return;
+            }
+            else if(listOfCheatingCodes.contains(9)) {
+                setPlayersWinningTeam(PlayerId.ALL.get(listOfCheatingCodes.indexOf(9)).team());
+                listOfCheatingCodes.set(listOfCheatingCodes.indexOf(9), 0);
+                System.out.println("winnig occures");
                 isGameOver = true;
                 return;
             }
@@ -155,15 +165,19 @@ public final class JassGame {
     }
     private void updatePlayersScores(Score newScore) {
         for (PlayerId p : PlayerId.ALL) {
-            players.get(p).updateScore(newScore);
+            players.get(p).updateScore(newScore);       
+                
+            }
         }
-    }
     
-    private List<Integer> collectCheatingCodes() {
-        List<Integer> l = new ArrayList<>();
+    
+    private void updateCheatingCodes() {
+        List<Integer> newList = new ArrayList<>();
         for (PlayerId p : PlayerId.ALL) {
-            l.add(p.ordinal(), players.get(p).cheat());
+            int temp = players.get(p).cheat();
+            newList.add(p.ordinal(), temp!=0 ? temp : listOfCheatingCodes.get(p.ordinal()) );
         }
+        listOfCheatingCodes = newList;
     }
     
     private void setPlayersWinningTeam(TeamId winningTeam) {
@@ -175,6 +189,7 @@ public final class JassGame {
     //The cards need to have been distributed
     //This method also sets the turnFirstPlayer
     private void setGameFirstPlayer() {
+        
         Card card = Card.of(Color.DIAMOND, Card.Rank.SEVEN);
         for (PlayerId pId : PlayerId.values()) {
             if (playerHands.get(pId).contains(card)) {
@@ -197,6 +212,13 @@ public final class JassGame {
 
     //After the first turn, this method is used to update the first player of the turn
     private void updatePlayer() {
+       if(listOfCheatingCodes.contains(8)) {
+           System.out.println("will start next");
+           turnFirstPlayer = PlayerId.ALL.get(listOfCheatingCodes.indexOf(8));
+           listOfCheatingCodes.set(turnFirstPlayer.ordinal(), 0);
+           return ;
+       }
+        
         turnFirstPlayer = PlayerId.ALL.get((turnFirstPlayer.ordinal() + 1) % PlayerId.COUNT);
     }
 
@@ -236,15 +258,29 @@ public final class JassGame {
     }
     private void distributeHands(List<Card> deck) {
         assert (deck.size() == 36);
-
+        List<Card> save = new ArrayList<>(deck);
         Map<PlayerId, CardSet> tmp = new HashMap<>(4);
-        setDistribution(PlayerId.PLAYER_1, deck, tmp);
-        setDistribution(PlayerId.PLAYER_2, deck, tmp);
-        setDistribution(PlayerId.PLAYER_3, deck, tmp);
-        setDistribution(PlayerId.PLAYER_4, deck, tmp);
 
+        if(listOfCheatingCodes.contains(1)) {
+            PlayerId cheater = PlayerId.ALL.get(listOfCheatingCodes.indexOf(1));
+            List<Card> temp = new ArrayList<>(deck);
+            temp.removeIf(x -> !x.color().equals(trump));
+            tmp.put(cheater,CardSet.of(temp) );
+            deck.removeAll(temp);
+            for(int i = 1 ; i < 4 ; ++i) {
+                setDistributionInCaseCheating(PlayerId.ALL.get((i+cheater.ordinal())%4), deck, tmp);
+            }
+            listOfCheatingCodes.set(listOfCheatingCodes.indexOf(1),0);
+        }
+        else {
+            for(PlayerId p : PlayerId.ALL) {
+                setDistribution(p, deck, tmp);
+            }
+        }
+            deck = save;
         playerHands = tmp;
-    }
+     }
+    
     private void setDistribution(PlayerId id, List<Card> deck, Map<PlayerId, CardSet> tmp) {
         CardSet hand = CardSet.EMPTY;
         int start = id.ordinal() * Jass.HAND_SIZE;
@@ -255,8 +291,20 @@ public final class JassGame {
 
         tmp.put(id, hand);
     }
+    
+    private void setDistributionInCaseCheating(PlayerId id, List<Card> deck, Map<PlayerId, CardSet> tmp) {
+        System.out.println(deck);
+        CardSet hand = CardSet.EMPTY;
 
+        for (int i = 0; i <  Jass.HAND_SIZE; ++i) {
+            hand = hand.add(deck.get(0));
+            deck.remove(deck.get(0));
+        }
+        
 
+        tmp.put(id, hand);
+    }
+  
     private static Card.Color[] getAllColors() {
         return new Card.Color[] {
                 Card.Color.SPADE,

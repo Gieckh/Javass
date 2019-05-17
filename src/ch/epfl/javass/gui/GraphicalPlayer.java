@@ -118,7 +118,7 @@ public class GraphicalPlayer {
                     try {
                         int code = Integer.parseInt(keyEvent.getCode().toString().substring(
                                 keyEvent.getCode().toString().length()-1));
-                        if(code<4)
+                        if(code<10)
                             cheatingQueue.put(code);
 
                     } catch (InterruptedException e1) {

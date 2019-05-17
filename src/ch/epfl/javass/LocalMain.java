@@ -113,7 +113,7 @@ public class LocalMain extends Application {
         case "h": ps.put(PlayerId.ALL.get(i), new GraphicalPlayerAdapter());
             break;
             
-        case "s" : ps.put(PlayerId.ALL.get(i), new PacedPlayer(new MctsPlayer(PlayerId.ALL.get(i), randomForPlayer.get(i), iterations.get(i)),2));
+        case "s" : ps.put(PlayerId.ALL.get(i), new PacedPlayer(new MctsPlayer(PlayerId.ALL.get(i), randomForPlayer.get(i), iterations.get(i)),0));
             break;
             
         case "r": try {
@@ -224,7 +224,7 @@ public class LocalMain extends Application {
             JassGame g = new JassGame(randomForJassGame, ps, ns);
             while (! g.isGameOver()) {
               g.advanceToEndOfNextTrick();
-              try { Thread.sleep(1000); } catch (Exception e) {}
+              try { Thread.sleep(0000); } catch (Exception e) {}
             }});
 
         gameThread.setDaemon(true);

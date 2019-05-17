@@ -80,7 +80,6 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public int cheat() {
         try {
-            System.out.println("reveived");
             return CheatingQueue.isEmpty() ? 0 : CheatingQueue.take() ;
             
         } catch (InterruptedException e) {
