@@ -61,11 +61,11 @@ public class LocalMain extends Application {
                     "<jn> spécifie le joueur n, ainsi:\n" + 
                     "  h:<nom>  un joueur humain nommé <nom> \n"+
                     "  s:<nom>:<itérations>  un joueur simulé nommé <nom> avec <itérations> itérations \n" +
-                    "  r:<nom>:<IP-Host>  un joueur humain à distance nommé <nom> et avec l'adresse IP <IP-Host> \n"+
+                    "  r:<nom>:<IP-Host>  un joueur humain à distance nommée <nom> et d'adresse IP <IP-Host> \n"+
                     "  <graine> la graine génératrice des autres graines utilisées partout dans le jeu \n"+
                     " où les noms sont optionnels (par défaut : Aline, Bastien, Colette et David dans l'ordre ) \n " +
-                    " où les itérations sont optionnelles (par defaut : 10 000 )\n " +
-                    " où les IP-Host sont optionnels (par defaut : localhost )\n "+
+                    " où les itérations sont optionnelles (par défaut : 10 000 )\n " +
+                    " où les IP-Host sont optionnels (par défaut : localhost )\n "+
                     " où graine est optionnelle et est forcément en 5ème position \n ");
         }
     }
@@ -73,7 +73,7 @@ public class LocalMain extends Application {
     private void checkParameters(List<String> list, String s, int i) {
         switch (s) {
         
-        case "h": if(list.size()>2) {
+        case "h": if (list.size() > 2) {
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
                     "<j"+i+"> est un joueur humain (h) "+
@@ -83,7 +83,7 @@ public class LocalMain extends Application {
         }
             break;
             
-        case "r":if(list.size()>3) {
+        case "r":if (list.size() > 3) {
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
                     "<j"+i+"> est un joueur humain (h) "+
@@ -93,7 +93,7 @@ public class LocalMain extends Application {
         }
             break;
             
-        case "s": if(list.size()>3) {
+        case "s": if (list.size() > 3) {
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
                     "où :\n" + 
                     "<j"+i+"> est un joueur simulé (s) "+//TODO: ?
@@ -136,7 +136,7 @@ public class LocalMain extends Application {
     /** ============================================== **/
     
     
-    /* 
+    /**
      * @see javafx.application.Application#start(javafx.stage.Stage)
      */
     @Override
@@ -151,10 +151,10 @@ public class LocalMain extends Application {
 
         checkSize(size);
         System.out.println(size);
-        for ( int i = 0 ; i < size; ++i) {
-            if(i == 4) {
-                try {   
-                generatingSeed = Long.parseLong(args.get(i));
+        for (int i = 0; i < size; ++i) {
+            if (i == 4) {
+                try {
+                    generatingSeed = Long.parseLong(args.get(i));
                 }
                 catch (NumberFormatException e){
                     displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" + 
@@ -165,14 +165,13 @@ public class LocalMain extends Application {
             else {
                 List<String> list = Arrays.asList(args.get(i).split(":"));
                 System.out.println(list.toString());
-                names.set(i, ((list.size() !=2 || list.get(1).isEmpty()) ?
-                        LocalMain.defaultNames[i] 
-                                : list.get(1)));
-                if(list.get(0).equals("h")){
+                names.set(i, (list.size() !=2 || list.get(1).isEmpty()) ?
+                        LocalMain.defaultNames[i]  : list.get(1));
+                if (list.get(0).equals("h")){
                     checkParameters(list, "h", i);
                     typeOfPlayer.set(i, "h");
                 }
-                if(list.get(0).equals("s")){
+                if (list.get(0).equals("s")){
                     checkParameters(list, "s", i);
                     typeOfPlayer.set(i,"s");
                     try {
@@ -210,9 +209,7 @@ public class LocalMain extends Application {
                             "<a>:<b>:<c>"+
                             "où <a> doit être <r>, <s>, ou <h> ");
                 }
-                
-                
-             }
+            }
         }
                 
         Random random = hasFiveArgs ?  new Random(generatingSeed) : new Random();
@@ -239,10 +236,10 @@ public class LocalMain extends Application {
     
 
     /**
-     * @brief the main of the whole project. It runs "launch" that will create a new thread for a game
-     * customed by the args array. 
+     * @brief the main of the whole project. It runs "launch" that will create
+     *        a new thread for a game customized by the args array.
      *
-     * @param args an Array of string that are infomations about players 
+     * @param args an Array of {@code String} containing information about the players
     */
     public static void main(String[] args) {
         launch(args);
