@@ -40,10 +40,9 @@ public interface Player {
      * @Brief Called during a TurnState, will provoke some specific 
      * cheating events in function of the int case.
      *
-     * @param Case an int which will cause a specific event 
-     * @return 
+     * @return  an int which will cause a specific cheating event 
     */
-    default public int cheat(int Case) {
+    default public int cheat() {
         return 0;
     }
 

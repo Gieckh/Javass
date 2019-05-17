@@ -154,9 +154,8 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
      * @see ch.epfl.javass.jass.Player#cheat(int)
      */
     @Override
-    public int cheat(int Case) {
-        forceWrite(JassCommand.CHET.toString(),combine(',',
-                StringSerializer.serializeInt(Case)));
+    public int cheat() {
+        forceWrite(JassCommand.CHET.toString(),"");
         try {
             return StringSerializer.deserializeInt(reader.readLine());
         } catch (IOException e) {

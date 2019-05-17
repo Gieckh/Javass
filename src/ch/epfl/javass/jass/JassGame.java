@@ -134,6 +134,7 @@ public final class JassGame {
     private void collect() {
         turnState = turnState.withTrickCollected();
         updatePlayersScores(turnState.score());
+        
     }
 
     //self-explanatory
@@ -157,6 +158,14 @@ public final class JassGame {
             players.get(p).updateScore(newScore);
         }
     }
+    
+    private List<Integer> collectCheatingCodes() {
+        List<Integer> l = new ArrayList<>();
+        for (PlayerId p : PlayerId.ALL) {
+            l.add(p.ordinal(), players.get(p).cheat());
+        }
+    }
+    
     private void setPlayersWinningTeam(TeamId winningTeam) {
         for (PlayerId p : PlayerId.ALL) {
             players.get(p).setWinningTeam(winningTeam);

@@ -146,10 +146,8 @@ public final class RemotePlayerServer {
                         break;
                         
                     case CHET:
-                        assert (words.size() == 2);
-                        w.write(StringSerializer.serializeInt(this.underLyingPlayer.cheat(StringSerializer
-                                        .deserializeInt(words.get(1)))));
-
+                        assert (words.size() == 1);
+                        w.write(StringSerializer.serializeInt(this.underLyingPlayer.cheat()));
                         w.write("\n");
                         w.flush();
                         

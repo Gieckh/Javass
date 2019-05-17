@@ -78,7 +78,7 @@ public class GraphicalPlayerAdapter implements Player {
      * @see ch.epfl.javass.jass.Player#cheat(int)
      */
     @Override
-    public int cheat(int Case) {
+    public int cheat() {
         try {
             System.out.println("reveived");
             return CheatingQueue.isEmpty() ? 0 : CheatingQueue.take() ;
