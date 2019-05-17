@@ -33,7 +33,7 @@ public class GraphicalPlayer2 {
     public GraphicalPlayer2(PlayerId myId, Map<PlayerId, String> playerNames,
                             ScoreBean scoreBean, TrickBean trickBean)
     {
-        GridPane scorePane = createScorePane(scoreBean);
+        GridPane scorePane = createScorePane(scoreBean, playerNames);
         scorePane.setStyle("-fx-font: 16 Optima; -fx-background-color: lightgray; -fx-padding: 5px; -fx-alignment: center;");
 
         GridPane trickPane = createTrickPane(trickBean);
@@ -78,7 +78,7 @@ public class GraphicalPlayer2 {
         Text textL2C4 = new Text();
         Text textL2C5 = new Text();
 
-        textL1C1.textProperty().set();
+        textL1C1.textProperty().set("");
 
         GridPane scoreGrid = new GridPane();
         scoreGrid.addRow(0, textL1C1, textL1C2, textL1C3, textL1C4, textL1C5);

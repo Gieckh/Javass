@@ -15,7 +15,6 @@ import ch.epfl.javass.jass.MctsPlayer;
 import ch.epfl.javass.jass.PacedPlayer;
 import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
-import ch.epfl.javass.net.Net;
 import ch.epfl.javass.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -33,16 +32,16 @@ public class LocalMain extends Application {
     /** ===============    ATTRIBUTES    ============== **/
     /** =============================================== **/
     
-    // I fought it was a good thing to do to create a list for each information we may need up to 4 times 
+    // I thought it was a good thing to do to create a list for each information we may need up to 4 times
     //instead of a list of lists for example.
     //TODO pas tres propre j'ai du initialiser certaines listes pour pas qu'il y ai de bug.
-    private static String defaultNames[] = {"Aline","Bastien","Colette","David"};
-    private List<String> typeOfPlayer = new ArrayList<String>(Collections.nCopies(4, ""));
-    private List<String> names = new ArrayList<String>(Collections.nCopies(4, ""));
-    private List<String> hosts = new ArrayList<String>(Collections.nCopies(4, ""));
+    private static String[] defaultNames = {"Aline", "Bastien", "Colette", "David"};
+    private List<String> typeOfPlayer = new ArrayList<>(Collections.nCopies(4, ""));
+    private List<String> names = new ArrayList<>(Collections.nCopies(4, ""));
+    private List<String> hosts = new ArrayList<>(Collections.nCopies(4, ""));
             //new ArrayList<String>(4);
-    private List<Long> randomForPlayer = new ArrayList<Long>(Collections.nCopies(4, 0l));
-    private List<Integer> iterations = new ArrayList<Integer>(Collections.nCopies(4, 0));
+    private List<Long> randomForPlayer = new ArrayList<>(Collections.nCopies(4, 0L));
+    private List<Integer> iterations = new ArrayList<>(Collections.nCopies(4, 0));
     
     /** ============================================== **/
     /** ==============   PRIVATE METHODS  ============ **/
@@ -64,7 +63,7 @@ public class LocalMain extends Application {
                     "  s:<nom>:<itérations>  un joueur simulé nommé <nom> avec <itérations> itérations \n" +
                     "  r:<nom>:<IP-Host>  un joueur humain à distance nommé <nom> et avec l'adresse IP <IP-Host> \n"+
                     "  <graine> la graine génératrice des autres graines utilisées partout dans le jeu \n"+
-                    " où les noms sont optionnels (par defaut : Aline, Bastien, Colette et David dans l'ordre ) \n " +
+                    " où les noms sont optionnels (par défaut : Aline, Bastien, Colette et David dans l'ordre ) \n " +
                     " où les itérations sont optionnelles (par defaut : 10 000 )\n " +
                     " où les IP-Host sont optionnels (par defaut : localhost )\n "+
                     " où graine est optionnelle et est forcément en 5ème position \n ");
@@ -235,15 +234,11 @@ public class LocalMain extends Application {
         gameThread.start();
         
     }
-        
-    
-    
-  
     
     
 
     /**
-     * @Brief the main of the whole project. It runs "launch" that will create a new thread for a game
+     * @brief the main of the whole project. It runs "launch" that will create a new thread for a game
      * customed by the args array. 
      *
      * @param args an Array of string that are infomations about players 
