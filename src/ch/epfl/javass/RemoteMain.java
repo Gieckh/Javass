@@ -27,8 +27,8 @@ public class RemoteMain extends Application {
     public void start(Stage primaryStage) throws Exception {
         Thread gameThread = new Thread(() -> {
             Player player = new GraphicalPlayerAdapter();
-            RemotePlayerServer gali =  new RemotePlayerServer(player);
-            gali.run();       
+            RemotePlayerServer rps =  new RemotePlayerServer(player);
+            rps.run();
           });
         System.out.println("La partie commencera à la connexion du client...");
         gameThread.setDaemon(true);

@@ -18,10 +18,10 @@ import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+//TODO: de vraies explications
 /**
  * LocalMain Is the main launcher of the whole project.
- * It is using the String of arguments "args" to build a customed game.
+ * It is using the String of arguments "args" to build a custom game.
  *
  *
  * @author Antoine Scardigli - (299905)
@@ -34,7 +34,7 @@ public class LocalMain extends Application {
 
     // I thought it was a good thing to do to create a list for each information we may need up to 4 times
     //instead of a list of lists for example.
-    //TODO pas tres propre j'ai du initialiser certaines listes pour pas qu'il y ai de bug.
+    //TODO pas tres propre j'ai du initialiser certaines listes pour pas qu'il y ait de bug.
     private static String[] defaultNames = {"Aline", "Bastien", "Colette", "David"};
     private List<String> typeOfPlayer = new ArrayList<>(Collections.nCopies(4, ""));
     private List<String> names = new ArrayList<>(Collections.nCopies(4, ""));
@@ -56,7 +56,7 @@ public class LocalMain extends Application {
     private void checkSize(int size) {
         if( !(size == 4 || size == 5) ) {
             System.out.println(size);
-            displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
+            displayError("Utilisation : java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
                     "où :\n" +
                     "<jn> spécifie le joueur n, ainsi:\n" +
                     "  h:<nom>  un joueur humain nommé <nom> \n"+
@@ -76,10 +76,8 @@ public class LocalMain extends Application {
         case "h": if (list.size() > 2) {
             displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
                     "où :\n" +
-                    "<j"+i+"> est un joueur humain (h) "+
-                    "qui n'admet qu'un paramètre maximum :"+
-                    "le nom du joueur "+
-                    "ex : <j"+i+">:<"+list.size()+"> .");
+                    "<j"+i+"> est un joueur humain (h) qui n'admet qu'un paramètre au maximum :"+
+                    "le nom du joueur. ex : <j"+i+">:<"+list.size()+"> .");
         }
             break;
 
@@ -156,9 +154,11 @@ public class LocalMain extends Application {
                     generatingSeed = Long.parseLong(args.get(i));
                 }
                 catch (NumberFormatException e){
-                    displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
+                    displayError(
+                            "Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
                             "où :\n" +
-                            "<graine> devrait être de type long:\n");
+                            "<graine> devrait être de type long:\n"
+                    );
                 }
             }
             else {
@@ -184,8 +184,7 @@ public class LocalMain extends Application {
                     catch (NumberFormatException e){
                         displayError("Utilisation: java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
                                 "où :\n" +
-                                "<j"+i+"> est un joueur simulé (s) "+
-                                "qui n'admet doit avoir comme deuxième paramètre "+
+                                "<j"+i+"> est un joueur simulé qui n'admet doit avoir comme deuxième paramètre "+//TODO: n'admet
                                 "le nombre d'itérations, forcément un entier."
                         );
                     }
