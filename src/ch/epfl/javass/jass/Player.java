@@ -1,6 +1,10 @@
 package ch.epfl.javass.jass;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import src.cs108.MeldSet;
 
 /**@brief This interface is implemented by the players, whether they are simulated
  *        or real.
@@ -35,6 +39,9 @@ public interface Player {
         //default is empty
     }
 
+    default public List<MeldSet> announcement(CardSet hand){
+        return new ArrayList<MeldSet>();
+    }
     
     /**
      * @Brief Called during a TurnState, will provoke some specific 

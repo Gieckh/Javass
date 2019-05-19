@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 import bonus.JassReductorOfSet;
-import bonus.TurnStateBonus;
 
 /**
  * @brief This class represents the [public] state of the game: what every Player
