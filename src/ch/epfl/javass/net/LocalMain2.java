@@ -17,19 +17,20 @@ public class LocalMain2 {
     private static final String DEFAULT_IP_ADDRESS = "localhost";
     private static final int SIMULATED_PLAYER_WAIT_TIME_MS = 2000; //in milliseconds
     private static final int NEW_CARD_WAIT_TIME_MS = 1000;
+    private static final int ARBITRARY_MIN_MCTS_ITERATIONS = 10;
 
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-
     private void displayError(String s) {
         System.err.println(s);
         System.exit(1);
     }
 
-    private void checkTotalNoParameters (int size) {
+    private void checkTotalNoOfParameters (List<String> args) {
+        int size = args.size();
         if( !(size == 4 || size == 5) ) {
             displayError("Mauvais nombre d'arguments : " + size + " n'est pas dans l'intervalle [|4, 5|]\n" +
                     "Utilisation : java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
@@ -46,29 +47,42 @@ public class LocalMain2 {
         }
     }
 
-    private void checkEachParameterArguments(List<String> parameter, PlayerType playerType, int i) {
+    private void checkEachParameterArguments(List<String> parameter, PlayerType playerType) {
         switch (playerType) {
-        case HUMAN:
-            if (parameter.size() > 2)
-                displayError(
-                        "Erreur : nombre de paramètres excessif : " + parameter.size() + ".\n" +
-                        "Un joueur de type humain admet 2 paramètres au maximum\n" +
-                        "Par exemple : \"h:Aline\" définit un joueur humain nommé Aline."
-                );
-        case REMOTE:
-            if (parameter.size() > 3)
-                displayError(
-                        "Erreur : nombre de paramètres excessif : " + parameter.size() + ".\n" +
-                        "Un joueur de type remote (distant) admet 3 paramètres au maximum\n" +
-                        "Par exemple : \"r:Bastien:128.178.243.14\" définit un joueur distant nommé Bastien dont l'adresse IP est 128.178.243.14."
-                );
-        case SIMULATED:
-            if (parameter.size() > 3)
-                displayError(
-                        "Erreur : nombre de paramètres excessif : " + parameter.size() + ".\n" +
-                        "Un joueur de type simulé admet 3 paramètres au maximum\n" +
-                        "Par exemple : \"s:Bastien:10000\" définit un joueur simulé nommé Bastien, utilisant l'algorithme MCTS avec 10_000 itérations."
-                );
+            case HUMAN:
+                if (parameter.size() > 2)
+                    displayError(
+                            "Erreur : nombre de paramètres excessif : " + parameter.size() + "dans l'entrée \"" + String.join(":", parameter) + "\".\n" +
+                            "Un joueur de type humain admet 2 paramètres au maximum\n" +
+                            "Par exemple : \"h:Aline\" définit un joueur humain nommé Aline."
+                    );
+                break;
+
+            case REMOTE:
+                if (parameter.size() > 3)
+                    displayError(
+                            "Erreur : nombre de paramètres excessif : " + parameter.size() + "dans l'entrée \"" + String.join(":", parameter) + "\".\n" +
+                            "Un joueur de type remote (distant) admet 3 paramètres au maximum\n" +
+                            "Par exemple : \"r:Bastien:128.178.243.14\" définit un joueur distant nommé Bastien dont l'adresse IP est 128.178.243.14."
+                    );
+                break;
+
+            case SIMULATED:
+                if (parameter.size() > 3)
+                    displayError(
+                            "Erreur : nombre de paramètres excessif " + parameter.size() + "dans l'entrée \"" + String.join(":", parameter) + "\".\n" +
+                            "Un joueur de type simulé admet 3 paramètres au maximum\n" +
+                            "Par exemple : \"s:Bastien:10000\" définit un joueur simulé nommé Bastien, utilisant l'algorithme MCTS avec 10_000 itérations."
+                    );
+                break;
+
+            default:
+                throw new Error();
         }
+    }
+
+    private void checkNumberOfMctsIterationsIsCorrect(int iterations) {
+        if (iterations < ARBITRARY_MIN_MCTS_ITERATIONS)
+            displayError("Le nombre");
     }
 }
