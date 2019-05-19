@@ -1,14 +1,13 @@
 package ch.epfl.javass.net;
 
 import ch.epfl.javass.PlayerType;
-import com.sun.org.apache.regexp.internal.RE;
+import ch.epfl.javass.gui.GraphicalPlayerAdapter;
+import ch.epfl.javass.jass.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.io.IOException;
+import java.util.*;
 
 public class LocalMain2 extends Application {
     /** ============================================== **/
@@ -23,12 +22,13 @@ public class LocalMain2 extends Application {
     private static final int SIMULATED_PLAYER_WAIT_TIME_MS = 2; //in seconds
     private static final int NEW_CARD_WAIT_TIME_MS = 1000;
     private static final int ARBITRARY_MIN_MCTS_ITERATIONS = 10;
-    private static final int SIZE_WITHOUT_SEED = 4;
-    private static final int SIZE_WITH_SEED = 5;
 
-    private static final String HUMAN = "h";
-    private static final String REMOTE = "r";
-    private static final String SIMULATED = "s";
+    private static final int SIZE_WITHOUT_SEED = 4;
+    private static final int SIZE_WITH_SEED    = 5;
+
+    private static final String HUMAN_STRING     = "h";
+    private static final String REMOTE_STRING    = "r";
+    private static final String SIMULATED_STRING = "s";
 
 
     /** ============================================== **/
@@ -51,7 +51,7 @@ public class LocalMain2 extends Application {
      *
      * @param args ({@code List<String>}) the arguments of the main.
      */
-    private void checkTotalNoOfParametersisValid (List<String> args) {
+    private void checkTotalNoOfParametersIsValid(List<String> args) {
         int size = args.size();
         if( !(size == SIZE_WITHOUT_SEED || size == SIZE_WITH_SEED) ) {
             displayError("Mauvais nombre d'arguments : " + size + " n'est pas dans l'intervalle [|4, 5|]\n" +
@@ -79,9 +79,9 @@ public class LocalMain2 extends Application {
      */
     private void checkPlayerTypeIsValid (List<String> arg) {
         String fstParam = arg.get(0);
-        if (! (fstParam.equals(HUMAN)  ||
-               fstParam.equals(REMOTE) ||
-               fstParam.equals(SIMULATED))
+        if (! (fstParam.equals(HUMAN_STRING)  ||
+               fstParam.equals(REMOTE_STRING) ||
+               fstParam.equals(SIMULATED_STRING))
         )
             displayError("Erreur : spécification de joueur invalide : " + fstParam +"\n" +
                          "Le premier caractère de chaque argument du programme devrait être 'h', 'r' ou 's'."
@@ -93,10 +93,10 @@ public class LocalMain2 extends Application {
      *        of the main contains the correct number of parameters.
      *
      * @param arg ({@code List<String>}) an argument of the main program.
-     * @param playerType
      */
     private void
-    checkNoOfEachArgumentParametersIsValid (List<String> arg, PlayerType playerType) {
+    checkNoOfEachArgumentParametersIsValid (List<String> arg) {
+        PlayerType playerType = PlayerType.toType(arg.get(0));
         switch (playerType) {
             case HUMAN:
                 if (arg.size() > 2)
@@ -184,6 +184,31 @@ public class LocalMain2 extends Application {
         throw new Error("How in God's name did you get there?");
     }
 
+    /**
+     * @brief Given a valid remote player [represented by "arg"], returns its host.
+     *
+     * @param arg ({@code List<String>}) the list of parameters corresponding to a remote player.
+     * @return (String) - The specified host if there is one, the default one otherwise.
+     */
+    private String getHost(List<String> arg) {
+        assert (arg.size() == 1 || arg.size() == 2 || arg.size() == 3);
+        return (arg.size() == 3) ? arg.get(2) : DEFAULT_IP_ADDRESS;
+    }
+
+    /**
+     * @brief Given a valid player [represented by "arg"], puts its name into the
+     *        {@code Map} "playerNames.
+     *
+     * @param arg ({@code}) the list of parameters corresponding to a player.
+     * @param playerNames ({@code Map<PlayerId, String>}) - where the name must be put.
+     * @param i ({@code int}) - indicates which player is being processed.
+     */
+    private void putNameInMap(List<String> arg, Map<PlayerId, String> playerNames, int i) {
+        if (arg.size() == 1 || arg.get(1).equals(""))
+            playerNames.put(PlayerId.ALL.get(i), DEFAULT_NAMES.get(i));
+        else
+            playerNames.put(PlayerId.ALL.get(i), arg.get(1));
+    }
 
     /** ============================================== **/
     /** =============    MAIN METHODS    ============= **/
@@ -195,7 +220,64 @@ public class LocalMain2 extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         List<String> args = getParameters().getRaw();
+        Map<PlayerId, Player> playersMap = new EnumMap<>(PlayerId.class);
+        Map<PlayerId, String> playerNames = new EnumMap<>(PlayerId.class);
 
+        checkTotalNoOfParametersIsValid(args);
+        Random random = generateRandom(args);
+        long jassGameRandom = random.nextLong();
+        for (int i = 0; i < 4; ++i) {
+            List<String> arg = Arrays.asList(args.get(i).split(":"));
+            checkPlayerTypeIsValid(arg);
+            checkNoOfEachArgumentParametersIsValid(arg);
+            putNameInMap(arg, playerNames, i);
+            PlayerId pId = PlayerId.ALL.get(i);
+
+            switch (arg.get(0)) {
+            case HUMAN_STRING:
+                playersMap.put(pId, new GraphicalPlayerAdapter());
+                break;
+            case REMOTE_STRING:
+                try {
+                    playersMap.put(pId, new RemotePlayerClient(getHost(arg)));
+                }
+                catch (IOException e) {
+                    displayError("Erreur de connexion au serveur du joueur distant n°" + i + " à l'adresse " + getHost(arg));
+                }
+                break;
+            case SIMULATED_STRING:
+                playersMap.put(
+                        pId,
+                        new PacedPlayer(
+                                new MctsPlayer(
+                                        pId,
+                                        random.nextLong(),
+                                        checkNumberOfMctsIterationsIsValidAndReturnsIt(arg)
+                                ),
+                                SIMULATED_PLAYER_WAIT_TIME_MS
+                        )
+                );
+                break;
+
+            default:
+                    throw new Error("How could you get here?");
+            }
+        }
+
+        Thread gameThread = new Thread(() -> {
+            JassGame g = new JassGame(jassGameRandom, playersMap, playerNames);
+            while (! g.isGameOver()) {
+                g.advanceToEndOfNextTrick();
+                try {
+                    Thread.sleep(NEW_CARD_WAIT_TIME_MS);
+                } catch (Exception e) {
+                    //TODO: nothing ?
+                }
+            }
+        });
+
+        gameThread.setDaemon(true);
+        gameThread.start();
     }
 
     /**
