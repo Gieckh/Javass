@@ -282,7 +282,7 @@ public class LocalMain2 extends Application {
 
     /**
      * @brief the main of the whole project. It runs "launch" that will create
-     *        a new thread for a game customized by the args array.
+     *        a new thread for a game, given the arguments entered in the configurations.
      *
      * @param args an Array of {@code String} containing information about the players
      */
