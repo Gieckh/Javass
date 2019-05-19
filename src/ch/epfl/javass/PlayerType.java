@@ -11,7 +11,7 @@ public enum PlayerType {
         this.stringRep = s;
     }
 
-    public PlayerType toType(String s) {
+    public static PlayerType toType(String s) {
         switch(s) {
             case "h": return HUMAN;
             case "r": return REMOTE;

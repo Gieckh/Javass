@@ -1,16 +1,16 @@
 package ch.epfl.javass.jass;
 
 import bonus.JassReductorOfSet;
-import ch.epfl.javass.gui.HandBean;
-import ch.epfl.javass.jass.Card.Color;
-import ch.epfl.javass.jass.Card.Rank;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ListChangeListener;
+import ch.epfl.javass.PlayerType;
+
+import java.util.Arrays;
+import java.util.List;
 
 //this is  a test, thus no need of javadoc
 public class test {
     public static void main(String[] args) {
-       System.out.println(Integer.parseUnsignedInt("10000"));
+        String s = "a::b";
+        List<String> ls = Arrays.asList(s.split(":"));
+        System.out.println(ls);
     }
 }

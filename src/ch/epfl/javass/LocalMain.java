@@ -163,7 +163,7 @@ public class LocalMain extends Application {
             }
             else {
                 List<String> list = Arrays.asList(args.get(i).split(":"));
-                names.set(i, (list.size() <2 || list.get(1).isEmpty()) ?
+                names.set(i, (list.size() < 2 || list.get(1).isEmpty()) ?
                         LocalMain.defaultNames[i]  : list.get(1));
                 if (list.get(0).equals("h")){
                     checkParameters(list, "h", i);
