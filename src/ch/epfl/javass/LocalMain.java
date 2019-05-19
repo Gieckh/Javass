@@ -151,7 +151,7 @@ public class LocalMain extends Application {
         for (int i = 0; i < size; ++i) {
             if (i == 4) {
                 try {
-                    generatingSeed = Long.parseLong(args.get(i));
+                    generatingSeed = Long.parseLong(args.get(4));
                 }
                 catch (NumberFormatException e){
                     displayError(
