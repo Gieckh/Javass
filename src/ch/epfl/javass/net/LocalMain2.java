@@ -20,7 +20,7 @@ public class LocalMain2 extends Application {
     private static final int DEFAULT_MCTS_ITERATION = 10_000;
     private static final String DEFAULT_IP_ADDRESS = "localhost";
 
-    private static final int SIMULATED_PLAYER_WAIT_TIME_MS = 2000; //in milliseconds
+    private static final int SIMULATED_PLAYER_WAIT_TIME_MS = 2; //in seconds
     private static final int NEW_CARD_WAIT_TIME_MS = 1000;
     private static final int ARBITRARY_MIN_MCTS_ITERATIONS = 10;
     private static final int SIZE_WITHOUT_SEED = 4;
@@ -134,7 +134,8 @@ public class LocalMain2 extends Application {
      * @brief Given a simulated player, checks that its given number of iterations
      *        is valid [if there is one], and returns it. If there is none, returns
      *        the default number of iterations.
-     * @param arg
+     * @param arg ({@code List<String>}) an argument of the main program [a simulated player].
+     *
      * @return ({@code int}) a simulated player's number of iterations.
      */
     private int checkNumberOfMctsIterationsIsValidAndReturnsIt (List<String> arg) {
@@ -142,7 +143,21 @@ public class LocalMain2 extends Application {
             return DEFAULT_MCTS_ITERATION;
 
         assert (arg.size() == 3);
-        if
+        int iterations;
+        try {
+            iterations = Integer.parseInt(arg.get(2));
+        }
+        catch (NumberFormatException e) {
+            iterations = DEFAULT_MCTS_ITERATION; //ignore
+            displayError("Erreur : spécification du nombre d'itérations invalide : " + arg.get(3) + "\n" +
+                         "Le nombre d'itérations devrait être une valeur de type int.");
+        }
+
+        if (iterations < ARBITRARY_MIN_MCTS_ITERATIONS)
+            displayError("Erreur : spécification du nombre d'itérations invalide : " + arg.get(3) + "\n" +
+                         "Le nombre d'itérations devrait être supérieur ou égal à " + ARBITRARY_MIN_MCTS_ITERATIONS);
+
+        return iterations;
     }
 
     /**
@@ -161,7 +176,8 @@ public class LocalMain2 extends Application {
             return new Random(Long.parseLong(args.get(4)));
         }
         catch (NumberFormatException e) {
-            displayError("Erreur : la chaîne de caractères indiquant la graine : \"" + args.get(4) + "\" ne représente pas une valeur de type long.");
+            displayError("Erreur : spécification de la graine invalide : " + args.get(4) + "\n" +
+                         "La graine devrait être une valeur de type long.");
         }
 
         //Unreachable statement
