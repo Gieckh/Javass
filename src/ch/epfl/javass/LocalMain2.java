@@ -142,7 +142,7 @@ public class LocalMain2 extends Application {
             return DEFAULT_MCTS_ITERATION;
 
         assert (arg.size() == 3);
-        int iterations;
+        int iterations; 
         try {
             iterations = Integer.parseInt(arg.get(2));
         }
