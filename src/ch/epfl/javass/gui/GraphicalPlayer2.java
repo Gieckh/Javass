@@ -59,30 +59,51 @@ public class GraphicalPlayer2 {
         return null;
     }
 
+    //Didn't feel like making a private method to initialize a row.
     /**
+     * @brief //TODO
      *
      * @param scoreBean
      * @return
      */
     private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
-        // https://piazza.com/class/jrhvyjm5czn4f?cid=372
-        Text textL1C1 = new Text();
+        // https://piazza.com/class/jrhvyjm5czn4f?cid=372 //TODO: suppr
+        //First row
+        Text textL1C1 = new Text(playerNames.get(PlayerId.PLAYER_1) + " et " + playerNames.get(PlayerId.PLAYER_3) + " : ");
+
         Text textL1C2 = new Text();
+        textL1C2.textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_1)));
+
         Text textL1C3 = new Text();
-        Text textL1C4 = new Text();
+        scoreBean.turnPointsProperty(TeamId.TEAM_1).addListener((observable, oldValue, newValue) ->
+                textL1C3.setText("(+" + Math.max(0, newValue.intValue() - oldValue.intValue()) + ")"));
+
+        Text textL1C4 = new Text("/ Total : ");
+
         Text textL1C5 = new Text();
+        textL1C5.textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(TeamId.TEAM_1)));
 
-        Text textL2C1 = new Text();
+
+        //Second row
+        Text textL2C1 = new Text(playerNames.get(PlayerId.PLAYER_2) + " et " + playerNames.get(PlayerId.PLAYER_4) + " : ");
+
         Text textL2C2 = new Text();
-        Text textL2C3 = new Text();
-        Text textL2C4 = new Text();
-        Text textL2C5 = new Text();
+        textL2C2.textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_2)));
 
-        textL1C1.textProperty().set("");
+        Text textL2C3 = new Text();
+        scoreBean.turnPointsProperty(TeamId.TEAM_2).addListener((observable, oldValue, newValue) ->
+                textL2C3.setText("(+" + Math.max(0, newValue.intValue() - oldValue.intValue()) + ")"));
+
+        Text textL2C4 = new Text("/ Total : ");
+
+        Text textL2C5 = new Text();
+        textL2C5.textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(TeamId.TEAM_2)));
 
         GridPane scoreGrid = new GridPane();
         scoreGrid.addRow(0, textL1C1, textL1C2, textL1C3, textL1C4, textL1C5);
         scoreGrid.addRow(1, textL2C1, textL2C2, textL2C3, textL2C4, textL2C5);
+
+
 
         //TODO
         return null;

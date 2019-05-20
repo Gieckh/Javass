@@ -1,8 +1,9 @@
-package ch.epfl.javass.net;
+package ch.epfl.javass;
 
 import ch.epfl.javass.PlayerType;
 import ch.epfl.javass.gui.GraphicalPlayerAdapter;
 import ch.epfl.javass.jass.*;
+import ch.epfl.javass.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
