@@ -103,10 +103,8 @@ public class GraphicalPlayer2 {
         scoreGrid.addRow(0, textL1C1, textL1C2, textL1C3, textL1C4, textL1C5);
         scoreGrid.addRow(1, textL2C1, textL2C2, textL2C3, textL2C4, textL2C5);
 
-
-
         //TODO
-        return null;
+        return scoreGrid;
     }
 
     /**

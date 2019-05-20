@@ -21,6 +21,7 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableMap;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.effect.GaussianBlur;
@@ -202,7 +203,10 @@ public class GraphicalPlayer {
         grid.setStyle("-fx-font: 16 Optima;\n" + 
                     "-fx-background-color: lightgray;\n" + 
                     "-fx-padding: 5px;\n" + 
-                    "-fx-alignment: center;"); 
+                    "-fx-alignment: center;");
+
+        GridPane.setHalignment(namesOfTeam1, HPos.RIGHT);
+        GridPane.setHalignment(namesOfTeam2, HPos.RIGHT);
         return grid;
     }
     
