@@ -332,7 +332,7 @@ public class GraphicalPlayer {
     private HBox createAnnouncesPane() {
         List<MeldSet> meldSet = Announcement.getAnnounces(CardSet.of(handBean.hand()));
         Text AllAnnouncesSet[] = new Text[meldSet.size()];
-        for(Meld m : meldSet) {
+        for(MeldSet m : meldSet) {
             
         }
     }
