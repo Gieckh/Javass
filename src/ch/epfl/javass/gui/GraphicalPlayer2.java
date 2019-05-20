@@ -6,6 +6,7 @@ import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.geometry.HPos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -99,11 +100,24 @@ public class GraphicalPlayer2 {
         Text textL2C5 = new Text();
         textL2C5.textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(TeamId.TEAM_2)));
 
+
         GridPane scoreGrid = new GridPane();
         scoreGrid.addRow(0, textL1C1, textL1C2, textL1C3, textL1C4, textL1C5);
         scoreGrid.addRow(1, textL2C1, textL2C2, textL2C3, textL2C4, textL2C5);
 
-        //TODO
+        //Setting the alignments
+        GridPane.setHalignment(textL1C1, HPos.RIGHT);
+        GridPane.setHalignment(textL1C2, HPos.RIGHT);
+        GridPane.setHalignment(textL1C3, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL1C4, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL1C5, HPos.RIGHT);
+
+        GridPane.setHalignment(textL2C1, HPos.RIGHT);
+        GridPane.setHalignment(textL2C2, HPos.RIGHT);
+        GridPane.setHalignment(textL2C3, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL2C4, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL2C5, HPos.RIGHT);
+
         return scoreGrid;
     }
 
