@@ -151,7 +151,16 @@ public final class RemotePlayerServer {
                         w.write(StringSerializer.serializeInt(this.underLyingPlayer.cheat()));
                         w.write("\n");
                         w.flush();
+                        break;
                         
+                    case MELD:
+                        assert (words.size() == 2);
+                        System.out.println("meld read");
+                        w.write(StringSerializer.serializeInt(this.underLyingPlayer.announcement(
+                                CardSet.ofPacked(
+                                StringSerializer.deserializeLong(words.get(1))))));
+                        w.write("\n");
+                        w.flush();
                         break;
                         
                     default:

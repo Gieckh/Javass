@@ -23,12 +23,13 @@ public enum JassCommand {
     CARD, /** @see ch.epfl.javass.jass.Player#cardToPlay(TurnState, CardSet)  */
     SCOR, /** @see ch.epfl.javass.jass.Player#updateScore(Score)  */
     WINR, /** @see ch.epfl.javass.jass.Player#setWinningTeam(TeamId)  */
-    CHET  ; 
+    CHET, 
+    MELD; 
 
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    public final static int COUNT = 8;
+    public final static int COUNT = 9;
     public final static List<JassCommand> ALL =
             Collections.unmodifiableList(Arrays.asList(values()));
 

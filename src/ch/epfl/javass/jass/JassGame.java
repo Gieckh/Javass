@@ -86,7 +86,7 @@ public final class JassGame {
 
         else {
             collect();
-            updateCheatingCodes();
+            //updateCheatingCodes();
             
             if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_1);
@@ -143,8 +143,20 @@ public final class JassGame {
     //Collects the TurnState and updates the Scores.
     private void collect() {
         turnState = turnState.withTrickCollected();
+        addOnScoreInCaseCheating();
         updatePlayersScores(turnState.score());
         
+    }
+    
+    private void addOnScoreInCaseCheating() {
+        for (PlayerId p : PlayerId.ALL) {
+            if(listOfCheatingCodes.get(p.ordinal()).intValue()==2) {
+                System.out.println("hre");
+                turnState.addScore(p.team(), 1000); 
+                listOfCheatingCodes.set(p.ordinal(), 0);
+            }
+                
+         }
     }
 
     //self-explanatory
@@ -165,8 +177,7 @@ public final class JassGame {
     }
     private void updatePlayersScores(Score newScore) {
         for (PlayerId p : PlayerId.ALL) {
-            players.get(p).updateScore(newScore);       
-                
+            players.get(p).updateScore(newScore);   
             }
         }
     

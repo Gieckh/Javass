@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 import ch.epfl.javass.jass.Card;
+import ch.epfl.javass.jass.CardSet;
 
 public final class MeldSet {
     private final Set<Meld> melds;
@@ -21,7 +22,7 @@ public final class MeldSet {
         return Sets.mutuallyDisjoint(allSetsOfCards);
     }
 
-    public static List<MeldSet> allIn(Collection<Card> hand) {
+    public static List<MeldSet> allIn(CardSet hand) {
         List<MeldSet> r = new ArrayList<>();
         for (Set<Meld> melds: Sets.powerSet(Meld.allIn(hand))) {
             if (mutuallyDisjoint(melds))

@@ -173,7 +173,19 @@ public final class PackedCardSet {
         return (mask & pkCardSet) == mask;
     }
 
-
+    /**
+     * @brief Indicates whether this packed set of card contains the
+     *        given packed Set of cards [CardSet].
+     *
+     * @param pkCardSet (long)
+     * @return (boolean) true if this set contains the whole packedCardSet.
+     */
+    public static boolean containsAll(long thisSet,long pkCardSetContained) {
+        
+        return PackedCardSet.intersection(thisSet, pkCardSetContained)==pkCardSetContained;
+    }
+    
+    
     /**
      * @brief Given a packed card, return its index in the (long) encoding any
      *        set of cards

@@ -162,6 +162,17 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
             throw new UncheckedIOException(e);
         }
     }
+    
+    @Override
+    public int announcement(CardSet hand) { 
+        forceWrite(JassCommand.MELD.toString(),
+            combine(' ',StringSerializer.serializeLong(hand.packed())));
+        try {
+            return StringSerializer.deserializeInt(reader.readLine());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
         
 
     /**

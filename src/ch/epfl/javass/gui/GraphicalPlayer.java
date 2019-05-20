@@ -6,10 +6,12 @@ import static javafx.collections.FXCollections.unmodifiableObservableMap;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static javafx.beans.binding.Bindings.when;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import ch.epfl.javass.jass.Card;
+import ch.epfl.javass.jass.CardSet;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.PlayerId;
@@ -37,6 +39,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import src.cs108.Announcement;
+import src.cs108.Meld;
+import src.cs108.MeldSet;
 
 /**
  * GraphicalPlayer is class creating a JavaFx Stage which is the graphical interface of a complete
@@ -63,6 +68,7 @@ public class GraphicalPlayer {
     private BorderPane victoryPaneForTeam[] = new BorderPane[2];
     private StackPane finalPane;
     private ArrayBlockingQueue<Integer> cheatingQueue;
+    private ArrayBlockingQueue<Integer> AnnouncesQueue;
 
 
     
@@ -84,7 +90,7 @@ public class GraphicalPlayer {
      */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
             TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication,
-            ArrayBlockingQueue<Integer> cheatingQueue ) {
+            ArrayBlockingQueue<Integer> cheatingQueue , ArrayBlockingQueue<Integer> AnnouncesQueue) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
         this.score = score; 
@@ -92,6 +98,7 @@ public class GraphicalPlayer {
         this.handBean = handBean;
         this.queueOfCommunication = queueOfCommunication;
         this.cheatingQueue = cheatingQueue;
+        this.AnnouncesQueue = AnnouncesQueue;
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
         HBox handPane = createHandPane();
@@ -322,6 +329,15 @@ public class GraphicalPlayer {
         
         return border;
     }
+    private HBox createAnnouncesPane() {
+        List<MeldSet> meldSet = Announcement.getAnnounces(CardSet.of(handBean.hand()));
+        Text AllAnnouncesSet[] = new Text[meldSet.size()];
+        for(Meld m : meldSet) {
+            
+        }
+    }
+    
+    
     
     private HBox createHandPane() {
         

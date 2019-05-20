@@ -103,6 +103,12 @@ public final class Score {
         return PackedScore.totalPoints(packedScore, t);
     }
     
+    public Score addPoints(TeamId winningTeam, int points) {
+        checkArgument(points >= 0);
+        return ofPacked(PackedScore.addPoints(packedScore, winningTeam, points));
+    }
+    
+    
     /**
      * @brief updates this pkScore, knowing that the team "winningTeam" just won
      *        a trick of value "trickPoints". takes into consideration the <em>additional trick</em>,

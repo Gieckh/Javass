@@ -171,6 +171,10 @@ public class TurnState {
         return Trick.ofPacked(pkCurrentTrick);
     }
 
+    
+    public void addScore(TeamId t , int score) {
+        PackedScore.addPoints(pkScore, t, score);
+    }
 
     //the real methods:
     /** 

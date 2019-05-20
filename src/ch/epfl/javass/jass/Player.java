@@ -39,8 +39,8 @@ public interface Player {
         //default is empty
     }
 
-    default public List<MeldSet> announcement(CardSet hand){
-        return new ArrayList<MeldSet>();
+    default public int announcement(CardSet hand){
+        return 0;
     }
     
     /**

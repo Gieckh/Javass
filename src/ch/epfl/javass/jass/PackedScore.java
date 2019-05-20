@@ -164,6 +164,15 @@ public final class PackedScore {
         );
     }
 
+    public static long addPoints(long pkScore, TeamId winningTeam, int points) {
+        assert(isValid(pkScore));
+        int shift = (winningTeam == TeamId.TEAM_1) ? TEAM_ONE_START : TEAM_TWO_START;
+        long PointsL = points;
+        PointsL <<= (shift + POINTS_PER_GAME_START);
+        return (pkScore + PointsL);
+    }
+    
+    
     /**
      * @brief updates the "pkScore", knowing that the team "winningTeam" just won
      *        a trick of value "trickPoints". takes into consideration the <em>additional trick</em>,

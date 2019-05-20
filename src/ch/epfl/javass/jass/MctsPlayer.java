@@ -2,7 +2,11 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
+import java.util.List;
 import java.util.SplittableRandom;
+
+import src.cs108.Announcement;
+import src.cs108.MeldSet;
 
 /**
  * @brief This class extends Player and only overrides the method "cardToPlay".
@@ -39,6 +43,14 @@ public class MctsPlayer implements Player {
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+    
+    @Override
+    public int announcement(CardSet hand) {
+        List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
+        MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
+        return bestAnnounceSet.points();
+    }
+    
     @SuppressWarnings("Duplicates")
     @Override
     /**

@@ -13,13 +13,10 @@ import javafx.collections.ListChangeListener;
 //this is  a test, thus no need of javadoc
 public class test {
     public static void main(String[] args) {
-        
-       Trick coucou = Trick.firstEmpty(Color.CLUB, PlayerId.PLAYER_2);
-       coucou = coucou.withAddedCard(Card.of(Color.CLUB, Rank.NINE));
-       coucou = coucou.withAddedCard(Card.of(Color.CLUB,Rank.QUEEN));
-       coucou= coucou.withAddedCard(Card.of(Color.CLUB, Rank.TEN));
-      // coucou = coucou.withAddedCard(Card.of(Color.CLUB, Rank.SIX));
-       System.out.println(JassReductorOfSet.CardsThePlayerHavnt(coucou, Collections.nCopies(4,CardSet.EMPTY)));
-       
+        Score b = Score.INITIAL;
+        System.out.println(b);
+        b = b.addPoints(TeamId.TEAM_1, 22);
+        System.out.println(b);
     }
+     
 }

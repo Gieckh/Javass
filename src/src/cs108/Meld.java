@@ -11,6 +11,7 @@ import java.util.Set;
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
+import ch.epfl.javass.jass.CardSet;
 
 
 public final class Meld {
@@ -70,10 +71,10 @@ public final class Meld {
         }
     }
 
-    public static List<Meld> allIn(Collection<Card> hand) {
+    public static List<Meld> allIn(CardSet hand) {
         List<Meld> allIn = new ArrayList<>();
         for (Meld m: ALL) {
-            if (hand.containsAll(m.cards()))
+            if (hand.containsAll(CardSet.of( new ArrayList<>(m.cards()))));
                 allIn.add(m);
         }
         return allIn;
