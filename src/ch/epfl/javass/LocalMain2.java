@@ -100,7 +100,7 @@ public class LocalMain2 extends Application {
             case HUMAN:
                 if (arg.size() > 2)
                     displayError(
-                            "Erreur : nombre de paramètres excessif : " + arg.size() + "dans l'entrée \"" + String.join(":", arg) + "\".\n" +
+                            "Erreur : nombre de paramètres excessif : " + arg.size() + " dans l'entrée \"" + String.join(":", arg) + "\".\n" +
                             "Un joueur de type humain admet 2 paramètres au maximum\n" +
                             "Par exemple : \"h:Aline\" définit un joueur humain nommé Aline."
                     );
@@ -142,18 +142,18 @@ public class LocalMain2 extends Application {
             return DEFAULT_MCTS_ITERATION;
 
         assert (arg.size() == 3);
-        int iterations;
+        int iterations; 
         try {
             iterations = Integer.parseInt(arg.get(2));
         }
         catch (NumberFormatException e) {
             iterations = DEFAULT_MCTS_ITERATION; //ignore
-            displayError("Erreur : spécification du nombre d'itérations invalide : " + arg.get(3) + "\n" +
+            displayError("Erreur : spécification du nombre d'itérations invalide : " + arg.get(2) + "\n" +
                          "Le nombre d'itérations devrait être une valeur de type int.");
         }
 
         if (iterations < ARBITRARY_MIN_MCTS_ITERATIONS)
-            displayError("Erreur : spécification du nombre d'itérations invalide : " + arg.get(3) + "\n" +
+            displayError("Erreur : spécification du nombre d'itérations invalide : " + arg.get(2) + "\n" +
                          "Le nombre d'itérations devrait être supérieur ou égal à " + ARBITRARY_MIN_MCTS_ITERATIONS);
 
         return iterations;
