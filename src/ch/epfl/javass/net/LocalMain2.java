@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
+import static ch.epfl.javass.PlayerType.*;
+
 public class LocalMain2 extends Application {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -25,10 +27,6 @@ public class LocalMain2 extends Application {
 
     private static final int SIZE_WITHOUT_SEED = 4;
     private static final int SIZE_WITH_SEED    = 5;
-
-    private static final String HUMAN_STRING     = "h";
-    private static final String REMOTE_STRING    = "r";
-    private static final String SIMULATED_STRING = "s";
 
 
     /** ============================================== **/
@@ -79,9 +77,9 @@ public class LocalMain2 extends Application {
      */
     private void checkPlayerTypeIsValid (List<String> arg) {
         String fstParam = arg.get(0);
-        if (! (fstParam.equals(HUMAN_STRING)  ||
-               fstParam.equals(REMOTE_STRING) ||
-               fstParam.equals(SIMULATED_STRING))
+        if (! (fstParam.equals(HUMAN    .toString()) ||
+               fstParam.equals(REMOTE   .toString()) ||
+               fstParam.equals(SIMULATED.toString()))
         )
             displayError("Erreur : spécification de joueur invalide : " + fstParam +"\n" +
                          "Le premier caractère de chaque argument du programme devrait être 'h', 'r' ou 's'."
@@ -229,15 +227,17 @@ public class LocalMain2 extends Application {
         for (int i = 0; i < 4; ++i) {
             List<String> arg = Arrays.asList(args.get(i).split(":"));
             checkPlayerTypeIsValid(arg);
+            PlayerType playerType = PlayerType.toType(arg.get(0));
             checkNoOfEachArgumentParametersIsValid(arg);
             putNameInMap(arg, playerNames, i);
             PlayerId pId = PlayerId.ALL.get(i);
 
-            switch (arg.get(0)) {
-            case HUMAN_STRING:
+            switch (playerType) {
+            case HUMAN:
                 playersMap.put(pId, new GraphicalPlayerAdapter());
                 break;
-            case REMOTE_STRING:
+
+            case REMOTE:
                 try {
                     playersMap.put(pId, new RemotePlayerClient(getHost(arg)));
                 }
@@ -245,7 +245,8 @@ public class LocalMain2 extends Application {
                     displayError("Erreur de connexion au serveur du joueur distant n°" + i + " à l'adresse " + getHost(arg));
                 }
                 break;
-            case SIMULATED_STRING:
+
+            case SIMULATED:
                 playersMap.put(
                         pId,
                         new PacedPlayer(
