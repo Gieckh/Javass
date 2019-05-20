@@ -22,6 +22,7 @@ import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
+import src.cs108.MeldSet;
 
 
 //TODO: does it actually work - without the "println(...)" ?
@@ -164,11 +165,14 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
     }
     
     @Override
-    public int announcement(CardSet hand) { 
+    public MeldSet announcement(CardSet hand) { 
         forceWrite(JassCommand.MELD.toString(),
             combine(' ',StringSerializer.serializeLong(hand.packed())));
         try {
-            return StringSerializer.deserializeInt(reader.readLine());
+           long Packed[] = new long[2];
+            Packed[0] = StringSerializer.deserializeLong(reader.readLine());
+            Packed[1] = StringSerializer.deserializeLong(reader.readLine());
+            return MeldSet.from(Packed);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

@@ -86,7 +86,7 @@ public final class JassGame {
 
         else {
             collect();
-            //updateCheatingCodes();
+            updateCheatingCodes();
             
             if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_1);

@@ -39,8 +39,8 @@ public interface Player {
         //default is empty
     }
 
-    default public int announcement(CardSet hand){
-        return 0;
+    default public MeldSet announcement(CardSet hand){
+        return MeldSet.allIn(CardSet.EMPTY).get(0);
     }
     
     /**

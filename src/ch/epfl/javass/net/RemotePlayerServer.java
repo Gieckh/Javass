@@ -156,9 +156,13 @@ public final class RemotePlayerServer {
                     case MELD:
                         assert (words.size() == 2);
                         System.out.println("meld read");
-                        w.write(StringSerializer.serializeInt(this.underLyingPlayer.announcement(
+                        w.write(StringSerializer.serializeLong(this.underLyingPlayer.announcement(
                                 CardSet.ofPacked(
-                                StringSerializer.deserializeLong(words.get(1))))));
+                                StringSerializer.deserializeLong(words.get(1)))).packed()[0]));
+                        w.write("\n");
+                        w.write(StringSerializer.serializeLong(this.underLyingPlayer.announcement(
+                                CardSet.ofPacked(
+                                StringSerializer.deserializeLong(words.get(1)))).packed()[1]));
                         w.write("\n");
                         w.flush();
                         break;

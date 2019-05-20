@@ -45,10 +45,10 @@ public class MctsPlayer implements Player {
     /** ============================================== **/
     
     @Override
-    public int announcement(CardSet hand) {
+    public MeldSet announcement(CardSet hand) {
         List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
         MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
-        return bestAnnounceSet.points();
+        return bestAnnounceSet;
     }
     
     @SuppressWarnings("Duplicates")

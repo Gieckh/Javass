@@ -1,6 +1,8 @@
 package ch.epfl.javass.gui;
 
 import ch.epfl.javass.jass.*;
+import src.cs108.MeldSet;
+
 import static javafx.application.Platform.runLater;
 
 import java.util.Map;
@@ -31,7 +33,7 @@ public class GraphicalPlayerAdapter implements Player {
     GraphicalPlayer graphicalPlayer;
     ArrayBlockingQueue<Card> queueOfCommunication ;
     ArrayBlockingQueue<Integer> CheatingQueue;
-    ArrayBlockingQueue<Integer> meldQueue;
+    ArrayBlockingQueue<MeldSet> meldQueue;
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -81,6 +83,7 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public int cheat() {
         try {
+            System.out.println(CheatingQueue.isEmpty());
             return CheatingQueue.isEmpty() ? 0 : CheatingQueue.take() ;
             
         } catch (InterruptedException e) {
@@ -93,12 +96,12 @@ public class GraphicalPlayerAdapter implements Player {
      * @see ch.epfl.javass.jass.Player#announcement(ch.epfl.javass.jass.CardSet)
      */
     @Override
-    public int announcement(CardSet hand) {
+    public MeldSet announcement(CardSet hand) {
         try {
             handBean.setHand(hand);
-            int points = meldQueue.take() ;
+            MeldSet meldSet = meldQueue.take() ;
             handBean.setHand(CardSet.EMPTY);
-            return points;
+            return meldSet;
             
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block

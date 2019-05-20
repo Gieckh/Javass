@@ -1,6 +1,7 @@
 package ch.epfl.javass.gui;
 
 import static javafx.beans.binding.Bindings.valueAt;
+import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
@@ -22,10 +23,13 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -68,7 +72,7 @@ public class GraphicalPlayer {
     private BorderPane victoryPaneForTeam[] = new BorderPane[2];
     private StackPane finalPane;
     private ArrayBlockingQueue<Integer> cheatingQueue;
-    private ArrayBlockingQueue<Integer> AnnouncesQueue;
+    private ArrayBlockingQueue<MeldSet> AnnouncesQueue;
 
 
     
@@ -90,7 +94,7 @@ public class GraphicalPlayer {
      */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
             TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication,
-            ArrayBlockingQueue<Integer> cheatingQueue , ArrayBlockingQueue<Integer> AnnouncesQueue) {
+            ArrayBlockingQueue<Integer> cheatingQueue , ArrayBlockingQueue<MeldSet> AnnouncesQueue) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
         this.score = score; 
@@ -107,8 +111,15 @@ public class GraphicalPlayer {
              BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
              this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
         }
-
+//        BooleanBinding shouldDisplay =  createBooleanBinding( () -> AnnouncesQueue.size()==1 );
+//        ListView<Text> listOfAnnounces = new ListView<>();
+//        HBox announcesPane = new HBox();
+//        announcesPane.getChildren().removeIf(shouldDisplay ? createAnnouncesPane() : new GridPane() ;
+       
+        
+        //listOfAnnounces.
         BorderPane main= new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
+        
         
         this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
         cheatingManager();
@@ -329,15 +340,28 @@ public class GraphicalPlayer {
         
         return border;
     }
-    private HBox createAnnouncesPane() {
+    
+    
+    private ListView<Text> createAnnouncesPane() {
         List<MeldSet> meldSet = Announcement.getAnnounces(CardSet.of(handBean.hand()));
-        Text AllAnnouncesSet[] = new Text[meldSet.size()];
+        ObservableList<Text> AllAnnouncesSet =  observableArrayList();
         for(MeldSet m : meldSet) {
-            
+            Text children = new Text(m.toString());
+            children.setStyle("-fx-font: 16 Optima;\n");
+            children.setOnMouseClicked((e) -> {
+                try {
+                    AnnouncesQueue.put(m);
+                } catch (InterruptedException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+           AllAnnouncesSet.add(children);
         }
+        
+        ListView<Text> announcesPane = new ListView<>(AllAnnouncesSet);
+        return announcesPane;
     }
-    
-    
     
     private HBox createHandPane() {
         
