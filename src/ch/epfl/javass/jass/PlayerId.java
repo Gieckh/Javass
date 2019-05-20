@@ -40,4 +40,22 @@ public enum PlayerId {
     public TeamId team() {
         return team;
     }
+
+    /**
+     * @brief Indicates the next player
+     *
+     * @return ({@code PlayerId}) the next player.
+     */
+    public PlayerId nextPlayer() {
+        return ALL.get((this.ordinal() + 1) % COUNT);
+    }
+
+    /**
+     * @brief Indicates the previous player
+     *
+     * @return ({@code PlayerId}) the previous player.
+     */
+    public PlayerId previousPlayer() {
+        return ALL.get((this.ordinal() + COUNT - 1) % COUNT);
+    }
 }

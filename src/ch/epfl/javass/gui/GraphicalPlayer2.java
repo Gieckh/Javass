@@ -8,8 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -67,6 +69,7 @@ public class GraphicalPlayer2 {
      * @param scoreBean
      * @return
      */
+    //TODO: array
     private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
         // https://piazza.com/class/jrhvyjm5czn4f?cid=372 //TODO: suppr
         //First row
@@ -126,9 +129,31 @@ public class GraphicalPlayer2 {
      * @param trickBean
      * @return
      */
-    private GridPane createTrickPane(TrickBean trickBean) {
+    private GridPane createTrickPane(TrickBean trickBean, PlayerId myId, Map<PlayerId, String> playerNames) {
+        int COL_SPAN = 1;
+        int ROW_SPAN = 1;
         //TODO
-        return null;
+
+        VBox middleLeft  = setTrickVBox (trickBean, myId, 3, playerNames.get(myId.previousPlayer()));
+        VBox upCenter    = setTrickVBox (trickBean, myId, 2, playerNames.get(myId.nextPlayer().nextPlayer()));
+        VBox middleRight = setTrickVBox (trickBean, myId, 1, playerNames.get(myId.nextPlayer()));
+        VBox downCenter  = setTrickVBox (trickBean, myId, 0, playerNames.get(myId));
+
+        ImageView trumpImage = new ImageView();
+
+        GridPane trickGrid = new GridPane();
+        trickGrid.add(middleLeft , 0, 1, COL_SPAN, ROW_SPAN);
+        trickGrid.add(upCenter   , 1, 0, COL_SPAN, ROW_SPAN);
+        trickGrid.add(middleRight, 2, 1, COL_SPAN, ROW_SPAN);
+        trickGrid.add(downCenter , 1, 2, COL_SPAN, ROW_SPAN);
+        trickGrid.add(trumpImage , 1, 1, COL_SPAN, ROW_SPAN);
+
+        return trickGrid;
+    }
+
+    private VBox setTrickVBox(TrickBean trickBean, PlayerId myId, int pos, String playerName) {
+
+        return (pos == 0) ? new VBox() : new VBox();
     }
 
     /**
@@ -163,6 +188,7 @@ public class GraphicalPlayer2 {
     }
 
     /**
+     * @brief
      *
      * @param winningTeam
      * @param playerNames
@@ -183,6 +209,7 @@ public class GraphicalPlayer2 {
     }
 
     /**
+     * @brief
      *
      * @param width
      * @return
@@ -202,6 +229,7 @@ public class GraphicalPlayer2 {
     }
 
     /**
+     * @brief
      *
      * @param c
      * @param r

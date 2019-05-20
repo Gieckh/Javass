@@ -54,8 +54,8 @@ public class GraphicalPlayer {
     private ScoreBean score;
     private TrickBean trick; 
     private HandBean handBean;
-    private static ObservableMap<Card,Image> cardImpage240 = GraphicalPlayer.cardImage240();
-    private static ObservableMap<Card,Image> cardImpage160 = GraphicalPlayer.cardImage160();
+    private static ObservableMap<Card,Image> cardImage240 = GraphicalPlayer.cardImage240();
+    private static ObservableMap<Card,Image> cardImage160 = GraphicalPlayer.cardImage160();
     private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
     private ArrayBlockingQueue<Card> queueOfCommunication;
     private BorderPane victoryPaneForTeam[] = new BorderPane[2];
@@ -69,7 +69,7 @@ public class GraphicalPlayer {
     /** ============================================== **/
 
     /**
-     * @Brief a lot of properties are shared between the graphicalPlayerAdapter and the graphicalPlayer thanks to this constructor. 
+     * @brief a lot of properties are shared between the graphicalPlayerAdapter and the graphicalPlayer thanks to this constructor.
      * The graphical Stage is created in this constructor.
      * 
      * @param thisId
@@ -212,24 +212,25 @@ public class GraphicalPlayer {
     
 
     private GridPane createTrickPane() {
-        
-      VBox couple[] = new VBox[4];
-      for(int i = 0 ; i < 4 ; ++i) {
+        VBox[] couple = new VBox[4];
+        for(int i = 0 ; i < 4 ; ++i) {
             PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
             Text textForCouple = new Text();
             textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
             textForCouple.setStyle("-fx-font: 14 Optima;"); 
             ImageView imageForCouple = new ImageView();
-            imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
+            imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImage240,valueAt(trick.trick(), playerIdForCouple)));
             imageForCouple.setFitHeight(180);
             imageForCouple.setFitWidth(120);
             Rectangle rectangle = new Rectangle(120, 180);
-            rectangle.setStyle("-fx-arc-width: 20;\n" + 
+            rectangle.setStyle(
+                    "-fx-arc-width: 20;\n" +
                     "-fx-arc-height: 20;\n" + 
                     "-fx-fill: transparent;\n" + 
                     "-fx-stroke: lightpink;\n" + 
                     "-fx-stroke-width: 5;\n" + 
-                    "-fx-opacity: 0.5;");
+                    "-fx-opacity: 0.5;"
+            );
             BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple.equals(trick.winningPlayerProperty().get()),
                     trick.winningPlayerProperty() );
             rectangle.visibleProperty().bind(shouldDisplay);
@@ -240,11 +241,11 @@ public class GraphicalPlayer {
 
       }
 
-        ImageView ImageTrump = new ImageView();
-        ImageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
-        ImageTrump.setFitHeight(101);   
-        ImageTrump.setFitWidth(101);
-        VBox trump = new VBox(ImageTrump);
+        ImageView imageTrump = new ImageView();
+        imageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
+        imageTrump.setFitHeight(101);
+        imageTrump.setFitWidth(101);
+        VBox trump = new VBox(imageTrump);
         trump.setAlignment(Pos.CENTER);
         
         
@@ -254,12 +255,14 @@ public class GraphicalPlayer {
         grid.add(couple[0], 1,0,1,1);
         grid.add(trump, 1,1,1,1);
         grid.add(couple[2], 1,2,1,1);
-        grid.setStyle("-fx-background-color: whitesmoke;\n" + 
+        grid.setStyle(
+                "-fx-background-color: whitesmoke;\n" +
                 "-fx-padding: 5px;\n" + 
                 "-fx-border-width: 3px 0px;\n" + 
                 "-fx-border-style: solid;\n" + 
                 "-fx-border-color: gray;\n" + 
-                "-fx-alignment: center;");
+                "-fx-alignment: center;"
+        );
         
         return grid;
     }
@@ -299,7 +302,7 @@ public class GraphicalPlayer {
         for(int i = 0 ; i < 9 ; ++i) {
             ImageView children = new ImageView();
             ObjectBinding<Card> correspondingCard = valueAt( handBean.hand(), i);
-            children.imageProperty().bind(valueAt(cardImpage160, correspondingCard));
+            children.imageProperty().bind(valueAt(cardImage160, correspondingCard));
             BooleanBinding isPlayable =  createBooleanBinding( () -> handBean.playableCards().contains(correspondingCard.get()),handBean.playableCards(),handBean.hand());
             children.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
             children.disableProperty().bind(isPlayable.not());
@@ -317,9 +320,11 @@ public class GraphicalPlayer {
             nineChildrens[i] = children;
         }
         HBox handPane = new HBox(nineChildrens);
-        handPane.setStyle("-fx-background-color: lightgray;\n" + 
+        handPane.setStyle(
+                "-fx-background-color: lightgray;\n" +
                 "-fx-spacing: 5px;\n" + 
-                "-fx-padding: 5px;");
+                "-fx-padding: 5px;"
+        );
         return handPane;
         
     }
