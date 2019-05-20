@@ -7,11 +7,14 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -39,7 +42,7 @@ public class GraphicalPlayer2 {
         GridPane scorePane = createScorePane(scoreBean, playerNames);
         scorePane.setStyle("-fx-font: 16 Optima; -fx-background-color: lightgray; -fx-padding: 5px; -fx-alignment: center;");
 
-        GridPane trickPane = createTrickPane(trickBean);
+        GridPane trickPane = createTrickPane(trickBean, myId, playerNames);
         trickPane.setStyle("-fx-background-color: whitesmoke; -fx-padding: 5px; -fx-border-width: 3px 0px; -fx-border-style: solid; -fx-border-color: gray; -fx-alignment: center;");
 
         BorderPane team1Pane = createTeamPane(scoreBean, TeamId.TEAM_1, TeamId.TEAM_2, playerNames);
@@ -152,8 +155,15 @@ public class GraphicalPlayer2 {
     }
 
     private VBox setTrickVBox(TrickBean trickBean, PlayerId myId, int pos, String playerName) {
+        ImageView cardImage = new ImageView();
+        Rectangle rectangle = new Rectangle(120, 180);
+        rectangle.setStyle("-fx-arc-width: 20; -fx-arc-height: 20; -fx-fill: transparent; -fx-stroke: lightpink; -fx-stroke-width: 5; -fx-opacity: 0.5;");
 
-        return (pos == 0) ? new VBox() : new VBox();
+        StackPane imageAndHalo = new StackPane(cardImage, rectangle);
+
+        VBox vBox = (pos == 0) ? new VBox(new Text(playerName), imageAndHalo) : new VBox(imageAndHalo, new Text(playerName));
+        vBox.setStyle("-fx-padding: 5px; -fx-alignment: center;");
+        return vBox;
     }
 
     /**
