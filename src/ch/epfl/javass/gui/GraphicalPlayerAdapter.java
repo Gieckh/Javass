@@ -36,10 +36,9 @@ public class GraphicalPlayerAdapter implements Player {
     /** ============================================== **/
     
     /**
-     * @Brief the only constructor of this class. It takes no parameters
+     * @brief the only constructor of this class. It takes no parameters
      *        and in particular no underlying player for the obvious reason that
      *        the graphicalPlayerAdapter will play what a human wants.
-     * 
      */
     public GraphicalPlayerAdapter() {
         this.handBean = new HandBean();
@@ -53,7 +52,7 @@ public class GraphicalPlayerAdapter implements Player {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#cardToPlay(ch.epfl.javass.jass.TurnState, ch.epfl.javass.jass.CardSet)
      */
     @Override public Card cardToPlay(TurnState state, CardSet hand) {
@@ -67,10 +66,10 @@ public class GraphicalPlayerAdapter implements Player {
             // TODO Auto-generated catch block
             throw new Error();
         }
-//        return state.trick().playableCards(hand).get(0);
+//        return state.trick().playableCards(hand).get(0); TODO
     }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
      */
     @Override public void
@@ -80,28 +79,28 @@ public class GraphicalPlayerAdapter implements Player {
     
     }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#updateHand(ch.epfl.javass.jass.CardSet)
      */
     @Override public void updateHand(CardSet newHand) {
         runLater(() -> {handBean.setHand(newHand);});
     }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#setTrump(ch.epfl.javass.jass.Card.Color)
      */
     @Override public void setTrump(Card.Color trump) {
         runLater(()-> {trickBean.setTrump(trump);});
     }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#updateTrick(ch.epfl.javass.jass.Trick)
      */
     @Override public void updateTrick(Trick newTrick) {
         runLater(()-> {trickBean.setTrick(newTrick);});
     }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#updateScore(ch.epfl.javass.jass.Score)
      */
     @Override public void updateScore(Score score) {
@@ -113,7 +112,7 @@ public class GraphicalPlayerAdapter implements Player {
         });
     }
 
-    /* 
+    /**
      * @see ch.epfl.javass.jass.Player#setWinningTeam(ch.epfl.javass.jass.TeamId)
      */
     @Override public void setWinningTeam(TeamId winningTeam) {

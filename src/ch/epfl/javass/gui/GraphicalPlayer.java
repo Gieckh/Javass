@@ -298,7 +298,7 @@ public class GraphicalPlayer {
     
     private HBox createHandPane() {
         
-        ImageView nineChildrens[] = new ImageView[9];
+        ImageView nineChildren[] = new ImageView[9];
         for(int i = 0 ; i < 9 ; ++i) {
             ImageView children = new ImageView();
             ObjectBinding<Card> correspondingCard = valueAt( handBean.hand(), i);
@@ -309,7 +309,7 @@ public class GraphicalPlayer {
             children.setOnMouseClicked((e)-> {
                 try {
                     queueOfCommunication.put(correspondingCard.get());
-                } catch (InterruptedException e1) {
+                } catch (InterruptedException e1) {//TODO: what ?
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
@@ -317,9 +317,9 @@ public class GraphicalPlayer {
             
             children.setFitHeight(120);
             children.setFitWidth(80);
-            nineChildrens[i] = children;
+            nineChildren[i] = children;
         }
-        HBox handPane = new HBox(nineChildrens);
+        HBox handPane = new HBox(nineChildren);
         handPane.setStyle(
                 "-fx-background-color: lightgray;\n" +
                 "-fx-spacing: 5px;\n" + 
