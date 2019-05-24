@@ -6,6 +6,7 @@ import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -15,19 +16,16 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 
-import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static javafx.beans.binding.Bindings.valueAt;
+import static javafx.beans.binding.Bindings.*;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
 
@@ -43,20 +41,26 @@ public class GraphicalPlayer2 {
     private final ObservableMap<Card, Image> cards160 = cards(160);
     private final ObservableMap<Card, Image> cards240 = cards(240);
     private final ObservableMap<Card.Color, Image> trumps = trumps();
+    private ArrayBlockingQueue<Card> queueOfCommunication;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
     public GraphicalPlayer2(PlayerId myId, Map<PlayerId, String> playerNames,
-                            ScoreBean scoreBean, TrickBean trickBean, HandBean handBean)
+            ScoreBean scoreBean, TrickBean trickBean, HandBean handBean,
+            ArrayBlockingQueue<Card> queueOfCommunication)
     {
+        this.queueOfCommunication = queueOfCommunication;
+
         GridPane scorePane = createScorePane(scoreBean, playerNames);
 
         GridPane trickPane = createTrickPane(trickBean, myId, playerNames);
+        HBox handPane = createHandPane(handBean);
 
         BorderPane team1Pane = createTeamPane(scoreBean, TeamId.TEAM_1, TeamId.TEAM_2, playerNames);
         BorderPane team2Pane = createTeamPane(scoreBean, TeamId.TEAM_2, TeamId.TEAM_1, playerNames);
+
     }
 
     /** ============================================== **/
@@ -222,6 +226,38 @@ public class GraphicalPlayer2 {
 
         victoryPane.setStyle("-fx-font: 16 Optima; -fx-background-color: white;");
         return victoryPane;
+    }
+
+    @SuppressWarnings("Duplicates")
+    private HBox createHandPane(HandBean handBean) {
+
+        ImageView[] hand = new ImageView[9];
+        for(int i = 0 ; i < hand.length ; ++i) {
+            ImageView child = new ImageView();
+            ObjectBinding<Card> correspondingCard = valueAt(handBean.hand(), i);
+            child.imageProperty().bind(valueAt(cards160, correspondingCard));
+            BooleanBinding isPlayable = createBooleanBinding(
+                    () -> handBean.playableCards().contains(correspondingCard.get()),
+                    handBean.playableCards(),handBean.hand()
+            );
+            child.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
+            child.disableProperty().bind(isPlayable.not());
+            child.setOnMouseClicked((e)-> {
+                try {
+                    queueOfCommunication.put(correspondingCard.get());
+                } catch (InterruptedException e1) {
+                    throw new Error(e1);
+                }
+            });
+
+            child.setFitHeight(120);
+            child.setFitWidth(80);
+            hand[i] = child;
+        }
+
+        HBox handPane = new HBox(hand);
+        handPane.setStyle("-fx-background-color: lightgray; -fx-spacing: 5px; -fx-padding: 5px;");
+        return handPane;
     }
 
     /**

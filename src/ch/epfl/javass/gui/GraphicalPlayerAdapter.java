@@ -28,7 +28,7 @@ public class GraphicalPlayerAdapter implements Player {
     TrickBean trickBean;
     HandBean handBean;
     GraphicalPlayer graphicalPlayer;
-    ArrayBlockingQueue<Card> queueOfCommunication ;
+    public static ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);;
     
     
     /** ============================================== **/
@@ -44,7 +44,6 @@ public class GraphicalPlayerAdapter implements Player {
         this.handBean = new HandBean();
         this.scoreBean = new ScoreBean();
         this.trickBean = new TrickBean();
-        this.queueOfCommunication =  new ArrayBlockingQueue<>(1);
         
     }
     

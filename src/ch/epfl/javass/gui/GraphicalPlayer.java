@@ -80,7 +80,7 @@ public class GraphicalPlayer {
      * @param queueOfCommunication
      */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
-            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication ) {
+            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
         this.score = score; 
@@ -309,12 +309,11 @@ public class GraphicalPlayer {
             children.setOnMouseClicked((e)-> {
                 try {
                     queueOfCommunication.put(correspondingCard.get());
-                } catch (InterruptedException e1) {//TODO: what ?
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                } catch (InterruptedException e1) {
+                    throw new Error(e1);
                 }
             });
-            
+
             children.setFitHeight(120);
             children.setFitWidth(80);
             nineChildren[i] = children;
