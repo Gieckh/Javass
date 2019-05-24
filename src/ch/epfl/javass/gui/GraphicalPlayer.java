@@ -1,18 +1,16 @@
 package ch.epfl.javass.gui;
 
+import static javafx.beans.binding.Bindings.createBooleanBinding;
 import static javafx.beans.binding.Bindings.valueAt;
-import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.beans.binding.Bindings.when;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static javafx.beans.binding.Bindings.when;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import ch.epfl.javass.jass.Card;
-import ch.epfl.javass.jass.CardSet;
 import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.PlayerId;
@@ -23,10 +21,7 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -35,7 +30,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -45,8 +39,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import src.cs108.Announcement;
-import src.cs108.Meld;
 import src.cs108.MeldSet;
 
 /**
@@ -74,7 +66,6 @@ public class GraphicalPlayer {
     private BorderPane victoryPaneForTeam[] = new BorderPane[2];
     private StackPane finalPane;
     private ArrayBlockingQueue<Integer> cheatingQueue;
-    private ArrayBlockingQueue<MeldSet> AnnouncesQueue;
 
 
     
@@ -96,7 +87,7 @@ public class GraphicalPlayer {
      */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
             TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication,
-            ArrayBlockingQueue<Integer> cheatingQueue , ArrayBlockingQueue<MeldSet> AnnouncesQueue,
+            ArrayBlockingQueue<Integer> cheatingQueue ,
             ObjectProperty<ListView<Text>> listOfAnnounces ) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
@@ -105,7 +96,6 @@ public class GraphicalPlayer {
         this.handBean = handBean;
         this.queueOfCommunication = queueOfCommunication;
         this.cheatingQueue = cheatingQueue;
-        this.AnnouncesQueue = AnnouncesQueue;
         GridPane scorePane = createScorePane();
         GridPane trickPane = createTrickPane();
         HBox handPane = createHandPane();
@@ -120,11 +110,16 @@ public class GraphicalPlayer {
             announcesPane.getChildren().clear();
             announcesPane.getChildren().add(New);
         }  );
+        BooleanBinding b =  createBooleanBinding( () -> {   
+        return handBean.hand().stream().noneMatch(c -> c == null);
+        },handBean.hand());
+        announcesPane.opacityProperty().bind(when(b).then(1).otherwise(0));
+    //    announcesPane.setVisible(announcesPane.equals(obj));
       //  announcesPane.getChildren().removeIf(shouldDisplay ? createAnnouncesPane() : new GridPane() ;
        
         
         //listOfAnnounces.
-        BorderPane main= new BorderPane(trickPane, scorePane , announcesPane,handPane, new GridPane());
+        BorderPane main= new BorderPane(trickPane, scorePane , announcesPane,handPane, new HBox());
         
         
         this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );

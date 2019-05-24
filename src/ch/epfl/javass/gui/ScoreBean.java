@@ -1,7 +1,5 @@
 package ch.epfl.javass.gui;
 
-import com.sun.xml.internal.fastinfoset.sax.Properties;
-
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;

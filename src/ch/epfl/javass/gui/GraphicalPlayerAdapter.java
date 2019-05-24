@@ -1,22 +1,28 @@
 package ch.epfl.javass.gui;
 
-import ch.epfl.javass.jass.*;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
-import javafx.scene.control.ListView;
-import javafx.scene.text.Text;
-import src.cs108.Announcement;
-import src.cs108.MeldSet;
-
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import ch.epfl.javass.jass.Card;
+import ch.epfl.javass.jass.CardSet;
+import ch.epfl.javass.jass.Player;
+import ch.epfl.javass.jass.PlayerId;
+import ch.epfl.javass.jass.Score;
+import ch.epfl.javass.jass.TeamId;
+import ch.epfl.javass.jass.Trick;
+import ch.epfl.javass.jass.TurnState;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
+import src.cs108.MeldSet;
 
 /**
  * @Brief This class extends Player and is an Adapter of a graphicalPlayer.
@@ -111,6 +117,9 @@ public class GraphicalPlayerAdapter implements Player {
             handBean.setannounces(hand);
             runLater(() -> { listOfAnnounces.setValue(createAnnouncesPane());});
             MeldSet meldSet = meldQueue.take() ;
+            runLater(() -> { listOfAnnounces.setValue(new ListView<>());
+            });
+            
             handBean.setannounces(CardSet.EMPTY);
             return meldSet;
             
@@ -151,7 +160,7 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, 
-                this.handBean, this.queueOfCommunication, this.CheatingQueue,this.meldQueue,this.listOfAnnounces);
+                this.handBean, this.queueOfCommunication, this.CheatingQueue,this.listOfAnnounces);
         runLater(() -> { graphicalPlayer.createStage().show(); });
     
     }
