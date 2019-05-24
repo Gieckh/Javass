@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 /**
  * RemoteMain is the main class to run to launch the remotePlayerServer that will create a graphical player
- *  on this computer playing remotely a jassGame thrown by a LocalMain.
+ *  on this computer playing remotely a jassGame thrown by a LocalMain3.
  *
  *
  * @author Antoine Scardigli - (299905)

@@ -72,8 +72,8 @@ public class GraphicalPlayerAdapter implements Player {
      */
     @Override public void
     setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean, queueOfCommunication);
-        runLater(() ->  graphicalPlayer.createStage().show() );
+        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean);
+        runLater(() ->  graphicalPlayer.createStage(ownId, playerNames).show() );
     }
 
     /**

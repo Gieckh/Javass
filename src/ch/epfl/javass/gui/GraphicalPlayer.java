@@ -1,329 +1,322 @@
 package ch.epfl.javass.gui;
 
-import static javafx.beans.binding.Bindings.valueAt;
-import static javafx.collections.FXCollections.observableMap;
-import static javafx.collections.FXCollections.unmodifiableObservableMap;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static javafx.beans.binding.Bindings.when;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-
 import ch.epfl.javass.jass.Card;
-import ch.epfl.javass.jass.Card.Color;
-import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.binding.StringExpression;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-/**
- * GraphicalPlayer is class creating a JavaFx Stage which is the graphical interface of a complete
- * jass virtual game. It is being adapted by graphicalPlayerAdapter to represent a player. 
- * 
- *
- * @author Antoine Scardigli - (299905)
- * @author Marin Nguyen - (288260)
- */
+import java.util.HashMap;
+import java.util.Map;
+
+import static javafx.beans.binding.Bindings.*;
+import static javafx.collections.FXCollections.observableMap;
+import static javafx.collections.FXCollections.unmodifiableObservableMap;
+
 public class GraphicalPlayer {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
 
-    private PlayerId thisId;
-    private Map<PlayerId, String> playerNames;
-    private ScoreBean score;
-    private TrickBean trick; 
-    private HandBean handBean;
-    private static ObservableMap<Card,Image> cardImage240 = GraphicalPlayer.cardImage240();
-    private static ObservableMap<Card,Image> cardImage160 = GraphicalPlayer.cardImage160();
-    private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
-    private ArrayBlockingQueue<Card> queueOfCommunication;
-    private BorderPane[] victoryPaneForTeam = new BorderPane[2];
+    private final ObservableMap<Card, Image> cards160 = cards(160);
+    private final ObservableMap<Card, Image> cards240 = cards(240);
+    private final ObservableMap<Card.Color, Image> trumps = trumps();
     private StackPane finalPane;
+//    private ArrayBlockingQueue<Card> queueOfCommunication;
 
-
-    
-        
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    /**
-     * @brief a lot of properties are shared between the graphicalPlayerAdapter and the graphicalPlayer thanks to this constructor.
-     * The graphical Stage is created in this constructor.
-     * 
-     * @param thisId
-     * @param playerNames
-     * @param score
-     * @param trick
-     * @param handBean
-     * @param queueOfCommunication
-     */
-    public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
-            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication) {
-        this.thisId = thisId; 
-        this.playerNames = playerNames; 
-        this.score = score; 
-        this.trick =trick;
-        this.handBean = handBean;
-        this.queueOfCommunication = queueOfCommunication;
-        GridPane scorePane = createScorePane();
-        GridPane trickPane = createTrickPane();
-        HBox handPane = createHandPane();
-        for(TeamId t : TeamId.ALL) {
-             this.victoryPaneForTeam[t.ordinal()] = createVictoryPanes(t);
-             BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
-             this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
-        }
+    public GraphicalPlayer(PlayerId myId, Map<PlayerId, String> playerNames,
+            ScoreBean scoreBean, TrickBean trickBean, HandBean handBean)
+    {
+//        this.queueOfCommunication = queueOfCommunication;
 
-        BorderPane main= new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
-        this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
+        GridPane scorePane = createScorePane(scoreBean, playerNames);
+
+        GridPane trickPane = createTrickPane(trickBean, myId, playerNames);
+        HBox handPane = createHandPane(handBean);
+
+        BorderPane team1Pane = createTeamPane(scoreBean, TeamId.TEAM_1, TeamId.TEAM_2, playerNames);
+        BorderPane team2Pane = createTeamPane(scoreBean, TeamId.TEAM_2, TeamId.TEAM_1, playerNames);
+
+        BorderPane main = new BorderPane(trickPane, scorePane, new GridPane(), handPane, new GridPane());
+        this.finalPane = new StackPane(main, team1Pane, team2Pane);
     }
-    
+
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    
+
     /**
-     * @Brief create the javaFx stage of a graphic Jass game.
      *
-     * @return the stage corresponding to a complete graphic Jass game.
-    */
-    public Stage createStage() {
+     * @return
+     */
+    public Stage createStage(PlayerId myId, Map<PlayerId, String> playerNames) {
         Stage stage = new Stage();
-        stage.setTitle("Javass - "+playerNames.get(thisId).toString() );
+        stage.setTitle("Javass - " + playerNames.get(myId));
         stage.setScene(new Scene(finalPane));
         return stage;
     }
-    
+
+    //Didn't feel like making a private method to initialize a row. TODO
     /**
-     * @Brief generates an observable map from Card to Image of width 160
+     * @brief //TODO
      *
-    */
-    private static ObservableMap<Card,Image> cardImage160() {
-        ObservableMap<Card,Image> map =  observableMap( new HashMap<>());
-        for(int i = 0 ; i<Color.ALL.size(); ++i) {
-            for(int j = 0 ; j < Rank.ALL.size(); ++j) {
-                String s = "/"+"card_"+i+"_"+j+"_"+160+".png";
-                map.put(Card.of(Color.ALL.get(i),Rank.ALL.get(j)), new Image(s));
-            }
-        }
-        return  unmodifiableObservableMap(map);
-    }
-    
-    /**
-     * @Brief generates an observable map from Card to Image of width 240
-     *
-    */
-    private static ObservableMap<Card,Image> cardImage240() {
-        ObservableMap<Card,Image> map = observableMap(new HashMap<>()); 
-        for(int i = 0 ; i<Color.ALL.size(); ++i) {
-            for(int j = 0 ; j < Rank.ALL.size(); ++j) {
-                String s = "/card_" + i + "_" + j + "_" + 240 + ".png";
-                map.put(Card.of(Color.ALL.get(i),Rank.ALL.get(j)), new Image(s));
-            }
-        }
-        return  unmodifiableObservableMap(map);
-    }
-    
-    /**
-     * @brief generates an observable map from trump to Image
-     *
+     * @param scoreBean
+     * @return
      */
-    private static ObservableMap<Color,Image> trumpImage() {
-        ObservableMap<Color,Image> map = observableMap(new HashMap<>());
-        for(int i = 0 ; i<Color.ALL.size(); ++i) {
-            String s = "/"+"trump_"+i+".png";
-            map.put(Color.ALL.get(i),new Image(s));
-        }
-        
-        return  unmodifiableObservableMap(map);
+    //TODO: array
+    private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
+        // https://piazza.com/class/jrhvyjm5czn4f?cid=372 //TODO: suppr
+        //First row
+        Text textL1C1 = new Text(playerNames.get(PlayerId.PLAYER_1) + " et " + playerNames.get(PlayerId.PLAYER_3) + " : ");
+
+        Text textL1C2 = new Text();
+        textL1C2.textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_1)));
+
+        Text textL1C3 = new Text();
+        scoreBean.turnPointsProperty(TeamId.TEAM_1).addListener((observable, oldValue, newValue) ->
+                textL1C3.setText("(+" + Math.max(0, newValue.intValue() - oldValue.intValue()) + ")"));
+
+        Text textL1C4 = new Text("/ Total : ");
+
+        Text textL1C5 = new Text();
+        textL1C5.textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(TeamId.TEAM_1)));
+
+
+        //Second row
+        Text textL2C1 = new Text(playerNames.get(PlayerId.PLAYER_2) + " et " + playerNames.get(PlayerId.PLAYER_4) + " : ");
+
+        Text textL2C2 = new Text();
+        textL2C2.textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_2)));
+
+        Text textL2C3 = new Text();
+        scoreBean.turnPointsProperty(TeamId.TEAM_2).addListener((observable, oldValue, newValue) ->
+                textL2C3.setText("(+" + Math.max(0, newValue.intValue() - oldValue.intValue()) + ")"));
+
+        Text textL2C4 = new Text("/ Total : ");
+
+        Text textL2C5 = new Text();
+        textL2C5.textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(TeamId.TEAM_2)));
+
+
+        GridPane scoreGrid = new GridPane();
+        scoreGrid.addRow(0, textL1C1, textL1C2, textL1C3, textL1C4, textL1C5);
+        scoreGrid.addRow(1, textL2C1, textL2C2, textL2C3, textL2C4, textL2C5);
+
+        //Setting the alignments
+        GridPane.setHalignment(textL1C1, HPos.RIGHT);
+        GridPane.setHalignment(textL1C2, HPos.RIGHT);
+        GridPane.setHalignment(textL1C3, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL1C4, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL1C5, HPos.RIGHT);
+
+        GridPane.setHalignment(textL2C1, HPos.RIGHT);
+        GridPane.setHalignment(textL2C2, HPos.RIGHT);
+        GridPane.setHalignment(textL2C3, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL2C4, HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(textL2C5, HPos.RIGHT);
+
+        scoreGrid.setStyle("-fx-font: 16 Optima; -fx-background-color: lightgray; -fx-padding: 5px; -fx-alignment: center;");
+        return scoreGrid;
     }
 
+     @SuppressWarnings("Duplicates")
+    /**
+     *
+     * @param trickBean
+     * @return
+     */
+    private GridPane createTrickPane(TrickBean trickBean, PlayerId myId, Map<PlayerId, String> playerNames) {
+        int COL_SPAN = 1;
+        int ROW_SPAN = 1;
+        //TODO
 
-    private GridPane createScorePane() {
-        
-        Text namesOfTeam1 = new Text(playerNames.get(PlayerId.PLAYER_1).toString()
-            +" et "+
-            playerNames.get(PlayerId.PLAYER_3) + " : ");
-        Text namesOfTeam2 = new Text(playerNames.get(PlayerId.PLAYER_2).toString()
-            +" et "+
-            playerNames.get(PlayerId.PLAYER_4) + " : ");
-        
-        Text totalString = new Text("/Total : ");
-        Text totalStringBis = new Text("/Total : ");
-        
-        ReadOnlyIntegerProperty turnPointsT1 = score.turnPointsProperty(TeamId.TEAM_1);
-        ReadOnlyIntegerProperty turnPointsT2 = score.turnPointsProperty(TeamId.TEAM_2);
-        
-        SimpleStringProperty trickOf1 = new SimpleStringProperty();
-        score.turnPointsProperty(TeamId.TEAM_1).addListener((object, old, New ) ->  trickOf1.set( " ( + "+ Math.max(0, New.intValue()-old.intValue())+" ) " ));
-        SimpleStringProperty trickOf2 = new SimpleStringProperty();
-        score.turnPointsProperty(TeamId.TEAM_2).addListener((object, old, New ) ->  trickOf2.set( " ( + "+ Math.max(0, New.intValue()-old.intValue())+" ) " ));
-        
-        Text gamePointsOfTeam1 = new Text();
-        gamePointsOfTeam1.textProperty().bind(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_1)));
-        Text turnPointsOfTeam1 = new Text();
-        turnPointsOfTeam1.textProperty().bind(Bindings.convert(turnPointsT1));
-        Text trickPointsOfTeam1 = new Text();        
-        trickPointsOfTeam1.textProperty().bind(trickOf1);
-        
-        Text gamePointsOfTeam2 = new Text();
-        gamePointsOfTeam2.textProperty().bind(Bindings.convert(score.gamePointsProperty(TeamId.TEAM_2)));
-        Text turnPointsOfTeam2 = new Text();
-        turnPointsOfTeam2.textProperty().bind(Bindings.convert(turnPointsT2));
-        Text trickPointsOfTeam2 = new Text();        
-        trickPointsOfTeam2.textProperty().bind(trickOf2);
-        
-        GridPane grid = new GridPane();
-        
-        grid.addRow(0,namesOfTeam1  , turnPointsOfTeam1 , trickPointsOfTeam1,totalString , gamePointsOfTeam1);
-        grid.addRow(1,namesOfTeam2 , turnPointsOfTeam2  , trickPointsOfTeam2 ,totalStringBis , gamePointsOfTeam2);
-        grid.setStyle("-fx-font: 16 Optima;\n" + 
-                    "-fx-background-color: lightgray;\n" + 
-                    "-fx-padding: 5px;\n" + 
-                    "-fx-alignment: center;");
+        VBox middleLeft  = setTrickVBox (trickBean, myId.previousPlayer(), 3, playerNames.get(myId.previousPlayer()));
+        VBox upCenter    = setTrickVBox (trickBean, myId.nextPlayer().nextPlayer(), 2, playerNames.get(myId.nextPlayer().nextPlayer()));
+        VBox middleRight = setTrickVBox (trickBean, myId.nextPlayer(), 1, playerNames.get(myId.nextPlayer()));
+        VBox downCenter  = setTrickVBox (trickBean, myId, 0, playerNames.get(myId));
 
-        GridPane.setHalignment(namesOfTeam1, HPos.RIGHT);
-        GridPane.setHalignment(namesOfTeam2, HPos.RIGHT);
-        return grid;
+        ImageView trumpImage = new ImageView();
+        trumpImage.imageProperty().bind(valueAt(trumps, trickBean.trumpProperty()));
+        trumpImage.setFitHeight(101);
+        trumpImage.setFitWidth(101);
+        VBox trumpVBox = new VBox(trumpImage);
+        trumpVBox.setAlignment(Pos.CENTER);
+
+        GridPane trickGrid = new GridPane();
+        trickGrid.add(middleLeft , 0, 1, COL_SPAN, ROW_SPAN);
+        trickGrid.add(upCenter   , 1, 0, COL_SPAN, ROW_SPAN);
+        trickGrid.add(middleRight, 2, 1, COL_SPAN, ROW_SPAN);
+        trickGrid.add(downCenter , 1, 2, COL_SPAN, ROW_SPAN);
+        trickGrid.add(trumpVBox  , 1, 1, COL_SPAN, ROW_SPAN);
+
+        trickGrid.setStyle("-fx-background-color: whitesmoke; -fx-padding: 5px; -fx-border-width: 3px 0px; -fx-border-style: solid; -fx-border-color: gray; -fx-alignment: center;");
+        return trickGrid;
     }
-    
 
-    private GridPane createTrickPane() {
-        VBox[] couple = new VBox[4];
-        for(int i = 0 ; i < 4 ; ++i) {
-            PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
-            Text textForCouple = new Text();
-            textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
-            textForCouple.setStyle("-fx-font: 14 Optima;"); 
-            ImageView imageForCouple = new ImageView();
-            imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImage240,valueAt(trick.trick(), playerIdForCouple)));
-            imageForCouple.setFitHeight(180);
-            imageForCouple.setFitWidth(120);
-            Rectangle rectangle = new Rectangle(120, 180);
-            rectangle.setStyle(
-                    "-fx-arc-width: 20;\n" +
-                    "-fx-arc-height: 20;\n" + 
-                    "-fx-fill: transparent;\n" + 
-                    "-fx-stroke: lightpink;\n" + 
-                    "-fx-stroke-width: 5;\n" + 
-                    "-fx-opacity: 0.5;"
-            );
-            BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple.equals(trick.winningPlayerProperty().get()),
-                    trick.winningPlayerProperty() );
-            rectangle.visibleProperty().bind(shouldDisplay);
-            rectangle.setEffect(new GaussianBlur(4));
-            StackPane imageWithHalo  = new StackPane(imageForCouple, rectangle);
-            couple[i] = new VBox(textForCouple,imageWithHalo);
-            couple[i].setAlignment(Pos.TOP_CENTER);
+    private VBox setTrickVBox(TrickBean trickBean, PlayerId pId, int pos, String playerName) {
+        ImageView cardImage = new ImageView();
+        cardImage.imageProperty().bind(valueAt(cards240, valueAt(trickBean.trick(), pId)));
+        cardImage.setFitHeight(180);
+        cardImage.setFitWidth(120);
 
-      }
-
-        ImageView imageTrump = new ImageView();
-        imageTrump.imageProperty().bind(valueAt(GraphicalPlayer.trumpImage,trick.trumpProperty()));
-        imageTrump.setFitHeight(101);
-        imageTrump.setFitWidth(101);
-        VBox trump = new VBox(imageTrump);
-        trump.setAlignment(Pos.CENTER);
-        
-        
-        GridPane grid = new GridPane();
-        grid.add(couple[1], 0, 1, 1, 1);
-        grid.add(couple[3], 2, 1, 1, 1);
-        grid.add(couple[0], 1,0,1,1);
-        grid.add(trump, 1,1,1,1);
-        grid.add(couple[2], 1,2,1,1);
-        grid.setStyle(
-                "-fx-background-color: whitesmoke;\n" +
-                "-fx-padding: 5px;\n" + 
-                "-fx-border-width: 3px 0px;\n" + 
-                "-fx-border-style: solid;\n" + 
-                "-fx-border-color: gray;\n" + 
-                "-fx-alignment: center;"
+        Rectangle rectangle = new Rectangle(120, 180);
+        BooleanBinding rectangleVisibleProperty = createBooleanBinding(
+                () -> pId.equals(trickBean.winningPlayerProperty().get()),
+                trickBean.winningPlayerProperty()
         );
-        
-        return grid;
+        rectangle.visibleProperty().bind(rectangleVisibleProperty);
+        rectangle.setStyle("-fx-arc-width: 20; -fx-arc-height: 20; -fx-fill: transparent; -fx-stroke: lightpink; -fx-stroke-width: 5; -fx-opacity: 0.5;");
+
+        StackPane imageAndHalo = new StackPane(cardImage, rectangle);
+
+        VBox vBox = (pos != 0) ? new VBox(new Text(playerName), imageAndHalo) : new VBox(imageAndHalo, new Text(playerName));
+        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.setStyle("-fx-padding: 5px; -fx-alignment: center;");
+        return vBox;
     }
-    
-    
-    private BorderPane createVictoryPanes(TeamId winningTeam) {
-        
-        String namesOfWinningTeam = winningTeam.equals(TeamId.TEAM_1)? 
-                playerNames.get(PlayerId.PLAYER_1).toString()
-                +" et "+
-                playerNames.get(PlayerId.PLAYER_3).toString() : 
-                playerNames.get(PlayerId.PLAYER_2).toString()
-                +" et "+
-                playerNames.get(PlayerId.PLAYER_4).toString();   
-                
-        StringExpression upDatingString = Bindings.createStringBinding(() -> namesOfWinningTeam+
-                " ont gagné avec "+
-                score.totalPointsProperty(winningTeam).get()+
-                " points contre "+
-                score.totalPointsProperty(winningTeam.other()).get()+
-                ".", score.totalPointsProperty(winningTeam),score.totalPointsProperty(winningTeam.other())); 
-                       
-        Text finalString= new Text();
-        finalString.textProperty().bind(Bindings.convert(upDatingString));
-        finalString.setStyle("-fx-font: 16 Optima;\n");
-        BorderPane border = new BorderPane(finalString);
-        border.centerProperty().set(finalString);        
-        border.setStyle("-fx-font: 16 Optima;\n" + 
-                "-fx-background-color: white;");
-        
-        return border;
+
+    /**
+     * @brief The victory panes.
+     *
+     * @param scoreBean
+     * @param winningTeam
+     * @param losingTeam
+     * @param playerNames
+     * @return
+     */
+    private BorderPane
+    createTeamPane(ScoreBean scoreBean, TeamId winningTeam, TeamId losingTeam, Map<PlayerId, String> playerNames)
+    {
+        //TODO: test
+        String[] winningPlayerNames = findWinningPlayerNames(winningTeam, playerNames);
+
+        Text victoryText = new Text();
+        victoryText.textProperty().bind(Bindings.format(
+                 "%s et %s ont gagné avec %d points contre %d.",
+                winningPlayerNames[0],
+                winningPlayerNames[1],
+                scoreBean.totalPointsProperty(winningTeam),
+                scoreBean.totalPointsProperty(losingTeam)
+                )
+        );
+
+        BorderPane victoryPane = new BorderPane(victoryText);
+        victoryPane.visibleProperty().bind(scoreBean.winningTeamProperty().isEqualTo(winningTeam));
+
+        victoryPane.setStyle("-fx-font: 16 Optima; -fx-background-color: white;");
+        return victoryPane;
     }
-    
-    private HBox createHandPane() {
-        
-        ImageView nineChildren[] = new ImageView[9];
-        for(int i = 0 ; i < 9 ; ++i) {
-            ImageView children = new ImageView();
-            ObjectBinding<Card> correspondingCard = valueAt( handBean.hand(), i);
-            children.imageProperty().bind(valueAt(cardImage160, correspondingCard));
-            BooleanBinding isPlayable =  createBooleanBinding( () -> handBean.playableCards().contains(correspondingCard.get()),handBean.playableCards(),handBean.hand());
-            children.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
-            children.disableProperty().bind(isPlayable.not());
-            children.setOnMouseClicked((e)-> {
+
+    @SuppressWarnings("Duplicates")
+    private HBox createHandPane(HandBean handBean) {
+
+        ImageView[] hand = new ImageView[9];
+        for(int i = 0 ; i < hand.length ; ++i) {
+            ImageView child = new ImageView();
+            ObjectBinding<Card> correspondingCard = valueAt(handBean.hand(), i);
+            child.imageProperty().bind(valueAt(cards160, correspondingCard));
+            BooleanBinding isPlayable = createBooleanBinding(
+                    () -> handBean.playableCards().contains(correspondingCard.get()),
+                    handBean.playableCards(),handBean.hand()
+            );
+            child.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
+            child.disableProperty().bind(isPlayable.not());
+            child.setOnMouseClicked((e)-> {
                 try {
-                    queueOfCommunication.put(correspondingCard.get());
+                    GraphicalPlayerAdapter.queueOfCommunication.put(correspondingCard.get());
                 } catch (InterruptedException e1) {
                     throw new Error(e1);
                 }
             });
 
-            children.setFitHeight(120);
-            children.setFitWidth(80);
-            nineChildren[i] = children;
+            child.setFitHeight(120);
+            child.setFitWidth(80);
+            hand[i] = child;
         }
-        HBox handPane = new HBox(nineChildren);
-        handPane.setStyle(
-                "-fx-background-color: lightgray;\n" +
-                "-fx-spacing: 5px;\n" + 
-                "-fx-padding: 5px;"
-        );
+
+        HBox handPane = new HBox(hand);
+        handPane.setStyle("-fx-background-color: lightgray; -fx-spacing: 5px; -fx-padding: 5px;");
         return handPane;
-        
+    }
+
+    /**
+     * @brief
+     *
+     * @param winningTeam
+     * @param playerNames
+     * @return
+     */
+    private String[] findWinningPlayerNames(TeamId winningTeam, Map<PlayerId, String> playerNames) {
+        String[] winningPlayerNames = new String[2];
+        if (winningTeam == TeamId.TEAM_1) {
+            winningPlayerNames[0] = playerNames.get(PlayerId.PLAYER_1);
+            winningPlayerNames[1] = playerNames.get(PlayerId.PLAYER_3);
+        }
+        else {
+            winningPlayerNames[0] = playerNames.get(PlayerId.PLAYER_2);
+            winningPlayerNames[1] = playerNames.get(PlayerId.PLAYER_4);
+        }
+
+        return winningPlayerNames;
+    }
+
+    /**
+     * @brief
+     *
+     * @param width
+     * @return
+     */
+    private ObservableMap<Card, Image> cards(int width) {
+        ObservableMap<Card, Image> map = FXCollections.observableMap(new HashMap<>());
+
+        for (int c = 0; c < Card.Color.COUNT; ++c) {
+            for (int r = 0; r < Card.Rank.COUNT; ++r) {
+                map.put(Card.of(Card.Color.ALL.get(c), Card.Rank.ALL.get(r)),
+                                  toCardName(c, r, width)
+                );
+            }
+        }
+
+        return unmodifiableObservableMap(map);
+    }
+
+    /**
+     * @brief
+     *
+     * @param c
+     * @param r
+     * @param width
+     * @return
+     */
+    private Image toCardName(int c, int r, int width) {
+        return new Image("/card_" + c + "_" + r + "_" + width + ".png");
+    }
+
+    private ObservableMap<Card.Color,Image> trumps() {
+        ObservableMap<Card.Color,Image> map = observableMap(new HashMap<>());
+
+        for (Card.Color c: Card.Color.ALL)
+            map.put(c, new Image(toTrumpName(c.ordinal())));
+        return  unmodifiableObservableMap(map);
+    }
+
+    private String toTrumpName(int i) {
+        return "/"+"trump_"+i+".png";
     }
 }
