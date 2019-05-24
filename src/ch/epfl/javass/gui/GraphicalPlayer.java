@@ -33,8 +33,9 @@ public class GraphicalPlayer {
     private final ObservableMap<Card, Image> cards160 = cards(160);
     private final ObservableMap<Card, Image> cards240 = cards(240);
     private final ObservableMap<Card.Color, Image> trumps = trumps();
+    private final int COL_SPAN = 1;
+    private final int ROW_SPAN = 1;
     private StackPane finalPane;
-//    private ArrayBlockingQueue<Card> queueOfCommunication;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -43,8 +44,6 @@ public class GraphicalPlayer {
     public GraphicalPlayer(PlayerId myId, Map<PlayerId, String> playerNames,
             ScoreBean scoreBean, TrickBean trickBean, HandBean handBean)
     {
-//        this.queueOfCommunication = queueOfCommunication;
-
         GridPane scorePane = createScorePane(scoreBean, playerNames);
 
         GridPane trickPane = createTrickPane(trickBean, myId, playerNames);
@@ -62,8 +61,12 @@ public class GraphicalPlayer {
     /** ============================================== **/
 
     /**
+     * @brief Create the javaFx stage of our JassGame.
      *
-     * @return
+     * @param myId ({@code PlayerId})
+     * @param playerNames ({Map<PlayerId, String>}) - associates the IDs of the
+     *                    players to their names.
+     * @return ({@code Stage}) - our game's stage.
      */
     public Stage createStage(PlayerId myId, Map<PlayerId, String> playerNames) {
         Stage stage = new Stage();
@@ -73,15 +76,18 @@ public class GraphicalPlayer {
     }
 
     //Didn't feel like making a private method to initialize a row. TODO
+
     /**
-     * @brief //TODO
+     * @brief Creates the {@code GridPane} which displays the scores. [Will be at
+     *        the top of the window]
      *
      * @param scoreBean
-     * @return
+     * @param playerNames
+     * @return ({@code GridPane}) - the pane used to display the scores.
      */
     //TODO: array
+
     private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
-        // https://piazza.com/class/jrhvyjm5czn4f?cid=372 //TODO: suppr
         //First row
         Text textL1C1 = new Text(playerNames.get(PlayerId.PLAYER_1) + " et " + playerNames.get(PlayerId.PLAYER_3) + " : ");
 
@@ -135,17 +141,10 @@ public class GraphicalPlayer {
         return scoreGrid;
     }
 
-     @SuppressWarnings("Duplicates")
-    /**
-     *
-     * @param trickBean
-     * @return
-     */
-    private GridPane createTrickPane(TrickBean trickBean, PlayerId myId, Map<PlayerId, String> playerNames) {
-        int COL_SPAN = 1;
-        int ROW_SPAN = 1;
-        //TODO
 
+    @SuppressWarnings("Duplicates")
+
+    private GridPane createTrickPane(TrickBean trickBean, PlayerId myId, Map<PlayerId, String> playerNames) {
         VBox middleLeft  = setTrickVBox (trickBean, myId.previousPlayer(), 3, playerNames.get(myId.previousPlayer()));
         VBox upCenter    = setTrickVBox (trickBean, myId.nextPlayer().nextPlayer(), 2, playerNames.get(myId.nextPlayer().nextPlayer()));
         VBox middleRight = setTrickVBox (trickBean, myId.nextPlayer(), 1, playerNames.get(myId.nextPlayer()));
@@ -169,6 +168,14 @@ public class GraphicalPlayer {
         return trickGrid;
     }
 
+    /**
+     *
+     * @param trickBean
+     * @param pId
+     * @param pos
+     * @param playerName
+     * @return
+     */
     private VBox setTrickVBox(TrickBean trickBean, PlayerId pId, int pos, String playerName) {
         ImageView cardImage = new ImageView();
         cardImage.imageProperty().bind(valueAt(cards240, valueAt(trickBean.trick(), pId)));

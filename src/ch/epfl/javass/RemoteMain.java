@@ -29,7 +29,7 @@ public class RemoteMain extends Application {
             Player player = new GraphicalPlayerAdapter();
             RemotePlayerServer rps =  new RemotePlayerServer(player);
             rps.run();
-          });
+        });
         System.out.println("La partie commencera à la connexion du client...");
         gameThread.setDaemon(true);
         gameThread.start();
