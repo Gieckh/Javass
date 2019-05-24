@@ -58,7 +58,7 @@ public class GraphicalPlayer {
     private static ObservableMap<Card,Image> cardImage160 = GraphicalPlayer.cardImage160();
     private static ObservableMap<Color,Image> trumpImage = GraphicalPlayer.trumpImage();
     private ArrayBlockingQueue<Card> queueOfCommunication;
-    private BorderPane victoryPaneForTeam[] = new BorderPane[2];
+    private BorderPane[] victoryPaneForTeam = new BorderPane[2];
     private StackPane finalPane;
 
 
@@ -98,7 +98,6 @@ public class GraphicalPlayer {
 
         BorderPane main= new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
         this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
-        
     }
     
     /** ============================================== **/

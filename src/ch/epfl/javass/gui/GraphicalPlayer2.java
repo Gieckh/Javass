@@ -1,18 +1,14 @@
 package ch.epfl.javass.gui;
 
 import ch.epfl.javass.jass.Card;
-import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +19,6 @@ import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import static javafx.beans.binding.Bindings.*;
 import static javafx.collections.FXCollections.observableMap;
@@ -33,25 +28,21 @@ public class GraphicalPlayer2 {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-//    private PlayerId myId;
-//    private Map<PlayerId, String> playerNames;
-//    private ScoreBean scoreBean;
-//    private TrickBean trickBean;
 
     private final ObservableMap<Card, Image> cards160 = cards(160);
     private final ObservableMap<Card, Image> cards240 = cards(240);
     private final ObservableMap<Card.Color, Image> trumps = trumps();
-    private ArrayBlockingQueue<Card> queueOfCommunication;
+    private StackPane finalPane;
+//    private ArrayBlockingQueue<Card> queueOfCommunication;
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
     public GraphicalPlayer2(PlayerId myId, Map<PlayerId, String> playerNames,
-            ScoreBean scoreBean, TrickBean trickBean, HandBean handBean,
-            ArrayBlockingQueue<Card> queueOfCommunication)
+            ScoreBean scoreBean, TrickBean trickBean, HandBean handBean)
     {
-        this.queueOfCommunication = queueOfCommunication;
+//        this.queueOfCommunication = queueOfCommunication;
 
         GridPane scorePane = createScorePane(scoreBean, playerNames);
 
@@ -61,6 +52,8 @@ public class GraphicalPlayer2 {
         BorderPane team1Pane = createTeamPane(scoreBean, TeamId.TEAM_1, TeamId.TEAM_2, playerNames);
         BorderPane team2Pane = createTeamPane(scoreBean, TeamId.TEAM_2, TeamId.TEAM_1, playerNames);
 
+        BorderPane main = new BorderPane(trickPane, scorePane, new GridPane(), handPane, new GridPane());
+        this.finalPane = new StackPane(main, team1Pane, team2Pane);
     }
 
     /** ============================================== **/
@@ -71,7 +64,7 @@ public class GraphicalPlayer2 {
      *
      * @return
      */
-    public Stage createStage(StackPane finalPane, PlayerId myId, Map<PlayerId, String> playerNames) {
+    public Stage createStage(PlayerId myId, Map<PlayerId, String> playerNames) {
         Stage stage = new Stage();
         stage.setTitle("Javass - " + playerNames.get(myId));
         stage.setScene(new Scene(finalPane));
@@ -244,7 +237,7 @@ public class GraphicalPlayer2 {
             child.disableProperty().bind(isPlayable.not());
             child.setOnMouseClicked((e)-> {
                 try {
-                    queueOfCommunication.put(correspondingCard.get());
+                    GraphicalPlayerAdapter.queueOfCommunication.put(correspondingCard.get());
                 } catch (InterruptedException e1) {
                     throw new Error(e1);
                 }

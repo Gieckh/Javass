@@ -24,11 +24,11 @@ public class GraphicalPlayerAdapter implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    ScoreBean scoreBean;
-    TrickBean trickBean;
-    HandBean handBean;
-    GraphicalPlayer graphicalPlayer;
-    public static ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);;
+    private ScoreBean scoreBean; //TODO: final ?
+    private TrickBean trickBean;
+    private HandBean handBean;
+    private GraphicalPlayer graphicalPlayer;
+    static ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);
     
     
     /** ============================================== **/
@@ -62,8 +62,7 @@ public class GraphicalPlayerAdapter implements Player {
             return card;
             
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            throw new Error();
+            throw new Error(e);
         }
 //        return state.trick().playableCards(hand).get(0); TODO
     }
@@ -73,9 +72,8 @@ public class GraphicalPlayerAdapter implements Player {
      */
     @Override public void
     setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean, this.queueOfCommunication);
-        runLater(() -> { graphicalPlayer.createStage().show(); });
-    
+        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean, queueOfCommunication);
+        runLater(() ->  graphicalPlayer.createStage().show() );
     }
 
     /**
