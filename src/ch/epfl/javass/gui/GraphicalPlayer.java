@@ -109,7 +109,7 @@ public final class GraphicalPlayer {
     }
 
     /**
-     * @brief Creates one row of the ScorePane
+     * @brief Creates one row of the ScorePane, and sets its HAlignment
      *
      * @param p1 ({@code PlayerId}) - the first player of the team.
      * @param p2 ({@code PlayerId}) - the second player of the team.
@@ -327,6 +327,6 @@ public final class GraphicalPlayer {
     }
 
     private String toTrumpName(int i) {
-        return "/"+"trump_"+i+".png";
+        return "/" + "trump_" +i+ ".png";
     }
 }
