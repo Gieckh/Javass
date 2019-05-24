@@ -96,51 +96,13 @@ public final class GraphicalPlayer {
     //TODO: array
 
     private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
-        Text[] row1 = createScorePaneRow();
-        Text[] row2 = createScorePaneRow();
-
-        Text textL1C3 = new Text();
-        scoreBean.turnPointsProperty(TeamId.TEAM_1).addListener((observable, oldValue, newValue) ->
-                textL1C3.setText("(+" + Math.max(0, newValue.intValue() - oldValue.intValue()) + ")"));
-
-        Text textL1C4 = new Text("/ Total : ");
-
-        Text textL1C5 = new Text();
-        textL1C5.textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(TeamId.TEAM_1)));
-
-
-        //Second row
-        Text textL2C1 = new Text(playerNames.get(PlayerId.PLAYER_2) + " et " + playerNames.get(PlayerId.PLAYER_4) + " : ");
-
-        Text textL2C2 = new Text();
-        textL2C2.textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_2)));
-
-        Text textL2C3 = new Text();
-        scoreBean.turnPointsProperty(TeamId.TEAM_2).addListener((observable, oldValue, newValue) ->
-                textL2C3.setText("(+" + Math.max(0, newValue.intValue() - oldValue.intValue()) + ")"));
-
-        Text textL2C4 = new Text("/ Total : ");
-
-        Text textL2C5 = new Text();
-        textL2C5.textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(TeamId.TEAM_2)));
+        Text[] row1 = createScorePaneRow(PlayerId.PLAYER_1, PlayerId.PLAYER_3, playerNames, scoreBean);
+        Text[] row2 = createScorePaneRow(PlayerId.PLAYER_2, PlayerId.PLAYER_4, playerNames, scoreBean);
 
 
         GridPane scoreGrid = new GridPane();
-        scoreGrid.addRow(0, textL1C1, textL1C2, textL1C3, textL1C4, textL1C5);
-        scoreGrid.addRow(1, textL2C1, textL2C2, textL2C3, textL2C4, textL2C5);
-
-        //Setting the alignments
-        GridPane.setHalignment(row1[0], HPos.RIGHT);
-        GridPane.setHalignment(row1[1], HPos.RIGHT);
-        GridPane.setHalignment(row1[2], HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(row1[3], HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(row1[4], HPos.RIGHT);
-
-        GridPane.setHalignment(row2[0], HPos.RIGHT);
-        GridPane.setHalignment(row2[1], HPos.RIGHT);
-        GridPane.setHalignment(row2[2], HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(row2[3], HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(row2[4], HPos.RIGHT);
+        scoreGrid.addRow(0, row1[0], row1[1], row1[2], row1[3], row1[4]);
+        scoreGrid.addRow(1, row2[0], row2[1], row2[2], row2[3], row2[4]);
 
         scoreGrid.setStyle("-fx-font: 16 Optima; -fx-background-color: lightgray; -fx-padding: 5px; -fx-alignment: center;");
         return scoreGrid;
@@ -158,7 +120,31 @@ public final class GraphicalPlayer {
         Text[] scorePaneRow = new Text[5];
         scorePaneRow[0] = new Text(playerNames.get(p1) + " et " + playerNames.get(p2) + " : ");
         scorePaneRow[1] = new Text();
-        scorePaneRow[1].textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_1)));
+        scorePaneRow[1].textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(p1.team())));
+
+
+        scorePaneRow[2] = new Text();
+        scoreBean.turnPointsProperty(p1.team()).addListener((observable, oldValue, newValue) ->
+                scorePaneRow[2].setText(
+                        "(+" +
+                        Math.max(0, newValue.intValue() - oldValue.intValue()) +
+                        ")"
+                )
+        );
+
+        scorePaneRow[3] = new Text("/ Total : ");
+
+        scorePaneRow[4] = new Text();
+        scorePaneRow[4].textProperty().bind(Bindings.convert(scoreBean.gamePointsProperty(p1.team())));
+
+
+        GridPane.setHalignment(scorePaneRow[0], HPos.RIGHT);
+        GridPane.setHalignment(scorePaneRow[1], HPos.RIGHT);
+        GridPane.setHalignment(scorePaneRow[2], HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(scorePaneRow[3], HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(scorePaneRow[4], HPos.RIGHT);
+
+        return scorePaneRow;
     }
 
     /**
