@@ -2,7 +2,6 @@ package ch.epfl.javass.gui;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;
-import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Trick;
 import javafx.beans.property.ObjectProperty;

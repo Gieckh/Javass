@@ -49,7 +49,7 @@ public final class RemotePlayerServer {
     /**
      * @brief This underlyingPlayer defines how the RemotePlayerServer will ask the RemotePlayerClient to play.
      * 
-     * @param underLyingPlayer (Player) - //TODO
+     * @param underLyingPlayer (Player) - the underlying player
      */
     public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;
@@ -81,12 +81,14 @@ public final class RemotePlayerServer {
             String message;
             while((message = r.readLine()) !=  null) {
                 assert (message.length() >= 6);
-                // I decided to combine the whole line only with ',' (even the jassCommand) //TODO: change that
+
                 List<String> words = new LinkedList<>(Arrays.asList(message.split("[ ,]")));
                 JassCommand Command = JassCommand.valueOf(words.get(0));
+
                 switch(Command) {
                     case PLRS:
                         assert (words.size() == 6);
+
                         System.out.println("players read");
                         Map<PlayerId, String> playerNames = new HashMap<>();
                         for(int i = 2; i < 6 ; ++i) {
@@ -97,24 +99,28 @@ public final class RemotePlayerServer {
                         
                     case TRMP:
                         assert (words.size() == 2);
+
                         System.out.println("trump read");
                         this.underLyingPlayer.setTrump(Card.Color.ALL.get(StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
                     case HAND:
                         assert (words.size() == 2);
+
                         System.out.println("hand read");
                         this.underLyingPlayer.updateHand(CardSet.ofPacked(StringSerializer.deserializeLong(words.get(1))));
                         break;
                         
                     case TRCK:
                         assert (words.size() == 2);
+
                         System.out.println("trick read");
                         this.underLyingPlayer.updateTrick(Trick.ofPacked(StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
                     case CARD:
                         assert (words.size() == 5);
+
                         System.out.println("card read");
                         System.out.println();
                         w.write(StringSerializer.serializeInt(this.underLyingPlayer.cardToPlay(
@@ -133,6 +139,7 @@ public final class RemotePlayerServer {
 
                     case SCOR:
                         assert (words.size() == 2);
+
                         System.out.println("score read");
                         this.underLyingPlayer.updateScore(Score.ofPacked(
                                 StringSerializer.deserializeLong(words.get(1))));
@@ -140,6 +147,7 @@ public final class RemotePlayerServer {
                         
                     case WINR:
                         assert (words.size() == 2);
+
                         System.out.println("win read");
                         this.underLyingPlayer.setWinningTeam(TeamId.ALL.get(
                                 StringSerializer.deserializeInt(words.get(1))));

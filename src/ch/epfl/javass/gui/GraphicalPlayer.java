@@ -25,7 +25,13 @@ import static javafx.beans.binding.Bindings.*;
 import static javafx.collections.FXCollections.observableMap;
 import static javafx.collections.FXCollections.unmodifiableObservableMap;
 
-public class GraphicalPlayer {
+/**
+ * This class represents the graphical interface of a human player.
+ *
+ * @author - Marin Nguyen (288260)
+ * @author - Antoine Scardigli (299905)
+ */
+public final class GraphicalPlayer {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
@@ -83,8 +89,8 @@ public class GraphicalPlayer {
      * @brief Creates the {@code GridPane} which displays the scores. [Will be at
      *        the top of the window]
      *
-     * @param scoreBean
-     * @param playerNames
+     * @param scoreBean ({@code ScoreBean})
+     * @param playerNames ({@code Map<PlayerId, String>})
      * @return ({@code GridPane}) - the pane used to display the scores.
      */
     //TODO: array
@@ -143,7 +149,14 @@ public class GraphicalPlayer {
         return scoreGrid;
     }
 
-
+    /**
+     * @brief Creates the ({@code GridPane}) corresponding to the current trick.
+     *
+     * @param trickBean ({@code TrickBean})
+     * @param myId ({@code PlayerId})
+     * @param playerNames ({@code Map<PlayerId, String>})
+     * @return ({@code GridPane}) - basically the current trick.
+     */
     private GridPane createTrickPane(TrickBean trickBean, PlayerId myId, Map<PlayerId, String> playerNames) {
         VBox middleLeft  = setTrickVBox (trickBean, myId.previousPlayer(), 3, playerNames.get(myId.previousPlayer()));
         VBox upCenter    = setTrickVBox (trickBean, myId.nextPlayer().nextPlayer(), 2, playerNames.get(myId.nextPlayer().nextPlayer()));
@@ -170,15 +183,18 @@ public class GraphicalPlayer {
     }
 
     /**
-     * @brief
+     * @brief Method used to fill the VBoxes corresponding to the cards which
+     *        have been played during the current trick, and the names of the players
+     *        who put them.
      *
      * @param trickBean ({@code TrickBean}) - the bean representing the trick.
      * @param pId ({@code PlayerId}) - the ID of the player corresponding to the
-     *            card
+     *            card that will be displayed here.
      *
-     * @param pos
-     * @param playerName
-     * @return
+     * @param pos ({@code int}) - the position of the player on the board: '0' for yourself,
+     *            '1' for the player on the right, and so on.
+     * @param playerName ({@code String}) - the name of the corresponding player.
+     * @return ({@code VBox}) - a card and the name of the player who put it.
      */
     private VBox setTrickVBox(TrickBean trickBean, PlayerId pId, int pos, String playerName) {
         ImageView cardImage = new ImageView();
@@ -205,11 +221,11 @@ public class GraphicalPlayer {
     /**
      * @brief The victory panes.
      *
-     * @param scoreBean
-     * @param winningTeam
-     * @param losingTeam
-     * @param playerNames
-     * @return
+     * @param scoreBean ({@code ScoreBean})
+     * @param winningTeam ({@code TeamId})
+     * @param losingTeam ({@code TeamId})
+     * @param playerNames ({@code Map<PlayerId, String>})
+     * @return the victory panes.
      */
     private BorderPane
     createTeamPane(ScoreBean scoreBean, TeamId winningTeam, TeamId losingTeam, Map<PlayerId, String> playerNames)
@@ -234,7 +250,6 @@ public class GraphicalPlayer {
         return victoryPane;
     }
 
-    @SuppressWarnings("Duplicates")
     private HBox createHandPane(HandBean handBean) {
 
         ImageView[] hand = new ImageView[9];
@@ -268,10 +283,10 @@ public class GraphicalPlayer {
     }
 
     /**
-     * @brief
+     * @brief the names of the players in the [actually] winning team.
      *
-     * @param winningTeam
-     * @param playerNames
+     * @param winningTeam ({@code TeamId})
+     * @param playerNames ({@code Map<PlayerId, String>})
      * @return
      */
     private String[] findWinningPlayerNames(TeamId winningTeam, Map<PlayerId, String> playerNames) {
@@ -288,12 +303,6 @@ public class GraphicalPlayer {
         return winningPlayerNames;
     }
 
-    /**
-     * @brief
-     *
-     * @param width
-     * @return
-     */
     private ObservableMap<Card, Image> cards(int width) {
         ObservableMap<Card, Image> map = FXCollections.observableMap(new HashMap<>());
 
@@ -308,14 +317,6 @@ public class GraphicalPlayer {
         return unmodifiableObservableMap(map);
     }
 
-    /**
-     * @brief
-     *
-     * @param c
-     * @param r
-     * @param width
-     * @return
-     */
     private Image toCardName(int c, int r, int width) {
         return new Image("/card_" + c + "_" + r + "_" + width + ".png");
     }

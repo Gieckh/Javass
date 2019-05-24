@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * @Brief This class extends Player and is an Adapter of a graphicalPlayer.
- *        As said in the patron Adapter ,the graphicalPlayerAdapter shares his scoreBean, trickBean, and handBean
+ * @brief This class extends Player and is an Adapter of a graphicalPlayer.
+ *        As said in the patron Adapter, the graphicalPlayerAdapter shares his scoreBean, trickBean, and handBean
  *        with the GraphicalPlayer. Most methods are about updating the corresponding Bean on the JavaFx thread (thanks to runLater).
  *        The SetPlayer's particularity is that it is the method creating the graphicalPlayer instance.
  *        CardToPlay returns the single card contained in "queueOfCommunication", which is an array shared with the graphicalPlayer.
@@ -20,15 +20,15 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
-public class GraphicalPlayerAdapter implements Player {
+public final class GraphicalPlayerAdapter implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    private ScoreBean scoreBean; //TODO: final ?
-    private TrickBean trickBean;
-    private HandBean handBean;
+    private final ScoreBean scoreBean; //TODO: final ?
+    private final TrickBean trickBean;
+    private final HandBean handBean;
     private GraphicalPlayer graphicalPlayer;
-    static ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);
+    static final ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);
     
     
     /** ============================================== **/
@@ -44,7 +44,6 @@ public class GraphicalPlayerAdapter implements Player {
         this.handBean = new HandBean();
         this.scoreBean = new ScoreBean();
         this.trickBean = new TrickBean();
-        
     }
     
     /** ============================================== **/
@@ -65,7 +64,6 @@ public class GraphicalPlayerAdapter implements Player {
         } catch (InterruptedException e) {
             throw new Error(e);
         }
-//        return state.trick().playableCards(hand).get(0); TODO
     }
 
     /**
@@ -75,7 +73,7 @@ public class GraphicalPlayerAdapter implements Player {
     public void
     setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean);
-        runLater(() ->  graphicalPlayer.createStage(ownId, playerNames).show() );
+        runLater( () -> graphicalPlayer.createStage(ownId, playerNames).show() );
     }
 
     /**
@@ -83,7 +81,7 @@ public class GraphicalPlayerAdapter implements Player {
      */
     @Override
     public void updateHand(CardSet newHand) {
-        runLater(() -> {handBean.setHand(newHand);});
+        runLater( () -> handBean.setHand(newHand) );
     }
 
     /**
@@ -91,7 +89,7 @@ public class GraphicalPlayerAdapter implements Player {
      */
     @Override
     public void setTrump(Card.Color trump) {
-        runLater(()-> {trickBean.setTrump(trump);});
+        runLater( () -> trickBean.setTrump(trump) );
     }
 
     /**
@@ -99,7 +97,7 @@ public class GraphicalPlayerAdapter implements Player {
      */
     @Override
     public void updateTrick(Trick newTrick) {
-        runLater(()-> {trickBean.setTrick(newTrick);});
+        runLater( ()-> trickBean.setTrick(newTrick) );
     }
 
     /**
@@ -107,10 +105,11 @@ public class GraphicalPlayerAdapter implements Player {
      */
     @Override
     public void updateScore(Score score) {
-        runLater(()-> {for(TeamId teamId :TeamId.ALL ) {
-            scoreBean.setGamePoints(teamId, score.gamePoints(teamId));
-            scoreBean.setTotalPoints(teamId, score.totalPoints(teamId));
-            scoreBean.setTurnPoints(teamId, score.turnPoints(teamId));
+        runLater( () -> {
+            for (TeamId teamId: TeamId.ALL) {
+                scoreBean.setGamePoints (teamId, score.gamePoints (teamId));
+                scoreBean.setTotalPoints(teamId, score.totalPoints(teamId));
+                scoreBean.setTurnPoints (teamId, score.turnPoints (teamId));
             }
         });
     }
@@ -120,6 +119,6 @@ public class GraphicalPlayerAdapter implements Player {
      */
     @Override
     public void setWinningTeam(TeamId winningTeam) {
-        runLater(()-> {scoreBean.setWinningTeam(winningTeam);});
+        runLater(()-> scoreBean.setWinningTeam(winningTeam));
     }
 }

@@ -1,6 +1,5 @@
 package ch.epfl.javass;
 
-import ch.epfl.javass.PlayerType;
 import ch.epfl.javass.gui.GraphicalPlayerAdapter;
 import ch.epfl.javass.jass.*;
 import ch.epfl.javass.net.RemotePlayerClient;
@@ -273,7 +272,7 @@ public class LocalMain extends Application {
                 try {
                     Thread.sleep(NEW_CARD_WAIT_TIME_MS);
                 } catch (Exception e) {
-                    //TODO: nothing ?
+                    throw new Error(e);
                 }
             }
         });

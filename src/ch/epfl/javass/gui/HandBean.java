@@ -10,7 +10,6 @@ import ch.epfl.javass.jass.CardSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 
-//TODO https://piazza.com/class/jrhvyjm5czn4f?cid=346 ?
 /**
  * HandBean is a JavaFx bean containing the hand and playableCards properties.
  *
@@ -71,10 +70,8 @@ public final class HandBean {
             }
         }
 
-        else { //newHand.size() < 9
+        else {
             assert (newHand.size() < 9);
-            //TODO: newHand is included in current hand right ?
-
             for(int i = 0 ; i < 9 ; ++i) {
                 Card cardToReplace = hand.get(i);
                 if ( (cardToReplace != null)  &&  !newHand.contains(cardToReplace) ) {

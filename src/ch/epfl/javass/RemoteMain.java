@@ -1,17 +1,13 @@
 package ch.epfl.javass;
 
-import ch.epfl.javass.gui.GraphicalPlayer;
 import ch.epfl.javass.gui.GraphicalPlayerAdapter;
-import ch.epfl.javass.jass.JassGame;
-import ch.epfl.javass.jass.MctsPlayer;
 import ch.epfl.javass.jass.Player;
-import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.net.RemotePlayerServer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * RemoteMain is the main class to run to launch the remotePlayerServer that will create a graphical player
+ *  RemoteMain is the main class to run to launch the remotePlayerServer that will create a graphical player
  *  on this computer playing remotely a jassGame thrown by a LocalMain3.
  *
  *
