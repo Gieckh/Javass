@@ -31,7 +31,6 @@ public final class MeldSet {
         for(Meld m : Meld.ALL) {
             i=i+1;
         //    shift<<=1;
-          //  System.out.println(Long.toBinaryString(packed[0]));
             if (melds.contains(m)) {
                 if((int)i/64 == 0) {
                     correction=i;
@@ -46,7 +45,6 @@ public final class MeldSet {
     
     public static MeldSet from(long packed[] ) {
         int size = Meld.ALL.size();
-       // System.out.println(size);
         Meld[] allMeldsInversed = new Meld[size];
         List<Meld> melds = new ArrayList<>();
         int i = 0;
@@ -66,10 +64,8 @@ public final class MeldSet {
     }
     
     public static List<MeldSet> allIn(CardSet hand) {
-        System.out.println(hand);
         List<MeldSet> r = new ArrayList<>();
         for (Set<Meld> melds: Sets.powerSet(Meld.allIn(hand))) {
-            System.out.println("boucle ic ?");
             if (mutuallyDisjoint(melds))
                 r.add(new MeldSet(melds));
         }

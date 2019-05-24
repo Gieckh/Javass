@@ -13,7 +13,6 @@ import ch.epfl.javass.jass.Card.Color;
 import ch.epfl.javass.jass.Card.Rank;
 import ch.epfl.javass.jass.CardSet;
 
-
 public final class Meld {
     public static List<Meld> ALL = computeAll();
 

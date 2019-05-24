@@ -152,7 +152,7 @@ public final class JassGame {
     private void addOnScoreInCaseCheating() {
         for (PlayerId p : PlayerId.ALL) {
             if(listOfCheatingCodes.get(p.ordinal()).intValue()==2) {
-                System.out.println("hre");
+                System.out.println("cheating score");
                 turnState.addScore(p.team(), 1000); 
                 listOfCheatingCodes.set(p.ordinal(), 0);
             }

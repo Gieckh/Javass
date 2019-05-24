@@ -1,9 +1,18 @@
 package ch.epfl.javass.gui;
 
 import ch.epfl.javass.jass.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
+import src.cs108.Announcement;
 import src.cs108.MeldSet;
 
 import static javafx.application.Platform.runLater;
+import static javafx.collections.FXCollections.observableArrayList;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +44,7 @@ public class GraphicalPlayerAdapter implements Player {
     ArrayBlockingQueue<Card> queueOfCommunication ;
     ArrayBlockingQueue<Integer> CheatingQueue;
     ArrayBlockingQueue<MeldSet> meldQueue;
+    ObjectProperty<ListView<Text>> listOfAnnounces = new SimpleObjectProperty<ListView<Text>>();
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -98,9 +108,8 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public MeldSet announcement(CardSet hand) {
         try {
-            System.out.println("announcement for gp");
             handBean.setannounces(hand);
-            System.out.println(meldQueue.isEmpty());
+            runLater(() -> { listOfAnnounces.setValue(createAnnouncesPane());});
             MeldSet meldSet = meldQueue.take() ;
             handBean.setannounces(CardSet.EMPTY);
             return meldSet;
@@ -109,15 +118,40 @@ public class GraphicalPlayerAdapter implements Player {
             // TODO Auto-generated catch block
             throw new Error();
         }
+
     }
 
+    private ListView<Text> createAnnouncesPane() {
+        ObservableList<MeldSet> meldSet = handBean.annouces();
+        ObservableList<Text> AllAnnouncesSet =  observableArrayList();
+        for(MeldSet m : meldSet) {
+            Text children = new Text();
+            SimpleStringProperty str = new SimpleStringProperty();
+            str.setValue(m.toString());
+            children.textProperty().bind(str);
+            children.setStyle("-fx-font: 16 Optima;\n");
+            children.setOnMouseClicked((e) -> { 
+                try {
+                    meldQueue.put(m);
+                } catch (InterruptedException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+           AllAnnouncesSet.add(children);
+        }
+        ListView<Text> announcesPane = new ListView<>(AllAnnouncesSet);
+        return announcesPane;
+    }
+    
+    
     /* 
      * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
      */
     @Override
     public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, 
-                this.handBean, this.queueOfCommunication, this.CheatingQueue,this.meldQueue);
+                this.handBean, this.queueOfCommunication, this.CheatingQueue,this.meldQueue,this.listOfAnnounces);
         runLater(() -> { graphicalPlayer.createStage().show(); });
     
     }

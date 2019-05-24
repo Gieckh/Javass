@@ -21,7 +21,9 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
@@ -94,7 +96,8 @@ public class GraphicalPlayer {
      */
     public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score, 
             TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication,
-            ArrayBlockingQueue<Integer> cheatingQueue , ArrayBlockingQueue<MeldSet> AnnouncesQueue) {
+            ArrayBlockingQueue<Integer> cheatingQueue , ArrayBlockingQueue<MeldSet> AnnouncesQueue,
+            ObjectProperty<ListView<Text>> listOfAnnounces ) {
         this.thisId = thisId; 
         this.playerNames = playerNames; 
         this.score = score; 
@@ -112,13 +115,16 @@ public class GraphicalPlayer {
              this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
         }
       //  BooleanBinding shouldDisplay =  createBooleanBinding( () -> AnnouncesQueue.size()==1 );
-        ListView<Text> listOfAnnounces = createAnnouncesPane();
-      //  HBox announcesPane = new HBox();
+        HBox announcesPane = new HBox();
+        listOfAnnounces.addListener( (object , old , New ) -> { 
+            announcesPane.getChildren().clear();
+            announcesPane.getChildren().add(New);
+        }  );
       //  announcesPane.getChildren().removeIf(shouldDisplay ? createAnnouncesPane() : new GridPane() ;
        
         
         //listOfAnnounces.
-        BorderPane main= new BorderPane(trickPane, scorePane , listOfAnnounces,handPane, new GridPane());
+        BorderPane main= new BorderPane(trickPane, scorePane , announcesPane,handPane, new GridPane());
         
         
         this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
@@ -348,29 +354,6 @@ public class GraphicalPlayer {
     }
     
     
-    private ListView<Text> createAnnouncesPane() {
-        ObservableList<MeldSet> meldSet = handBean.annouces();
-        ObservableList<Text> AllAnnouncesSet =  observableArrayList();
-        for(MeldSet m : meldSet) {
-            Text children = new Text();
-            SimpleStringProperty str = new SimpleStringProperty();
-            str.setValue(m.toString());
-            children.textProperty().bind(str);
-            children.setStyle("-fx-font: 16 Optima;\n");
-            children.setOnMouseClicked((e) -> {
-                try {
-                    AnnouncesQueue.put(m);
-                } catch (InterruptedException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            });
-           AllAnnouncesSet.add(children);
-        }
-        
-        ListView<Text> announcesPane = new ListView<>(AllAnnouncesSet);
-        return announcesPane;
-    }
     
     private HBox createHandPane() {
         

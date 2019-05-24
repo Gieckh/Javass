@@ -39,8 +39,13 @@ public interface Player {
         //default is empty
     }
 
+    /**
+     * @Brief
+     *
+     * @param hand
+     * @return
+    */
     default public MeldSet announcement(CardSet hand){
-        System.out.println("he");
         return null;
     }
     
