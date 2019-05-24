@@ -96,11 +96,8 @@ public final class GraphicalPlayer {
     //TODO: array
 
     private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
-        //First row
-        Text textL1C1 = new Text(playerNames.get(PlayerId.PLAYER_1) + " et " + playerNames.get(PlayerId.PLAYER_3) + " : ");
-
-        Text textL1C2 = new Text();
-        textL1C2.textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_1)));
+        Text[] row1 = createScorePaneRow();
+        Text[] row2 = createScorePaneRow();
 
         Text textL1C3 = new Text();
         scoreBean.turnPointsProperty(TeamId.TEAM_1).addListener((observable, oldValue, newValue) ->
@@ -133,20 +130,35 @@ public final class GraphicalPlayer {
         scoreGrid.addRow(1, textL2C1, textL2C2, textL2C3, textL2C4, textL2C5);
 
         //Setting the alignments
-        GridPane.setHalignment(textL1C1, HPos.RIGHT);
-        GridPane.setHalignment(textL1C2, HPos.RIGHT);
-        GridPane.setHalignment(textL1C3, HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(textL1C4, HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(textL1C5, HPos.RIGHT);
+        GridPane.setHalignment(row1[0], HPos.RIGHT);
+        GridPane.setHalignment(row1[1], HPos.RIGHT);
+        GridPane.setHalignment(row1[2], HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(row1[3], HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(row1[4], HPos.RIGHT);
 
-        GridPane.setHalignment(textL2C1, HPos.RIGHT);
-        GridPane.setHalignment(textL2C2, HPos.RIGHT);
-        GridPane.setHalignment(textL2C3, HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(textL2C4, HPos.LEFT); //not needed, but more explicit.
-        GridPane.setHalignment(textL2C5, HPos.RIGHT);
+        GridPane.setHalignment(row2[0], HPos.RIGHT);
+        GridPane.setHalignment(row2[1], HPos.RIGHT);
+        GridPane.setHalignment(row2[2], HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(row2[3], HPos.LEFT); //not needed, but more explicit.
+        GridPane.setHalignment(row2[4], HPos.RIGHT);
 
         scoreGrid.setStyle("-fx-font: 16 Optima; -fx-background-color: lightgray; -fx-padding: 5px; -fx-alignment: center;");
         return scoreGrid;
+    }
+
+    /**
+     * @brief Creates one row of the ScorePane
+     *
+     * @param p1 ({@code PlayerId}) - the first player of the team.
+     * @param p2 ({@code PlayerId}) - the second player of the team.
+     *
+     * @return A row of the ScorePane.
+     */
+    private Text[] createScorePaneRow(PlayerId p1, PlayerId p2, Map<PlayerId, String> playerNames, ScoreBean scoreBean) {
+        Text[] scorePaneRow = new Text[5];
+        scorePaneRow[0] = new Text(playerNames.get(p1) + " et " + playerNames.get(p2) + " : ");
+        scorePaneRow[1] = new Text();
+        scorePaneRow[1].textProperty().bind(Bindings.convert(scoreBean.turnPointsProperty(TeamId.TEAM_1)));
     }
 
     /**
@@ -230,7 +242,6 @@ public final class GraphicalPlayer {
     private BorderPane
     createTeamPane(ScoreBean scoreBean, TeamId winningTeam, TeamId losingTeam, Map<PlayerId, String> playerNames)
     {
-        //TODO: test
         String[] winningPlayerNames = findWinningPlayerNames(winningTeam, playerNames);
 
         Text victoryText = new Text();

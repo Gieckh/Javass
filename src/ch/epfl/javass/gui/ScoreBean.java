@@ -36,8 +36,7 @@ public final class ScoreBean {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
 
-    //default constructor per default is enough
-    //TODO: why not private ? -> cf corrigé
+    //default constructor per default is enough askip
     
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
@@ -74,7 +73,6 @@ public final class ScoreBean {
     }
     
 
-    //TODO: indicates which team HAS WON right ? (and not IS CURRENTLY WINNING)
     /**
      * @brief It is a public getter for the winningTeam property.
      *
@@ -128,8 +126,6 @@ public final class ScoreBean {
     }
 
 
-
-    //TODO: indicates which team HAS WON right ? (and not IS CURRENTLY WINNING)
     /**
      * @brief public setter for the chosen winning team.
      *

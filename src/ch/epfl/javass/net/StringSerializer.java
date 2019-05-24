@@ -66,12 +66,27 @@ public final class StringSerializer {
         return Long.parseUnsignedLong(s, RADIX);
     }
 
-    //TODO
+    /**
+     * @brief Given the {@code String} "s", serializes its UTF_8 encoding in Base64
+     *        and returns this serialization.
+     * @see Base64#getEncoder()
+     * @see java.util.Base64.Encoder#encodeToString(byte[])
+     *
+     * @param s ({@code String}) - the {@code String} to serialize
+     * @return ({@code String}) - the serialized version of "s"
+     */
     public static String serializeString(String s) {
         return Base64.getEncoder().encodeToString((s.getBytes(StandardCharsets.UTF_8)));
     }
 
-    //TODO
+    /**
+     * @brief Given the serialized {@code String} "s", return its deserialization.
+     * @see Base64#getDecoder()
+     * @see java.util.Base64.Decoder#decode(String)
+     *
+     * @param s ({@code String}) - a serialized {@code String}.
+     * @return ({@code}) - the deserialized version of "s".
+     */
     public static String deserializeString(String s) {
         return new String(Base64.getDecoder().decode(s), StandardCharsets.UTF_8);
     }

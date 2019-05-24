@@ -18,7 +18,6 @@ import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.net.RemotePlayerClient;
 import javafx.application.Application;
 import javafx.stage.Stage;
-//TODO: de vraies explications
 /**
  * LocalMain3 Is the main launcher of the whole project.
  * It is using the String of arguments "args" to build a custom game.

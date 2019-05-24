@@ -24,7 +24,7 @@ public final class GraphicalPlayerAdapter implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    private final ScoreBean scoreBean; //TODO: final ?
+    private final ScoreBean scoreBean;
     private final TrickBean trickBean;
     private final HandBean handBean;
     private GraphicalPlayer graphicalPlayer;

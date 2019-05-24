@@ -11,7 +11,7 @@ import java.util.*;
 
 import static ch.epfl.javass.PlayerType.*;
 
-public class LocalMain extends Application {
+public final class LocalMain extends Application {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/

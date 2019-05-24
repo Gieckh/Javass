@@ -20,7 +20,6 @@ public class NetJassGame {
     public static void main(String[] args)  {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
-        //works for any seed //TODO: suppr
         Player player;
         for (PlayerId pId: PlayerId.ALL) {
             try {
