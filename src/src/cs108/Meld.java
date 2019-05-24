@@ -74,7 +74,8 @@ public final class Meld {
     public static List<Meld> allIn(CardSet hand) {
         List<Meld> allIn = new ArrayList<>();
         for (Meld m: ALL) {
-            if (hand.containsAll(CardSet.of( new ArrayList<>(m.cards()))));
+           //System.out.println("boucle meld");
+            if (hand.containsAll(CardSet.of( new ArrayList<>(m.cards()))))
                 allIn.add(m);
         }
         return allIn;

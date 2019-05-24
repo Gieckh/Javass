@@ -5,6 +5,7 @@ import src.cs108.MeldSet;
 
 import static javafx.application.Platform.runLater;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -83,7 +84,6 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public int cheat() {
         try {
-            System.out.println(CheatingQueue.isEmpty());
             return CheatingQueue.isEmpty() ? 0 : CheatingQueue.take() ;
             
         } catch (InterruptedException e) {
@@ -98,9 +98,11 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public MeldSet announcement(CardSet hand) {
         try {
-            handBean.setHand(hand);
+            System.out.println("announcement for gp");
+            handBean.setannounces(hand);
+            System.out.println(meldQueue.isEmpty());
             MeldSet meldSet = meldQueue.take() ;
-            handBean.setHand(CardSet.EMPTY);
+            handBean.setannounces(CardSet.EMPTY);
             return meldSet;
             
         } catch (InterruptedException e) {
@@ -127,6 +129,11 @@ public class GraphicalPlayerAdapter implements Player {
         runLater(() -> {handBean.setHand(newHand);});
     }
 
+    @Override
+    public void updateAnnouncement(List<MeldSet> m) {
+        runLater(()->{handBean.setannouncesPerPlayer(m);});
+    }
+    
     /* 
      * @see ch.epfl.javass.jass.Player#setTrump(ch.epfl.javass.jass.Card.Color)
      */

@@ -40,7 +40,8 @@ public interface Player {
     }
 
     default public MeldSet announcement(CardSet hand){
-        return MeldSet.allIn(CardSet.EMPTY).get(0);
+        System.out.println("he");
+        return null;
     }
     
     /**
@@ -60,6 +61,10 @@ public interface Player {
      * @param newHand (CardSet) the new hand of the Player.
      */
     default public void updateHand(CardSet newHand) {
+        //default is empty
+    }
+    
+    default public void updateAnnouncement(List<MeldSet> m) {
         //default is empty
     }
 
@@ -82,6 +87,7 @@ public interface Player {
     default public void updateTrick(Trick newTrick) {
 
     }
+    
 
     /**
      * @brief Called when the [tota] Score changes [at the beginning of the game, or when a

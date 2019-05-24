@@ -111,14 +111,14 @@ public class GraphicalPlayer {
              BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
              this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
         }
-//        BooleanBinding shouldDisplay =  createBooleanBinding( () -> AnnouncesQueue.size()==1 );
-//        ListView<Text> listOfAnnounces = new ListView<>();
-//        HBox announcesPane = new HBox();
-//        announcesPane.getChildren().removeIf(shouldDisplay ? createAnnouncesPane() : new GridPane() ;
+      //  BooleanBinding shouldDisplay =  createBooleanBinding( () -> AnnouncesQueue.size()==1 );
+        ListView<Text> listOfAnnounces = createAnnouncesPane();
+      //  HBox announcesPane = new HBox();
+      //  announcesPane.getChildren().removeIf(shouldDisplay ? createAnnouncesPane() : new GridPane() ;
        
         
         //listOfAnnounces.
-        BorderPane main= new BorderPane(trickPane, scorePane , new GridPane(),handPane, new GridPane());
+        BorderPane main= new BorderPane(trickPane, scorePane , listOfAnnounces,handPane, new GridPane());
         
         
         this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
@@ -267,6 +267,11 @@ public class GraphicalPlayer {
             Text textForCouple = new Text();
             textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
             textForCouple.setStyle("-fx-font: 14 Optima;"); 
+            //Text announcementForCouple = new Text();
+            //SimpleStringProperty str = new SimpleStringProperty();
+            //str.setValue(handBean.announcesPerPlayer().get(i).toString());
+           // announcementForCouple.textProperty().bind(str);
+           // announcementForCouple.setStyle("-fx-font: 14 Optima;"); 
             ImageView imageForCouple = new ImageView();
             imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
             imageForCouple.setFitHeight(180);
@@ -283,7 +288,8 @@ public class GraphicalPlayer {
             rectangle.visibleProperty().bind(shouldDisplay);
             rectangle.setEffect(new GaussianBlur(4));
             StackPane imageWithHalo  = new StackPane(imageForCouple, rectangle);
-            couple[i] = new VBox(textForCouple,imageWithHalo);
+            couple[i] = new VBox(textForCouple,imageWithHalo//, announcementForCouple
+                    );
             couple[i].setAlignment(Pos.TOP_CENTER);
 
       }
@@ -343,10 +349,13 @@ public class GraphicalPlayer {
     
     
     private ListView<Text> createAnnouncesPane() {
-        List<MeldSet> meldSet = Announcement.getAnnounces(CardSet.of(handBean.hand()));
+        ObservableList<MeldSet> meldSet = handBean.annouces();
         ObservableList<Text> AllAnnouncesSet =  observableArrayList();
         for(MeldSet m : meldSet) {
-            Text children = new Text(m.toString());
+            Text children = new Text();
+            SimpleStringProperty str = new SimpleStringProperty();
+            str.setValue(m.toString());
+            children.textProperty().bind(str);
             children.setStyle("-fx-font: 16 Optima;\n");
             children.setOnMouseClicked((e) -> {
                 try {

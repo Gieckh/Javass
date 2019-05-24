@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.epfl.javass.jass.Card.Color;
+import src.cs108.MeldSet;
 
 /**
  * @author Antoine Scardigli - (299905)
@@ -30,7 +31,7 @@ public final class JassGame {
     private boolean isGameOver;
     private int turnNumber = 1; //starts at turn 1
     private List<Integer> listOfCheatingCodes = new ArrayList<>(Collections.nCopies(4, 0));
-    
+    private List<MeldSet> listOdAnnouncement = new ArrayList<>(4);
 
 
     /** ============================================== **/
@@ -237,11 +238,22 @@ public final class JassGame {
     private void setTurn() {
         setTrump();
         setPlayersTrumps(trump);
-
         distributeHands();
+        listOdAnnouncement.clear();
         for (PlayerId pId: PlayerId.ALL) {
             players.get(pId).updateHand(playerHands.get(pId));
+            listOdAnnouncement.add(players.get(pId).announcement(playerHands.get(pId)));
+           // players.get(pId).updateAnnouncement(listOdAnnouncement);
         }
+      //  manageAnnouncement();
+    }
+    
+    private void manageAnnouncement() {
+        int pointsOfTeam1 = listOdAnnouncement.get(0).points() + listOdAnnouncement.get(2).points(); 
+        int pointsOfTeam2 = listOdAnnouncement.get(1).points() + listOdAnnouncement.get(3).points();
+        turnState.addScore(pointsOfTeam1>=pointsOfTeam2 ? 
+                TeamId.TEAM_1 : TeamId.TEAM_2, Math.max(pointsOfTeam1, pointsOfTeam2));
+        
     }
 
     private void setTrump() {

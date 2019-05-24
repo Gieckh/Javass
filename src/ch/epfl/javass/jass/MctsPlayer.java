@@ -46,6 +46,7 @@ public class MctsPlayer implements Player {
     
     @Override
     public MeldSet announcement(CardSet hand) {
+        System.out.println("hey");
         List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
         MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
         return bestAnnounceSet;

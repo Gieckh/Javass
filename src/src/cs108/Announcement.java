@@ -17,8 +17,9 @@ public final class Announcement {
     
     
     public static List<MeldSet> getAnnounces(CardSet hand) {
-
+System.out.println("here");
         List<MeldSet> melds = MeldSet.allIn((hand));
+        System.out.println("there");
         melds.sort(new MeldSetByPointsComparator());
         return melds;
         }

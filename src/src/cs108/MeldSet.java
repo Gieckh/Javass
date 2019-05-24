@@ -66,8 +66,10 @@ public final class MeldSet {
     }
     
     public static List<MeldSet> allIn(CardSet hand) {
+        System.out.println(hand);
         List<MeldSet> r = new ArrayList<>();
         for (Set<Meld> melds: Sets.powerSet(Meld.allIn(hand))) {
+            System.out.println("boucle ic ?");
             if (mutuallyDisjoint(melds))
                 r.add(new MeldSet(melds));
         }

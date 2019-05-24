@@ -5,10 +5,14 @@ import static javafx.collections.FXCollections.observableSet;
 import static javafx.collections.FXCollections.unmodifiableObservableList;
 import static javafx.collections.FXCollections.unmodifiableObservableSet;
 
+import java.util.List;
+
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import src.cs108.Announcement;
+import src.cs108.MeldSet;
 
 //TODO https://piazza.com/class/jrhvyjm5czn4f?cid=346 ?
 /**
@@ -22,10 +26,11 @@ public final class HandBean {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    
+    private ObservableList<MeldSet> listOfAnnouncementPerPlayer = observableArrayList();
     private ObservableList<Card> hand =  observableArrayList();
     private ObservableSet<Card> playableCards  = observableSet();
-
+    private ObservableList<MeldSet> announces = observableArrayList();
+    
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
@@ -54,7 +59,19 @@ public final class HandBean {
         return unmodifiableObservableSet(playableCards); 
     }
     
-    //TODO : why isn't the test of the prof printing correctly ? (althought works)
+    /**
+     * @brief It is a public getter of the announcement property.
+     *
+     * @return the announcement property
+     */
+    public ObservableList<MeldSet> annouces(){
+        return unmodifiableObservableList(announces);
+    }
+    
+    
+    public ObservableList<MeldSet> announcesPerPlayer(){
+        return unmodifiableObservableList(listOfAnnouncementPerPlayer);
+    }
     
     
     /**
@@ -85,6 +102,21 @@ public final class HandBean {
             }
        }
    }
+    
+    public void setannounces(CardSet hand) {
+       List<MeldSet> announces=  Announcement.getAnnounces(hand);//CardSet.of(this.hand
+       this.announces.clear();
+       for(int i = 0 ; i < announces.size(); ++i) {
+           this.announces.add(announces.get(i));
+       }
+   }
+    
+    public void setannouncesPerPlayer(List<MeldSet> listOfAnnounces) {
+        this.listOfAnnouncementPerPlayer.clear();
+        for(int i = 0 ; i < announces.size(); ++i) {
+            this.listOfAnnouncementPerPlayer.add(listOfAnnounces.get(i));
+        }
+    }
     
 
     /**
