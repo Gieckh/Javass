@@ -54,7 +54,8 @@ public class GraphicalPlayerAdapter implements Player {
     /**
      * @see ch.epfl.javass.jass.Player#cardToPlay(ch.epfl.javass.jass.TurnState, ch.epfl.javass.jass.CardSet)
      */
-    @Override public Card cardToPlay(TurnState state, CardSet hand) {
+    @Override
+    public Card cardToPlay(TurnState state, CardSet hand) {
         try {
             handBean.setPlayableCards(state.trick().playableCards(hand));
             Card card = queueOfCommunication.take();
@@ -70,7 +71,8 @@ public class GraphicalPlayerAdapter implements Player {
     /**
      * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
      */
-    @Override public void
+    @Override
+    public void
     setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean);
         runLater(() ->  graphicalPlayer.createStage(ownId, playerNames).show() );
@@ -79,28 +81,32 @@ public class GraphicalPlayerAdapter implements Player {
     /**
      * @see ch.epfl.javass.jass.Player#updateHand(ch.epfl.javass.jass.CardSet)
      */
-    @Override public void updateHand(CardSet newHand) {
+    @Override
+    public void updateHand(CardSet newHand) {
         runLater(() -> {handBean.setHand(newHand);});
     }
 
     /**
      * @see ch.epfl.javass.jass.Player#setTrump(ch.epfl.javass.jass.Card.Color)
      */
-    @Override public void setTrump(Card.Color trump) {
+    @Override
+    public void setTrump(Card.Color trump) {
         runLater(()-> {trickBean.setTrump(trump);});
     }
 
     /**
      * @see ch.epfl.javass.jass.Player#updateTrick(ch.epfl.javass.jass.Trick)
      */
-    @Override public void updateTrick(Trick newTrick) {
+    @Override
+    public void updateTrick(Trick newTrick) {
         runLater(()-> {trickBean.setTrick(newTrick);});
     }
 
     /**
      * @see ch.epfl.javass.jass.Player#updateScore(ch.epfl.javass.jass.Score)
      */
-    @Override public void updateScore(Score score) {
+    @Override
+    public void updateScore(Score score) {
         runLater(()-> {for(TeamId teamId :TeamId.ALL ) {
             scoreBean.setGamePoints(teamId, score.gamePoints(teamId));
             scoreBean.setTotalPoints(teamId, score.totalPoints(teamId));
@@ -112,7 +118,8 @@ public class GraphicalPlayerAdapter implements Player {
     /**
      * @see ch.epfl.javass.jass.Player#setWinningTeam(ch.epfl.javass.jass.TeamId)
      */
-    @Override public void setWinningTeam(TeamId winningTeam) {
+    @Override
+    public void setWinningTeam(TeamId winningTeam) {
         runLater(()-> {scoreBean.setWinningTeam(winningTeam);});
     }
 }

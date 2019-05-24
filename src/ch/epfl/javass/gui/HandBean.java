@@ -54,8 +54,6 @@ public final class HandBean {
         return unmodifiableObservableSet(playableCards); 
     }
     
-    //TODO : why isn't the test of the prof printing correctly ? (althought works)
-    
     
     /**
      * @brief It is a public setter for the hand property, given the CardSet newHand.

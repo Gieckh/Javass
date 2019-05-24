@@ -33,8 +33,10 @@ public class GraphicalPlayer {
     private final ObservableMap<Card, Image> cards160 = cards(160);
     private final ObservableMap<Card, Image> cards240 = cards(240);
     private final ObservableMap<Card.Color, Image> trumps = trumps();
-    private final int COL_SPAN = 1;
-    private final int ROW_SPAN = 1;
+    private final int TRICK_CARD_HEIGHT = 180;
+    private final int TRICK_CARD_WIDTH = 120;
+    private final int TRUMP_HEIGHT = 101;
+    private final int TRUMP_WIDTH = 101;
     private StackPane finalPane;
 
     /** ============================================== **/
@@ -142,8 +144,6 @@ public class GraphicalPlayer {
     }
 
 
-    @SuppressWarnings("Duplicates")
-
     private GridPane createTrickPane(TrickBean trickBean, PlayerId myId, Map<PlayerId, String> playerNames) {
         VBox middleLeft  = setTrickVBox (trickBean, myId.previousPlayer(), 3, playerNames.get(myId.previousPlayer()));
         VBox upCenter    = setTrickVBox (trickBean, myId.nextPlayer().nextPlayer(), 2, playerNames.get(myId.nextPlayer().nextPlayer()));
@@ -152,26 +152,30 @@ public class GraphicalPlayer {
 
         ImageView trumpImage = new ImageView();
         trumpImage.imageProperty().bind(valueAt(trumps, trickBean.trumpProperty()));
-        trumpImage.setFitHeight(101);
-        trumpImage.setFitWidth(101);
+        trumpImage.setFitHeight(TRUMP_HEIGHT);
+        trumpImage.setFitWidth(TRUMP_WIDTH);
         VBox trumpVBox = new VBox(trumpImage);
         trumpVBox.setAlignment(Pos.CENTER);
 
         GridPane trickGrid = new GridPane();
-        trickGrid.add(middleLeft , 0, 1, COL_SPAN, ROW_SPAN);
-        trickGrid.add(upCenter   , 1, 0, COL_SPAN, ROW_SPAN);
-        trickGrid.add(middleRight, 2, 1, COL_SPAN, ROW_SPAN);
-        trickGrid.add(downCenter , 1, 2, COL_SPAN, ROW_SPAN);
-        trickGrid.add(trumpVBox  , 1, 1, COL_SPAN, ROW_SPAN);
+        trickGrid.setAlignment(Pos.CENTER);
+        trickGrid.add(middleLeft , 0, 0, 1, 3);
+        trickGrid.add(upCenter   , 1, 0, 1, 1);
+        trickGrid.add(middleRight, 2, 0, 1, 3);
+        trickGrid.add(downCenter , 1, 2, 1, 1);
+        trickGrid.add(trumpVBox  , 1, 1, 1, 1);
 
         trickGrid.setStyle("-fx-background-color: whitesmoke; -fx-padding: 5px; -fx-border-width: 3px 0px; -fx-border-style: solid; -fx-border-color: gray; -fx-alignment: center;");
         return trickGrid;
     }
 
     /**
+     * @brief
      *
-     * @param trickBean
-     * @param pId
+     * @param trickBean ({@code TrickBean}) - the bean representing the trick.
+     * @param pId ({@code PlayerId}) - the ID of the player corresponding to the
+     *            card
+     *
      * @param pos
      * @param playerName
      * @return
@@ -179,10 +183,10 @@ public class GraphicalPlayer {
     private VBox setTrickVBox(TrickBean trickBean, PlayerId pId, int pos, String playerName) {
         ImageView cardImage = new ImageView();
         cardImage.imageProperty().bind(valueAt(cards240, valueAt(trickBean.trick(), pId)));
-        cardImage.setFitHeight(180);
-        cardImage.setFitWidth(120);
+        cardImage.setFitWidth(TRICK_CARD_WIDTH);
+        cardImage.setFitHeight(TRICK_CARD_HEIGHT);
 
-        Rectangle rectangle = new Rectangle(120, 180);
+        Rectangle rectangle = new Rectangle(TRICK_CARD_WIDTH, TRICK_CARD_HEIGHT);
         BooleanBinding rectangleVisibleProperty = createBooleanBinding(
                 () -> pId.equals(trickBean.winningPlayerProperty().get()),
                 trickBean.winningPlayerProperty()
@@ -193,7 +197,7 @@ public class GraphicalPlayer {
         StackPane imageAndHalo = new StackPane(cardImage, rectangle);
 
         VBox vBox = (pos != 0) ? new VBox(new Text(playerName), imageAndHalo) : new VBox(imageAndHalo, new Text(playerName));
-        vBox.setAlignment(Pos.TOP_CENTER);
+        vBox.setAlignment(Pos.CENTER);
         vBox.setStyle("-fx-padding: 5px; -fx-alignment: center;");
         return vBox;
     }
@@ -240,7 +244,8 @@ public class GraphicalPlayer {
             child.imageProperty().bind(valueAt(cards160, correspondingCard));
             BooleanBinding isPlayable = createBooleanBinding(
                     () -> handBean.playableCards().contains(correspondingCard.get()),
-                    handBean.playableCards(),handBean.hand()
+                    handBean.playableCards(),
+                    handBean.hand()
             );
             child.opacityProperty().bind(when(isPlayable).then(1.0).otherwise(0.2) );
             child.disableProperty().bind(isPlayable.not());
