@@ -53,7 +53,7 @@ public final class LocalMain extends Application {
         int size = args.size();
         if( !(size == SIZE_WITHOUT_SEED || size == SIZE_WITH_SEED) ) {
             displayError("Mauvais nombre d'arguments : " + size + " n'est pas dans l'intervalle [|4, 5|]\n" +
-                    "Utilisation : java ch.epfl.javass.LocalMain3 <j1>…<j4> [<graine>]\n" +
+                    "Utilisation : java ch.epfl.javass.LocalMain <j1>…<j4> [<graine>]\n" +
                     "où :\n" +
                     "<jn> spécifie le joueur n, ainsi :\n" +
                     "  h:<nom>  un joueur humain nommé <nom> \n"+
