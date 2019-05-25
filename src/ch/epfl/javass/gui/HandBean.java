@@ -106,8 +106,10 @@ public final class HandBean {
     public void setannounces(CardSet hand) {
        List<MeldSet> announces=  Announcement.getAnnounces(hand);//CardSet.of(this.hand
        this.announces.clear();
-       for(int i = 0 ; i < announces.size(); ++i) {
-           this.announces.add(announces.get(i));
+       if(hand!=CardSet.EMPTY) {
+           for(int i = 0 ; i < announces.size(); ++i) {
+               this.announces.add(announces.get(i));
+           }
        }
    }
     

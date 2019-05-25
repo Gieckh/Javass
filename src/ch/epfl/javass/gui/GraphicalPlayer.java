@@ -104,26 +104,23 @@ public class GraphicalPlayer {
              BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
              this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
         }
-      //  BooleanBinding shouldDisplay =  createBooleanBinding( () -> AnnouncesQueue.size()==1 );
-        HBox announcesPane = new HBox();
+        
+        GridPane announcesPane = new GridPane();
         listOfAnnounces.addListener( (object , old , New ) -> { 
             announcesPane.getChildren().clear();
             announcesPane.getChildren().add(New);
+            New.minHeightProperty().bind(trickPane.heightProperty());
         }  );
         BooleanBinding b =  createBooleanBinding( () -> {   
-        return handBean.hand().stream().noneMatch(c -> c == null);
-        },handBean.hand());
-        announcesPane.opacityProperty().bind(when(b).then(1).otherwise(0));
-    //    announcesPane.setVisible(announcesPane.equals(obj));
-      //  announcesPane.getChildren().removeIf(shouldDisplay ? createAnnouncesPane() : new GridPane() ;
-       
+        return handBean.annouces().size()!=0;
+        },handBean.annouces());
         
-        //listOfAnnounces.
+
         BorderPane main= new BorderPane(trickPane, scorePane , announcesPane,handPane, new HBox());
-        
-        
+        main.rightProperty().bind(when(b).then(announcesPane).otherwise(new GridPane()));
         this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
         cheatingManager();
+
     }
     
     /** ============================================== **/
