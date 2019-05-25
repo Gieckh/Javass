@@ -117,10 +117,10 @@ public class GraphicalPlayerAdapter implements Player {
             handBean.setannounces(hand);
             runLater(() -> { listOfAnnounces.setValue(createAnnouncesPane());});
             MeldSet meldSet = meldQueue.take() ;
-            runLater(() -> { listOfAnnounces.setValue(new ListView<>());
+            runLater(() -> { handBean.setannounces(CardSet.EMPTY);
             });
             
-            handBean.setannounces(CardSet.EMPTY);
+            
             return meldSet;
             
         } catch (InterruptedException e) {
