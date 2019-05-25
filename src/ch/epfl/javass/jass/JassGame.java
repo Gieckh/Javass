@@ -31,7 +31,7 @@ public final class JassGame {
     private boolean isGameOver;
     private int turnNumber = 1; //starts at turn 1
     private List<Integer> listOfCheatingCodes = new ArrayList<>(Collections.nCopies(4, 0));
-    private List<MeldSet> listOdAnnouncement = new ArrayList<>(4);
+    private List<MeldSet> listOfAnnouncement = new ArrayList<>(4);
 
 
     /** ============================================== **/
@@ -254,15 +254,15 @@ public final class JassGame {
     }
     
     private void collectAnnouncement() {
-        listOdAnnouncement.clear();
+        listOfAnnouncement.clear();
         for (PlayerId pId: PlayerId.ALL) {
-            listOdAnnouncement.add(players.get(pId).announcement(playerHands.get(pId)));
+            listOfAnnouncement.add(players.get(pId).announcement(playerHands.get(pId)));
         }
     }
     
     private void manageAnnouncement() {
-        int pointsOfTeam1 = listOdAnnouncement.get(0).points() + listOdAnnouncement.get(2).points(); 
-        int pointsOfTeam2 = listOdAnnouncement.get(1).points() + listOdAnnouncement.get(3).points();
+        int pointsOfTeam1 = listOfAnnouncement.get(0).points() + listOfAnnouncement.get(2).points(); 
+        int pointsOfTeam2 = listOfAnnouncement.get(1).points() + listOfAnnouncement.get(3).points();
         turnState = turnState.addScore(pointsOfTeam1>=pointsOfTeam2 ? 
                 TeamId.TEAM_1 : TeamId.TEAM_2, Math.max(pointsOfTeam1, pointsOfTeam2));
         
@@ -270,7 +270,7 @@ public final class JassGame {
     
     private void updateAnnouncement() {
         for (PlayerId pId: PlayerId.ALL) {
-            players.get(pId).updateAnnouncement(listOdAnnouncement);
+            players.get(pId).updateAnnouncement(listOfAnnouncement);
         }
     }
 

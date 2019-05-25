@@ -177,7 +177,6 @@ public class GraphicalPlayerAdapter implements Player {
 
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
-        System.out.println("ha");
         runLater(()->{handBean.setannouncesPerPlayer(m);});
     }
     

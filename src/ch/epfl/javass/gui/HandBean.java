@@ -10,6 +10,7 @@ import java.util.List;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import src.cs108.Announcement;
@@ -27,7 +28,7 @@ public final class HandBean {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    private ObservableList<MeldSet> listOfAnnouncementPerPlayer = observableArrayList();
+    private ObservableList<SimpleStringProperty> listOfAnnouncementPerPlayer = observableArrayList();
     private ObservableList<Card> hand =  observableArrayList();
     private ObservableSet<Card> playableCards  = observableSet();
     private ObservableList<MeldSet> announces = observableArrayList();
@@ -70,11 +71,12 @@ public final class HandBean {
     }
     
     
-    public ObservableList<MeldSet> announcesPerPlayer(){
-        
-        return listOfAnnouncementPerPlayer.isEmpty() ?
-                unmodifiableObservableList(observableArrayList(Collections.nCopies(4, MeldSet.EMPTY_SET))):
-                unmodifiableObservableList(listOfAnnouncementPerPlayer);
+    public ObservableList<SimpleStringProperty> announcesPerPlayerToString(){
+        if(listOfAnnouncementPerPlayer.isEmpty()) {
+            setannouncesPerPlayer(Collections.nCopies(4, MeldSet.EMPTY_SET));;
+        }
+        System.out.println(listOfAnnouncementPerPlayer);
+        return unmodifiableObservableList(listOfAnnouncementPerPlayer);
     }
     
     
@@ -118,9 +120,14 @@ public final class HandBean {
    }
     
     public void setannouncesPerPlayer(List<MeldSet> listOfAnnounces) {
-        this.listOfAnnouncementPerPlayer.clear();
-        for(int i = 0 ; i < announces.size(); ++i) {
-            this.listOfAnnouncementPerPlayer.add(listOfAnnounces.get(i));
+        if(listOfAnnouncementPerPlayer.isEmpty()) {
+            for(int i =0 ; i<4 ;++i) {
+                SimpleStringProperty s = new SimpleStringProperty();
+                listOfAnnouncementPerPlayer.add(s);
+            }
+        }
+        for(int i = 0 ; i < listOfAnnounces.size(); ++i) {
+           listOfAnnouncementPerPlayer.get(i).set(listOfAnnounces.get(i).toString());
         }
     }
     

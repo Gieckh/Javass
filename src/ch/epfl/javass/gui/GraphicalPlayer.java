@@ -258,6 +258,9 @@ public class GraphicalPlayer {
     
 
     private GridPane createTrickPane() {
+        BooleanBinding b =  createBooleanBinding( () -> {   
+            return handBean.hand().stream().noneMatch(c -> c == null);
+            },handBean.hand());
       VBox couple[] = new VBox[4];
       for(int i = 0 ; i < 4 ; ++i) {
             PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
@@ -266,9 +269,10 @@ public class GraphicalPlayer {
             textForCouple.setStyle("-fx-font: 14 Optima;"); 
             Text announcementForCouple = new Text();
             SimpleStringProperty str = new SimpleStringProperty();
-            str.setValue(handBean.announcesPerPlayer().get(playerIdForCouple.ordinal()).toString());
+            str.bind(handBean.announcesPerPlayerToString().get(playerIdForCouple.ordinal()));
             announcementForCouple.textProperty().bind(str);
-            announcementForCouple.setStyle("-fx-font: 16 Optima;"); 
+            announcementForCouple.setStyle("-fx-font: 16 Optima;");
+            announcementForCouple.visibleProperty().bind(b);
             ImageView imageForCouple = new ImageView();
             imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
             imageForCouple.setFitHeight(180);
