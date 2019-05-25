@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -176,6 +177,24 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+    
+    @Override
+    public void updateAnnouncement(List<MeldSet> m) {
+        forceWrite(JassCommand.ANCM.toString(),
+                combine(' ',
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(0).packed()[0]),
+                                StringSerializer.serializeLong(m.get(0).packed()[1])),
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(1).packed()[0]),
+                                StringSerializer.serializeLong(m.get(1).packed()[1])),
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(2).packed()[0]),
+                                StringSerializer.serializeLong(m.get(2).packed()[1])),
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(3).packed()[0]),
+                                StringSerializer.serializeLong(m.get(3).packed()[1]))));
     }
         
 

@@ -39,44 +39,26 @@ public final class MeldSet {
     
     public  long[] packed() {
         long packed[] = new long[2];
-        int i= -1;
-        int correction = 0;
-        //long shift = 1;
-        for(Meld m : Meld.ALL) {
-            i=i+1;
-        //    shift<<=1;
+        for(int i =0 ; i< Meld.ALL.size() ; ++i) {
+            Meld m=Meld.ALL.get(i);
             if (melds.contains(m)) {
-                if((int)i/64 == 0) {
-                    correction=i;
-                }
-                packed[i/64]+=1;
+                packed[i/64]+=((long)1<<(i<64? 63 : 13));
             }
-            packed[i/64] <<= 1;
+            if(i<63) packed[0] >>>= 1;
+            else if(i<77) packed[1] >>>= 1;
         }
-        packed[0]>>= (64 - correction);
         return packed;
     }
     
     public static MeldSet from(long packed[] ) {
-        int size = Meld.ALL.size();
-        Meld[] allMeldsInversed = new Meld[size];
         List<Meld> melds = new ArrayList<>();
-        int i = 0;
-        for(Meld m : Meld.ALL) {
-            allMeldsInversed[--size]= m;
-        }
-        for(Meld m : allMeldsInversed) {
-            if((packed[i/64] & 1l )== 1) {
-              //  System.out.println( i + "  " +  (int)i/64);
-                melds.add(m);
-            }
-            packed[i/64]>>= 1;
-            i++;
-
-        }
+       for(int i =0 ; i<Meld.ALL.size() ; ++i){
+           if((packed[i/64]&((long)1<<(i%64)))==((long)1<<(i%64))) {
+               melds.add(Meld.ALL.get(i));
+           }
+       }
         return new MeldSet(melds);
     }
-    
     public static List<MeldSet> allIn(CardSet hand) {
         List<MeldSet> r = new ArrayList<>();
         for (Set<Meld> melds: Sets.powerSet(Meld.allIn(hand))) {

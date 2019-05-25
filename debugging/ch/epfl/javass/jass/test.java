@@ -15,8 +15,17 @@ import src.cs108.MeldSet;
 //this is  a test, thus no need of javadoc
 public class test {
     public static void main(String[] args) {
-        long packed[] = {0b1110,0b11110101011};
-        System.out.println(Long.toBinaryString(MeldSet.from(packed).packed()[0]));
+        long packed[] = new long[2];
+        long v = 0l;
+        System.out.println(Meld.ALL.size());
+        for(long l = 0l ; l<0b1111111111111 ; ++l) {
+            packed[0] = l;
+            v=MeldSet.from(packed).packed()[0];
+            if(l!=v) System.out.println(Long.toBinaryString(v) +" au lieu de "+Long.toBinaryString(l));
+        }
+        
+//        long packed[] = {0b1110,0b11110101011};
+//        System.out.println(Long.toBinaryString(MeldSet.from(packed).packed()[1]));
     }
      
 }

@@ -75,7 +75,6 @@ public final class HandBean {
         if(listOfAnnouncementPerPlayer.isEmpty()) {
             setannouncesPerPlayer(Collections.nCopies(4, MeldSet.EMPTY_SET));;
         }
-        System.out.println(listOfAnnouncementPerPlayer);
         return unmodifiableObservableList(listOfAnnouncementPerPlayer);
     }
     

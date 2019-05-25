@@ -114,12 +114,11 @@ public class GraphicalPlayer {
         BooleanBinding b =  createBooleanBinding( () -> {   
         return handBean.annouces().size()!=0;
         },handBean.annouces());
+        announcesPane.disableProperty().bind(b.not());
         
-
         BorderPane main= new BorderPane(trickPane, scorePane , announcesPane,handPane, new HBox());
         main.rightProperty().bind(when(b).then(announcesPane).otherwise(new GridPane()));
         this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
-        cheatingManager();
 
     }
     
@@ -127,10 +126,12 @@ public class GraphicalPlayer {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
-    private void cheatingManager() {
-        finalPane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+    private void cheatingManager(Scene scene) {
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(final KeyEvent keyEvent) {
+                System.out.println("her");
                 if (keyEvent.getCode().isDigitKey() && cheatingQueue.isEmpty()) {
+                    System.out.println("keyboeard");
                     try {
                         int code = Integer.parseInt(keyEvent.getCode().toString().substring(
                                 keyEvent.getCode().toString().length()-1));
@@ -159,7 +160,10 @@ public class GraphicalPlayer {
         stage.setTitle("Javass - "+playerNames.get(thisId).toString() );
         Scene finalScene = new Scene(finalPane);
         finalScene.getRoot().requestFocus();
+        cheatingManager(finalScene);
+
         stage.setScene(finalScene);
+
         
         return stage;
     }
@@ -259,8 +263,8 @@ public class GraphicalPlayer {
 
     private GridPane createTrickPane() {
         BooleanBinding b =  createBooleanBinding( () -> {   
-            return handBean.hand().stream().noneMatch(c -> c == null);
-            },handBean.hand());
+            return (handBean.hand().stream().noneMatch(c -> c == null));
+            },handBean.hand(), trick.trick());
       VBox couple[] = new VBox[4];
       for(int i = 0 ; i < 4 ; ++i) {
             PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
