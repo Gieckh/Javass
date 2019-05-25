@@ -93,6 +93,8 @@ public class GraphicalPlayerAdapter implements Player {
 //        return state.trick().playableCards(hand).get(0);
     }
     
+
+    
     
     /* 
      * @see ch.epfl.javass.jass.Player#cheat(int)
@@ -114,8 +116,9 @@ public class GraphicalPlayerAdapter implements Player {
     @Override
     public MeldSet announcement(CardSet hand) {
         try {
-            handBean.setannounces(hand);
-            runLater(() -> { listOfAnnounces.setValue(createAnnouncesPane());});
+            runLater(() -> { 
+                handBean.setannounces(hand);
+                listOfAnnounces.setValue(createAnnouncesPane());});
             MeldSet meldSet = meldQueue.take() ;
             runLater(() -> { handBean.setannounces(CardSet.EMPTY);
             });
@@ -174,6 +177,7 @@ public class GraphicalPlayerAdapter implements Player {
 
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
+        System.out.println("ha");
         runLater(()->{handBean.setannouncesPerPlayer(m);});
     }
     

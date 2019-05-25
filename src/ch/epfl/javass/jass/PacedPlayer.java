@@ -1,5 +1,6 @@
 package ch.epfl.javass.jass;
 
+import java.util.List;
 import java.util.Map;
 
 import src.cs108.MeldSet;
@@ -64,6 +65,11 @@ public final class PacedPlayer implements Player{
     @Override
     public MeldSet announcement(CardSet hand) {
         return underLyingPlayer.announcement(hand);
+    }
+    
+    @Override
+    public void updateAnnouncement(List<MeldSet> m) {
+        underLyingPlayer.updateAnnouncement(m);
     }
     
     

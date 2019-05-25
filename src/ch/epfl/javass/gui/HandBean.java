@@ -5,6 +5,7 @@ import static javafx.collections.FXCollections.observableSet;
 import static javafx.collections.FXCollections.unmodifiableObservableList;
 import static javafx.collections.FXCollections.unmodifiableObservableSet;
 
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.javass.jass.Card;
@@ -70,7 +71,10 @@ public final class HandBean {
     
     
     public ObservableList<MeldSet> announcesPerPlayer(){
-        return unmodifiableObservableList(listOfAnnouncementPerPlayer);
+        
+        return listOfAnnouncementPerPlayer.isEmpty() ?
+                unmodifiableObservableList(observableArrayList(Collections.nCopies(4, MeldSet.EMPTY_SET))):
+                unmodifiableObservableList(listOfAnnouncementPerPlayer);
     }
     
     

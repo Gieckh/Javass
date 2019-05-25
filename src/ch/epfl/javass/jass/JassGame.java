@@ -76,18 +76,21 @@ public final class JassGame {
         if (isGameOver()) { //Here because the tests decided to call this method, even though the game is already over
             return;
         }
-
+        int tempNumberOfTurn=turnNumber;
         if (isTrickFirstOfTheGame()) {
             setPlayers();
             setTurn();
             setGameFirstPlayer();
+            collectAnnouncement();
             turnState = TurnState.initial(trump, Score.INITIAL, gameFirstPlayer);
-            updatePlayersScores(Score.INITIAL);
+            manageAnnouncement();
+            updatePlayersScores(turnState.score());
+            updateAnnouncement();
         }
 
         else {
-            collect();
             updateCheatingCodes();
+            collect();
             
             if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_1);
@@ -109,7 +112,7 @@ public final class JassGame {
                 isGameOver = true;
                 return;
             }
-
+            
             if (isTrickFirstOfTheTurn()) {
 
                 turnNumber++;
@@ -123,6 +126,12 @@ public final class JassGame {
             }
         }
         updatePlayersTricks(turnState.trick());
+        
+        if(turnNumber-tempNumberOfTurn!=0) {
+            collectAnnouncement();
+            manageAnnouncement();
+            updateAnnouncement();
+        }
 
 
         //The 4 players play until the end
@@ -153,7 +162,7 @@ public final class JassGame {
         for (PlayerId p : PlayerId.ALL) {
             if(listOfCheatingCodes.get(p.ordinal()).intValue()==2) {
                 System.out.println("cheating score");
-                turnState.addScore(p.team(), 1000); 
+                turnState = turnState.addScore(p.team(), 100); 
                 listOfCheatingCodes.set(p.ordinal(), 0);
             }
                 
@@ -239,21 +248,30 @@ public final class JassGame {
         setTrump();
         setPlayersTrumps(trump);
         distributeHands();
-        listOdAnnouncement.clear();
         for (PlayerId pId: PlayerId.ALL) {
             players.get(pId).updateHand(playerHands.get(pId));
-            listOdAnnouncement.add(players.get(pId).announcement(playerHands.get(pId)));
-           // players.get(pId).updateAnnouncement(listOdAnnouncement);
         }
-      //  manageAnnouncement();
+    }
+    
+    private void collectAnnouncement() {
+        listOdAnnouncement.clear();
+        for (PlayerId pId: PlayerId.ALL) {
+            listOdAnnouncement.add(players.get(pId).announcement(playerHands.get(pId)));
+        }
     }
     
     private void manageAnnouncement() {
         int pointsOfTeam1 = listOdAnnouncement.get(0).points() + listOdAnnouncement.get(2).points(); 
         int pointsOfTeam2 = listOdAnnouncement.get(1).points() + listOdAnnouncement.get(3).points();
-        turnState.addScore(pointsOfTeam1>=pointsOfTeam2 ? 
+        turnState = turnState.addScore(pointsOfTeam1>=pointsOfTeam2 ? 
                 TeamId.TEAM_1 : TeamId.TEAM_2, Math.max(pointsOfTeam1, pointsOfTeam2));
         
+    }
+    
+    private void updateAnnouncement() {
+        for (PlayerId pId: PlayerId.ALL) {
+            players.get(pId).updateAnnouncement(listOdAnnouncement);
+        }
     }
 
     private void setTrump() {

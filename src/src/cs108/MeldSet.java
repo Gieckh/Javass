@@ -3,6 +3,7 @@ package src.cs108;
 import static java.util.Collections.unmodifiableSet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,17 +13,30 @@ import java.util.StringJoiner;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
+import ch.epfl.javass.jass.PackedCardSet;
 
 public final class MeldSet {
     private final Set<Meld> melds;
 
+    public final static MeldSet EMPTY_SET= MeldSet.allIn(CardSet.EMPTY).get(0);
+    
     public static boolean mutuallyDisjoint(Collection<Meld> melds) {
         List<Set<Card>> allSetsOfCards = new ArrayList<>();
         for (Meld m: melds)
             allSetsOfCards.add(m.cards());
         return Sets.mutuallyDisjoint(allSetsOfCards);
     }
-
+    
+    public CardSet cards() {
+        long cardSet = 0l;
+        for (Meld m : melds) {
+            List<Card> listOfCards = new ArrayList<>();
+            listOfCards.addAll(m.cards());
+            cardSet = PackedCardSet.union(cardSet, CardSet.of(listOfCards).packed());
+        }
+        return CardSet.ofPacked(cardSet);
+    }
+    
     public  long[] packed() {
         long packed[] = new long[2];
         int i= -1;

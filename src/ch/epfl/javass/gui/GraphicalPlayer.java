@@ -258,18 +258,17 @@ public class GraphicalPlayer {
     
 
     private GridPane createTrickPane() {
-        
       VBox couple[] = new VBox[4];
       for(int i = 0 ; i < 4 ; ++i) {
             PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
             Text textForCouple = new Text();
             textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
             textForCouple.setStyle("-fx-font: 14 Optima;"); 
-            //Text announcementForCouple = new Text();
-            //SimpleStringProperty str = new SimpleStringProperty();
-            //str.setValue(handBean.announcesPerPlayer().get(i).toString());
-           // announcementForCouple.textProperty().bind(str);
-           // announcementForCouple.setStyle("-fx-font: 14 Optima;"); 
+            Text announcementForCouple = new Text();
+            SimpleStringProperty str = new SimpleStringProperty();
+            str.setValue(handBean.announcesPerPlayer().get(playerIdForCouple.ordinal()).toString());
+            announcementForCouple.textProperty().bind(str);
+            announcementForCouple.setStyle("-fx-font: 16 Optima;"); 
             ImageView imageForCouple = new ImageView();
             imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
             imageForCouple.setFitHeight(180);
@@ -286,7 +285,7 @@ public class GraphicalPlayer {
             rectangle.visibleProperty().bind(shouldDisplay);
             rectangle.setEffect(new GaussianBlur(4));
             StackPane imageWithHalo  = new StackPane(imageForCouple, rectangle);
-            couple[i] = new VBox(textForCouple,imageWithHalo//, announcementForCouple
+            couple[i] = new VBox(textForCouple,imageWithHalo, announcementForCouple
                     );
             couple[i].setAlignment(Pos.TOP_CENTER);
 

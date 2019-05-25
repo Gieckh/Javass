@@ -172,8 +172,8 @@ public class TurnState {
     }
 
     
-    public void addScore(TeamId t , int score) {
-        PackedScore.addPoints(pkScore, t, score);
+    public TurnState addScore(TeamId t , int score) {
+        return new TurnState(PackedScore.addPoints(pkScore, t, score),pkUnplayedCards,pkCurrentTrick);
     }
 
     //the real methods:
