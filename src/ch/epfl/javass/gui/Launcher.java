@@ -9,9 +9,7 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -102,16 +100,40 @@ public class Launcher extends Application {
             if (!newValue.matches("\\d*"))
                 seed.setText(oldValue);
         }));
+        HBox seedBox = new HBox(new Label("seed"), seed);
 
 
         Button launch = new Button("Démarrer");
         launch.setOnAction(e -> {
             Map <PlayerId, String> playerNames = new HashMap<>(PlayerId.COUNT);
             Map <PlayerId, Player> players = new HashMap<>(PlayerId.COUNT);
-            Random random = randomOrDefault(...);
+            Random random = randomOrDefault(seed.getText());
+
+            for (PlayerId pId: PlayerId.ALL) {
+                List<String> args = new ArrayList<>(2);
+                args.add(((TextField) playersGUI.get(pId.ordinal()).get(3)).getText());
+
+                switch (playerTypes.get(pId)) {
+                case HUMAN:
+                    break;
+
+                case REMOTE:
+                    args.add(((TextField) ((HBox) playersGUI.get(pId.ordinal()).get(5)).getChildren().get(1)).getText());
+                    break;
+
+                case SIMULATED:
+                    args.add(((TextField) ((HBox) playersGUI.get(pId.ordinal()).get(4)).getChildren().get(1)).getText());
+                    break;
+
+                default:
+                        throw new Error("Impossible!!!");
+                }
+
+                createsPlayerAndPutsInMaps(playerNames, players, playerTypes, args, pId, random);
+            }
 
             Thread gameThread = new Thread(() -> {
-                JassGame g = new JassGame(random, players, playerNames);
+                JassGame g = new JassGame(random.nextLong(), players, playerNames);
                 while (! g.isGameOver()) {
                     g.advanceToEndOfNextTrick();
                     try {
@@ -121,22 +143,32 @@ public class Launcher extends Application {
                     }
                 }
             });
+
+            gameThread.setDaemon(true);
+            gameThread.start();
         });
 
 
         GridPane localLauncher = new GridPane();
         for (int i = 0; i < PlayerId.COUNT; ++i) {
+            List<Node> column = playersGUI.get(i);
             localLauncher.addColumn(
                     i,
+                    new SplitPane(
+                            column.get(0),
+                            column.get(1),
+                            column.get(2)),
+                    column.get(3),
                     new StackPane(
-                            playersGUI.get(i).get(0),
-                            playersGUI.get(i).get(1),
-                            playersGUI.get(i).get(2)),
-                    playersGUI.get(i).get(3),
-                    playersGUI.get(i).get(4)
-                    );
+                            column.get(4),
+                            column.get(5)
+                    )
+            );
         }
-        return null;
+        localLauncher.addColumn(4, seedBox);
+        localLauncher.addRow(4, launch);
+
+        return localLauncher;
     }
 
     private List<Node> createPlayerField(PlayerId pId, Map<PlayerId, PlayerType> playerTypes) {
@@ -157,7 +189,7 @@ public class Launcher extends Application {
         iterationsBox.setVisible(false);
 
         Label ipAddressLabel = new Label("Adresse IP :");
-        TextField ipAddressField = new TextField("localhost");
+        TextField ipAddressField = new TextField(DEFAULT_IP_ADDRESS);
         HBox ipAddressBox = new HBox(ipAddressLabel, ipAddressField);
         ipAddressBox.setVisible(false);
 
@@ -173,7 +205,7 @@ public class Launcher extends Application {
             human.setVisible(false);
             remote.setVisible(false);
             simulated.setVisible(false);
-            iterationsBox.setVisible(true);
+            ipAddressBox.setVisible(true);
 
             playerTypes.put(pId, PlayerType.REMOTE);
         });
@@ -182,7 +214,7 @@ public class Launcher extends Application {
             human.setVisible(false);
             remote.setVisible(false);
             simulated.setVisible(false);
-            ipAddressBox.setVisible(true);
+            iterationsBox.setVisible(true);
 
             playerTypes.put(pId, PlayerType.SIMULATED);
         });
@@ -191,22 +223,24 @@ public class Launcher extends Application {
     }
 
     private void createsPlayerAndPutsInMaps(Map<PlayerId, String> playerNames,
-            Map<PlayerId, Player> players, List<String> args, PlayerId pId,
-            Random random)
+            Map<PlayerId, Player> players, Map<PlayerId, PlayerType> playerTypes,
+            List<String> args, PlayerId pId,  Random random)
     {
-        playerNames.put(pId, args.get(1));
+        assert(args.size() <= 2);
 
-        switch(PlayerType.toType(args.get(0))) {
+        playerNames.put(pId, args.get(0));
+
+        switch(playerTypes.get(pId)) {
         case HUMAN:
             players.put(pId, new GraphicalPlayerAdapter());
             break;
 
         case REMOTE:
             try {
-                players.put(pId, new RemotePlayerClient(getHost(args.get(2))));
+                players.put(pId, new RemotePlayerClient(getHost(args.get(1))));
             }
             catch (IOException e) {
-                displayError("Erreur de connexion au serveur du joueur distant n°" + pId.ordinal() + " à l'adresse " + getHost(args.get(2)));
+                displayError("Erreur de connexion au serveur du joueur distant n°" + pId.ordinal() + " à l'adresse " + getHost(args.get(1)));
             }
             break;
 
@@ -217,7 +251,7 @@ public class Launcher extends Application {
                             new MctsPlayer(
                                     pId,
                                     random.nextLong(),
-                                    iterationsOrDefault(args.get(2))
+                                    iterationsOrDefault(args.get(1))
                             ),
                             SIMULATED_PLAYER_WAIT_TIME_MS
                     )
@@ -253,6 +287,7 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) throws Exception {
         GridPane launcher = createMainLauncher();
         StackPane mainPane = new StackPane(launcher);
+//        StackPane mainPane = new StackPane(createLocalLaucher());
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.setTitle("ok");
         primaryStage.show();
