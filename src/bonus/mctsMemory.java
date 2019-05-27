@@ -1,10 +1,19 @@
-package ch.epfl.javass.jass;
+package bonus;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.SplittableRandom;
 
+import ch.epfl.javass.jass.Card;
+import ch.epfl.javass.jass.CardSet;
+import ch.epfl.javass.jass.Player;
+import ch.epfl.javass.jass.PlayerId;
+import ch.epfl.javass.jass.Score;
+import ch.epfl.javass.jass.TeamId;
+import ch.epfl.javass.jass.TurnState;
 import src.cs108.Announcement;
 import src.cs108.MeldSet;
 
@@ -17,7 +26,7 @@ import src.cs108.MeldSet;
  *
  * @author - Marin Nguyen (288260)
  */
-public class MctsPlayer implements Player {
+public class mctsMemory implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
@@ -26,18 +35,20 @@ public class MctsPlayer implements Player {
     private final PlayerId ownId;
 //    private final long rngSeed;
     private SplittableRandom rng;
+    private List<CardSet> listOfKnownCard; 
 
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     //TODO: why no JDoc there ?
-    public MctsPlayer(PlayerId ownId, long rngSeed, int iterations) {
+    public mctsMemory(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
         this.ownId = ownId;
 //        this.rngSeed = rngSeed;
         this.rng = new SplittableRandom(rngSeed);
+        listOfKnownCard = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
     }
 
     /** ============================================== **/
@@ -50,7 +61,15 @@ public class MctsPlayer implements Player {
         MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
         return bestAnnounceSet;
     }
-
+    
+    @Override
+    public void updateAnnouncement(List<MeldSet> m) {
+        listOfKnownCard.clear();
+        for(int i = 0 ; i<4 ; ++i) {
+            listOfKnownCard.add(m.get(i).cards());
+        }
+    }
+    
     
     @SuppressWarnings("Duplicates")
     @Override
@@ -199,7 +218,17 @@ public class MctsPlayer implements Player {
 //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
-            Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
+            
+            ///////////////////////////////////////////////////// MODIF TODO
+            
+            CardSet onlyPossibleCards = playableCards.difference(listOfKnownCard.get((copyState.nextPlayer().ordinal()+1)%4));
+            onlyPossibleCards = onlyPossibleCards.difference(listOfKnownCard.get((copyState.nextPlayer().ordinal()+2)%4));
+            onlyPossibleCards = onlyPossibleCards.difference(listOfKnownCard.get((copyState.nextPlayer().ordinal()+3)%4));
+            
+            ////////////////////////////////////////////////////
+            Card randomCardToPlay = onlyPossibleCards.size() !=0 ? 
+                    onlyPossibleCards.get(rng.nextInt(onlyPossibleCards.size())) : 
+                        playableCards.get(rng.nextInt(playableCards.size()));
 
             copyHand = copyHand.remove(randomCardToPlay);
             copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);

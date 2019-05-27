@@ -146,6 +146,20 @@ public final class CardSet {
     public boolean contains(Card card) {
         return PackedCardSet.contains(pkCardSet, card.packed());
     }
+    
+    
+    /**
+     * @brief Indicates whether this set of card contains the
+     *        given Set of cards [CardSet].
+     *
+     * @param cardSet (CardSet)
+     * @return (boolean) true if this set contains the whole cardSet.
+     */
+    public boolean containsAll(CardSet cardSet) {
+        
+        return PackedCardSet.containsAll(pkCardSet, cardSet.packed());
+    }
+    
     /**
      * @brief The CardSet made of all the cards not in "this" CardSet
      *

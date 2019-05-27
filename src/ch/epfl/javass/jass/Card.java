@@ -3,9 +3,12 @@ package ch.epfl.javass.jass;
 import static ch.epfl.javass.Preconditions.checkArgument;
 import static ch.epfl.javass.jass.PackedCard.pack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The class used to represent a card.
@@ -264,4 +267,20 @@ public final class Card {
     public String toString() {
         return PackedCard.toString(packedCard);
     }
+    
+    public static final Map<Color, List<Card>> ALL_OF = computeAllOf();
+
+    private static Map<Color, List<Card>> computeAllOf() {
+        Map<Color, List<Card>> allOf = new EnumMap<>(Color.class);
+        for (Color c: Color.ALL) {
+            allOf.put(c, new ArrayList<>());
+            for(Rank r : Rank.ALL) {
+                allOf.get(c).add(Card.of(c, r));
+                }
+            }
+        return allOf;
+    }
+
+    
+    
 }

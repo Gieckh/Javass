@@ -1,6 +1,10 @@
 package ch.epfl.javass.jass;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import src.cs108.MeldSet;
 
 /**@brief This interface is implemented by the players, whether they are simulated
  *        or real.
@@ -9,6 +13,8 @@ import java.util.Map;
  * @author Marin Nguyen - (288260)
  */
 public interface Player {
+    
+    
     /**
      * @brief Returns the Card the [underlying] Player wants to play, given its hand
      *        and the actual TurnState.
@@ -33,6 +39,25 @@ public interface Player {
         //default is empty
     }
 
+    /**
+     * @Brief
+     *
+     * @param hand
+     * @return
+    */
+    default public MeldSet announcement(CardSet hand){
+        return MeldSet.EMPTY_SET;
+    }
+    
+    /**
+     * @Brief Called during a TurnState, will provoke some specific 
+     * cheating events in function of the int case.
+     *
+     * @return  an int which will cause a specific cheating event 
+    */
+    default public int cheat() {
+        return 0;
+    }
 
     /**
      * @brief Called when the hand of the Player is updated [distribution, or when he plays].
@@ -41,6 +66,10 @@ public interface Player {
      * @param newHand (CardSet) the new hand of the Player.
      */
     default public void updateHand(CardSet newHand) {
+        //default is empty
+    }
+    
+    default public void updateAnnouncement(List<MeldSet> m) {
         //default is empty
     }
 
@@ -63,6 +92,7 @@ public interface Player {
     default public void updateTrick(Trick newTrick) {
 
     }
+    
 
     /**
      * @brief Called when the [tota] Score changes [at the beginning of the game, or when a

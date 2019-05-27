@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 import ch.epfl.javass.jass.Card.Color;
+import src.cs108.MeldSet;
 
 /**
  * @author Antoine Scardigli - (299905)
@@ -20,7 +21,7 @@ public final class JassGame {
     /** ============================================== **/
     private final Random shuffleRng;
     private final Random trumpRng;
-    public TurnState turnState = null;
+    private TurnState turnState = null;
     private final Map<PlayerId, Player> players;
     private final Map<PlayerId, String> playerNames;
     private Map<PlayerId, CardSet> playerHands;
@@ -29,6 +30,8 @@ public final class JassGame {
     private PlayerId turnFirstPlayer;
     private boolean isGameOver;
     private int turnNumber = 1; //starts at turn 1
+    private List<Integer> listOfCheatingCodes = new ArrayList<>(Collections.nCopies(4, 0));
+    private List<MeldSet> listOfAnnouncement = new ArrayList<>(4);
 
 
     /** ============================================== **/
@@ -73,18 +76,22 @@ public final class JassGame {
         if (isGameOver()) { //Here because the tests decided to call this method, even though the game is already over
             return;
         }
-
+        int tempNumberOfTurn=turnNumber;
         if (isTrickFirstOfTheGame()) {
             setPlayers();
             setTurn();
             setGameFirstPlayer();
+            collectAnnouncement();
             turnState = TurnState.initial(trump, Score.INITIAL, gameFirstPlayer);
-            updatePlayersScores(Score.INITIAL);
+            manageAnnouncement();
+            updatePlayersScores(turnState.score());
+            updateAnnouncement();
         }
 
         else {
+            updateCheatingCodes();
             collect();
-
+            
             if (PackedScore.totalPoints(turnState.packedScore(), TeamId.TEAM_1) >= Jass.WINNING_POINTS) {
                 setPlayersWinningTeam(TeamId.TEAM_1);
                 updatePlayersScores(turnState.score().nextTurn());
@@ -98,7 +105,14 @@ public final class JassGame {
                 isGameOver = true;
                 return;
             }
-
+            else if(listOfCheatingCodes.contains(9)) {
+                setPlayersWinningTeam(PlayerId.ALL.get(listOfCheatingCodes.indexOf(9)).team());
+                listOfCheatingCodes.set(listOfCheatingCodes.indexOf(9), 0);
+                System.out.println("winnig occures");
+                isGameOver = true;
+                return;
+            }
+            
             if (isTrickFirstOfTheTurn()) {
 
                 turnNumber++;
@@ -112,6 +126,12 @@ public final class JassGame {
             }
         }
         updatePlayersTricks(turnState.trick());
+        
+        if(turnNumber-tempNumberOfTurn!=0) {
+            collectAnnouncement();
+            manageAnnouncement();
+            updateAnnouncement();
+        }
 
 
         //The 4 players play until the end
@@ -133,7 +153,20 @@ public final class JassGame {
     //Collects the TurnState and updates the Scores.
     private void collect() {
         turnState = turnState.withTrickCollected();
+        addOnScoreInCaseCheating();
         updatePlayersScores(turnState.score());
+        
+    }
+    
+    private void addOnScoreInCaseCheating() {
+        for (PlayerId p : PlayerId.ALL) {
+            if(listOfCheatingCodes.get(p.ordinal()).intValue()==2) {
+                System.out.println("cheating score");
+                turnState = turnState.addScore(p.team(), 100); 
+                listOfCheatingCodes.set(p.ordinal(), 0);
+            }
+                
+         }
     }
 
     //self-explanatory
@@ -154,9 +187,20 @@ public final class JassGame {
     }
     private void updatePlayersScores(Score newScore) {
         for (PlayerId p : PlayerId.ALL) {
-            players.get(p).updateScore(newScore);
+            players.get(p).updateScore(newScore);   
+            }
         }
+    
+    
+    private void updateCheatingCodes() {
+        List<Integer> newList = new ArrayList<>();
+        for (PlayerId p : PlayerId.ALL) {
+            int temp = players.get(p).cheat();
+            newList.add(p.ordinal(), temp!=0 ? temp : listOfCheatingCodes.get(p.ordinal()) );
+        }
+        listOfCheatingCodes = newList;
     }
+    
     private void setPlayersWinningTeam(TeamId winningTeam) {
         for (PlayerId p : PlayerId.ALL) {
             players.get(p).setWinningTeam(winningTeam);
@@ -166,6 +210,7 @@ public final class JassGame {
     //The cards need to have been distributed
     //This method also sets the turnFirstPlayer
     private void setGameFirstPlayer() {
+        
         Card card = Card.of(Color.DIAMOND, Card.Rank.SEVEN);
         for (PlayerId pId : PlayerId.values()) {
             if (playerHands.get(pId).contains(card)) {
@@ -188,6 +233,13 @@ public final class JassGame {
 
     //After the first turn, this method is used to update the first player of the turn
     private void updatePlayer() {
+       if(listOfCheatingCodes.contains(8)) {
+           System.out.println("will start next");
+           turnFirstPlayer = PlayerId.ALL.get(listOfCheatingCodes.indexOf(8));
+           listOfCheatingCodes.set(turnFirstPlayer.ordinal(), 0);
+           return ;
+       }
+        
         turnFirstPlayer = PlayerId.ALL.get((turnFirstPlayer.ordinal() + 1) % PlayerId.COUNT);
     }
 
@@ -195,10 +247,30 @@ public final class JassGame {
     private void setTurn() {
         setTrump();
         setPlayersTrumps(trump);
-
         distributeHands();
         for (PlayerId pId: PlayerId.ALL) {
             players.get(pId).updateHand(playerHands.get(pId));
+        }
+    }
+    
+    private void collectAnnouncement() {
+        listOfAnnouncement.clear();
+        for (PlayerId pId: PlayerId.ALL) {
+            listOfAnnouncement.add(players.get(pId).announcement(playerHands.get(pId)));
+        }
+    }
+    
+    private void manageAnnouncement() {
+        int pointsOfTeam1 = listOfAnnouncement.get(0).points() + listOfAnnouncement.get(2).points(); 
+        int pointsOfTeam2 = listOfAnnouncement.get(1).points() + listOfAnnouncement.get(3).points();
+        turnState = turnState.addScore(pointsOfTeam1>=pointsOfTeam2 ? 
+                TeamId.TEAM_1 : TeamId.TEAM_2, Math.max(pointsOfTeam1, pointsOfTeam2));
+        
+    }
+    
+    private void updateAnnouncement() {
+        for (PlayerId pId: PlayerId.ALL) {
+            players.get(pId).updateAnnouncement(listOfAnnouncement);
         }
     }
 
@@ -227,15 +299,29 @@ public final class JassGame {
     }
     private void distributeHands(List<Card> deck) {
         assert (deck.size() == 36);
-
+        List<Card> save = new ArrayList<>(deck);
         Map<PlayerId, CardSet> tmp = new HashMap<>(4);
-        setDistribution(PlayerId.PLAYER_1, deck, tmp);
-        setDistribution(PlayerId.PLAYER_2, deck, tmp);
-        setDistribution(PlayerId.PLAYER_3, deck, tmp);
-        setDistribution(PlayerId.PLAYER_4, deck, tmp);
 
+        if(listOfCheatingCodes.contains(1)) {
+            PlayerId cheater = PlayerId.ALL.get(listOfCheatingCodes.indexOf(1));
+            List<Card> temp = new ArrayList<>(deck);
+            temp.removeIf(x -> !x.color().equals(trump));
+            tmp.put(cheater,CardSet.of(temp) );
+            deck.removeAll(temp);
+            for(int i = 1 ; i < 4 ; ++i) {
+                setDistributionInCaseCheating(PlayerId.ALL.get((i+cheater.ordinal())%4), deck, tmp);
+            }
+            listOfCheatingCodes.set(listOfCheatingCodes.indexOf(1),0);
+        }
+        else {
+            for(PlayerId p : PlayerId.ALL) {
+                setDistribution(p, deck, tmp);
+            }
+        }
+            deck = save;
         playerHands = tmp;
-    }
+     }
+    
     private void setDistribution(PlayerId id, List<Card> deck, Map<PlayerId, CardSet> tmp) {
         CardSet hand = CardSet.EMPTY;
         int start = id.ordinal() * Jass.HAND_SIZE;
@@ -246,8 +332,20 @@ public final class JassGame {
 
         tmp.put(id, hand);
     }
+    
+    private void setDistributionInCaseCheating(PlayerId id, List<Card> deck, Map<PlayerId, CardSet> tmp) {
+        System.out.println(deck);
+        CardSet hand = CardSet.EMPTY;
 
+        for (int i = 0; i <  Jass.HAND_SIZE; ++i) {
+            hand = hand.add(deck.get(0));
+            deck.remove(deck.get(0));
+        }
+        
 
+        tmp.put(id, hand);
+    }
+  
     private static Card.Color[] getAllColors() {
         return new Card.Color[] {
                 Card.Color.SPADE,

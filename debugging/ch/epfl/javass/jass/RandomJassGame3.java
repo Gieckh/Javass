@@ -1,30 +1,47 @@
+
 package ch.epfl.javass.jass;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import bonus.mctsMemory;
+import bonus.mctsPlayerSmart;
 //this is for a test, thus no need of javadoc
-@SuppressWarnings("Duplicates")
 public final class RandomJassGame3 {
     public static void main(String[] args) {
+
+        //I expect the team 1 to lose ^^
+        // after test, team 2 have almost 200 more points , with 10 000 iterations ;
+        //which is not  great at all , but maybe a proof mcts does something
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
-        //marche pour n'importe quelle seed
-        Player player;
-        for (PlayerId pId: PlayerId.ALL) {
-            if (pId.team() == TeamId.TEAM_1)
-                player = new MctsPlayer(pId, 2019, 10_000);
-            else
-                player = new RandomPlayer(2019);
 
-            players.put(pId, player);
-            playerNames.put(pId, pId.name());
+        int k = 100_000;
+        int i = 4000;
+        int m = 0;
+        int win = 0;
+        for (PlayerId pId: PlayerId.ALL) {
+          Player player = new  MctsPlayer(pId.equals(PlayerId.PLAYER_2)?  PlayerId.PLAYER_2 : PlayerId.PLAYER_4, i, k);
+          if (pId.team() == TeamId.TEAM_1) {
+             player=  new mctsPlayerSmart(pId.equals(PlayerId.PLAYER_1)?  PlayerId.PLAYER_1 : PlayerId.PLAYER_3, i, k);
+           }
+     
+          players.put(pId, player);
+          playerNames.put(pId, pId.name());
         }
-        
-            JassGame g = new JassGame(2084, players, playerNames);
-            long cardsOfOne = PackedCardSet.ALL_CARDS;
+        for(int l = 10 ; l < 100; ++l) {
+            ++i;
+            JassGame g = new JassGame(i, players, playerNames);
             while (!g.isGameOver()) {
                 g.advanceToEndOfNextTrick();
-                //PackedCardSet.difference(CardSet.ofPacked(cardsOfOne),CardSet.of(g.));
+                }
+            m=m+ (g.turnState.score().totalPoints(TeamId.TEAM_2 )-g.turnState.score().totalPoints(TeamId.TEAM_1 ));
+            System.out.println(m);
+            System.out.println(g.turnState.score().totalPoints(TeamId.TEAM_2 )>=1000? ++win : win);
+            System.out.println();
+        
         }
+            
+           
     }
 }

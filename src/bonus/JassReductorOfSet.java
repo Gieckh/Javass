@@ -70,7 +70,7 @@ public Trick trick;
         
             Color baseColor = trick.baseColor();
             Color trumpColor = trick.trump();
-            List<CardSet> cardsThePlayerDontHave  = oldListOfCardSetNotPossessed;
+            List<CardSet> cardsThePlayerDontHave = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
             List<CardSet> cardsThePlayerHavnt = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
             List<Card> cardPlayed = new ArrayList<>(); 
             for(int i =0 ; i< index ; ++i ) {
@@ -80,7 +80,7 @@ public Trick trick;
                 boolean nobodyUseTrump = true;
                 for(int i = 1 ; (i<index)&&nobodyUseTrump; ++i) {         
                     if(!(cardPlayed.get(i).color().equals(trumpColor)||cardPlayed.get(i).color().equals(baseColor))) {
-                        cardsThePlayerDontHave.set(i, CardSet.ofPacked(PackedCardSet.subsetOfColor(PackedCardSet.ALL_CARDS, baseColor)).union(cardsThePlayerDontHave.get(i)));
+                        cardsThePlayerDontHave.set(i, CardSet.ofPacked(PackedCardSet.subsetOfColor(PackedCardSet.ALL_CARDS, baseColor)));
                     }
                     else {
                         nobodyUseTrump = false;
@@ -88,14 +88,17 @@ public Trick trick;
                 }
                
             }
-            
+            Card bestCard = null ;
             for(int i = 0 ; i < index-1 ; ++i) {
-                if(cardPlayed.get(i).color().equals(trumpColor)) {
-                    for(int j =i ; j< index ; ++j) {
-                        if(cardPlayed.get(j).color().equals(trumpColor)) {
-                            if(cardPlayed.get(i).isBetter(trumpColor,  cardPlayed.get(j))) {
-                                cardsThePlayerDontHave.set(j, cardsThePlayerDontHave.get(j).union(CardSet.ofPacked(PackedCardSet.trumpAbove(cardPlayed.get(i).packed()))));
-                                
+                if(bestCard == null || cardPlayed.get(i).isBetter(trumpColor, bestCard)) {
+                    bestCard = cardPlayed.get(i);
+                    if(cardPlayed.get(i).color().equals(trumpColor)) {
+                        for(int j =i+1 ; j< index ; ++j) {
+                            if(cardPlayed.get(j).color().equals(trumpColor)) {
+                                if(cardPlayed.get(i).isBetter(trumpColor,  cardPlayed.get(j))) {
+                                    cardsThePlayerDontHave.set(j, cardsThePlayerDontHave.get(j).union(CardSet.ofPacked(PackedCardSet.trumpAbove(cardPlayed.get(i).packed()))));
+                                    
+                                }
                             }
                         }
                     }
@@ -103,7 +106,10 @@ public Trick trick;
             }
             int shift = trick.player(0).ordinal();
             for(PlayerId p : PlayerId.ALL) {
-                cardsThePlayerHavnt.set(p.ordinal(), CardSet.ofPacked(PackedCardSet.difference(cardsThePlayerDontHave.get((-shift+p.ordinal()+4 )%4).packed(), PackedCardSet.add(PackedCardSet.EMPTY, PackedCard.pack(trumpColor, Rank.JACK)))));
+                cardsThePlayerHavnt.set(p.ordinal(), oldListOfCardSetNotPossessed.get(p.ordinal()).union
+                        (CardSet.ofPacked(PackedCardSet.difference
+                                (cardsThePlayerDontHave.get((-shift+p.ordinal()+4 )%4).packed(),
+                                        PackedCardSet.add(PackedCardSet.EMPTY, PackedCard.pack(trumpColor, Rank.JACK))))));
             }
             return cardsThePlayerHavnt;
         

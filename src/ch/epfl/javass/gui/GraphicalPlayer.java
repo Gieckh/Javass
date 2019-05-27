@@ -1,22 +1,46 @@
 package ch.epfl.javass.gui;
 
+import static javafx.beans.binding.Bindings.createBooleanBinding;
+import static javafx.beans.binding.Bindings.valueAt;
+import static javafx.beans.binding.Bindings.when;
+import static javafx.collections.FXCollections.observableMap;
+import static javafx.collections.FXCollections.unmodifiableObservableMap;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.TeamId;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.binding.StringExpression;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import src.cs108.MeldSet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +68,8 @@ public final class GraphicalPlayer {
     private final int TRUMP_HEIGHT = 101;
     private final int TRUMP_WIDTH = 101;
     private StackPane finalPane;
+    private ArrayBlockingQueue<Integer> cheatingQueue;
+
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -62,11 +88,78 @@ public final class GraphicalPlayer {
 
         BorderPane main = new BorderPane(trickPane, scorePane, new GridPane(), handPane, new GridPane());
         this.finalPane = new StackPane(main, team1Pane, team2Pane);
+    /**
+     * @Brief a lot of properties are shared between the graphicalPlayerAdapter and the graphicalPlayer thanks to this constructor.
+     * The graphical Stage is created in this constructor.
+     *
+     * @param thisId
+     * @param playerNames
+     * @param score
+     * @param trick
+     * @param handBean
+     * @param queueOfCommunication
+     */
+    public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score,
+            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication,
+            ArrayBlockingQueue<Integer> cheatingQueue ,
+            ObjectProperty<ListView<Text>> listOfAnnounces ) {
+        this.thisId = thisId;
+        this.playerNames = playerNames;
+        this.score = score;
+        this.trick =trick;
+        this.handBean = handBean;
+        this.queueOfCommunication = queueOfCommunication;
+        this.cheatingQueue = cheatingQueue;
+        GridPane scorePane = createScorePane();
+        GridPane trickPane = createTrickPane();
+        HBox handPane = createHandPane();
+        for(TeamId t : TeamId.ALL) {
+             this.victoryPaneForTeam[t.ordinal()] = createVictoryPanes(t);
+             BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
+             this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
+        }
+
+        GridPane announcesPane = new GridPane();
+        listOfAnnounces.addListener( (object , old , New ) -> {
+            announcesPane.getChildren().clear();
+            announcesPane.getChildren().add(New);
+            New.minHeightProperty().bind(trickPane.heightProperty());
+        }  );
+        BooleanBinding b =  createBooleanBinding( () -> {
+        return handBean.annouces().size()!=0;
+        },handBean.annouces());
+        announcesPane.disableProperty().bind(b.not());
+
+        BorderPane main= new BorderPane(trickPane, scorePane , announcesPane,handPane, new HBox());
+        main.rightProperty().bind(when(b).then(announcesPane).otherwise(new GridPane()));
+        this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
+
     }
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
+
+    private void cheatingManager(Scene scene) {
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(final KeyEvent keyEvent) {
+                if (keyEvent.getCode().isDigitKey() && cheatingQueue.isEmpty()) {
+                    try {
+                        int code = Integer.parseInt(keyEvent.getCode().toString().substring(
+                                keyEvent.getCode().toString().length() - 1));
+                        if(code < 10)
+                            cheatingQueue.put(code);
+
+                    } catch (InterruptedException e1) {
+                        throw new Error(e1);
+                    }
+                 keyEvent.consume();
+
+               }
+            }
+        });
+    }
+
 
     /**
      * @brief Create the javaFx stage of our JassGame.
@@ -78,13 +171,15 @@ public final class GraphicalPlayer {
      */
     public Stage createStage(PlayerId myId, Map<PlayerId, String> playerNames) {
         Stage stage = new Stage();
-        stage.setTitle("Javass - " + playerNames.get(myId));
-        stage.setScene(new Scene(finalPane));
+        stage.setTitle("Javass - " + playerNames.get(thisId));
+        Scene finalScene = new Scene(finalPane);
+        finalScene.getRoot().requestFocus();
+        cheatingManager(finalScene);
+
+        stage.setScene(finalScene);
         return stage;
     }
-
-    //Didn't feel like making a private method to initialize a row. TODO
-
+    
     /**
      * @brief Creates the {@code GridPane} which displays the scores. [Will be at
      *        the top of the window]
@@ -175,6 +270,42 @@ public final class GraphicalPlayer {
         trickGrid.add(middleRight, 2, 0, 1, 3);
         trickGrid.add(downCenter , 1, 2, 1, 1);
         trickGrid.add(trumpVBox  , 1, 1, 1, 1);
+
+    private GridPane createTrickPane() {
+        BooleanBinding b =  createBooleanBinding( () -> {
+            return (handBean.hand().stream().noneMatch(c -> c == null));
+            },handBean.hand(), trick.trick());
+      VBox couple[] = new VBox[4];
+      for(int i = 0 ; i < 4 ; ++i) {
+            PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
+            Text textForCouple = new Text();
+            textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
+            textForCouple.setStyle("-fx-font: 14 Optima;");
+            Text announcementForCouple = new Text();
+            SimpleStringProperty str = new SimpleStringProperty();
+            str.bind(handBean.announcesPerPlayerToString().get(playerIdForCouple.ordinal()));
+            announcementForCouple.textProperty().bind(str);
+            announcementForCouple.setStyle("-fx-font: 16 Optima;");
+            announcementForCouple.visibleProperty().bind(b);
+            ImageView imageForCouple = new ImageView();
+            imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
+            imageForCouple.setFitHeight(180);
+            imageForCouple.setFitWidth(120);
+            Rectangle rectangle = new Rectangle(120, 180);
+            rectangle.setStyle("-fx-arc-width: 20;\n" +
+                    "-fx-arc-height: 20;\n" +
+                    "-fx-fill: transparent;\n" +
+                    "-fx-stroke: lightpink;\n" +
+                    "-fx-stroke-width: 5;\n" +
+                    "-fx-opacity: 0.5;");
+            BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple.equals(trick.winningPlayerProperty().get()),
+                    trick.winningPlayerProperty() );
+            rectangle.visibleProperty().bind(shouldDisplay);
+            rectangle.setEffect(new GaussianBlur(4));
+            StackPane imageWithHalo  = new StackPane(imageForCouple, rectangle);
+            couple[i] = new VBox(textForCouple,imageWithHalo, announcementForCouple
+                    );
+            couple[i].setAlignment(Pos.TOP_CENTER);
 
         trickGrid.setStyle("-fx-background-color: whitesmoke; -fx-padding: 5px; -fx-border-width: 3px 0px; -fx-border-style: solid; -fx-border-color: gray; -fx-alignment: center;");
         return trickGrid;

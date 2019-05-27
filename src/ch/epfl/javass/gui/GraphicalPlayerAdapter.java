@@ -1,10 +1,28 @@
 package ch.epfl.javass.gui;
 
-import ch.epfl.javass.jass.*;
 import static javafx.application.Platform.runLater;
+import static javafx.collections.FXCollections.observableArrayList;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import ch.epfl.javass.jass.Card;
+import ch.epfl.javass.jass.CardSet;
+import ch.epfl.javass.jass.Player;
+import ch.epfl.javass.jass.PlayerId;
+import ch.epfl.javass.jass.Score;
+import ch.epfl.javass.jass.TeamId;
+import ch.epfl.javass.jass.Trick;
+import ch.epfl.javass.jass.TurnState;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
+import src.cs108.MeldSet;
 
 /**
  * @brief This class extends Player and is an Adapter of a graphicalPlayer.
@@ -29,7 +47,9 @@ public final class GraphicalPlayerAdapter implements Player {
     private final HandBean handBean;
     private GraphicalPlayer graphicalPlayer;
     static final ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);
-    
+    private final ArrayBlockingQueue<Integer> CheatingQueue;
+    private final ArrayBlockingQueue<MeldSet> meldQueue;
+    private final ObjectProperty<ListView<Text>> listOfAnnounces = new SimpleObjectProperty<>();
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -44,6 +64,9 @@ public final class GraphicalPlayerAdapter implements Player {
         this.handBean = new HandBean();
         this.scoreBean = new ScoreBean();
         this.trickBean = new TrickBean();
+        this.queueOfCommunication =  new ArrayBlockingQueue<>(1);
+        this.CheatingQueue = new ArrayBlockingQueue<>(1);
+        this.meldQueue = new ArrayBlockingQueue<>(1);
     }
     
     /** ============================================== **/
@@ -66,6 +89,71 @@ public final class GraphicalPlayerAdapter implements Player {
         }
     }
 
+
+
+
+    /**
+     * @see ch.epfl.javass.jass.Player#cheat(int)
+     */
+    @Override
+    public int cheat() {
+        try {
+            return CheatingQueue.isEmpty() ? 0 : CheatingQueue.take() ;
+
+        } catch (InterruptedException e) {
+            throw new Error(e);
+        }
+    }
+
+    /**
+     * @see ch.epfl.javass.jass.Player#announcement(ch.epfl.javass.jass.CardSet)
+     */
+    @Override
+    public MeldSet announcement(CardSet hand) {
+        try {
+            runLater(() -> {
+                handBean.setannounces(hand);
+                listOfAnnounces.setValue(createAnnouncesPane());});
+            MeldSet meldSet = meldQueue.take() ;
+            runLater(() -> { handBean.setannounces(CardSet.EMPTY);
+            });
+
+
+            return meldSet;
+
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            throw new Error();
+        }
+
+    }
+
+    private ListView<Text> createAnnouncesPane() {
+        ObservableList<MeldSet> meldSet = handBean.annouces();
+        ObservableList<Text> AllAnnouncesSet =  observableArrayList();
+        for(MeldSet m : meldSet) {
+            Text children = new Text();
+            SimpleStringProperty str = new SimpleStringProperty();
+            str.setValue(m.toString());
+            children.textProperty().bind(str);
+            children.setStyle("-fx-font: 16 Optima;\n");
+            children.setOnMouseClicked((e) -> {
+                try {
+                    meldQueue.put(m);
+                } catch (InterruptedException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            });
+           AllAnnouncesSet.add(children);
+        }
+        ListView<Text> announcesPane = new ListView<>(AllAnnouncesSet);
+        return announcesPane;
+    }
+
+
+    /* 
+
     /**
      * @see ch.epfl.javass.jass.Player#setPlayers(ch.epfl.javass.jass.PlayerId, java.util.Map)
      */
@@ -74,6 +162,12 @@ public final class GraphicalPlayerAdapter implements Player {
     setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
         this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean);
         runLater( () -> graphicalPlayer.createStage(ownId, playerNames).show() );
+    @Override
+    public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
+        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean,
+                this.handBean, this.queueOfCommunication, this.CheatingQueue,this.listOfAnnounces);
+        runLater(() -> { graphicalPlayer.createStage().show(); });
+
     }
 
     /**
@@ -84,6 +178,12 @@ public final class GraphicalPlayerAdapter implements Player {
         runLater( () -> handBean.setHand(newHand) );
     }
 
+    @Override
+    public void updateAnnouncement(List<MeldSet> m) {
+        runLater(()->{handBean.setannouncesPerPlayer(m);});
+    }
+
+    /*
     /**
      * @see ch.epfl.javass.jass.Player#setTrump(ch.epfl.javass.jass.Card.Color)
      */

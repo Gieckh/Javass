@@ -5,10 +5,16 @@ import static javafx.collections.FXCollections.observableSet;
 import static javafx.collections.FXCollections.unmodifiableObservableList;
 import static javafx.collections.FXCollections.unmodifiableObservableSet;
 
+import java.util.Collections;
+import java.util.List;
+
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import src.cs108.Announcement;
+import src.cs108.MeldSet;
 
 /**
  * HandBean is a JavaFx bean containing the hand and playableCards properties.
@@ -21,9 +27,10 @@ public final class HandBean {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
-    
+    private ObservableList<SimpleStringProperty> listOfAnnouncementPerPlayer = observableArrayList();
     private ObservableList<Card> hand =  observableArrayList();
     private ObservableSet<Card> playableCards  = observableSet();
+    private ObservableList<MeldSet> announces = observableArrayList();
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -52,8 +59,25 @@ public final class HandBean {
     public ObservableSet<Card> playableCards() {
         return unmodifiableObservableSet(playableCards); 
     }
-    
-    
+
+    /**
+     * @brief It is a public getter of the announcement property.
+     *
+     * @return the announcement property
+     */
+    public ObservableList<MeldSet> annouces(){
+        return unmodifiableObservableList(announces);
+    }
+
+
+    public ObservableList<SimpleStringProperty> announcesPerPlayerToString(){
+        if(listOfAnnouncementPerPlayer.isEmpty()) {
+            setannouncesPerPlayer(Collections.nCopies(4, MeldSet.EMPTY_SET));;
+        }
+        return unmodifiableObservableList(listOfAnnouncementPerPlayer);
+    }
+
+
     /**
      * @brief It is a public setter for the hand property, given the CardSet newHand.
      *  If the new CardSet newHand is of size 9, we replace the previous hand property 
@@ -70,7 +94,7 @@ public final class HandBean {
             }
         }
 
-        else {
+        else { //newHand.size() < 9
             assert (newHand.size() < 9);
             for(int i = 0 ; i < 9 ; ++i) {
                 Card cardToReplace = hand.get(i);
@@ -81,6 +105,28 @@ public final class HandBean {
        }
    }
     
+    public void setannounces(CardSet hand) {
+       List<MeldSet> announces=  Announcement.getAnnounces(hand);//CardSet.of(this.hand
+       this.announces.clear();
+       if(hand!=CardSet.EMPTY) {
+           for(int i = 0 ; i < announces.size(); ++i) {
+               this.announces.add(announces.get(i));
+           }
+       }
+   }
+
+    public void setannouncesPerPlayer(List<MeldSet> listOfAnnounces) {
+        if(listOfAnnouncementPerPlayer.isEmpty()) {
+            for(int i =0 ; i<4 ;++i) {
+                SimpleStringProperty s = new SimpleStringProperty();
+                listOfAnnouncementPerPlayer.add(s);
+            }
+        }
+        for(int i = 0 ; i < listOfAnnounces.size(); ++i) {
+           listOfAnnouncementPerPlayer.get(i).set(listOfAnnounces.get(i).toString());
+        }
+    }
+
 
     /**
      * @brief public setter for the playableCards property. The current list of

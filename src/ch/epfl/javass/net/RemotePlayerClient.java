@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.net.Socket;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -22,6 +23,7 @@ import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
+import src.cs108.MeldSet;
 
 
 //TODO: does it actually work - without the "println(...)" ?
@@ -148,6 +150,51 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         forceWrite(JassCommand.PLRS.toString(),
                    combine(' ', s, str.toString())
         );
+    }
+    
+    /* 
+     * @see ch.epfl.javass.jass.Player#cheat(int)
+     */
+    @Override
+    public int cheat() {
+        forceWrite(JassCommand.CHET.toString(),"");
+        try {
+            return StringSerializer.deserializeInt(reader.readLine());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+    
+    @Override
+    public MeldSet announcement(CardSet hand) { 
+        forceWrite(JassCommand.MELD.toString(),
+            combine(' ',StringSerializer.serializeLong(hand.packed())));
+        try {
+           long Packed[] = new long[2];
+            Packed[0] = StringSerializer.deserializeLong(reader.readLine());
+            Packed[1] = StringSerializer.deserializeLong(reader.readLine());
+            return MeldSet.from(Packed);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+    
+    @Override
+    public void updateAnnouncement(List<MeldSet> m) {
+        forceWrite(JassCommand.ANCM.toString(),
+                combine(' ',
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(0).packed()[0]),
+                                StringSerializer.serializeLong(m.get(0).packed()[1])),
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(1).packed()[0]),
+                                StringSerializer.serializeLong(m.get(1).packed()[1])),
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(2).packed()[0]),
+                                StringSerializer.serializeLong(m.get(2).packed()[1])),
+                        combine(',',
+                                StringSerializer.serializeLong(m.get(3).packed()[0]),
+                                StringSerializer.serializeLong(m.get(3).packed()[1]))));
     }
         
 

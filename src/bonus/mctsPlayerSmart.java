@@ -1,5 +1,6 @@
 package bonus;
 
+
 import static ch.epfl.javass.Preconditions.checkArgument;
 
 import java.util.ArrayList;
@@ -13,8 +14,9 @@ import ch.epfl.javass.jass.Player;
 import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
-import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
+import src.cs108.Announcement;
+import src.cs108.MeldSet;
 
 /**
  * @brief This class extends Player and only overrides the method "cardToPlay".
@@ -34,8 +36,7 @@ public class mctsPlayerSmart implements Player {
     private final PlayerId ownId;
 //    private final long rngSeed;
     private SplittableRandom rng;
-    List<CardSet> cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
-
+    private List<CardSet> listOfKnownCard; 
 
 
     /** ============================================== **/
@@ -48,24 +49,27 @@ public class mctsPlayerSmart implements Player {
         this.ownId = ownId;
 //        this.rngSeed = rngSeed;
         this.rng = new SplittableRandom(rngSeed);
+        listOfKnownCard = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
+
     }
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
-    
     @Override
-    public void updateTrick(Trick newTrick) {
-        //System.out.println("update");
-        this.cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(newTrick, cardsThePlayersDontHave);
-        Player.super.updateTrick(newTrick);
-
+    public MeldSet announcement(CardSet hand) {
+        List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
+        MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
+        return bestAnnounceSet;
     }
     
-    
-    private CardSet cardsOnePlayerDoesntHave(PlayerId p) {
-        return cardsThePlayersDontHave.get(p.ordinal());
+    @Override
+    public void updateAnnouncement(List<MeldSet> m) {
+        listOfKnownCard.clear();
+        for(int i = 0 ; i<4 ; ++i) {
+            listOfKnownCard.add(m.get(i).cards());
+        }
     }
 
     
@@ -81,11 +85,7 @@ public class mctsPlayerSmart implements Player {
      *                [according to the Monte-Carlo tree search algorithm]
      */
     public Card cardToPlay(TurnState state, CardSet hand) {
-        
-        if(state.trick().index()==0) {
-            this.cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
-        }
-        
+                
         
         //default, the root teamId is this player's and its father is null.
         Node root;
@@ -97,8 +97,6 @@ public class mctsPlayerSmart implements Player {
         }
         else
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
-       // System.out.println(hand.toString());
-        //System.out.println(cardsThePlayersDontHave.get(0).complement().intersection(hand).toString());
         iterate(root);
 
         return root.playableCardsFromTurnState.get(root.selectSon(0));
@@ -170,7 +168,7 @@ public class mctsPlayerSmart implements Player {
         assert (! father.state.trick().isFull());
         sonTeamId = father.state.nextPlayer().team();
 
-        //We never wanna have a full trick in our turnState, unless it is the last trick of the turn
+        //We never wanna have a full trick in our TurnState, unless it is the last trick of the turn
         if (father.state.trick().isLast()) {
             sonState = father.state.withNewCardPlayed(card);
             //PlayableCards should never be called at the last turn of the game
@@ -223,17 +221,34 @@ public class mctsPlayerSmart implements Player {
 //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
-            CardSet OnlyPossiblePlayableCards = playableCards.intersection(cardsOnePlayerDoesntHave(this.ownId).complement());
-            if(OnlyPossiblePlayableCards.size()==0) {
-                //System.out.println(cardsOnePlayerDoesntHave(this.ownId).complement());
-                //System.out.println(playableCards);
-            }
-            Card randomCardToPlay = OnlyPossiblePlayableCards.size() !=0 ? OnlyPossiblePlayableCards.get(rng.nextInt(OnlyPossiblePlayableCards.size())) : playableCards.get(rng.nextInt(playableCards.size()));
+            //this.gameState
+            
+            CardSet RestrictiveSetOfCards = chooseBestRestrectiveSet(playableCards, copyState);
+            Card randomCardToPlay = RestrictiveSetOfCards.get(rng.nextInt(RestrictiveSetOfCards.size())) ;
 
             copyHand = copyHand.remove(randomCardToPlay);
             copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
         }
         return copyState.score();
+    }
+    
+    private CardSet chooseBestRestrectiveSet(CardSet playableCards,TurnState state) {
+        CardSet CardsThatRespectsRules = playableCards.intersection(     state.cardsOnePlayerDoesntHave(this.ownId).complement());
+        CardSet CardsThatRespectsAnnouncements = playableCards.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+1)%4));
+        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+2)%4));
+        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+3)%4));
+        CardSet merge = CardsThatRespectsAnnouncements.intersection(CardsThatRespectsRules);
+        if(merge.size()!=0) {
+            return merge;
+        }
+        //with some test over 1000 games , it seemed that announcement was more efficient than rules
+        if(CardsThatRespectsAnnouncements.size()!=0) return CardsThatRespectsAnnouncements;
+        if(CardsThatRespectsRules.size()!=0) {
+            return CardsThatRespectsRules;
+            
+        }
+        else return playableCards;
+       
     }
 
     /**

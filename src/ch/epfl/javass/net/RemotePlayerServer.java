@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
+import src.cs108.MeldSet;
 
 /**
  * @brief RemotePlayerServer instance is a remote server which particularity is that
@@ -54,7 +56,7 @@ public final class RemotePlayerServer {
     public RemotePlayerServer(Player underLyingPlayer) {
         this.underLyingPlayer = underLyingPlayer;
         try {
-            s0 = new ServerSocket(Net.PORT_NUMBER);
+            s0 = new ServerSocket(PORT_NUMBER);
         } catch (IOException e) {
             throw new UncheckedIOException("unchecked: " + e.getMessage(),e);
         }
@@ -153,7 +155,40 @@ public final class RemotePlayerServer {
                                 StringSerializer.deserializeInt(words.get(1))));
                         break;
                         
-
+                    case CHET:
+                        assert (words.size() == 1);
+                        System.out.println("cheat read");
+                        w.write(StringSerializer.serializeInt(this.underLyingPlayer.cheat()));
+                        w.write("\n");
+                        w.flush();
+                        break;
+                        
+                    case MELD:
+                        assert (words.size() == 2);
+                        System.out.println("meld read");
+                        w.write(StringSerializer.serializeLong(this.underLyingPlayer.announcement(
+                                CardSet.ofPacked(
+                                StringSerializer.deserializeLong(words.get(1)))).packed()[0]));
+                        w.write("\n");
+                        w.write(StringSerializer.serializeLong(this.underLyingPlayer.announcement(
+                                CardSet.ofPacked(
+                                StringSerializer.deserializeLong(words.get(1)))).packed()[1]));
+                        w.write("\n");
+                        w.flush();
+                        break;
+                        
+                    case ANCM:
+                        assert(words.size() == 9);
+                        System.out.println("announcement read");
+                        List<MeldSet> m = new ArrayList<>();
+                        for(int i =0 ; i<4 ; ++i) {
+                            long meldSet[] = {StringSerializer.deserializeLong(words.get(1+2*i))
+                                    ,StringSerializer.deserializeLong(words.get(2+2*i))};
+                            m.add(MeldSet.from(meldSet));
+                        }
+                        this.underLyingPlayer.updateAnnouncement(m);
+                        break;
+                        
                     default:
                         throw new Error("JassCommand enum has been changed?");
                 }

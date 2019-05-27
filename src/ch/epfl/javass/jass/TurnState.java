@@ -2,6 +2,12 @@ package ch.epfl.javass.jass;
 
 import static ch.epfl.javass.Preconditions.checkArgument;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import bonus.JassReductorOfSet;
+
 /**
  * @brief This class represents the [public] state of the game: what every Player
  *        can see/know. Namely the score of each team, the Cards left to play,
@@ -13,7 +19,7 @@ import static ch.epfl.javass.Preconditions.checkArgument;
  * @author Antoine Scardigli - (299905)
  * @author Marin Nguyen - (288260)
  */
-public final class TurnState {
+public class TurnState {
     
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -22,7 +28,21 @@ public final class TurnState {
     private final long pkScore;
     private final long pkUnplayedCards;
     private final int pkCurrentTrick;
+    private List<CardSet> cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
 
+    public CardSet cardsOnePlayerDoesntHave(PlayerId p) {
+//        if(!(cardsThePlayersDontHave.get(0).isEmpty() &&
+//                cardsThePlayersDontHave.get(1).isEmpty() && 
+//                cardsThePlayersDontHave.get(2).isEmpty() &&
+//                cardsThePlayersDontHave.get(3).isEmpty())&&
+//                (!trick().baseColor().equals(trick().trump()))) {
+//            System.out.println(trick().index());
+//            System.out.println(PackedTrick.toString(pkCurrentTrick));
+//            System.out.println(cardsThePlayersDontHave);
+//        }
+        
+        return cardsThePlayersDontHave.get(p.ordinal());
+    }
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -38,7 +58,14 @@ public final class TurnState {
      * @param pkUnplayedCards (long) - the cards not played yet
      * @param pkCurrentTrick (int) - the current trick
      */
-    private TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
+    public TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick) {
+        this.pkScore =  pkScore;
+        this.pkUnplayedCards = pkUnplayedCards;
+        this.pkCurrentTrick  = pkCurrentTrick;
+    }
+    
+    public TurnState(long pkScore, long pkUnplayedCards, int pkCurrentTrick , List<CardSet> cardsUnHaved) {
+        this.cardsThePlayersDontHave = cardsUnHaved;
         this.pkScore =  pkScore;
         this.pkUnplayedCards = pkUnplayedCards;
         this.pkCurrentTrick  = pkCurrentTrick;
@@ -144,6 +171,10 @@ public final class TurnState {
         return Trick.ofPacked(pkCurrentTrick);
     }
 
+    
+    public TurnState addScore(TeamId t , int score) {
+        return new TurnState(PackedScore.addPoints(pkScore, t, score),pkUnplayedCards,pkCurrentTrick);
+    }
 
     //the real methods:
     /** 
@@ -184,9 +215,11 @@ public final class TurnState {
         }
 
         int pkCard = card.packed();
-        return new TurnState(pkScore, PackedCardSet.remove(pkUnplayedCards, pkCard),
-                             PackedTrick.withAddedCard(pkCurrentTrick, pkCard) );
-    }
+        TurnState state = new TurnState(pkScore, PackedCardSet.remove(pkUnplayedCards, pkCard),
+                PackedTrick.withAddedCard(pkCurrentTrick, pkCard) );
+        cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(trick(), cardsThePlayersDontHave);
+        return  state;
+        }
 
     /**
      * @brief Method created to avoid duplicates.
@@ -234,15 +267,18 @@ public final class TurnState {
         if(PackedTrick.isFull(pkCurrentTrick)) {
             throw new IllegalStateException();
         }
-
+        if(trick().index()==0) {
+            this.cardsThePlayersDontHave  = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
+        }
+        
         int pkCard = card.packed();
         long newUnplayedCards = PackedCardSet.remove(pkUnplayedCards, pkCard);
         int newTrick = PackedTrick.withAddedCard(pkCurrentTrick, pkCard);
-
+        cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(trick(), cardsThePlayersDontHave);
         if (!PackedTrick.isFull(newTrick)) {
             return new TurnState(pkScore, newUnplayedCards, newTrick);
         }
-
+        
         return collectTrick(pkScore, newUnplayedCards, newTrick);
     }
 }
