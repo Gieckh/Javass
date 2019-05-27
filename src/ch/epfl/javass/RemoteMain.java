@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  * @author Marin Nguyen - (288260)
  */
 public class RemoteMain extends Application {
-    
+    @SuppressWarnings("Duplicates")
     /**
      * @see javafx.application.Application#start(javafx.stage.Stage)
      */

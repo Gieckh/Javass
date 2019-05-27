@@ -11,6 +11,7 @@ import java.util.*;
 
 import static ch.epfl.javass.PlayerType.*;
 
+@SuppressWarnings("Duplicates")
 public final class LocalMain extends Application {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
