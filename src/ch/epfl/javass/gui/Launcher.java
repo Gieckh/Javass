@@ -10,22 +10,26 @@ import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings("Duplicates")
 public class Launcher extends Application {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
+
+    private static final List<String> DEFAULT_NAMES = Collections.unmodifiableList(
+            Arrays.asList("Aline", "Bastien", "Colette", "David")
+    );
 
     private static final int ARBITRARY_MIN_MCTS_ITERATIONS = 10;
     private static final int SIMULATED_PLAYER_WAIT_TIME_MS = 1; //in seconds
@@ -87,18 +91,23 @@ public class Launcher extends Application {
     private GridPane createLocalLaucher() {
         //TODO
 
-        Node[][] playersParameters;
-        TextField seedTextField = new TextField();
+        Map<PlayerId, PlayerType> playerTypes = new HashMap<>();
+        List<List<Node>> playersGUI = new ArrayList<>();
+        for (PlayerId pId: PlayerId.ALL) {
+            playersGUI.add(createPlayerField(pId, playerTypes));
+        }
 
-        seedTextField.textProperty().addListener(((observable, oldValue, newValue) -> {
+        TextField seed = new TextField();
+        seed.textProperty().addListener(((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*"))
-                seedTextField.setText(oldValue);
+                seed.setText(oldValue);
         }));
+
 
         Button launch = new Button("Démarrer");
         launch.setOnAction(e -> {
-            Map <PlayerId, String> playerNames;
-            Map <PlayerId, Player> players;
+            Map <PlayerId, String> playerNames = new HashMap<>(PlayerId.COUNT);
+            Map <PlayerId, Player> players = new HashMap<>(PlayerId.COUNT);
             Random random = randomOrDefault(...);
 
             Thread gameThread = new Thread(() -> {
@@ -113,11 +122,75 @@ public class Launcher extends Application {
                 }
             });
         });
+
+
+        GridPane localLauncher = new GridPane();
+        for (int i = 0; i < PlayerId.COUNT; ++i) {
+            localLauncher.addColumn(
+                    i,
+                    new StackPane(
+                            playersGUI.get(i).get(0),
+                            playersGUI.get(i).get(1),
+                            playersGUI.get(i).get(2)),
+                    playersGUI.get(i).get(3),
+                    playersGUI.get(i).get(4)
+                    );
+        }
         return null;
     }
 
+    private List<Node> createPlayerField(PlayerId pId, Map<PlayerId, PlayerType> playerTypes) {
+        TextField nameTextField = new TextField(DEFAULT_NAMES.get(pId.ordinal()));
+        Button human = new Button("humain");
+        Button remote = new Button("distant");
+        Button simulated = new Button("simulated");
 
-    private void createPlayerAndPutInMaps(Map<PlayerId, String> playerNames,
+        TextField name = new TextField(DEFAULT_NAMES.get(pId.ordinal()));
+
+        Label iterationsLabel = new Label("Itérations :");
+        TextField iterationsField = new TextField("10000");
+        iterationsField.textProperty().addListener(((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*"))
+                iterationsField.setText(oldValue);
+        }));
+        HBox iterationsBox = new HBox(iterationsLabel, iterationsField);
+        iterationsBox.setVisible(false);
+
+        Label ipAddressLabel = new Label("Adresse IP :");
+        TextField ipAddressField = new TextField("localhost");
+        HBox ipAddressBox = new HBox(ipAddressLabel, ipAddressField);
+        ipAddressBox.setVisible(false);
+
+        human.setOnAction(e -> {
+            human.setVisible(false);
+            remote.setVisible(false);
+            simulated.setVisible(false);
+
+            playerTypes.put(pId, PlayerType.HUMAN);
+        });
+
+        remote.setOnAction(e -> {
+            human.setVisible(false);
+            remote.setVisible(false);
+            simulated.setVisible(false);
+            iterationsBox.setVisible(true);
+
+            playerTypes.put(pId, PlayerType.REMOTE);
+        });
+
+        simulated.setOnAction(e -> {
+            human.setVisible(false);
+            remote.setVisible(false);
+            simulated.setVisible(false);
+            ipAddressBox.setVisible(true);
+
+            playerTypes.put(pId, PlayerType.SIMULATED);
+        });
+
+        return Collections.unmodifiableList(Arrays.asList(human, remote, simulated, name, iterationsBox, ipAddressBox));
+    }
+
+    private void createsPlayerAndPutsInMaps(Map<PlayerId, String> playerNames,
             Map<PlayerId, Player> players, List<String> args, PlayerId pId,
             Random random)
     {
