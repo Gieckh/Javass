@@ -8,6 +8,7 @@ import java.util.SplittableRandom;
 import src.cs108.Announcement;
 import src.cs108.MeldSet;
 
+@SuppressWarnings("Duplicates")
 /**
  * @brief This class extends Player and only overrides the method "cardToPlay".
  *        To decide which card to play, the computer uses a Monte-Carlo tree search
@@ -31,12 +32,17 @@ public class MctsPlayer implements Player {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    //TODO: why no JDoc there ?
+
+    /**
+     * TODO
+     * @param ownId
+     * @param rngSeed
+     * @param iterations
+     */
     public MctsPlayer(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
         this.ownId = ownId;
-//        this.rngSeed = rngSeed;
         this.rng = new SplittableRandom(rngSeed);
     }
 
@@ -45,14 +51,16 @@ public class MctsPlayer implements Player {
     /** ============================================== **/
     
     @Override
+    /**
+     * @see Player#announcement(CardSet)
+     */
     public MeldSet announcement(CardSet hand) {
         List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
-        MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
+        MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size() - 1);
         return bestAnnounceSet;
     }
 
-    
-    @SuppressWarnings("Duplicates")
+
     @Override
     /**
      * @brief The card "this" [the Player] should play, in order to maximize its points.
@@ -120,7 +128,6 @@ public class MctsPlayer implements Player {
             return node;
         }
 
-        //a node was created, right ?
         Node son = createNode(node);
         node.directChildrenOfNode[index] = son;
         return son;

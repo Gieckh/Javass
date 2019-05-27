@@ -7,20 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import ch.epfl.javass.jass.Card;
-import ch.epfl.javass.jass.CardSet;
-import ch.epfl.javass.jass.Player;
-import ch.epfl.javass.jass.PlayerId;
-import ch.epfl.javass.jass.Score;
-import ch.epfl.javass.jass.TeamId;
-import ch.epfl.javass.jass.Trick;
-import ch.epfl.javass.jass.TurnState;
+import ch.epfl.javass.jass.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import src.cs108.MeldSet;
 
@@ -46,10 +38,10 @@ public final class GraphicalPlayerAdapter implements Player {
     private final TrickBean trickBean;
     private final HandBean handBean;
     private GraphicalPlayer graphicalPlayer;
-    static final ArrayBlockingQueue<Card> queueOfCommunication = new ArrayBlockingQueue<>(1);
-    private final ArrayBlockingQueue<Integer> CheatingQueue;
+    private final ArrayBlockingQueue<Card> queueOfCommunication;
+    private final ArrayBlockingQueue<Integer> cheatingQueue;
     private final ArrayBlockingQueue<MeldSet> meldQueue;
-    private final ObjectProperty<ListView<Text>> listOfAnnounces = new SimpleObjectProperty<>();
+    private final ObjectProperty<ListView<Text>> listOfAnnounces;
     
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
@@ -65,8 +57,9 @@ public final class GraphicalPlayerAdapter implements Player {
         this.scoreBean = new ScoreBean();
         this.trickBean = new TrickBean();
         this.queueOfCommunication =  new ArrayBlockingQueue<>(1);
-        this.CheatingQueue = new ArrayBlockingQueue<>(1);
+        this.cheatingQueue = new ArrayBlockingQueue<>(1);
         this.meldQueue = new ArrayBlockingQueue<>(1);
+        this.listOfAnnounces = new SimpleObjectProperty<>();
     }
     
     /** ============================================== **/
@@ -93,12 +86,12 @@ public final class GraphicalPlayerAdapter implements Player {
 
 
     /**
-     * @see ch.epfl.javass.jass.Player#cheat(int)
+     * @see ch.epfl.javass.jass.Player#cheat()
      */
     @Override
     public int cheat() {
         try {
-            return CheatingQueue.isEmpty() ? 0 : CheatingQueue.take() ;
+            return cheatingQueue.isEmpty() ? 0 : cheatingQueue.take() ;
 
         } catch (InterruptedException e) {
             throw new Error(e);
@@ -160,14 +153,14 @@ public final class GraphicalPlayerAdapter implements Player {
     @Override
     public void
     setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean, this.handBean);
-        runLater( () -> graphicalPlayer.createStage(ownId, playerNames).show() );
-    @Override
-    public void setPlayers(PlayerId ownId, Map<PlayerId, String> playerNames) {
-        this.graphicalPlayer = new GraphicalPlayer(ownId, playerNames, this.scoreBean, this.trickBean,
-                this.handBean, this.queueOfCommunication, this.CheatingQueue,this.listOfAnnounces);
-        runLater(() -> { graphicalPlayer.createStage().show(); });
+        this.graphicalPlayer = new GraphicalPlayer(
+                ownId, playerNames, this.scoreBean, this.trickBean, this.handBean,
+                queueOfCommunication, listOfAnnounces
+        );
 
+        runLater( () ->
+                graphicalPlayer.createStage(ownId, playerNames, cheatingQueue).show()
+        );
     }
 
     /**
@@ -180,7 +173,7 @@ public final class GraphicalPlayerAdapter implements Player {
 
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
-        runLater(()->{handBean.setannouncesPerPlayer(m);});
+        runLater( () -> handBean.setannouncesPerPlayer(m) );
     }
 
     /*

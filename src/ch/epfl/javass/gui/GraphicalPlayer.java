@@ -30,7 +30,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -40,14 +39,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import src.cs108.MeldSet;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static javafx.beans.binding.Bindings.*;
-import static javafx.collections.FXCollections.observableMap;
-import static javafx.collections.FXCollections.unmodifiableObservableMap;
 
 /**
  * This class represents the graphical interface of a human player.
@@ -68,7 +59,6 @@ public final class GraphicalPlayer {
     private final int TRUMP_HEIGHT = 101;
     private final int TRUMP_WIDTH = 101;
     private StackPane finalPane;
-    private ArrayBlockingQueue<Integer> cheatingQueue;
 
 
     /** ============================================== **/
@@ -76,71 +66,42 @@ public final class GraphicalPlayer {
     /** ============================================== **/
 
     public GraphicalPlayer(PlayerId myId, Map<PlayerId, String> playerNames,
-            ScoreBean scoreBean, TrickBean trickBean, HandBean handBean)
+            ScoreBean scoreBean, TrickBean trickBean, HandBean handBean,
+            ArrayBlockingQueue<Card> queueOfCommunication,
+            ObjectProperty<ListView<Text>> listOfAnnounces)
     {
         GridPane scorePane = createScorePane(scoreBean, playerNames);
 
-        GridPane trickPane = createTrickPane(trickBean, myId, playerNames);
-        HBox handPane = createHandPane(handBean);
+        GridPane trickPane = createTrickPane(trickBean, handBean, myId, playerNames);
+        HBox handPane = createHandPane(handBean, queueOfCommunication);
 
         BorderPane team1Pane = createTeamPane(scoreBean, TeamId.TEAM_1, TeamId.TEAM_2, playerNames);
         BorderPane team2Pane = createTeamPane(scoreBean, TeamId.TEAM_2, TeamId.TEAM_1, playerNames);
 
-        BorderPane main = new BorderPane(trickPane, scorePane, new GridPane(), handPane, new GridPane());
-        this.finalPane = new StackPane(main, team1Pane, team2Pane);
-    /**
-     * @Brief a lot of properties are shared between the graphicalPlayerAdapter and the graphicalPlayer thanks to this constructor.
-     * The graphical Stage is created in this constructor.
-     *
-     * @param thisId
-     * @param playerNames
-     * @param score
-     * @param trick
-     * @param handBean
-     * @param queueOfCommunication
-     */
-    public GraphicalPlayer(PlayerId thisId , Map<PlayerId, String> playerNames,ScoreBean score,
-            TrickBean trick, HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication,
-            ArrayBlockingQueue<Integer> cheatingQueue ,
-            ObjectProperty<ListView<Text>> listOfAnnounces ) {
-        this.thisId = thisId;
-        this.playerNames = playerNames;
-        this.score = score;
-        this.trick =trick;
-        this.handBean = handBean;
-        this.queueOfCommunication = queueOfCommunication;
-        this.cheatingQueue = cheatingQueue;
-        GridPane scorePane = createScorePane();
-        GridPane trickPane = createTrickPane();
-        HBox handPane = createHandPane();
-        for(TeamId t : TeamId.ALL) {
-             this.victoryPaneForTeam[t.ordinal()] = createVictoryPanes(t);
-             BooleanBinding shouldDisplay =  createBooleanBinding( () ->t.equals(score.winningTeamProperty().get()),score.winningTeamProperty() );
-             this.victoryPaneForTeam[t.ordinal()].visibleProperty().bind(shouldDisplay);
-        }
-
         GridPane announcesPane = new GridPane();
-        listOfAnnounces.addListener( (object , old , New ) -> {
+        listOfAnnounces.addListener( (observable, oldValue, newValue) -> {
             announcesPane.getChildren().clear();
-            announcesPane.getChildren().add(New);
-            New.minHeightProperty().bind(trickPane.heightProperty());
+            announcesPane.getChildren().add(newValue);
+            newValue.minHeightProperty().bind(trickPane.heightProperty());
         }  );
         BooleanBinding b =  createBooleanBinding( () -> {
-        return handBean.annouces().size()!=0;
+            return handBean.annouces().size()!=0;
         },handBean.annouces());
         announcesPane.disableProperty().bind(b.not());
 
-        BorderPane main= new BorderPane(trickPane, scorePane , announcesPane,handPane, new HBox());
+        BorderPane main = new BorderPane(
+                trickPane, scorePane , announcesPane,
+                handPane, new GridPane()
+        );
         main.rightProperty().bind(when(b).then(announcesPane).otherwise(new GridPane()));
-        this.finalPane = new StackPane(main, victoryPaneForTeam[0] , victoryPaneForTeam[1] );
-
+        this.finalPane = new StackPane(main, team1Pane, team2Pane);
     }
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
 
-    private void cheatingManager(Scene scene) {
+    private void cheatingManager(Scene scene, ArrayBlockingQueue<Integer> cheatingQueue) {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             public void handle(final KeyEvent keyEvent) {
                 if (keyEvent.getCode().isDigitKey() && cheatingQueue.isEmpty()) {
@@ -154,7 +115,6 @@ public final class GraphicalPlayer {
                         throw new Error(e1);
                     }
                  keyEvent.consume();
-
                }
             }
         });
@@ -169,12 +129,12 @@ public final class GraphicalPlayer {
      *                    players to their names.
      * @return ({@code Stage}) - our game's stage.
      */
-    public Stage createStage(PlayerId myId, Map<PlayerId, String> playerNames) {
+    public Stage createStage(PlayerId myId, Map<PlayerId, String> playerNames, ArrayBlockingQueue<Integer> cheatingQueue) {
         Stage stage = new Stage();
-        stage.setTitle("Javass - " + playerNames.get(thisId));
+        stage.setTitle("Javass - " + playerNames.get(myId));
         Scene finalScene = new Scene(finalPane);
         finalScene.getRoot().requestFocus();
-        cheatingManager(finalScene);
+        cheatingManager(finalScene, cheatingQueue);
 
         stage.setScene(finalScene);
         return stage;
@@ -188,7 +148,6 @@ public final class GraphicalPlayer {
      * @param playerNames ({@code Map<PlayerId, String>})
      * @return ({@code GridPane}) - the pane used to display the scores.
      */
-    //TODO: array
 
     private GridPane createScorePane(ScoreBean scoreBean, Map<PlayerId, String> playerNames) {
         Text[] row1 = createScorePaneRow(PlayerId.PLAYER_1, PlayerId.PLAYER_3, playerNames, scoreBean);
@@ -250,11 +209,17 @@ public final class GraphicalPlayer {
      * @param playerNames ({@code Map<PlayerId, String>})
      * @return ({@code GridPane}) - basically the current trick.
      */
-    private GridPane createTrickPane(TrickBean trickBean, PlayerId myId, Map<PlayerId, String> playerNames) {
-        VBox middleLeft  = setTrickVBox (trickBean, myId.previousPlayer(), 3, playerNames.get(myId.previousPlayer()));
-        VBox upCenter    = setTrickVBox (trickBean, myId.nextPlayer().nextPlayer(), 2, playerNames.get(myId.nextPlayer().nextPlayer()));
-        VBox middleRight = setTrickVBox (trickBean, myId.nextPlayer(), 1, playerNames.get(myId.nextPlayer()));
-        VBox downCenter  = setTrickVBox (trickBean, myId, 0, playerNames.get(myId));
+    private GridPane createTrickPane(TrickBean trickBean, HandBean handBean, PlayerId myId, Map<PlayerId, String> playerNames) {
+        BooleanBinding b = createBooleanBinding( () ->
+                handBean.hand().stream().noneMatch(c -> c == null),
+                handBean.hand(),
+                trickBean.trick()
+        );
+
+        VBox middleLeft  = setTrickVBox (trickBean, handBean, myId.previousPlayer()         , 3, playerNames.get(myId.previousPlayer())         , b);
+        VBox upCenter    = setTrickVBox (trickBean, handBean, myId.nextPlayer().nextPlayer(), 2, playerNames.get(myId.nextPlayer().nextPlayer()), b);
+        VBox middleRight = setTrickVBox (trickBean, handBean, myId.nextPlayer()             , 1, playerNames.get(myId.nextPlayer())             , b);
+        VBox downCenter  = setTrickVBox (trickBean, handBean, myId, 0                  , playerNames.get(myId)                                  , b);
 
         ImageView trumpImage = new ImageView();
         trumpImage.imageProperty().bind(valueAt(trumps, trickBean.trumpProperty()));
@@ -270,42 +235,6 @@ public final class GraphicalPlayer {
         trickGrid.add(middleRight, 2, 0, 1, 3);
         trickGrid.add(downCenter , 1, 2, 1, 1);
         trickGrid.add(trumpVBox  , 1, 1, 1, 1);
-
-    private GridPane createTrickPane() {
-        BooleanBinding b =  createBooleanBinding( () -> {
-            return (handBean.hand().stream().noneMatch(c -> c == null));
-            },handBean.hand(), trick.trick());
-      VBox couple[] = new VBox[4];
-      for(int i = 0 ; i < 4 ; ++i) {
-            PlayerId playerIdForCouple = PlayerId.ALL.get((thisId.ordinal()+2+i)%4);
-            Text textForCouple = new Text();
-            textForCouple.textProperty().set(playerNames.get(playerIdForCouple));
-            textForCouple.setStyle("-fx-font: 14 Optima;");
-            Text announcementForCouple = new Text();
-            SimpleStringProperty str = new SimpleStringProperty();
-            str.bind(handBean.announcesPerPlayerToString().get(playerIdForCouple.ordinal()));
-            announcementForCouple.textProperty().bind(str);
-            announcementForCouple.setStyle("-fx-font: 16 Optima;");
-            announcementForCouple.visibleProperty().bind(b);
-            ImageView imageForCouple = new ImageView();
-            imageForCouple.imageProperty().bind(valueAt(GraphicalPlayer.cardImpage240,valueAt(trick.trick(), playerIdForCouple)));
-            imageForCouple.setFitHeight(180);
-            imageForCouple.setFitWidth(120);
-            Rectangle rectangle = new Rectangle(120, 180);
-            rectangle.setStyle("-fx-arc-width: 20;\n" +
-                    "-fx-arc-height: 20;\n" +
-                    "-fx-fill: transparent;\n" +
-                    "-fx-stroke: lightpink;\n" +
-                    "-fx-stroke-width: 5;\n" +
-                    "-fx-opacity: 0.5;");
-            BooleanBinding shouldDisplay =  createBooleanBinding( () ->playerIdForCouple.equals(trick.winningPlayerProperty().get()),
-                    trick.winningPlayerProperty() );
-            rectangle.visibleProperty().bind(shouldDisplay);
-            rectangle.setEffect(new GaussianBlur(4));
-            StackPane imageWithHalo  = new StackPane(imageForCouple, rectangle);
-            couple[i] = new VBox(textForCouple,imageWithHalo, announcementForCouple
-                    );
-            couple[i].setAlignment(Pos.TOP_CENTER);
 
         trickGrid.setStyle("-fx-background-color: whitesmoke; -fx-padding: 5px; -fx-border-width: 3px 0px; -fx-border-style: solid; -fx-border-color: gray; -fx-alignment: center;");
         return trickGrid;
@@ -325,7 +254,7 @@ public final class GraphicalPlayer {
      * @param playerName ({@code String}) - the name of the corresponding player.
      * @return ({@code VBox}) - a card and the name of the player who put it.
      */
-    private VBox setTrickVBox(TrickBean trickBean, PlayerId pId, int pos, String playerName) {
+    private VBox setTrickVBox(TrickBean trickBean, HandBean handBean, PlayerId pId, int pos, String playerName, BooleanBinding b) {
         ImageView cardImage = new ImageView();
         cardImage.imageProperty().bind(valueAt(cards240, valueAt(trickBean.trick(), pId)));
         cardImage.setFitWidth(TRICK_CARD_WIDTH);
@@ -341,7 +270,14 @@ public final class GraphicalPlayer {
 
         StackPane imageAndHalo = new StackPane(cardImage, rectangle);
 
-        VBox vBox = (pos != 0) ? new VBox(new Text(playerName), imageAndHalo) : new VBox(imageAndHalo, new Text(playerName));
+        Text meld = new Text();
+        SimpleStringProperty meldStr = new SimpleStringProperty();
+        meldStr.bind(handBean.announcesPerPlayerToString().get(pId.ordinal()));
+        meld.textProperty().bind(meldStr);
+        meld.setStyle("-fx-font: 16 Optima;");
+        meld.visibleProperty().bind(b);
+
+        VBox vBox = (pos != 0) ? new VBox(new Text(playerName), imageAndHalo, meld) : new VBox(meld, imageAndHalo, new Text(playerName));
         vBox.setAlignment(Pos.CENTER);
         vBox.setStyle("-fx-padding: 5px; -fx-alignment: center;");
         return vBox;
@@ -378,7 +314,7 @@ public final class GraphicalPlayer {
         return victoryPane;
     }
 
-    private HBox createHandPane(HandBean handBean) {
+    private HBox createHandPane(HandBean handBean, ArrayBlockingQueue<Card> queueOfCommunication) {
 
         ImageView[] hand = new ImageView[9];
         for(int i = 0 ; i < hand.length ; ++i) {
@@ -394,7 +330,7 @@ public final class GraphicalPlayer {
             child.disableProperty().bind(isPlayable.not());
             child.setOnMouseClicked((e)-> {
                 try {
-                    GraphicalPlayerAdapter.queueOfCommunication.put(correspondingCard.get());
+                    queueOfCommunication.put(correspondingCard.get());
                 } catch (InterruptedException e1) {
                     throw new Error(e1);
                 }

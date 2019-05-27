@@ -13,8 +13,6 @@ import src.cs108.MeldSet;
  * @author Marin Nguyen - (288260)
  */
 public interface Player {
-    
-    
     /**
      * @brief Returns the Card the [underlying] Player wants to play, given its hand
      *        and the actual TurnState.
@@ -40,6 +38,7 @@ public interface Player {
     }
 
     /**
+     * TODO
      * @Brief
      *
      * @param hand
