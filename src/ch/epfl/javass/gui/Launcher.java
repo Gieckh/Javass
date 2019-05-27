@@ -121,7 +121,7 @@ public class Launcher extends Application {
                     args.add(((TextField) ((HBox) playersGUI.get(pId.ordinal()).get(5)).getChildren().get(1)).getText());
                     break;
 
-                case SIMULATED:
+                case SIMULATED_GOOD:
                     args.add(((TextField) ((HBox) playersGUI.get(pId.ordinal()).get(4)).getChildren().get(1)).getText());
                     break;
 
@@ -216,7 +216,7 @@ public class Launcher extends Application {
             simulated.setVisible(false);
             iterationsBox.setVisible(true);
 
-            playerTypes.put(pId, PlayerType.SIMULATED);
+            playerTypes.put(pId, PlayerType.SIMULATED_GOOD);
         });
 
         return Collections.unmodifiableList(Arrays.asList(human, remote, simulated, name, iterationsBox, ipAddressBox));
@@ -244,7 +244,7 @@ public class Launcher extends Application {
             }
             break;
 
-        case SIMULATED:
+        case SIMULATED_GOOD:
             players.put(
                     pId,
                     new PacedPlayer(

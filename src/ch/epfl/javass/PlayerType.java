@@ -3,7 +3,7 @@ package ch.epfl.javass;
 public enum PlayerType {
     HUMAN("h"),
     REMOTE("r"),
-    SIMULATED("s");
+    SIMULATED_GOOD("s");
 
     private String stringRep;
 
@@ -15,7 +15,7 @@ public enum PlayerType {
         switch(s) {
             case "h": return HUMAN;
             case "r": return REMOTE;
-            case "s": return SIMULATED;
+            case "s": return SIMULATED_GOOD;
             default: throw new IllegalArgumentException();
         }
     }

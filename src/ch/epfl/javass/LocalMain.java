@@ -80,7 +80,7 @@ public final class LocalMain extends Application {
         String fstParam = arg.get(0);
         if (! (fstParam.equals(HUMAN    .toString()) ||
                fstParam.equals(REMOTE   .toString()) ||
-               fstParam.equals(SIMULATED.toString()))
+               fstParam.equals(SIMULATED_GOOD.toString()))
         )
             displayError("Erreur : spécification de joueur invalide : " + fstParam +"\n" +
                          "Le premier caractère de chaque argument du programme devrait être 'h', 'r' ou 's'."
@@ -115,7 +115,7 @@ public final class LocalMain extends Application {
                     );
                 break;
 
-            case SIMULATED:
+            case SIMULATED_GOOD:
                 if (arg.size() > 3)
                     displayError(
                             "Erreur : nombre de paramètres excessif " + arg.size() + "dans l'entrée \"" + String.join(":", arg) + "\".\n" +
@@ -247,7 +247,7 @@ public final class LocalMain extends Application {
                 }
                 break;
 
-            case SIMULATED:
+            case SIMULATED_GOOD:
                 playersMap.put(
                         pId,
                         new PacedPlayer(
