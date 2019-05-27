@@ -1,5 +1,6 @@
 package bonus;
 
+
 import static ch.epfl.javass.Preconditions.checkArgument;
 
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ import src.cs108.MeldSet;
  *
  * @author - Marin Nguyen (288260)
  */
-public class mctsMemory implements Player {
+@SuppressWarnings("Duplicates")
+public class MctsPlayerSmart implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
@@ -42,13 +44,14 @@ public class mctsMemory implements Player {
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
     //TODO: why no JDoc there ?
-    public mctsMemory(PlayerId ownId, long rngSeed, int iterations) {
+    public MctsPlayerSmart(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
         this.ownId = ownId;
 //        this.rngSeed = rngSeed;
         this.rng = new SplittableRandom(rngSeed);
         listOfKnownCard = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
+
     }
 
     /** ============================================== **/
@@ -58,20 +61,18 @@ public class mctsMemory implements Player {
     @Override
     public MeldSet announcement(CardSet hand) {
         List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
-        MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
-        return bestAnnounceSet;
+        return listOfAnnouncesSet.get(listOfAnnouncesSet.size() - 1);
     }
     
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
         listOfKnownCard.clear();
-        for(int i = 0 ; i<4 ; ++i) {
+        for(int i = 0; i < 4 ; ++i) {
             listOfKnownCard.add(m.get(i).cards());
         }
     }
-    
-    
-    @SuppressWarnings("Duplicates")
+
+
     @Override
     /**
      * @brief The card "this" [the Player] should play, in order to maximize its points.
@@ -83,9 +84,10 @@ public class mctsMemory implements Player {
      *                [according to the Monte-Carlo tree search algorithm]
      */
     public Card cardToPlay(TurnState state, CardSet hand) {
+
         //default, the root teamId is this player's and its father is null.
         Node root;
-
+       
         //The trick corresponding to the TurnState of a Node should NEVER be full -using our implementation
         if (state.trick().isFull()) {
             assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
@@ -93,7 +95,6 @@ public class mctsMemory implements Player {
         }
         else
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
-
         iterate(root);
 
         return root.playableCardsFromTurnState.get(root.selectSon(0));
@@ -165,7 +166,7 @@ public class mctsMemory implements Player {
         assert (! father.state.trick().isFull());
         sonTeamId = father.state.nextPlayer().team();
 
-        //We never wanna have a full trick in our turnState, unless it is the last trick of the turn
+        //We never wanna have a full trick in our TurnState, unless it is the last trick of the turn
         if (father.state.trick().isLast()) {
             sonState = father.state.withNewCardPlayed(card);
             //PlayableCards should never be called at the last turn of the game
@@ -218,22 +219,33 @@ public class mctsMemory implements Player {
 //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
+            //this.gameState
             
-            ///////////////////////////////////////////////////// MODIF TODO
-            
-            CardSet onlyPossibleCards = playableCards.difference(listOfKnownCard.get((copyState.nextPlayer().ordinal()+1)%4));
-            onlyPossibleCards = onlyPossibleCards.difference(listOfKnownCard.get((copyState.nextPlayer().ordinal()+2)%4));
-            onlyPossibleCards = onlyPossibleCards.difference(listOfKnownCard.get((copyState.nextPlayer().ordinal()+3)%4));
-            
-            ////////////////////////////////////////////////////
-            Card randomCardToPlay = onlyPossibleCards.size() !=0 ? 
-                    onlyPossibleCards.get(rng.nextInt(onlyPossibleCards.size())) : 
-                        playableCards.get(rng.nextInt(playableCards.size()));
+            CardSet RestrictiveSetOfCards = chooseBestRestrictiveSet(playableCards, copyState);
+            Card randomCardToPlay = RestrictiveSetOfCards.get(rng.nextInt(RestrictiveSetOfCards.size())) ;
 
             copyHand = copyHand.remove(randomCardToPlay);
             copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
         }
         return copyState.score();
+    }
+    
+    private CardSet chooseBestRestrictiveSet(CardSet playableCards, TurnState state) {
+        CardSet CardsThatRespectsRules = playableCards.intersection(     state.cardsOnePlayerDoesntHave(this.ownId).complement());
+        CardSet CardsThatRespectsAnnouncements = playableCards.difference(listOfKnownCard.get((state.nextPlayer().nextPlayer().ordinal())));
+        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+2)%PlayerId.COUNT));
+        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().previousPlayer().ordinal())));
+        CardSet merge = CardsThatRespectsAnnouncements.intersection(CardsThatRespectsRules);
+        if(merge.size() != 0) {
+            return merge;
+        }
+        //with some test over 1000 games , it seemed that announcement was more efficient than rules
+        if(CardsThatRespectsAnnouncements.size()!=0) return CardsThatRespectsAnnouncements;
+        if(CardsThatRespectsRules.size()!=0) {
+            return CardsThatRespectsRules;
+            
+        }
+        else return playableCards;
     }
 
     /**
@@ -356,7 +368,6 @@ public class mctsMemory implements Player {
             return selectSon(DEFAULT_EXPLORATION_PARAMETER);
         }
 
-        @SuppressWarnings("Duplicates")
         /**
          * @brief Never called with a [true] leaf.
          *        Indicates which son, of the (Node) it is called by, should be explored.
@@ -364,7 +375,7 @@ public class mctsMemory implements Player {
          * @param explorationParameter (int) - quantifies the likeliness of our algorithm to wander horizontally,
          *                             i.e. to explore rarely explored branches.
          * @return (int) - the index of a son for which "evaluate" is maximal.
-         *                 [If a {@code Node} hasn't been explored yet, its value is considered infinite, and therefore maximal]
+         *                 [If a (Node) hasn't been explored yet, its value is considered infinite, and therefore maximal]
          */
         private int selectSon(int explorationParameter) {
             if (directChildrenOfNode.length == 0) {
@@ -377,6 +388,7 @@ public class mctsMemory implements Player {
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node node = directChildrenOfNode[i];
                 if (node == null) {
+//                    return (i | (1 << 5));
                     return i;
                 }
                 double tmpValue = evaluate(node, explorationParameter);
@@ -390,7 +402,7 @@ public class mctsMemory implements Player {
         }
 
         /**
-         * @brief Indicates whether the {@code Node} "this" is a [true] leaf in the tree.
+         * @brief Indicates whether the (Node) "this" is a [true] leaf in the tree.
          *        [i.e. it corresponds to the last Card of the last Trick of the turn]
          *
          * @return (boolean) true if "this" is a leaf.

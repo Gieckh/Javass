@@ -15,6 +15,7 @@ import java.util.SplittableRandom;
  *
  * @author - Marin Nguyen (288260)
  */
+@SuppressWarnings("Duplicates")
 public class WorstMctsPlayer implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/

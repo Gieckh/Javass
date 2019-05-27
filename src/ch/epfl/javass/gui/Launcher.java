@@ -285,9 +285,9 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GridPane launcher = createMainLauncher();
-        StackPane mainPane = new StackPane(launcher);
-//        StackPane mainPane = new StackPane(createLocalLaucher());
+//        GridPane launcher = createMainLauncher();
+//        StackPane mainPane = new StackPane(launcher);
+        StackPane mainPane = new StackPane(createLocalLaucher());
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.setTitle("ok");
         primaryStage.show();

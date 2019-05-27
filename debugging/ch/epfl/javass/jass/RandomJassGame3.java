@@ -4,8 +4,8 @@
 //import java.util.HashMap;
 //import java.util.Map;
 //
-//import bonus.mctsMemory;
-//import bonus.mctsPlayerSmart;
+//import ch.epfl.javass.jass.mctsMemory;
+//import bonus.MctsPlayerSmart;
 ////this is for a test, thus no need of javadoc
 //public final class RandomJassGame3 {
 //    public static void main(String[] args) {
@@ -23,7 +23,7 @@
 //        for (PlayerId pId: PlayerId.ALL) {
 //          Player player = new  MctsPlayer(pId.equals(PlayerId.PLAYER_2)?  PlayerId.PLAYER_2 : PlayerId.PLAYER_4, i, k);
 //          if (pId.team() == TeamId.TEAM_1) {
-//             player=  new mctsPlayerSmart(pId.equals(PlayerId.PLAYER_1)?  PlayerId.PLAYER_1 : PlayerId.PLAYER_3, i, k);
+//             player=  new MctsPlayerSmart(pId.equals(PlayerId.PLAYER_1)?  PlayerId.PLAYER_1 : PlayerId.PLAYER_3, i, k);
 //           }
 //
 //          players.put(pId, player);

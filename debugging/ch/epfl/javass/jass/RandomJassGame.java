@@ -31,7 +31,7 @@
 //import java.util.HashMap;
 //import java.util.Map;
 //
-//import bonus.mctsPlayerSmart;
+//import bonus.MctsPlayerSmart;
 ////this is for a test, thus no need of javadoc
 //public final class RandomJassGame {
 //    public static void main(String[] args) {
@@ -72,7 +72,7 @@
 //        for (PlayerId pId: PlayerId.ALL) {
 //          Player player = new PacedPlayer(new RandomPlayer(2019), 1);
 //          if (pId == PlayerId.PLAYER_1) {
-//             player =  new PrintingPlayer(new mctsPlayerSmart(PlayerId.PLAYER_1, 2019, k));
+//             player =  new PrintingPlayer(new MctsPlayerSmart(PlayerId.PLAYER_1, 2019, k));
 //           }
 //         if (pId == PlayerId.PLAYER_4) {
 //             player = new MctsPlayer(PlayerId.PLAYER_4, 2019, k);
@@ -81,7 +81,7 @@
 //             player = new MctsPlayer(PlayerId.PLAYER_2, 2019, k);
 //           }
 //       if (pId == PlayerId.PLAYER_3) {
-//           player = new mctsPlayerSmart(PlayerId.PLAYER_3, 2019, k);
+//           player = new MctsPlayerSmart(PlayerId.PLAYER_3, 2019, k);
 //   }
 //          players.put(pId, player);
 //          playerNames.put(pId, pId.name());
