@@ -46,7 +46,7 @@ public interface Player {
      * @return
     */
     default public MeldSet announcement(CardSet hand){
-        return null;
+        return MeldSet.EMPTY_SET;
     }
     
     /**

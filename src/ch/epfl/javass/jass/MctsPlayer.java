@@ -50,10 +50,7 @@ public class MctsPlayer implements Player {
         MeldSet bestAnnounceSet = listOfAnnouncesSet.get(listOfAnnouncesSet.size()-1);
         return bestAnnounceSet;
     }
-    
-    @Override
-    public void updateAnnouncement(List<MeldSet> m) {
-    }
+
     
     @SuppressWarnings("Duplicates")
     @Override

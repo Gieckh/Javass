@@ -16,20 +16,20 @@ public final class RandomJassGame3 {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
 
-        int k = 1_000;
-        int i = 5000;
+        int k = 100_000;
+        int i = 4000;
         int m = 0;
         int win = 0;
         for (PlayerId pId: PlayerId.ALL) {
           Player player = new  MctsPlayer(pId.equals(PlayerId.PLAYER_2)?  PlayerId.PLAYER_2 : PlayerId.PLAYER_4, i, k);
           if (pId.team() == TeamId.TEAM_1) {
-             player=  new mctsMemory(pId.equals(PlayerId.PLAYER_1)?  PlayerId.PLAYER_1 : PlayerId.PLAYER_3, i, k);
+             player=  new mctsPlayerSmart(pId.equals(PlayerId.PLAYER_1)?  PlayerId.PLAYER_1 : PlayerId.PLAYER_3, i, k);
            }
      
           players.put(pId, player);
           playerNames.put(pId, pId.name());
         }
-        for(int l = 0 ; l < 100 ; ++l) {
+        for(int l = 10 ; l < 100; ++l) {
             ++i;
             JassGame g = new JassGame(i, players, playerNames);
             while (!g.isGameOver()) {
