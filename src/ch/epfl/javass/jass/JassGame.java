@@ -123,6 +123,8 @@ public final class JassGame {
                         PackedCardSet.ALL_CARDS,
                         PackedTrick.firstEmpty(trump, turnFirstPlayer)
                 );
+                updatePlayersScores(turnState.score());
+
             }
         }
         updatePlayersTricks(turnState.trick());
@@ -265,7 +267,7 @@ public final class JassGame {
         int pointsOfTeam2 = listOfAnnouncement.get(1).points() + listOfAnnouncement.get(3).points();
         turnState = turnState.addScore(pointsOfTeam1>=pointsOfTeam2 ? 
                 TeamId.TEAM_1 : TeamId.TEAM_2, Math.max(pointsOfTeam1, pointsOfTeam2));
-        
+        updatePlayersScores(turnState.score());
     }
     
     private void updateAnnouncement() {

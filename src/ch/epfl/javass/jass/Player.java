@@ -37,12 +37,13 @@ public interface Player {
         //default is empty
     }
 
+
     /**
-     * TODO
-     * @Brief
+     * @Brief returns the MeldsSet ( announcement) this player decide to do
+     * given its hand.
      *
      * @param hand
-     * @return
+     * @return the announcement chosen by this player
     */
     default public MeldSet announcement(CardSet hand){
         return MeldSet.EMPTY_SET;
@@ -68,6 +69,11 @@ public interface Player {
         //default is empty
     }
     
+    /**
+     * @Brief informs the player of which player did which announcement.
+     *
+     * @param m the list sorted by playerId of the announcement of each players
+    */
     default public void updateAnnouncement(List<MeldSet> m) {
         //default is empty
     }

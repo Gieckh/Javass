@@ -84,7 +84,7 @@ public final class GraphicalPlayer {
             newValue.minHeightProperty().bind(trickPane.heightProperty());
         }  );
         BooleanBinding b =  createBooleanBinding( () -> {
-            return handBean.annouces().size()!=0;
+            return handBean.annouces().size()!=0 ;
         },handBean.annouces());
         announcesPane.disableProperty().bind(b.not());
 
