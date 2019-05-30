@@ -1,12 +1,12 @@
 package ch.epfl.javass.gui;
 
+import bonus.MctsPlayerSmart;
 import ch.epfl.javass.PlayerType;
 import ch.epfl.javass.jass.*;
 import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
 import javafx.application.Application;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -167,7 +167,9 @@ public class Launcher extends Application {
                     args.add(((TextField) ((HBox) playersGUI.get(pId.ordinal()).get(5)).getChildren().get(1)).getText());
                     break;
 
+                case SIMULATED_VERY_GOOD:
                 case SIMULATED_GOOD:
+                case SIMULATED_BAD:
                     args.add(((TextField) ((HBox) playersGUI.get(pId.ordinal()).get(4)).getChildren().get(1)).getText());
                     break;
 
@@ -192,8 +194,6 @@ public class Launcher extends Application {
 
             gameThread.setDaemon(true);
             gameThread.start();
-
-            localLauncher.setVisible(false);
         });
 
         for (int i = 0; i < PlayerId.COUNT; ++i) {
@@ -201,9 +201,10 @@ public class Launcher extends Application {
             localLauncher.addColumn(
                     i,
                     new SplitPane(
-                            column.get(0),
-                            column.get(1),
-                            column.get(2)),
+                            new StackPane(column.get(0), column.get(6)),
+                            new StackPane(column.get(1), column.get(7)),
+                            new StackPane(column.get(2), column.get(8))
+                    ),
                     column.get(3),
                     new StackPane(
                             column.get(4),
@@ -214,6 +215,7 @@ public class Launcher extends Application {
         localLauncher.addColumn(4, seedBox);
         localLauncher.add(launch, 2, 4, 1, 1);
 
+        localLauncher.setStyle("-fx-font: 16 Optima;");
         GridPane.setHalignment(launch, HPos.CENTER);
 
         return localLauncher;
@@ -222,7 +224,35 @@ public class Launcher extends Application {
     private List<Node> createPlayerField(PlayerId pId, Map<PlayerId, PlayerType> playerTypes, Boolean[] canStart) {
         Button human = new Button("humain");
         Button remote = new Button("distant");
-        Button simulated = new Button("simulé");
+        Button simulated = new Button("IA");
+        Button[] simulatedLevel = {new Button("Very good"),
+                                   new Button("Good"),
+                                   new Button("Bad")};
+
+        for (Button b: simulatedLevel)
+            b.setVisible(false);
+
+        simulatedLevel[0].setOnAction(e -> {
+            for (Button b: simulatedLevel)
+                b.setVisible(false);
+
+            playerTypes.put(pId, PlayerType.SIMULATED_VERY_GOOD);
+            canStart[pId.ordinal()] = true;
+        });
+        simulatedLevel[1].setOnAction(e -> {
+            for (Button b: simulatedLevel)
+                b.setVisible(false);
+
+            playerTypes.put(pId, PlayerType.SIMULATED_GOOD);
+            canStart[pId.ordinal()] = true;
+        });
+        simulatedLevel[2].setOnAction(e -> {
+            for (Button b: simulatedLevel)
+                b.setVisible(false);
+
+            playerTypes.put(pId, PlayerType.SIMULATED_BAD);
+            canStart[pId.ordinal()] = true;
+        });
 
         TextField name = new TextField(DEFAULT_NAMES.get(pId.ordinal()));
 
@@ -263,14 +293,15 @@ public class Launcher extends Application {
             human.setVisible(false);
             remote.setVisible(false);
             simulated.setVisible(false);
+
+            for (Button b: simulatedLevel)
+                b.setVisible(true);
+
             iterationsBox.setVisible(true);
-
-
-            playerTypes.put(pId, PlayerType.SIMULATED_GOOD);
-            canStart[pId.ordinal()] = true;
         });
 
-        return Collections.unmodifiableList(Arrays.asList(human, remote, simulated, name, iterationsBox, ipAddressBox));
+        return Collections.unmodifiableList(Arrays.asList(human, remote, simulated, name, iterationsBox, ipAddressBox,
+                simulatedLevel[0], simulatedLevel[1], simulatedLevel[2]));
     }
 
     private void createsPlayerAndPutsInMaps(Map<PlayerId, String> playerNames,
@@ -295,6 +326,33 @@ public class Launcher extends Application {
             }
             break;
 
+        case SIMULATED_VERY_GOOD:
+        case SIMULATED_GOOD:
+        case SIMULATED_BAD:
+            createSimulatedPlayer(playerTypes.get(pId), pId, random, args.get(1), players);
+            break;
+
+        default:
+                throw new Error("Impossible!!!");
+        }
+    }
+
+    private void createSimulatedPlayer(PlayerType playerType, PlayerId pId,
+            Random random, String iterations, Map<PlayerId, Player> players) {
+        switch (playerType) {
+        case SIMULATED_VERY_GOOD:
+            players.put(
+                    pId,
+                    new PacedPlayer(
+                            new MctsPlayerSmart(
+                                    pId,
+                                    random.nextLong(),
+                                    iterationsOrDefault(iterations)
+                            ),
+                            SIMULATED_PLAYER_WAIT_TIME_MS
+                    )
+            );
+            break;
         case SIMULATED_GOOD:
             players.put(
                     pId,
@@ -302,15 +360,26 @@ public class Launcher extends Application {
                             new MctsPlayer(
                                     pId,
                                     random.nextLong(),
-                                    iterationsOrDefault(args.get(1))
+                                    iterationsOrDefault(iterations)
                             ),
                             SIMULATED_PLAYER_WAIT_TIME_MS
                     )
             );
             break;
-
-        default:
-                throw new Error("Impossible!!!");
+        case SIMULATED_BAD:
+            players.put(
+                    pId,
+                    new PacedPlayer(
+                            new WorstMctsPlayer(
+                                    pId,
+                                    random.nextLong(),
+                                    iterationsOrDefault(iterations)
+                            ),
+                            SIMULATED_PLAYER_WAIT_TIME_MS
+                    )
+            );
+            break;
+            default: throw new IllegalArgumentException();
         }
     }
 
