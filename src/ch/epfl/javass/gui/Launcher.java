@@ -54,13 +54,14 @@ public class Launcher extends Application {
     }
 
     @SuppressWarnings("Duplicates")
-    private GridPane createMainLauncher() {
+    private GridPane createMainLauncher(GridPane localLauncher) {
+        localLauncher.setVisible(false);
         String[] args1 = {"s", "h", "s", "s"};
         String[] args2 = {};
 
         Text instructions = new Text("Choisissez votre type de partie : ");
+
         Button local = new Button("Partie locale");
-        local.setOnAction(e -> LocalMain.main(args1));
 
         Button remote = new Button("Partie distante");
         remote.setOnAction(e -> {
@@ -75,6 +76,7 @@ public class Launcher extends Application {
         });
 
         GridPane launcher = new GridPane();
+
         launcher.addRow(0, instructions);
         launcher.addRow(1, local);
         launcher.addRow(2, remote);
@@ -83,10 +85,17 @@ public class Launcher extends Application {
         GridPane.setHalignment(local       , HPos.CENTER);
         GridPane.setHalignment(remote      , HPos.CENTER);
 
+        local.setOnAction(e -> {
+            launcher.setVisible(false);
+            launcher.disableProperty();
+            localLauncher.setVisible(true);
+
+        });
+
         return launcher;
     }
 
-    private GridPane createLocalLaucher() {
+    private GridPane createLocalLauncher() {
         //TODO
 
         Map<PlayerId, PlayerType> playerTypes = new HashMap<>();
@@ -166,7 +175,9 @@ public class Launcher extends Application {
             );
         }
         localLauncher.addColumn(4, seedBox);
-        localLauncher.addRow(4, launch);
+        localLauncher.add(launch, 2, 4, 1, 1);
+
+        GridPane.setHalignment(launch, HPos.CENTER);
 
         return localLauncher;
     }
@@ -285,9 +296,8 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        GridPane launcher = createMainLauncher();
-//        StackPane mainPane = new StackPane(launcher);
-        StackPane mainPane = new StackPane(createLocalLaucher());
+        GridPane localLauncher = createLocalLauncher();
+        StackPane mainPane = new StackPane(localLauncher, createMainLauncher(localLauncher));
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.setTitle("ok");
         primaryStage.show();
