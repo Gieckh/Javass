@@ -34,6 +34,12 @@ public class JassReductorOfSet {
      *  Un joueur qui possède le valet d’atout, <b>n’est pas obligé de le jouer</b>, même si la couleur de base du pli est celle d’atout
      *  et que c’est la seule carte de cette couleur qui reste dans sa main. " d'après wikipedia
      *  With in bold some set of cards we can deduce a player doesn't have thank's to the rules.
+     *  
+     *  Si ca n'est pas encore clair, nous prenons en compte les 3 cas suivants (pour faire simple): 
+     *  •   si le premier joueur ne joue une couleur X qui n’est pas atout , et qu'un joueur ne suis pas ni ne coupe,
+     *      c’est qu’il n’a pas de carte de la couleur X .
+     *  •   Si un joueur coupe et un autre joueur sous coupe , c’est qu’il n’a pas d’atout supérieur à la carte du joueur qui a coupé. 
+     *  •   Le valet d'atout est une exception aux regles ci dessus.
      *
      * @param trick
      * @param oldListOfCardSetNotPossessed
@@ -53,13 +59,11 @@ public class JassReductorOfSet {
             for(int i =0 ; i< index ; ++i ) {
                 cardPlayed.add(i, trick.card(i));    
             }
-            if(!baseColor.equals(trumpColor)) {
                 for(int i = 1 ; (i<index); ++i) {         
                     if(!(cardPlayed.get(i).color().equals(trumpColor)||cardPlayed.get(i).color().equals(baseColor))) {
                         cardsPlayerDontHave.set(i, CardSet.ofPacked(PackedCardSet.subsetOfColor(PackedCardSet.ALL_CARDS, baseColor)));
                     }
                 }             
-            }
             Card bestCard = null ;
             for(int i = 0 ; i < index-1 ; ++i) {
                 if(bestCard == null || cardPlayed.get(i).isBetter(trumpColor, bestCard)) {

@@ -240,7 +240,7 @@ public class MctsPlayerSmart implements Player {
     }
     
     private CardSet chooseBestRestrictiveSet(CardSet playableCards, TurnState state) {
-        CardSet CardsThatRespectsRules = playableCards.intersection(     state.cardsOnePlayerDoesntHave(this.ownId).complement());
+        CardSet CardsThatRespectsRules = playableCards.difference(state.cardsOnePlayerDoesntHave(this.ownId));
         CardSet CardsThatRespectsAnnouncements = playableCards.difference(listOfKnownCard.get((state.nextPlayer().nextPlayer().ordinal())));
         CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+2)%PlayerId.COUNT));
         CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().previousPlayer().ordinal())));
@@ -250,7 +250,10 @@ public class MctsPlayerSmart implements Player {
         }
         //with some test over 1000 games , it seemed that announcement was more efficient than rules
         if(CardsThatRespectsAnnouncements.size()!=0) return CardsThatRespectsAnnouncements;
-        if(CardsThatRespectsRules.size()!=0) return CardsThatRespectsRules;
+
+        if(CardsThatRespectsRules.size()!=0) {
+            return CardsThatRespectsRules;
+        }
         else return playableCards;
     }
 

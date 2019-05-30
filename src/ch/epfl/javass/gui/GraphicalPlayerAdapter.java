@@ -3,6 +3,8 @@ package ch.epfl.javass.gui;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -105,6 +107,9 @@ public final class GraphicalPlayerAdapter implements Player {
     public MeldSet announcement(CardSet hand) {
         try {
             runLater(() -> {
+                //reset the announce pane
+                handBean.setannouncesPerPlayer(new ArrayList<>(Collections.nCopies(4, MeldSet.EMPTY_SET)));
+                
                 handBean.setannounces(hand);
                 listOfAnnounces.setValue(createAnnouncesPane());});
             MeldSet meldSet = meldQueue.take() ;

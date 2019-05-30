@@ -16,7 +16,7 @@ public final class RandomJassGame3 {
         Map<PlayerId, Player> players = new HashMap<>();
         Map<PlayerId, String> playerNames = new HashMap<>();
 
-        int k = 100000;
+        int k = 10;
         int i = 56;
         int m = 0;
         int win = 0;
@@ -29,7 +29,7 @@ public final class RandomJassGame3 {
           players.put(pId, player);
           playerNames.put(pId, pId.name());
         }
-        for(int l = 0 ; l < 10; ++l) {
+        for(int l = 0 ; l < 1000; ++l) {
             ++i;
             JassGame g = new JassGame(i, players, playerNames);
             while (!g.isGameOver()) {
