@@ -3,10 +3,13 @@ package ch.epfl.javass.gui;
 import static javafx.application.Platform.runLater;
 import static javafx.collections.FXCollections.observableArrayList;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import bonus.MeldSet;
 import ch.epfl.javass.jass.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -14,7 +17,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import src.cs108.MeldSet;
 
 /**
  * @brief This class extends Player and is an Adapter of a graphicalPlayer.
@@ -105,6 +107,9 @@ public final class GraphicalPlayerAdapter implements Player {
     public MeldSet announcement(CardSet hand) {
         try {
             runLater(() -> {
+                //reset the announce pane
+                handBean.setannouncesPerPlayer(new ArrayList<>(Collections.nCopies(4, MeldSet.EMPTY_SET)));
+                
                 handBean.setannounces(hand);
                 listOfAnnounces.setValue(createAnnouncesPane());});
             MeldSet meldSet = meldQueue.take() ;

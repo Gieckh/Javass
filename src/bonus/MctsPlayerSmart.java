@@ -15,17 +15,20 @@ import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.TurnState;
-import src.cs108.Announcement;
-import src.cs108.MeldSet;
 
 /**
- * @brief This class extends Player and only overrides the method "cardToPlay".
+ * @brief BONUS : This class extends Player
  *        To decide which card to play, the computer uses a Monte-Carlo tree search
  *        algorithm - hence the "MCTS".
+ *        But also some deductions from rulesOfJass hence "smart".
+ *        It chooses the best possible announcement .
+ *        go to line 220 to 260 for the bonus modification.
  *
  * @see Player
  *
- * @author - Marin Nguyen (288260)
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen -  (288260)
+ * 
  */
 @SuppressWarnings("Duplicates")
 public class MctsPlayerSmart implements Player {
@@ -43,7 +46,7 @@ public class MctsPlayerSmart implements Player {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    //TODO: why no JDoc there ?
+
     public MctsPlayerSmart(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
@@ -58,12 +61,18 @@ public class MctsPlayerSmart implements Player {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
+    /* Chooses best.
+     * @see ch.epfl.javass.jass.Player#announcement(ch.epfl.javass.jass.CardSet)
+     */
     @Override
     public MeldSet announcement(CardSet hand) {
         List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
         return listOfAnnouncesSet.get(listOfAnnouncesSet.size() - 1);
     }
     
+    /* Update to do deductions.
+     * @see ch.epfl.javass.jass.Player#updateAnnouncement(java.util.List)
+     */
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
         listOfKnownCard.clear();
@@ -231,7 +240,7 @@ public class MctsPlayerSmart implements Player {
     }
     
     private CardSet chooseBestRestrictiveSet(CardSet playableCards, TurnState state) {
-        CardSet CardsThatRespectsRules = playableCards.intersection(     state.cardsOnePlayerDoesntHave(this.ownId).complement());
+        CardSet CardsThatRespectsRules = playableCards.difference(state.cardsOnePlayerDoesntHave(this.ownId));
         CardSet CardsThatRespectsAnnouncements = playableCards.difference(listOfKnownCard.get((state.nextPlayer().nextPlayer().ordinal())));
         CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+2)%PlayerId.COUNT));
         CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().previousPlayer().ordinal())));
@@ -241,15 +250,15 @@ public class MctsPlayerSmart implements Player {
         }
         //with some test over 1000 games , it seemed that announcement was more efficient than rules
         if(CardsThatRespectsAnnouncements.size()!=0) return CardsThatRespectsAnnouncements;
+
         if(CardsThatRespectsRules.size()!=0) {
             return CardsThatRespectsRules;
-            
         }
         else return playableCards;
     }
 
     /**
-     * @brief Indicates the Cards the next Player to play
+     * @brief Indicates the Cards the next Player to play   
      *          - can play, if it is "this"
      *          - could play if it is any of the other 3. [actually there are some
      *          card that could be played that won't be taken into account, but

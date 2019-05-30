@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import bonus.MeldSet;
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import ch.epfl.javass.jass.Player;
@@ -23,7 +24,6 @@ import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
-import src.cs108.MeldSet;
 
 
 //TODO: does it actually work - without the "println(...)" ?
@@ -165,6 +165,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         }
     }
     
+    /* 
+     * @see ch.epfl.javass.jass.Player#announcement(ch.epfl.javass.jass.CardSet)
+     */
     @Override
     public MeldSet announcement(CardSet hand) { 
         forceWrite(JassCommand.MELD.toString(),
@@ -179,6 +182,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         }
     }
     
+    /* 
+     * @see ch.epfl.javass.jass.Player#updateAnnouncement(java.util.List)
+     */
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
         forceWrite(JassCommand.ANCM.toString(),

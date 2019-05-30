@@ -1,4 +1,4 @@
-package ch.epfl.javass.jass;
+package bonus;
 //TODO: com vitef
 //TODO: an "AbstractMCTSPlayer" class, but it would change the architecture for the "rendu obligatoire".
 //TODO: test
@@ -6,9 +6,17 @@ import static ch.epfl.javass.Preconditions.checkArgument;
 
 import java.util.SplittableRandom;
 
+import ch.epfl.javass.jass.Card;
+import ch.epfl.javass.jass.CardSet;
+import ch.epfl.javass.jass.Player;
+import ch.epfl.javass.jass.PlayerId;
+import ch.epfl.javass.jass.Score;
+import ch.epfl.javass.jass.TeamId;
+import ch.epfl.javass.jass.TurnState;
+
 /**
  * @brief This class extends Player and only overrides the method "cardToPlay".
- *        To decide which card to play, the computer uses a Monte-Carlo tree search
+ *        To decide which card to play the worst way, the computer uses a Monte-Carlo tree search
  *        algorithm - hence the "MCTS".
  *
  * @see Player
@@ -30,7 +38,6 @@ public class WorstMctsPlayer implements Player {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    //TODO: why no JDoc there ?
     public WorstMctsPlayer(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;

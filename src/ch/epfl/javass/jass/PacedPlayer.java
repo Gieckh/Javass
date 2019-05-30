@@ -3,7 +3,7 @@ package ch.epfl.javass.jass;
 import java.util.List;
 import java.util.Map;
 
-import src.cs108.MeldSet;
+import bonus.MeldSet;
 
 /**
  * PacedPlayer

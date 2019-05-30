@@ -23,9 +23,9 @@ public enum JassCommand {
     CARD, /** @see ch.epfl.javass.jass.Player#cardToPlay(TurnState, CardSet)  */
     SCOR, /** @see ch.epfl.javass.jass.Player#updateScore(Score)  */
     WINR, /** @see ch.epfl.javass.jass.Player#setWinningTeam(TeamId)  */
-    CHET, 
-    MELD,
-    ANCM; 
+    CHET, //Bonus : for cheating
+    MELD, //Bonus : to declare announces 
+    ANCM; //Bonus : to update all announces 
 
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
