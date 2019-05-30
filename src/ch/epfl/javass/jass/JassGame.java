@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import bonus.MeldSet;
+import ch.epfl.javass.jass.Announces.MeldSet;
 import ch.epfl.javass.jass.Card.Color;
 
 /**

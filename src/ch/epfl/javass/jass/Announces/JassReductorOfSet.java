@@ -1,4 +1,4 @@
-package bonus;
+package ch.epfl.javass.jass.Announces;
 
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.Card.Color;

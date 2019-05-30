@@ -8,8 +8,8 @@ import static javafx.collections.FXCollections.unmodifiableObservableSet;
 import java.util.Collections;
 import java.util.List;
 
-import bonus.Announcement;
-import bonus.MeldSet;
+import ch.epfl.javass.jass.Announces.Announcement;
+import ch.epfl.javass.jass.Announces.MeldSet;
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import javafx.beans.property.SimpleStringProperty;

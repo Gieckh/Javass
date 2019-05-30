@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import bonus.MeldSet;
+import ch.epfl.javass.jass.Announces.MeldSet;
 import ch.epfl.javass.jass.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

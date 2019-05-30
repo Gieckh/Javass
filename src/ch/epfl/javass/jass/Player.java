@@ -1,10 +1,9 @@
 package ch.epfl.javass.jass;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import bonus.MeldSet;
+import ch.epfl.javass.jass.Announces.MeldSet;
 
 /**@brief This interface is implemented by the players, whether they are simulated
  *        or real.

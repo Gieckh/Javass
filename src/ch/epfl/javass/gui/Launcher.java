@@ -1,6 +1,7 @@
 package ch.epfl.javass.gui;
 
-import bonus.MctsPlayerSmart;
+import ch.epfl.javass.jass.Announces.MctsPlayerSmart;
+import ch.epfl.javass.jass.WorstMctsPlayer;
 import ch.epfl.javass.PlayerType;
 import ch.epfl.javass.jass.*;
 import ch.epfl.javass.net.RemotePlayerClient;
@@ -259,8 +260,13 @@ public class Launcher extends Application {
         Label iterationsLabel = new Label("Itérations :");
         TextField iterationsField = new TextField("10000");
         iterationsField.textProperty().addListener(((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*"))
-                iterationsField.setText(oldValue);
+            try {
+                Integer.parseInt(newValue);
+            }
+            catch (NumberFormatException e) {
+                if (!newValue.equals(""))
+                    iterationsField.setText(oldValue);
+            }
         }));
         HBox iterationsBox = new HBox(iterationsLabel, iterationsField);
         iterationsBox.setVisible(false);

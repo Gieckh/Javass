@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import bonus.JassReductorOfSet;
+import ch.epfl.javass.jass.Announces.JassReductorOfSet;
 
 /**
  * @brief This class represents the [public] state of the game: what every Player

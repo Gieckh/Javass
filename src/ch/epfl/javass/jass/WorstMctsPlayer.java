@@ -1,11 +1,9 @@
-package bonus;
-
-
+package ch.epfl.javass.jass;
+//TODO: com vitef
+//TODO: an "AbstractMCTSPlayer" class, but it would change the architecture for the "rendu obligatoire".
+//TODO: test
 import static ch.epfl.javass.Preconditions.checkArgument;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.SplittableRandom;
 
 import ch.epfl.javass.jass.Card;
@@ -17,71 +15,41 @@ import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.TurnState;
 
 /**
- * @brief BONUS : This class extends Player
- *        To decide which card to play, the computer uses a Monte-Carlo tree search
+ * @brief This class extends Player and only overrides the method "cardToPlay".
+ *        To decide which card to play the worst way, the computer uses a Monte-Carlo tree search
  *        algorithm - hence the "MCTS".
- *        But also some deductions from rulesOfJass hence "smart".
- *        It chooses the best possible announcement .
- *        go to line 220 to 260 for the bonus modification.
  *
  * @see Player
  *
- * @author Antoine Scardigli - (299905)
- * @author Marin Nguyen -  (288260)
- * 
+ * @author - Marin Nguyen (288260)
  */
 @SuppressWarnings("Duplicates")
-public class MctsPlayerSmart implements Player {
+public class WorstMctsPlayer implements Player {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
     /** ============================================== **/
     private static final int DEFAULT_EXPLORATION_PARAMETER = 40;
     private final int iterations;
     private final PlayerId ownId;
-//    private final long rngSeed;
+    //    private final long rngSeed;
     private SplittableRandom rng;
-    private List<CardSet> listOfKnownCard; 
 
 
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-
-    public MctsPlayerSmart(PlayerId ownId, long rngSeed, int iterations) {
+    public WorstMctsPlayer(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
         this.ownId = ownId;
-//        this.rngSeed = rngSeed;
+        //        this.rngSeed = rngSeed;
         this.rng = new SplittableRandom(rngSeed);
-        listOfKnownCard = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
-
     }
 
     /** ============================================== **/
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
-    
-    /* Chooses best.
-     * @see ch.epfl.javass.jass.Player#announcement(ch.epfl.javass.jass.CardSet)
-     */
-    @Override
-    public MeldSet announcement(CardSet hand) {
-        List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
-        return listOfAnnouncesSet.get(listOfAnnouncesSet.size() - 1);
-    }
-    
-    /* Update to do deductions.
-     * @see ch.epfl.javass.jass.Player#updateAnnouncement(java.util.List)
-     */
-    @Override
-    public void updateAnnouncement(List<MeldSet> m) {
-        listOfKnownCard.clear();
-        for(int i = 0; i < 4 ; ++i) {
-            listOfKnownCard.add(m.get(i).cards());
-        }
-    }
-
-
+    @SuppressWarnings("Duplicates")
     @Override
     /**
      * @brief The card "this" [the Player] should play, in order to maximize its points.
@@ -93,10 +61,9 @@ public class MctsPlayerSmart implements Player {
      *                [according to the Monte-Carlo tree search algorithm]
      */
     public Card cardToPlay(TurnState state, CardSet hand) {
-
         //default, the root teamId is this player's and its father is null.
         Node root;
-       
+
         //The trick corresponding to the TurnState of a Node should NEVER be full -using our implementation
         if (state.trick().isFull()) {
             assert (! state.trick().isLast()); //We should never call cardToPlay when the last Trick of the turn is full
@@ -104,11 +71,13 @@ public class MctsPlayerSmart implements Player {
         }
         else
             root = new Node(state, playableCards(state, hand), hand, null, ownId.team());
+
         iterate(root);
 
         return root.playableCardsFromTurnState.get(root.selectSon(0));
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Quite straightforward: will call the method "expand" on the root
      *        the number of iterations specified in this class's constructor and
@@ -127,6 +96,7 @@ public class MctsPlayerSmart implements Player {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Given the root of the tree, this method <em>expands</em> it by a node if it can,
      *        and returns it. If a leaf was reached, this method simply returns it.
@@ -155,6 +125,7 @@ public class MctsPlayerSmart implements Player {
         return son;
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Given a (Node) "father" whose trick is not full --"father" is therefore not a leaf,
      *        creates his next son (indicated by the parameter "nextChildIllPlayIn".
@@ -175,7 +146,7 @@ public class MctsPlayerSmart implements Player {
         assert (! father.state.trick().isFull());
         sonTeamId = father.state.nextPlayer().team();
 
-        //We never wanna have a full trick in our TurnState, unless it is the last trick of the turn
+        //We never wanna have a full trick in our turnState, unless it is the last trick of the turn
         if (father.state.trick().isLast()) {
             sonState = father.state.withNewCardPlayed(card);
             //PlayableCards should never be called at the last turn of the game
@@ -191,6 +162,7 @@ public class MctsPlayerSmart implements Player {
         return father.of(sonState, sonPlayableCards, sonHand, sonTeamId);
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Given a (Node) "node" and the (Score) "score" obtained after simulating
      *        a random turn starting from this Node's TurnState, updates
@@ -210,6 +182,7 @@ public class MctsPlayerSmart implements Player {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     /**
      * @brief Simulates randomly a turn until the end, given the specified (TurnState) "state"
      *        and (CardSet) 'hand" - the player's hand.
@@ -225,40 +198,20 @@ public class MctsPlayerSmart implements Player {
 
         TurnState copyState = state;
         CardSet copyHand = hand;
-//        SplittableRandom rng = new SplittableRandom(rngSeed);
+        //        SplittableRandom rng = new SplittableRandom(rngSeed);
         while(! copyState.isTerminal()) {
             CardSet playableCards = playableCards(copyState, copyHand);
-            //this.gameState
-            
-            CardSet RestrictiveSetOfCards = chooseBestRestrictiveSet(playableCards, copyState);
-            Card randomCardToPlay = RestrictiveSetOfCards.get(rng.nextInt(RestrictiveSetOfCards.size())) ;
+            Card randomCardToPlay = playableCards.get(rng.nextInt(playableCards.size()));
 
             copyHand = copyHand.remove(randomCardToPlay);
             copyState = copyState.withNewCardPlayedAndTrickCollected(randomCardToPlay);
         }
         return copyState.score();
     }
-    
-    private CardSet chooseBestRestrictiveSet(CardSet playableCards, TurnState state) {
-        CardSet CardsThatRespectsRules = playableCards.difference(state.cardsOnePlayerDoesntHave(this.ownId));
-        CardSet CardsThatRespectsAnnouncements = playableCards.difference(listOfKnownCard.get((state.nextPlayer().nextPlayer().ordinal())));
-        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+2)%PlayerId.COUNT));
-        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().previousPlayer().ordinal())));
-        CardSet merge = CardsThatRespectsAnnouncements.intersection(CardsThatRespectsRules);
-        if(merge.size() != 0) {
-            return merge;
-        }
-        //with some test over 1000 games , it seemed that announcement was more efficient than rules
-        if(CardsThatRespectsAnnouncements.size()!=0) return CardsThatRespectsAnnouncements;
 
-        if(CardsThatRespectsRules.size()!=0) {
-            return CardsThatRespectsRules;
-        }
-        else return playableCards;
-    }
-
+    @SuppressWarnings("Duplicates")
     /**
-     * @brief Indicates the Cards the next Player to play   
+     * @brief Indicates the Cards the next Player to play
      *          - can play, if it is "this"
      *          - could play if it is any of the other 3. [actually there are some
      *          card that could be played that won't be taken into account, but
@@ -277,7 +230,7 @@ public class MctsPlayerSmart implements Player {
             return state.trick().playableCards(hand);
         }
 
-//        return state.unplayedCards().difference(hand);
+        //        return state.unplayedCards().difference(hand);
         return state.trick().playableCards(state.unplayedCards().difference(hand));
     }
 
@@ -314,6 +267,7 @@ public class MctsPlayerSmart implements Player {
         /** ==============   CONSTRUCTORS   ============== **/
         /** ============================================== **/
 
+        @SuppressWarnings("Duplicates")
         /**
          * @brief Creates a new Node, given all its necessary parameters
          *
@@ -366,7 +320,7 @@ public class MctsPlayerSmart implements Player {
          * @return (double) - the value of the (Node) "node"
          */
         private double evaluate(Node node, int explorationParameter) {
-            return (float)node.totalPointsFromNode / node.randomTurnsPlayed +
+            return -(float)node.totalPointsFromNode / node.randomTurnsPlayed +
                     explorationParameter * (float)Math.sqrt(2 * Math.log(randomTurnsPlayed) / node.randomTurnsPlayed);
         }
 
@@ -377,9 +331,10 @@ public class MctsPlayerSmart implements Player {
             return selectSon(DEFAULT_EXPLORATION_PARAMETER);
         }
 
+        @SuppressWarnings("Duplicates")
         /**
          * @brief Never called with a [true] leaf.
-         *        Indicates which son, of the (Node) it is called by, should be explored.
+         *        Indicates which son, of the {@code Node} it is called by, should be explored.
          *
          * @param explorationParameter (int) - quantifies the likeliness of our algorithm to wander horizontally,
          *                             i.e. to explore rarely explored branches.
@@ -397,11 +352,10 @@ public class MctsPlayerSmart implements Player {
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node node = directChildrenOfNode[i];
                 if (node == null) {
-//                    return (i | (1 << 5));
                     return i;
                 }
                 double tmpValue = evaluate(node, explorationParameter);
-                if (tmpValue > value) {
+                if (tmpValue < value) {
                     value = tmpValue;
                     index = i;
                 }

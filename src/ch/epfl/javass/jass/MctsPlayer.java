@@ -5,8 +5,8 @@ import static ch.epfl.javass.Preconditions.checkArgument;
 import java.util.List;
 import java.util.SplittableRandom;
 
-import bonus.Announcement;
-import bonus.MeldSet;
+import ch.epfl.javass.jass.Announces.Announcement;
+import ch.epfl.javass.jass.Announces.MeldSet;
 
 @SuppressWarnings("Duplicates")
 /**

@@ -1,4 +1,4 @@
-package bonus;
+package ch.epfl.javass.jass.Announces;
 
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;

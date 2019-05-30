@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import bonus.MeldSet;
+import ch.epfl.javass.jass.Announces.MeldSet;
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import ch.epfl.javass.jass.Player;
