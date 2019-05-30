@@ -1,25 +1,28 @@
 package ch.epfl.javass.gui;
 
-import ch.epfl.javass.LocalMain;
 import ch.epfl.javass.PlayerType;
 import ch.epfl.javass.jass.*;
 import ch.epfl.javass.net.RemotePlayerClient;
 import ch.epfl.javass.net.RemotePlayerServer;
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.*;
-//TODO
-@SuppressWarnings("Duplicates")
+
+/**
+ * @brief This class contains the Graphical User Interface of the Jass game's launcher.
+ *
+ * @author - Marin Nguyen (288260)
+ * @author - Antoine Scardigli (299905)
+ */
 public class Launcher extends Application {
     /** ============================================== **/
     /** ==============    ATTRIBUTES    ============== **/
@@ -53,11 +56,22 @@ public class Launcher extends Application {
         System.exit(1);
     }
 
-    @SuppressWarnings("Duplicates")
+    /**
+     * @brief Creates the first launcher of the game. In it, you simply choose if
+     *        you want to play a remote game ["partie distante"], or a local
+     *        game ["partie locale"].
+     *        If you want to play a remote one, you don't
+     *        have anything else to do.
+     *        If you want to play a local one, the local launcher will then be opened,
+     *        which you'll have to fill. That is why this method takes "localLauncher"
+     *        as an argument.
+     *
+     * @param localLauncher ({@code GridPane}) - The interface of the local launcher.
+     * @return ({@code GridPane}) - The interface which allows you to choose
+     *         between a local game and a remote one.
+     */
     private GridPane createMainLauncher(GridPane localLauncher) {
         localLauncher.setVisible(false);
-        String[] args1 = {"s", "h", "s", "s"};
-        String[] args2 = {};
 
         Text instructions = new Text("Choisissez votre type de partie : ");
 
@@ -95,25 +109,48 @@ public class Launcher extends Application {
         return launcher;
     }
 
+    /**
+     * @brief The GUI to create a local game. Run the main and click on "Partie locale"
+     *        to see it.
+     *
+     * @return {(@code GridPane}) the interface used to initialize a local game.
+     */
     private GridPane createLocalLauncher() {
-        //TODO
+        Boolean[] canStart = {false, false, false, false};
 
         Map<PlayerId, PlayerType> playerTypes = new HashMap<>();
         List<List<Node>> playersGUI = new ArrayList<>();
         for (PlayerId pId: PlayerId.ALL) {
-            playersGUI.add(createPlayerField(pId, playerTypes));
+            playersGUI.add(createPlayerField(pId, playerTypes, canStart));
         }
 
         TextField seed = new TextField();
         seed.textProperty().addListener(((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*"))
-                seed.setText(oldValue);
+//            if (!newValue.matches("\\d*"))
+//                seed.setText(oldValue);
+            //Greedier, but also handles the case when the user enters a value too big
+            //i.e. greater than Integer.MAX_VALUE
+            try {
+                Integer.parseInt(newValue);
+            }
+            catch (NumberFormatException e) {
+                if (!newValue.equals(""))
+                    seed.setText(oldValue);
+            }
         }));
         HBox seedBox = new HBox(new Label("seed"), seed);
 
 
         Button launch = new Button("Démarrer");
+        GridPane localLauncher = new GridPane();
+
         launch.setOnAction(e -> {
+            for(Boolean b: canStart) {
+                if (!b) {
+                    return;
+                }
+            }
+
             Map <PlayerId, String> playerNames = new HashMap<>(PlayerId.COUNT);
             Map <PlayerId, Player> players = new HashMap<>(PlayerId.COUNT);
             Random random = randomOrDefault(seed.getText());
@@ -135,7 +172,7 @@ public class Launcher extends Application {
                     break;
 
                 default:
-                        throw new Error("Impossible!!!");
+                    throw new Error("Impossible!!!");
                 }
 
                 createsPlayerAndPutsInMaps(playerNames, players, playerTypes, args, pId, random);
@@ -155,10 +192,10 @@ public class Launcher extends Application {
 
             gameThread.setDaemon(true);
             gameThread.start();
+
+            localLauncher.setVisible(false);
         });
 
-
-        GridPane localLauncher = new GridPane();
         for (int i = 0; i < PlayerId.COUNT; ++i) {
             List<Node> column = playersGUI.get(i);
             localLauncher.addColumn(
@@ -182,11 +219,10 @@ public class Launcher extends Application {
         return localLauncher;
     }
 
-    private List<Node> createPlayerField(PlayerId pId, Map<PlayerId, PlayerType> playerTypes) {
-        TextField nameTextField = new TextField(DEFAULT_NAMES.get(pId.ordinal()));
+    private List<Node> createPlayerField(PlayerId pId, Map<PlayerId, PlayerType> playerTypes, Boolean[] canStart) {
         Button human = new Button("humain");
         Button remote = new Button("distant");
-        Button simulated = new Button("simulated");
+        Button simulated = new Button("simulé");
 
         TextField name = new TextField(DEFAULT_NAMES.get(pId.ordinal()));
 
@@ -210,6 +246,7 @@ public class Launcher extends Application {
             simulated.setVisible(false);
 
             playerTypes.put(pId, PlayerType.HUMAN);
+            canStart[pId.ordinal()] = true;
         });
 
         remote.setOnAction(e -> {
@@ -219,6 +256,7 @@ public class Launcher extends Application {
             ipAddressBox.setVisible(true);
 
             playerTypes.put(pId, PlayerType.REMOTE);
+            canStart[pId.ordinal()] = true;
         });
 
         simulated.setOnAction(e -> {
@@ -227,7 +265,9 @@ public class Launcher extends Application {
             simulated.setVisible(false);
             iterationsBox.setVisible(true);
 
+
             playerTypes.put(pId, PlayerType.SIMULATED_GOOD);
+            canStart[pId.ordinal()] = true;
         });
 
         return Collections.unmodifiableList(Arrays.asList(human, remote, simulated, name, iterationsBox, ipAddressBox));
@@ -294,15 +334,26 @@ public class Launcher extends Application {
     /** =============    MAIN METHODS    ============= **/
     /** ============================================== **/
 
+    /**
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         GridPane localLauncher = createLocalLauncher();
-        StackPane mainPane = new StackPane(localLauncher, createMainLauncher(localLauncher));
+        GridPane mainLauncher = createMainLauncher(localLauncher);
+
+        StackPane mainPane = new StackPane(localLauncher, mainLauncher);
+
         primaryStage.setScene(new Scene(mainPane));
-        primaryStage.setTitle("ok");
+        primaryStage.setTitle("Launcher");
         primaryStage.show();
     }
 
+    /**
+     * @brief Run this main to start a Jass game.
+     *
+     * @param args - //
+     */
     public static void main(String[] args) {
         launch(args);
     }
