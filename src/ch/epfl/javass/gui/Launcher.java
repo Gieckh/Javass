@@ -1,6 +1,6 @@
 package ch.epfl.javass.gui;
 
-import ch.epfl.javass.jass.Announces.MctsPlayerSmart;
+import ch.epfl.javass.jass.MctsPlayerSmart;
 import ch.epfl.javass.jass.WorstMctsPlayer;
 import ch.epfl.javass.PlayerType;
 import ch.epfl.javass.jass.*;

@@ -5,7 +5,7 @@
 //import java.util.Map;
 //
 //import ch.epfl.javass.jass.mctsMemory;
-//import ch.epfl.javass.jass.Announces.MctsPlayerSmart;
+//import ch.epfl.javass.jass.MctsPlayerSmart;
 ////this is for a test, thus no need of javadoc
 //public final class RandomJassGame3 {
 //    public static void main(String[] args) {

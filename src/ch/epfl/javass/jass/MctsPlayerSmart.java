@@ -1,4 +1,4 @@
-package ch.epfl.javass.jass.Announces;
+package ch.epfl.javass.jass;
 
 
 import static ch.epfl.javass.Preconditions.checkArgument;
@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SplittableRandom;
 
+import ch.epfl.javass.jass.Announces.Announcement;
+import ch.epfl.javass.jass.Announces.MeldSet;
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import ch.epfl.javass.jass.Player;
