@@ -250,15 +250,12 @@ public class MctsPlayerSmart implements Player {
         }
         //with some test over 1000 games , it seemed that announcement was more efficient than rules
         if(CardsThatRespectsAnnouncements.size()!=0) return CardsThatRespectsAnnouncements;
-        if(CardsThatRespectsRules.size()!=0) {
-            return CardsThatRespectsRules;
-            
-        }
+        if(CardsThatRespectsRules.size()!=0) return CardsThatRespectsRules;
         else return playableCards;
     }
 
     /**
-     * @brief Indicates the Cards the next Player to play
+     * @brief Indicates the Cards the next Player to play   
      *          - can play, if it is "this"
      *          - could play if it is any of the other 3. [actually there are some
      *          card that could be played that won't be taken into account, but

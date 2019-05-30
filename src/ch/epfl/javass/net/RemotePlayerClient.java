@@ -165,6 +165,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         }
     }
     
+    /* 
+     * @see ch.epfl.javass.jass.Player#announcement(ch.epfl.javass.jass.CardSet)
+     */
     @Override
     public MeldSet announcement(CardSet hand) { 
         forceWrite(JassCommand.MELD.toString(),
@@ -179,6 +182,9 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
         }
     }
     
+    /* 
+     * @see ch.epfl.javass.jass.Player#updateAnnouncement(java.util.List)
+     */
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
         forceWrite(JassCommand.ANCM.toString(),

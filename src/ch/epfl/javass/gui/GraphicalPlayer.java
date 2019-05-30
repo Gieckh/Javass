@@ -68,8 +68,7 @@ public final class GraphicalPlayer {
     public GraphicalPlayer(PlayerId myId, Map<PlayerId, String> playerNames,
             ScoreBean scoreBean, TrickBean trickBean, HandBean handBean,
             ArrayBlockingQueue<Card> queueOfCommunication,
-            ObjectProperty<ListView<Text>> listOfAnnounces)
-    {
+            ObjectProperty<ListView<Text>> listOfAnnounces) {
         GridPane scorePane = createScorePane(scoreBean, playerNames);
 
         GridPane trickPane = createTrickPane(trickBean, handBean, myId, playerNames);

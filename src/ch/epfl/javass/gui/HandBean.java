@@ -70,6 +70,11 @@ public final class HandBean {
     }
 
 
+    /**
+     * @Brief public getter of the list of stringProperty of the announces per player.
+     *
+     * @return the list of stringProperty announces per player
+    */
     public ObservableList<SimpleStringProperty> announcesPerPlayerToString(){
         if(listOfAnnouncementPerPlayer.isEmpty()) {
             setannouncesPerPlayer(Collections.nCopies(4, MeldSet.EMPTY_SET));;
@@ -105,6 +110,11 @@ public final class HandBean {
        }
    }
     
+    /**
+     * @Brief public setter for the self-announcement
+     *
+     * @param hand
+    */
     public void setannounces(CardSet hand) {
        List<MeldSet> announces=  Announcement.getAnnounces(hand);//CardSet.of(this.hand
        this.announces.clear();
@@ -115,6 +125,11 @@ public final class HandBean {
        }
    }
 
+    /**
+     * @Brief public setter for the list of all announces.
+     *
+     * @param listOfAnnounces
+    */
     public void setannouncesPerPlayer(List<MeldSet> listOfAnnounces) {
         if(listOfAnnouncementPerPlayer.isEmpty()) {
             for(int i =0 ; i<4 ;++i) {
