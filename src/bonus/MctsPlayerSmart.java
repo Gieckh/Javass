@@ -15,17 +15,20 @@ import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.TurnState;
-import src.cs108.Announcement;
-import src.cs108.MeldSet;
 
 /**
- * @brief This class extends Player and only overrides the method "cardToPlay".
+ * @brief BONUS : This class extends Player
  *        To decide which card to play, the computer uses a Monte-Carlo tree search
  *        algorithm - hence the "MCTS".
+ *        But also some deductions from rulesOfJass hence "smart".
+ *        It chooses the best possible announcement .
+ *        go to line 220 to 260 for the bonus modification.
  *
  * @see Player
  *
- * @author - Marin Nguyen (288260)
+ * @author Antoine Scardigli - (299905)
+ * @author Marin Nguyen -  (288260)
+ * 
  */
 @SuppressWarnings("Duplicates")
 public class MctsPlayerSmart implements Player {
@@ -43,7 +46,7 @@ public class MctsPlayerSmart implements Player {
     /** ============================================== **/
     /** ==============   CONSTRUCTORS   ============== **/
     /** ============================================== **/
-    //TODO: why no JDoc there ?
+
     public MctsPlayerSmart(PlayerId ownId, long rngSeed, int iterations) {
         checkArgument(iterations >= 9);
         this.iterations = iterations;
@@ -58,12 +61,18 @@ public class MctsPlayerSmart implements Player {
     /** ===============    METHODS    ================ **/
     /** ============================================== **/
     
+    /* Chooses best.
+     * @see ch.epfl.javass.jass.Player#announcement(ch.epfl.javass.jass.CardSet)
+     */
     @Override
     public MeldSet announcement(CardSet hand) {
         List<MeldSet> listOfAnnouncesSet = Announcement.getAnnounces(hand);
         return listOfAnnouncesSet.get(listOfAnnouncesSet.size() - 1);
     }
     
+    /* Update to do deductions.
+     * @see ch.epfl.javass.jass.Player#updateAnnouncement(java.util.List)
+     */
     @Override
     public void updateAnnouncement(List<MeldSet> m) {
         listOfKnownCard.clear();

@@ -8,13 +8,13 @@ import static javafx.collections.FXCollections.unmodifiableObservableSet;
 import java.util.Collections;
 import java.util.List;
 
+import bonus.Announcement;
+import bonus.MeldSet;
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import src.cs108.Announcement;
-import src.cs108.MeldSet;
 
 /**
  * HandBean is a JavaFx bean containing the hand and playableCards properties.

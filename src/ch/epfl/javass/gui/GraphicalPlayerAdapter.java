@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import bonus.MeldSet;
 import ch.epfl.javass.jass.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -14,7 +15,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import src.cs108.MeldSet;
 
 /**
  * @brief This class extends Player and is an Adapter of a graphicalPlayer.

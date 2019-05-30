@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import src.cs108.MeldSet;
+import bonus.MeldSet;
 
 /**@brief This interface is implemented by the players, whether they are simulated
  *        or real.

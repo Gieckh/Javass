@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SplittableRandom;
 
+import bonus.Announcement;
+import bonus.MeldSet;
 import ch.epfl.javass.jass.Card;
 import ch.epfl.javass.jass.CardSet;
 import ch.epfl.javass.jass.Player;
@@ -14,8 +16,6 @@ import ch.epfl.javass.jass.PlayerId;
 import ch.epfl.javass.jass.Score;
 import ch.epfl.javass.jass.TeamId;
 import ch.epfl.javass.jass.TurnState;
-import src.cs108.Announcement;
-import src.cs108.MeldSet;
 
 /**
  * @brief This class extends Player and only overrides the method "cardToPlay".

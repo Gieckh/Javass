@@ -1,4 +1,4 @@
-package src.cs108;
+package bonus;
 
 import java.util.ArrayList;
 import java.util.Collection;

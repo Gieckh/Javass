@@ -1,4 +1,4 @@
-package src.cs108;
+package bonus;
 
 import static java.util.Collections.unmodifiableSet;
 
@@ -27,6 +27,11 @@ public final class MeldSet {
         return Sets.mutuallyDisjoint(allSetsOfCards);
     }
     
+    /**
+     * @Brief BONUS : returns the set of cards contained in this meldSet.
+     *
+     * @return the set of cards contained in the meldSet
+    */
     public CardSet cards() {
         long cardSet = 0l;
         for (Meld m : melds) {
@@ -37,6 +42,13 @@ public final class MeldSet {
         return CardSet.ofPacked(cardSet);
     }
     
+    /**
+     * @Brief pack this meldSet into an array of long. 
+     * The main interest is for the remote player.
+     *  
+     *
+     * @return an array of long.
+    */
     public  long[] packed() {
         long packed[] = new long[2];
         for(int i =0 ; i< Meld.ALL.size() ; ++i) {
@@ -50,6 +62,12 @@ public final class MeldSet {
         return packed;
     }
     
+    /**
+     * @Brief returns the meldSet corresponding to the long array.
+     *
+     * @param packed an array of long
+     * @return a meldSet
+    */
     public static MeldSet from(long packed[] ) {
         List<Meld> melds = new ArrayList<>();
        for(int i =0 ; i<Meld.ALL.size() ; ++i){
@@ -59,6 +77,14 @@ public final class MeldSet {
        }
         return new MeldSet(melds);
     }
+    
+    
+    /**
+     * @Brief BONUS : returns the List of all the possible MeldSet from a given hand.
+     *
+     * @param hand a cardSet
+     * @return the List of all the possible MeldSet from a given hand.
+    */
     public static List<MeldSet> allIn(CardSet hand) {
         List<MeldSet> r = new ArrayList<>();
         for (Set<Meld> melds: Sets.powerSet(Meld.allIn(hand))) {

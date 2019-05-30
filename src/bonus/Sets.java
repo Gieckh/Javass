@@ -1,4 +1,4 @@
-package src.cs108;
+package bonus;
 
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import bonus.MeldSet;
 import ch.epfl.javass.jass.Card.Color;
-import src.cs108.MeldSet;
 
 /**
  * @author Antoine Scardigli - (299905)
