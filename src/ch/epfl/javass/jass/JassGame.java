@@ -108,7 +108,6 @@ public final class JassGame {
             else if(listOfCheatingCodes.contains(9)) {
                 setPlayersWinningTeam(PlayerId.ALL.get(listOfCheatingCodes.indexOf(9)).team());
                 listOfCheatingCodes.set(listOfCheatingCodes.indexOf(9), 0);
-                System.out.println("winnig occures");
                 isGameOver = true;
                 return;
             }
@@ -236,7 +235,6 @@ public final class JassGame {
     //After the first turn, this method is used to update the first player of the turn
     private void updatePlayer() {
        if(listOfCheatingCodes.contains(8)) {
-           System.out.println("will start next");
            turnFirstPlayer = PlayerId.ALL.get(listOfCheatingCodes.indexOf(8));
            listOfCheatingCodes.set(turnFirstPlayer.ordinal(), 0);
            return ;
@@ -336,7 +334,6 @@ public final class JassGame {
     }
     
     private void setDistributionInCaseCheating(PlayerId id, List<Card> deck, Map<PlayerId, CardSet> tmp) {
-        System.out.println(deck);
         CardSet hand = CardSet.EMPTY;
 
         for (int i = 0; i <  Jass.HAND_SIZE; ++i) {
