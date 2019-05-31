@@ -44,47 +44,62 @@ public class JassReductorOfSet {
      * @return an updated list sorted by playerIds of each card a specific player can't have knowing the trick and the previous list
     */
     public static List<CardSet> cardsThePlayerHasNot(Trick trick,List<CardSet> oldListOfCardSetNotPossessed) {
-        if(trick.isEmpty()) {
+        if (trick.isEmpty())
             return oldListOfCardSetNotPossessed;
-        }
+
         else {
             int index = trick.size();
         
             Color baseColor = trick.baseColor();
             Color trumpColor = trick.trump();
+
             List<CardSet> cardsPlayerDontHave = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
-            List<Card> cardPlayed = new ArrayList<>(); 
-            for(int i =0 ; i< index ; ++i ) {
-                cardPlayed.add(i, trick.card(i));    
+            List<Card> cardPlayed = new ArrayList<>();
+
+            for(int i = 0; i < index ; ++i)
+                cardPlayed.add(i, trick.card(i));
+
+            for(int i = 1 ; (i<index); ++i) {
+                if( !(cardPlayed.get(i).color().equals(trumpColor) || cardPlayed.get(i).color().equals(baseColor)) )
+                    cardsPlayerDontHave.set(i, CardSet.ofPacked(PackedCardSet.subsetOfColor(PackedCardSet.ALL_CARDS, baseColor)));
             }
-                for(int i = 1 ; (i<index); ++i) {         
-                    if(!(cardPlayed.get(i).color().equals(trumpColor)||cardPlayed.get(i).color().equals(baseColor))) {
-                        cardsPlayerDontHave.set(i, CardSet.ofPacked(PackedCardSet.subsetOfColor(PackedCardSet.ALL_CARDS, baseColor)));
-                    }
-                }             
+
             Card bestCard = null ;
             for(int i = 0 ; i < index-1 ; ++i) {
                 if(bestCard == null || cardPlayed.get(i).isBetter(trumpColor, bestCard)) {
                     bestCard = cardPlayed.get(i);
-                    if(cardPlayed.get(i).color().equals(trumpColor)) {
-                        for(int j =i+1 ; j< index ; ++j) {
-                            if(cardPlayed.get(j).color().equals(trumpColor)) {
-                                if(cardPlayed.get(i).isBetter(trumpColor,  cardPlayed.get(j))) {
+
+                    if (cardPlayed.get(i).color().equals(trumpColor)) {
+                        for (int j = i+1; j < index; ++j) {
+                            if (cardPlayed.get(j).color().equals(trumpColor)) {
+                                if (cardPlayed.get(i).isBetter(trumpColor,  cardPlayed.get(j)))
                                     cardsPlayerDontHave.set(j, cardsPlayerDontHave.get(j).union(CardSet.ofPacked(PackedCardSet.trumpAbove(cardPlayed.get(i).packed()))));
-                                    
-                                }
                             }
                         }
                     }
                 }
             }
+
             int shift = trick.player(0).ordinal();
             List<CardSet> updatedListOfCardSetNotPossessed = new ArrayList<>(Collections.nCopies(4, CardSet.EMPTY));
+
             for(PlayerId p : PlayerId.ALL) {
-                updatedListOfCardSetNotPossessed.set(p.ordinal(), oldListOfCardSetNotPossessed.get(p.ordinal()).union
-                        (CardSet.ofPacked(PackedCardSet.difference
-                                (cardsPlayerDontHave.get((-shift+p.ordinal()+4 )%4).packed(),
-                                        PackedCardSet.add(PackedCardSet.EMPTY, PackedCard.pack(trumpColor, Rank.JACK))))));
+                updatedListOfCardSetNotPossessed.set(
+                        p.ordinal(),
+                        oldListOfCardSetNotPossessed.get(p.ordinal()).union
+                                (CardSet.ofPacked
+                                        (PackedCardSet.difference
+                                                (
+                                                        cardsPlayerDontHave.get((-shift+p.ordinal()+4 )%4).packed(),
+                                                        PackedCardSet.add(
+                                                                PackedCardSet.EMPTY,
+                                                                PackedCard.pack(trumpColor, Rank.JACK
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                );
             }
             return updatedListOfCardSetNotPossessed;
         
