@@ -354,9 +354,9 @@ public class MctsPlayer implements Player {
             int index = 0;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node node = directChildrenOfNode[i];
-                if (node == null) {
+                if (node == null)
                     return i;
-                }
+
                 double tmpValue = evaluate(node, explorationParameter);
                 if (tmpValue > value) {
                     value = tmpValue;

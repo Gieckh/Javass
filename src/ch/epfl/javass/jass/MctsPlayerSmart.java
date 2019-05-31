@@ -242,21 +242,22 @@ public class MctsPlayerSmart implements Player {
     }
     
     private CardSet chooseBestRestrictiveSet(CardSet playableCards, TurnState state) {
-        CardSet CardsThatRespectsRules = playableCards.difference(state.cardsOnePlayerDoesntHave(this.ownId));
-        CardSet CardsThatRespectsAnnouncements = playableCards.difference(listOfKnownCard.get((state.nextPlayer().nextPlayer().ordinal())));
-        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().ordinal()+2)%PlayerId.COUNT));
-        CardsThatRespectsAnnouncements = CardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().previousPlayer().ordinal())));
-        CardSet merge = CardsThatRespectsAnnouncements.intersection(CardsThatRespectsRules);
-        if(merge.size() != 0) {
+        CardSet cardsThatRespectsRules = playableCards.difference(state.cardsOnePlayerDoesntHave(this.ownId));
+        CardSet cardsThatRespectsAnnouncements = playableCards.difference(listOfKnownCard.get((state.nextPlayer().nextPlayer().ordinal())));
+        cardsThatRespectsAnnouncements = cardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().nextPlayer().nextPlayer().ordinal())));
+        cardsThatRespectsAnnouncements = cardsThatRespectsAnnouncements.difference(listOfKnownCard.get((state.nextPlayer().previousPlayer().ordinal())));
+        CardSet merge = cardsThatRespectsAnnouncements.intersection(cardsThatRespectsRules);
+        if(merge.size() != 0)
             return merge;
-        }
-        //with some test over 1000 games , it seemed that announcement was more efficient than rules
-        if(CardsThatRespectsAnnouncements.size()!=0) return CardsThatRespectsAnnouncements;
 
-        if(CardsThatRespectsRules.size()!=0) {
-            return CardsThatRespectsRules;
-        }
-        else return playableCards;
+        //with some test over 1000 games , it seemed that announcement was more efficient than rules
+        if(cardsThatRespectsAnnouncements.size() != 0)
+            return cardsThatRespectsAnnouncements;
+
+        if (cardsThatRespectsRules.size() != 0)
+            return cardsThatRespectsRules;
+        else
+            return playableCards;
     }
 
     /**
@@ -398,10 +399,9 @@ public class MctsPlayerSmart implements Player {
             int index = 0;
             for (int i = 0; i < directChildrenOfNode.length; ++i) {
                 Node node = directChildrenOfNode[i];
-                if (node == null) {
-//                    return (i | (1 << 5));
+                if (node == null)
                     return i;
-                }
+
                 double tmpValue = evaluate(node, explorationParameter);
                 if (tmpValue > value) {
                     value = tmpValue;
