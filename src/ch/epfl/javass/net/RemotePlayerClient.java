@@ -26,8 +26,6 @@ import ch.epfl.javass.jass.Trick;
 import ch.epfl.javass.jass.TurnState;
 
 
-//TODO: does it actually work - without the "println(...)" ?
-
 /**
  * RemotePlayerClient instance acts as a player in a JassGame although it exchanges information
  * with a RemotePlayerServer instance (which plays in remote) and which takes the decisions.
@@ -56,7 +54,6 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
      * @brief Constructs a socket, a reader, and an writer.
      * 
      * @param hostName (String) - the name or the IP string of the host in which the RemotePlayerServer is
-     * @param port (int) - should be 5108 per default
      * @throws IOException
      */
     public RemotePlayerClient(String hostName) throws IOException {
@@ -194,8 +191,8 @@ public final class RemotePlayerClient implements Player, AutoCloseable {
                                 StringSerializer.serializeLong(m.get(0).packed()[1])),
                         combine(',',
                                 StringSerializer.serializeLong(m.get(1).packed()[0]),
-                                StringSerializer.serializeLong(m.get(1).packed()[1])),
-                        combine(',',
+                                combine(',',
+                                        StringSerializer.serializeLong(m.get(1).packed()[1])),
                                 StringSerializer.serializeLong(m.get(2).packed()[0]),
                                 StringSerializer.serializeLong(m.get(2).packed()[1])),
                         combine(',',

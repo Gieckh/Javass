@@ -23,7 +23,7 @@ import ch.epfl.javass.jass.TurnState;
  *        To decide which card to play, the computer uses a Monte-Carlo tree search
  *        algorithm - hence the "MCTS".
  *        But also some deductions from rulesOfJass hence "smart".
- *        It chooses the best possible announcement .
+ *        It chooses the best possible announcement.
  *        go to line 220 to 260 for the bonus modification.
  *
  * @see Player
