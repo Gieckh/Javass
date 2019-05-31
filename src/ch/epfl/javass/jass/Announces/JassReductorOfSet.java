@@ -90,7 +90,7 @@ public class JassReductorOfSet {
                                 (CardSet.ofPacked
                                         (PackedCardSet.difference
                                                 (
-                                                        cardsPlayerDontHave.get((-shift+p.ordinal()+4 )%4).packed(),
+                                                        cardsPlayerDontHave.get(Math.floorMod(p.ordinal() - shift, PlayerId.COUNT)).packed(),
                                                         PackedCardSet.add(
                                                                 PackedCardSet.EMPTY,
                                                                 PackedCard.pack(trumpColor, Rank.JACK
