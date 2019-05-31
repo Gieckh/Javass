@@ -92,9 +92,10 @@ public class JassReductorOfSet {
         
         }
     }
-    
+
+    //TODO: suppr ? @Antoine
     /**
-     * @Brief JUST A SMALL VARIATION OF THE UPPER METHOD : NEVER USED.
+     * @brief JUST A SMALL VARIATION OF THE UPPER METHOD : NEVER USED.
      *
      * @param trick
      * @return
