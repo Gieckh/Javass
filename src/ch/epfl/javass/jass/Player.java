@@ -94,7 +94,7 @@ public interface Player {
      * @param newTrick (Trick) The new trick.
      */
     default public void updateTrick(Trick newTrick) {
-
+        //default is empty
     }
     
 

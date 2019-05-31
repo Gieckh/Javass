@@ -140,5 +140,4 @@ public class JassReductorOfSet {
         return cardsThePlayerHavnt;
 
     }
-
 }

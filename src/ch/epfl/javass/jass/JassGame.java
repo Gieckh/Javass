@@ -263,11 +263,16 @@ public final class JassGame {
     private void manageAnnouncement() {
         int pointsOfTeam1 = listOfAnnouncement.get(0).points() + listOfAnnouncement.get(2).points(); 
         int pointsOfTeam2 = listOfAnnouncement.get(1).points() + listOfAnnouncement.get(3).points();
-        turnState = turnState.addScore(pointsOfTeam1>=pointsOfTeam2 ? 
-                TeamId.TEAM_1 : TeamId.TEAM_2, Math.max(pointsOfTeam1, pointsOfTeam2));
+
+        turnState = (pointsOfTeam1 > pointsOfTeam2) ?
+            turnState.addScore(TeamId.TEAM_1, pointsOfTeam1):
+            turnState.addScore(TeamId.TEAM_2, pointsOfTeam2);
+
         updatePlayersScores(turnState.score());
+
+
     }
-    
+
     private void updateAnnouncement() {
         for (PlayerId pId: PlayerId.ALL) {
             players.get(pId).updateAnnouncement(listOfAnnouncement);
