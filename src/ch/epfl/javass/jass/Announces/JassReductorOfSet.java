@@ -22,8 +22,6 @@ import ch.epfl.javass.jass.Trick;
  * @author Marin Nguyen - (288260)
  */
 public class JassReductorOfSet {
-
-
     /**
      * @Brief BONUS :  will deduce on some cases that some player can't have some specific set of cards according to the rules of jass : 
      * "Un joueur doit poser une carte de la même couleur que celle du joueur qui à la main(suivre). <b>S’il n’a pas de carte de la même couleur</b>, 
@@ -45,7 +43,7 @@ public class JassReductorOfSet {
      * @param oldListOfCardSetNotPossessed
      * @return an updated list sorted by playerIds of each card a specific player can't have knowing the trick and the previous list
     */
-    public static List<CardSet> CardsThePlayerHavnt(Trick trick,List<CardSet> oldListOfCardSetNotPossessed) {
+    public static List<CardSet> cardsThePlayerHasNot(Trick trick,List<CardSet> oldListOfCardSetNotPossessed) {
         if(trick.isEmpty()) {
             return oldListOfCardSetNotPossessed;
         }
@@ -100,7 +98,7 @@ public class JassReductorOfSet {
      * @param trick
      * @return
     */
-    public static List<CardSet> CardsThePlayerHavnt(Trick trick) {
+    public static List<CardSet> cardsThePlayerHasNot(Trick trick) {
         assert(trick.isFull());
         Color baseColor = trick.baseColor();
         Color trumpColor = trick.trump();

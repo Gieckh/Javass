@@ -207,7 +207,7 @@ public class TurnState {
         int pkCard = card.packed();
         TurnState state = new TurnState(pkScore, PackedCardSet.remove(pkUnplayedCards, pkCard),
                 PackedTrick.withAddedCard(pkCurrentTrick, pkCard) );
-        cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(trick(), cardsThePlayersDontHave);
+        cardsThePlayersDontHave = JassReductorOfSet.cardsThePlayerHasNot(trick(), cardsThePlayersDontHave);
         return  state;
         }
 
@@ -264,7 +264,7 @@ public class TurnState {
         int pkCard = card.packed();
         long newUnplayedCards = PackedCardSet.remove(pkUnplayedCards, pkCard);
         int newTrick = PackedTrick.withAddedCard(pkCurrentTrick, pkCard);
-        cardsThePlayersDontHave = JassReductorOfSet.CardsThePlayerHavnt(trick(), cardsThePlayersDontHave);
+        cardsThePlayersDontHave = JassReductorOfSet.cardsThePlayerHasNot(trick(), cardsThePlayersDontHave);
         if (!PackedTrick.isFull(newTrick)) {
             return new TurnState(pkScore, newUnplayedCards, newTrick);
         }
