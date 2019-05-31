@@ -269,14 +269,11 @@ public final class JassGame {
             turnState.addScore(TeamId.TEAM_2, pointsOfTeam2);
 
         updatePlayersScores(turnState.score());
-
-
     }
 
     private void updateAnnouncement() {
-        for (PlayerId pId: PlayerId.ALL) {
+        for (PlayerId pId: PlayerId.ALL)
             players.get(pId).updateAnnouncement(listOfAnnouncement);
-        }
     }
 
     private void setTrump() {
